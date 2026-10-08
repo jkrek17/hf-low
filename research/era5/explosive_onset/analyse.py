@@ -27,6 +27,11 @@ def load(arm):
     ft = pd.concat([pd.read_csv(x) for x in glob.glob(os.path.join(WORK, "armB" if arm == "B" else "armA", "*.csv"))])
     ft = ft.drop(columns=[c for c in ["g800"] if c in ft.columns and arm == "B"], errors="ignore")
     d = d.merge(ft.drop(columns=[c for c in ["match_km", "g800_re"] if c in ft.columns and arm == "A"]), on=["track", "time"])
+    if arm == "A":      # the non-case sample is a 600-time random sample of ALL non-case times; Arm A keeps those before the WB2 end, so re-weight
+        cut = 2023011000
+        ct_all = S.groupby("time").hf24.max()
+        n_pop = int(((ct_all == False) & (ct_all.index < cut)).sum()); n_smp = d[d.kind != "case_time"].time.nunique()
+        d["weight"] = np.where(d.kind == "case_time", 1.0, n_pop / n_smp)
     d["case"] = d.hf24.astype(float); d["grp"] = pd.factorize(d.time)[0]
     d["lb1"] = np.log(d.M1.clip(1e-5, 1 - 1e-5) / (1 - d.M1.clip(1e-5, 1 - 1e-5)))
     d["lb0"] = np.log(d.M0.clip(1e-5, 1 - 1e-5) / (1 - d.M0.clip(1e-5, 1 - 1e-5)))

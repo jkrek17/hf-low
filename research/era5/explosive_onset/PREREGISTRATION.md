@@ -163,6 +163,14 @@ Only the extraction (feature tables, no outcome joined) and the reproduction che
    the area terms) have MDEs of 0.4 to 0.7, so a null for those groups will be reported as "can't tell" unless the group MDE is
    lower in the joint test.
 
+5. **Arm A weights.** The 600 sampled non-case times are a sample of all non-case times; Arm A keeps those before 2023-01-10, so
+   its weight is (non-case times before 2023-01-10) / (sampled non-case times kept) instead of 25.29. Coded before any test ran.
+6. **Which q decides.** The plan says q is reported within an arm and over all primary tests together but the decision rule says only
+   "q < 0.05". After seeing that the two readings differ for B1, B4 and B_all (within-arm 0.028 to 0.029, over all nine 0.050 to
+   0.052), the more conservative one (over all nine) is used for the yes/no call and the within-arm value is reported beside it. This
+   was decided after the results, so it is listed under deviations as well.
+
 ## Deviations (post hoc)
 
-None yet.
+- Reading 6 above (the q used for the call) was fixed after seeing the primary tests. Both q values are in the README and
+  `results/summary.txt`. No test, feature, model or rule was added or removed after the first test ran.
