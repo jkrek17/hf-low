@@ -1,0 +1,313 @@
+quantity,basin,month,value,mean_per_season,n_seasons,label
+Q1,atl,6,0.0045455,0.13636,22,"archive HF count by first-HF-fix month, per day"
+Q1,atl,7,0.0029326,0.090909,22,"archive HF count by first-HF-fix month, per day"
+Q1,atl,8,0.014663,0.45455,22,"archive HF count by first-HF-fix month, per day"
+Q1,atl,9,0.057576,1.7273,22,"archive HF count by first-HF-fix month, per day"
+Q1,atl,10,0.12317,3.8182,22,"archive HF count by first-HF-fix month, per day"
+Q1,atl,11,0.15,4.5,22,"archive HF count by first-HF-fix month, per day"
+Q1,atl,12,0.27273,8.4545,22,"archive HF count by first-HF-fix month, per day"
+Q1,atl,1,0.30205,9.3636,22,"archive HF count by first-HF-fix month, per day"
+Q1,atl,2,0.31079,8.7727,22,"archive HF count by first-HF-fix month, per day"
+Q1,atl,3,0.19208,5.9545,22,"archive HF count by first-HF-fix month, per day"
+Q1,atl,4,0.059091,1.7727,22,"archive HF count by first-HF-fix month, per day"
+Q1,atl,5,0.020528,0.63636,22,"archive HF count by first-HF-fix month, per day"
+Q2,atl,6,0.0060606,0.18182,22,"pipeline A HF count by genesis month, per day"
+Q2,atl,7,0.0087977,0.27273,22,"pipeline A HF count by genesis month, per day"
+Q2,atl,8,0.026393,0.81818,22,"pipeline A HF count by genesis month, per day"
+Q2,atl,9,0.086364,2.5909,22,"pipeline A HF count by genesis month, per day"
+Q2,atl,10,0.1305,4.0455,22,"pipeline A HF count by genesis month, per day"
+Q2,atl,11,0.15,4.5,22,"pipeline A HF count by genesis month, per day"
+Q2,atl,12,0.30059,9.3182,22,"pipeline A HF count by genesis month, per day"
+Q2,atl,1,0.31818,9.8636,22,"pipeline A HF count by genesis month, per day"
+Q2,atl,2,0.3285,9.2727,22,"pipeline A HF count by genesis month, per day"
+Q2,atl,3,0.21994,6.8182,22,"pipeline A HF count by genesis month, per day"
+Q2,atl,4,0.065152,1.9545,22,"pipeline A HF count by genesis month, per day"
+Q2,atl,5,0.017595,0.54545,22,"pipeline A HF count by genesis month, per day"
+Q3,atl,6,2.2985,68.955,22,"pipeline A all-cyclone count by genesis month, per day"
+Q3,atl,7,2.2009,68.227,22,"pipeline A all-cyclone count by genesis month, per day"
+Q3,atl,8,2.0865,64.682,22,"pipeline A all-cyclone count by genesis month, per day"
+Q3,atl,9,1.9712,59.136,22,"pipeline A all-cyclone count by genesis month, per day"
+Q3,atl,10,1.8944,58.727,22,"pipeline A all-cyclone count by genesis month, per day"
+Q3,atl,11,2.0773,62.318,22,"pipeline A all-cyclone count by genesis month, per day"
+Q3,atl,12,2.0073,62.227,22,"pipeline A all-cyclone count by genesis month, per day"
+Q3,atl,1,2.0894,64.773,22,"pipeline A all-cyclone count by genesis month, per day"
+Q3,atl,2,2.0902,59,22,"pipeline A all-cyclone count by genesis month, per day"
+Q3,atl,3,2.1701,67.273,22,"pipeline A all-cyclone count by genesis month, per day"
+Q3,atl,4,2.3394,70.182,22,"pipeline A all-cyclone count by genesis month, per day"
+Q3,atl,5,2.1569,66.864,22,"pipeline A all-cyclone count by genesis month, per day"
+Q4,atl,6,0.0026368,0.18182,22,"pipeline A HF share (HF / all cyclones, genesis cohort)"
+Q4,atl,7,0.0039973,0.27273,22,"pipeline A HF share (HF / all cyclones, genesis cohort)"
+Q4,atl,8,0.012649,0.81818,22,"pipeline A HF share (HF / all cyclones, genesis cohort)"
+Q4,atl,9,0.043812,2.5909,22,"pipeline A HF share (HF / all cyclones, genesis cohort)"
+Q4,atl,10,0.068885,4.0455,22,"pipeline A HF share (HF / all cyclones, genesis cohort)"
+Q4,atl,11,0.07221,4.5,22,"pipeline A HF share (HF / all cyclones, genesis cohort)"
+Q4,atl,12,0.14974,9.3182,22,"pipeline A HF share (HF / all cyclones, genesis cohort)"
+Q4,atl,1,0.15228,9.8636,22,"pipeline A HF share (HF / all cyclones, genesis cohort)"
+Q4,atl,2,0.15716,9.2727,22,"pipeline A HF share (HF / all cyclones, genesis cohort)"
+Q4,atl,3,0.10135,6.8182,22,"pipeline A HF share (HF / all cyclones, genesis cohort)"
+Q4,atl,4,0.02785,1.9545,22,"pipeline A HF share (HF / all cyclones, genesis cohort)"
+Q4,atl,5,0.0081577,0.54545,22,"pipeline A HF share (HF / all cyclones, genesis cohort)"
+Q5,atl,6,0.79242,23.773,22,"pipeline A real-cyclone count by genesis month, per day"
+Q5,atl,7,0.74633,23.136,22,"pipeline A real-cyclone count by genesis month, per day"
+Q5,atl,8,0.78299,24.273,22,"pipeline A real-cyclone count by genesis month, per day"
+Q5,atl,9,0.98333,29.5,22,"pipeline A real-cyclone count by genesis month, per day"
+Q5,atl,10,0.9824,30.455,22,"pipeline A real-cyclone count by genesis month, per day"
+Q5,atl,11,1.097,32.909,22,"pipeline A real-cyclone count by genesis month, per day"
+Q5,atl,12,1.1657,36.136,22,"pipeline A real-cyclone count by genesis month, per day"
+Q5,atl,1,1.1496,35.636,22,"pipeline A real-cyclone count by genesis month, per day"
+Q5,atl,2,1.182,33.364,22,"pipeline A real-cyclone count by genesis month, per day"
+Q5,atl,3,1.1642,36.091,22,"pipeline A real-cyclone count by genesis month, per day"
+Q5,atl,4,1.097,32.909,22,"pipeline A real-cyclone count by genesis month, per day"
+Q5,atl,5,0.8915,27.636,22,"pipeline A real-cyclone count by genesis month, per day"
+Q6,atl,6,0.0060606,0.18182,22,"pipeline A HF count by HF onset month, per day"
+Q6,atl,7,0.0087977,0.27273,22,"pipeline A HF count by HF onset month, per day"
+Q6,atl,8,0.02346,0.72727,22,"pipeline A HF count by HF onset month, per day"
+Q6,atl,9,0.083333,2.5,22,"pipeline A HF count by HF onset month, per day"
+Q6,atl,10,0.1261,3.9091,22,"pipeline A HF count by HF onset month, per day"
+Q6,atl,11,0.15,4.5,22,"pipeline A HF count by HF onset month, per day"
+Q6,atl,12,0.29912,9.2727,22,"pipeline A HF count by HF onset month, per day"
+Q6,atl,1,0.30938,9.5909,22,"pipeline A HF count by HF onset month, per day"
+Q6,atl,2,0.33011,9.3182,22,"pipeline A HF count by HF onset month, per day"
+Q6,atl,3,0.23167,7.1818,22,"pipeline A HF count by HF onset month, per day"
+Q6,atl,4,0.072727,2.1818,22,"pipeline A HF count by HF onset month, per day"
+Q6,atl,5,0.017595,0.54545,22,"pipeline A HF count by HF onset month, per day"
+Q7,atl,6,0.0035461,0.10638,47,"pipeline A depth-strong count by genesis month, per day"
+Q7,atl,7,0.00068634,0.021277,47,"pipeline A depth-strong count by genesis month, per day"
+Q7,atl,8,0.0151,0.46809,47,"pipeline A depth-strong count by genesis month, per day"
+Q7,atl,9,0.066667,2,47,"pipeline A depth-strong count by genesis month, per day"
+Q7,atl,10,0.12835,3.9787,47,"pipeline A depth-strong count by genesis month, per day"
+Q7,atl,11,0.20355,6.1064,47,"pipeline A depth-strong count by genesis month, per day"
+Q7,atl,12,0.31091,9.6383,47,"pipeline A depth-strong count by genesis month, per day"
+Q7,atl,1,0.33837,10.489,47,"pipeline A depth-strong count by genesis month, per day"
+Q7,atl,2,0.31928,9.0213,47,"pipeline A depth-strong count by genesis month, per day"
+Q7,atl,3,0.17159,5.3191,47,"pipeline A depth-strong count by genesis month, per day"
+Q7,atl,4,0.039716,1.1915,47,"pipeline A depth-strong count by genesis month, per day"
+Q7,atl,5,0.0089224,0.2766,47,"pipeline A depth-strong count by genesis month, per day"
+Q8,atl,6,0.0015798,0.10638,47,pipeline A depth-strong share
+Q8,atl,7,0.00031898,0.021277,47,pipeline A depth-strong share
+Q8,atl,8,0.007483,0.46809,47,pipeline A depth-strong share
+Q8,atl,9,0.033716,2,47,pipeline A depth-strong share
+Q8,atl,10,0.067001,3.9787,47,pipeline A depth-strong share
+Q8,atl,11,0.097321,6.1064,47,pipeline A depth-strong share
+Q8,atl,12,0.15356,9.6383,47,pipeline A depth-strong share
+Q8,atl,1,0.16373,10.489,47,pipeline A depth-strong share
+Q8,atl,2,0.15675,9.0213,47,pipeline A depth-strong share
+Q8,atl,3,0.080283,5.3191,47,pipeline A depth-strong share
+Q8,atl,4,0.017354,1.1915,47,pipeline A depth-strong share
+Q8,atl,5,0.0040663,0.2766,47,pipeline A depth-strong share
+Q11,atl,6,43.933,5.9909,22,archive mean latitude of the first HF fix (deg N)
+Q11,atl,7,42.25,3.8409,22,archive mean latitude of the first HF fix (deg N)
+Q11,atl,8,52.19,23.723,22,archive mean latitude of the first HF fix (deg N)
+Q11,atl,9,50.711,87.591,22,archive mean latitude of the first HF fix (deg N)
+Q11,atl,10,51.494,196.61,22,archive mean latitude of the first HF fix (deg N)
+Q11,atl,11,54.781,246.51,22,archive mean latitude of the first HF fix (deg N)
+Q11,atl,12,54.56,461.28,22,archive mean latitude of the first HF fix (deg N)
+Q11,atl,1,54.053,506.13,22,archive mean latitude of the first HF fix (deg N)
+Q11,atl,2,51.249,449.59,22,archive mean latitude of the first HF fix (deg N)
+Q11,atl,3,52.854,314.72,22,archive mean latitude of the first HF fix (deg N)
+Q11,atl,4,52.454,92.986,22,archive mean latitude of the first HF fix (deg N)
+Q11,atl,5,50.736,32.286,22,archive mean latitude of the first HF fix (deg N)
+Q12,atl,6,40.75,7.4091,22,pipeline A mean HF onset latitude (deg N)
+Q12,atl,7,42.917,11.705,22,pipeline A mean HF onset latitude (deg N)
+Q12,atl,8,34.109,24.807,22,pipeline A mean HF onset latitude (deg N)
+Q12,atl,9,38.364,95.909,22,pipeline A mean HF onset latitude (deg N)
+Q12,atl,10,47.73,186.58,22,pipeline A mean HF onset latitude (deg N)
+Q12,atl,11,54.399,244.8,22,pipeline A mean HF onset latitude (deg N)
+Q12,atl,12,53.89,499.7,22,pipeline A mean HF onset latitude (deg N)
+Q12,atl,1,53.411,512.26,22,pipeline A mean HF onset latitude (deg N)
+Q12,atl,2,51.272,477.76,22,pipeline A mean HF onset latitude (deg N)
+Q12,atl,3,53.68,385.52,22,pipeline A mean HF onset latitude (deg N)
+Q12,atl,4,52.38,114.28,22,pipeline A mean HF onset latitude (deg N)
+Q12,atl,5,52.833,28.818,22,pipeline A mean HF onset latitude (deg N)
+Q13,atl,6,52.275,3604.6,22,pipeline A all-track mean peak latitude (deg N)
+Q13,atl,7,55.009,3753.1,22,pipeline A all-track mean peak latitude (deg N)
+Q13,atl,8,53.871,3484.5,22,pipeline A all-track mean peak latitude (deg N)
+Q13,atl,9,53.993,3193,22,pipeline A all-track mean peak latitude (deg N)
+Q13,atl,10,52.956,3109.9,22,pipeline A all-track mean peak latitude (deg N)
+Q13,atl,11,53.469,3332.1,22,pipeline A all-track mean peak latitude (deg N)
+Q13,atl,12,54.352,3382.2,22,pipeline A all-track mean peak latitude (deg N)
+Q13,atl,1,54.616,3537.6,22,pipeline A all-track mean peak latitude (deg N)
+Q13,atl,2,53.674,3166.8,22,pipeline A all-track mean peak latitude (deg N)
+Q13,atl,3,52.011,3498.9,22,pipeline A all-track mean peak latitude (deg N)
+Q13,atl,4,49.743,3491,22,pipeline A all-track mean peak latitude (deg N)
+Q13,atl,5,50.589,3382.6,22,pipeline A all-track mean peak latitude (deg N)
+Q1,pac,6,0.0045455,0.13636,22,"archive HF count by first-HF-fix month, per day"
+Q1,pac,7,0,0,22,"archive HF count by first-HF-fix month, per day"
+Q1,pac,8,0.0058651,0.18182,22,"archive HF count by first-HF-fix month, per day"
+Q1,pac,9,0.051515,1.5455,22,"archive HF count by first-HF-fix month, per day"
+Q1,pac,10,0.12757,3.9545,22,"archive HF count by first-HF-fix month, per day"
+Q1,pac,11,0.17121,5.1364,22,"archive HF count by first-HF-fix month, per day"
+Q1,pac,12,0.25806,8,22,"archive HF count by first-HF-fix month, per day"
+Q1,pac,1,0.27713,8.5909,22,"archive HF count by first-HF-fix month, per day"
+Q1,pac,2,0.20129,5.6818,22,"archive HF count by first-HF-fix month, per day"
+Q1,pac,3,0.12903,4,22,"archive HF count by first-HF-fix month, per day"
+Q1,pac,4,0.05,1.5,22,"archive HF count by first-HF-fix month, per day"
+Q1,pac,5,0.0058651,0.18182,22,"archive HF count by first-HF-fix month, per day"
+Q2,pac,6,0.0075758,0.22727,22,"pipeline A HF count by genesis month, per day"
+Q2,pac,7,0.0058651,0.18182,22,"pipeline A HF count by genesis month, per day"
+Q2,pac,8,0.024927,0.77273,22,"pipeline A HF count by genesis month, per day"
+Q2,pac,9,0.060606,1.8182,22,"pipeline A HF count by genesis month, per day"
+Q2,pac,10,0.14223,4.4091,22,"pipeline A HF count by genesis month, per day"
+Q2,pac,11,0.17424,5.2273,22,"pipeline A HF count by genesis month, per day"
+Q2,pac,12,0.27273,8.4545,22,"pipeline A HF count by genesis month, per day"
+Q2,pac,1,0.26686,8.2727,22,"pipeline A HF count by genesis month, per day"
+Q2,pac,2,0.21739,6.1364,22,"pipeline A HF count by genesis month, per day"
+Q2,pac,3,0.1217,3.7727,22,"pipeline A HF count by genesis month, per day"
+Q2,pac,4,0.042424,1.2727,22,"pipeline A HF count by genesis month, per day"
+Q2,pac,5,0.0058651,0.18182,22,"pipeline A HF count by genesis month, per day"
+Q3,pac,6,2.8758,86.273,22,"pipeline A all-cyclone count by genesis month, per day"
+Q3,pac,7,2.7067,83.909,22,"pipeline A all-cyclone count by genesis month, per day"
+Q3,pac,8,2.3065,71.5,22,"pipeline A all-cyclone count by genesis month, per day"
+Q3,pac,9,1.9985,59.955,22,"pipeline A all-cyclone count by genesis month, per day"
+Q3,pac,10,1.9399,60.136,22,"pipeline A all-cyclone count by genesis month, per day"
+Q3,pac,11,2.0955,62.864,22,"pipeline A all-cyclone count by genesis month, per day"
+Q3,pac,12,2.3959,74.273,22,"pipeline A all-cyclone count by genesis month, per day"
+Q3,pac,1,2.3431,72.636,22,"pipeline A all-cyclone count by genesis month, per day"
+Q3,pac,2,2.1337,60.227,22,"pipeline A all-cyclone count by genesis month, per day"
+Q3,pac,3,2.1041,65.227,22,"pipeline A all-cyclone count by genesis month, per day"
+Q3,pac,4,2.1985,65.955,22,"pipeline A all-cyclone count by genesis month, per day"
+Q3,pac,5,2.4619,76.318,22,"pipeline A all-cyclone count by genesis month, per day"
+Q4,pac,6,0.0026344,0.22727,22,"pipeline A HF share (HF / all cyclones, genesis cohort)"
+Q4,pac,7,0.0021668,0.18182,22,"pipeline A HF share (HF / all cyclones, genesis cohort)"
+Q4,pac,8,0.010807,0.77273,22,"pipeline A HF share (HF / all cyclones, genesis cohort)"
+Q4,pac,9,0.030326,1.8182,22,"pipeline A HF share (HF / all cyclones, genesis cohort)"
+Q4,pac,10,0.073318,4.4091,22,"pipeline A HF share (HF / all cyclones, genesis cohort)"
+Q4,pac,11,0.083153,5.2273,22,"pipeline A HF share (HF / all cyclones, genesis cohort)"
+Q4,pac,12,0.11383,8.4545,22,"pipeline A HF share (HF / all cyclones, genesis cohort)"
+Q4,pac,1,0.11389,8.2727,22,"pipeline A HF share (HF / all cyclones, genesis cohort)"
+Q4,pac,2,0.10189,6.1364,22,"pipeline A HF share (HF / all cyclones, genesis cohort)"
+Q4,pac,3,0.05784,3.7727,22,"pipeline A HF share (HF / all cyclones, genesis cohort)"
+Q4,pac,4,0.019297,1.2727,22,"pipeline A HF share (HF / all cyclones, genesis cohort)"
+Q4,pac,5,0.0023824,0.18182,22,"pipeline A HF share (HF / all cyclones, genesis cohort)"
+Q5,pac,6,1.0091,30.273,22,"pipeline A real-cyclone count by genesis month, per day"
+Q5,pac,7,0.82551,25.591,22,"pipeline A real-cyclone count by genesis month, per day"
+Q5,pac,8,0.82111,25.455,22,"pipeline A real-cyclone count by genesis month, per day"
+Q5,pac,9,0.88788,26.636,22,"pipeline A real-cyclone count by genesis month, per day"
+Q5,pac,10,0.97947,30.364,22,"pipeline A real-cyclone count by genesis month, per day"
+Q5,pac,11,1.1348,34.045,22,"pipeline A real-cyclone count by genesis month, per day"
+Q5,pac,12,1.2243,37.955,22,"pipeline A real-cyclone count by genesis month, per day"
+Q5,pac,1,1.2185,37.773,22,"pipeline A real-cyclone count by genesis month, per day"
+Q5,pac,2,1.0805,30.5,22,"pipeline A real-cyclone count by genesis month, per day"
+Q5,pac,3,1.0337,32.045,22,"pipeline A real-cyclone count by genesis month, per day"
+Q5,pac,4,0.97576,29.273,22,"pipeline A real-cyclone count by genesis month, per day"
+Q5,pac,5,0.96041,29.773,22,"pipeline A real-cyclone count by genesis month, per day"
+Q6,pac,6,0.0075758,0.22727,22,"pipeline A HF count by HF onset month, per day"
+Q6,pac,7,0.0043988,0.13636,22,"pipeline A HF count by HF onset month, per day"
+Q6,pac,8,0.02346,0.72727,22,"pipeline A HF count by HF onset month, per day"
+Q6,pac,9,0.059091,1.7727,22,"pipeline A HF count by HF onset month, per day"
+Q6,pac,10,0.14076,4.3636,22,"pipeline A HF count by HF onset month, per day"
+Q6,pac,11,0.16515,4.9545,22,"pipeline A HF count by HF onset month, per day"
+Q6,pac,12,0.26979,8.3636,22,"pipeline A HF count by HF onset month, per day"
+Q6,pac,1,0.27126,8.4091,22,"pipeline A HF count by HF onset month, per day"
+Q6,pac,2,0.22222,6.2727,22,"pipeline A HF count by HF onset month, per day"
+Q6,pac,3,0.12317,3.8182,22,"pipeline A HF count by HF onset month, per day"
+Q6,pac,4,0.05,1.5,22,"pipeline A HF count by HF onset month, per day"
+Q6,pac,5,0.0058651,0.18182,22,"pipeline A HF count by HF onset month, per day"
+Q7,pac,6,0.0049645,0.14894,47,"pipeline A depth-strong count by genesis month, per day"
+Q7,pac,7,0.0041181,0.12766,47,"pipeline A depth-strong count by genesis month, per day"
+Q7,pac,8,0.0089224,0.2766,47,"pipeline A depth-strong count by genesis month, per day"
+Q7,pac,9,0.058865,1.766,47,"pipeline A depth-strong count by genesis month, per day"
+Q7,pac,10,0.12354,3.8298,47,"pipeline A depth-strong count by genesis month, per day"
+Q7,pac,11,0.20284,6.0851,47,"pipeline A depth-strong count by genesis month, per day"
+Q7,pac,12,0.28964,8.9787,47,"pipeline A depth-strong count by genesis month, per day"
+Q7,pac,1,0.28552,8.8511,47,"pipeline A depth-strong count by genesis month, per day"
+Q7,pac,2,0.22214,6.2766,47,"pipeline A depth-strong count by genesis month, per day"
+Q7,pac,3,0.12766,3.9574,47,"pipeline A depth-strong count by genesis month, per day"
+Q7,pac,4,0.046099,1.383,47,"pipeline A depth-strong count by genesis month, per day"
+Q7,pac,5,0.010981,0.34043,47,"pipeline A depth-strong count by genesis month, per day"
+Q8,pac,6,0.0017619,0.14894,47,pipeline A depth-strong share
+Q8,pac,7,0.0015404,0.12766,47,pipeline A depth-strong share
+Q8,pac,8,0.0039841,0.2766,47,pipeline A depth-strong share
+Q8,pac,9,0.029986,1.766,47,pipeline A depth-strong share
+Q8,pac,10,0.063672,3.8298,47,pipeline A depth-strong share
+Q8,pac,11,0.095365,6.0851,47,pipeline A depth-strong share
+Q8,pac,12,0.12158,8.9787,47,pipeline A depth-strong share
+Q8,pac,1,0.1203,8.8511,47,pipeline A depth-strong share
+Q8,pac,2,0.10068,6.2766,47,pipeline A depth-strong share
+Q8,pac,3,0.062021,3.9574,47,pipeline A depth-strong share
+Q8,pac,4,0.021566,1.383,47,pipeline A depth-strong share
+Q8,pac,5,0.004548,0.34043,47,pipeline A depth-strong share
+Q11,pac,6,37.4,5.1,22,archive mean latitude of the first HF fix (deg N)
+Q11,pac,7,,0,22,archive mean latitude of the first HF fix (deg N)
+Q11,pac,8,46.25,8.4091,22,archive mean latitude of the first HF fix (deg N)
+Q11,pac,9,47.524,73.445,22,archive mean latitude of the first HF fix (deg N)
+Q11,pac,10,46.9,185.47,22,archive mean latitude of the first HF fix (deg N)
+Q11,pac,11,47.636,244.68,22,archive mean latitude of the first HF fix (deg N)
+Q11,pac,12,46.337,370.7,22,archive mean latitude of the first HF fix (deg N)
+Q11,pac,1,43.471,373.45,22,archive mean latitude of the first HF fix (deg N)
+Q11,pac,2,45.158,256.58,22,archive mean latitude of the first HF fix (deg N)
+Q11,pac,3,44.222,176.89,22,archive mean latitude of the first HF fix (deg N)
+Q11,pac,4,44.645,66.968,22,archive mean latitude of the first HF fix (deg N)
+Q11,pac,5,41.475,7.5409,22,archive mean latitude of the first HF fix (deg N)
+Q12,pac,6,26.95,6.125,22,pipeline A mean HF onset latitude (deg N)
+Q12,pac,7,26.25,3.5795,22,pipeline A mean HF onset latitude (deg N)
+Q12,pac,8,30.125,21.909,22,pipeline A mean HF onset latitude (deg N)
+Q12,pac,9,34.679,61.477,22,pipeline A mean HF onset latitude (deg N)
+Q12,pac,10,40.661,177.43,22,pipeline A mean HF onset latitude (deg N)
+Q12,pac,11,45.142,223.66,22,pipeline A mean HF onset latitude (deg N)
+Q12,pac,12,43.16,360.98,22,pipeline A mean HF onset latitude (deg N)
+Q12,pac,1,42.562,357.91,22,pipeline A mean HF onset latitude (deg N)
+Q12,pac,2,43.047,270.02,22,pipeline A mean HF onset latitude (deg N)
+Q12,pac,3,42.973,164.08,22,pipeline A mean HF onset latitude (deg N)
+Q12,pac,4,41.902,62.852,22,pipeline A mean HF onset latitude (deg N)
+Q12,pac,5,28.75,5.2273,22,pipeline A mean HF onset latitude (deg N)
+Q13,pac,6,53.547,4619.7,22,pipeline A all-track mean peak latitude (deg N)
+Q13,pac,7,54.455,4569.3,22,pipeline A all-track mean peak latitude (deg N)
+Q13,pac,8,53.496,3825,22,pipeline A all-track mean peak latitude (deg N)
+Q13,pac,9,53.174,3188,22,pipeline A all-track mean peak latitude (deg N)
+Q13,pac,10,52.511,3157.8,22,pipeline A all-track mean peak latitude (deg N)
+Q13,pac,11,52.026,3270.5,22,pipeline A all-track mean peak latitude (deg N)
+Q13,pac,12,50.875,3778.6,22,pipeline A all-track mean peak latitude (deg N)
+Q13,pac,1,49.572,3600.7,22,pipeline A all-track mean peak latitude (deg N)
+Q13,pac,2,50.228,3025.1,22,pipeline A all-track mean peak latitude (deg N)
+Q13,pac,3,50.51,3294.6,22,pipeline A all-track mean peak latitude (deg N)
+Q13,pac,4,51.778,3415,22,pipeline A all-track mean peak latitude (deg N)
+Q13,pac,5,52.976,4043.1,22,pipeline A all-track mean peak latitude (deg N)
+Q9,atl,6,66.157,66.157,17,v250 2-6 day eddy activity in box (m2/s2)
+Q9,atl,7,59.053,59.053,17,v250 2-6 day eddy activity in box (m2/s2)
+Q9,atl,8,63.336,63.336,17,v250 2-6 day eddy activity in box (m2/s2)
+Q9,atl,9,93.564,93.564,17,v250 2-6 day eddy activity in box (m2/s2)
+Q9,atl,10,106.73,106.73,17,v250 2-6 day eddy activity in box (m2/s2)
+Q9,atl,11,133.15,133.15,17,v250 2-6 day eddy activity in box (m2/s2)
+Q9,atl,12,132.25,132.25,17,v250 2-6 day eddy activity in box (m2/s2)
+Q9,atl,1,128.79,128.79,17,v250 2-6 day eddy activity in box (m2/s2)
+Q9,atl,2,136.34,136.34,17,v250 2-6 day eddy activity in box (m2/s2)
+Q9,atl,3,112.78,112.78,17,v250 2-6 day eddy activity in box (m2/s2)
+Q9,atl,4,109.72,109.72,17,v250 2-6 day eddy activity in box (m2/s2)
+Q9,atl,5,73.636,73.636,17,v250 2-6 day eddy activity in box (m2/s2)
+Q10,atl,6,74143,74143,42,MSLP 2-6 day eddy activity in box (Pa2; ERA5 pressure is in Pa)
+Q10,atl,7,59206,59206,42,MSLP 2-6 day eddy activity in box (Pa2; ERA5 pressure is in Pa)
+Q10,atl,8,69075,69075,42,MSLP 2-6 day eddy activity in box (Pa2; ERA5 pressure is in Pa)
+Q10,atl,9,1.1641e+05,1.1641e+05,42,MSLP 2-6 day eddy activity in box (Pa2; ERA5 pressure is in Pa)
+Q10,atl,10,1.683e+05,1.683e+05,42,MSLP 2-6 day eddy activity in box (Pa2; ERA5 pressure is in Pa)
+Q10,atl,11,2.2779e+05,2.2779e+05,42,MSLP 2-6 day eddy activity in box (Pa2; ERA5 pressure is in Pa)
+Q10,atl,12,2.4923e+05,2.4923e+05,42,MSLP 2-6 day eddy activity in box (Pa2; ERA5 pressure is in Pa)
+Q10,atl,1,2.6051e+05,2.6051e+05,42,MSLP 2-6 day eddy activity in box (Pa2; ERA5 pressure is in Pa)
+Q10,atl,2,2.542e+05,2.542e+05,42,MSLP 2-6 day eddy activity in box (Pa2; ERA5 pressure is in Pa)
+Q10,atl,3,2.1024e+05,2.1024e+05,42,MSLP 2-6 day eddy activity in box (Pa2; ERA5 pressure is in Pa)
+Q10,atl,4,1.4712e+05,1.4712e+05,42,MSLP 2-6 day eddy activity in box (Pa2; ERA5 pressure is in Pa)
+Q10,atl,5,92447,92447,42,MSLP 2-6 day eddy activity in box (Pa2; ERA5 pressure is in Pa)
+Q9,pac,6,58.08,58.08,17,v250 2-6 day eddy activity in box (m2/s2)
+Q9,pac,7,40.233,40.233,17,v250 2-6 day eddy activity in box (m2/s2)
+Q9,pac,8,55.331,55.331,17,v250 2-6 day eddy activity in box (m2/s2)
+Q9,pac,9,88.612,88.612,17,v250 2-6 day eddy activity in box (m2/s2)
+Q9,pac,10,121.05,121.05,17,v250 2-6 day eddy activity in box (m2/s2)
+Q9,pac,11,128.38,128.38,17,v250 2-6 day eddy activity in box (m2/s2)
+Q9,pac,12,111.53,111.53,17,v250 2-6 day eddy activity in box (m2/s2)
+Q9,pac,1,95.523,95.523,17,v250 2-6 day eddy activity in box (m2/s2)
+Q9,pac,2,106.67,106.67,17,v250 2-6 day eddy activity in box (m2/s2)
+Q9,pac,3,119.68,119.68,17,v250 2-6 day eddy activity in box (m2/s2)
+Q9,pac,4,133.05,133.05,17,v250 2-6 day eddy activity in box (m2/s2)
+Q9,pac,5,106.11,106.11,17,v250 2-6 day eddy activity in box (m2/s2)
+Q10,pac,6,85043,85043,42,MSLP 2-6 day eddy activity in box (Pa2; ERA5 pressure is in Pa)
+Q10,pac,7,48555,48555,42,MSLP 2-6 day eddy activity in box (Pa2; ERA5 pressure is in Pa)
+Q10,pac,8,64577,64577,42,MSLP 2-6 day eddy activity in box (Pa2; ERA5 pressure is in Pa)
+Q10,pac,9,1.4321e+05,1.4321e+05,42,MSLP 2-6 day eddy activity in box (Pa2; ERA5 pressure is in Pa)
+Q10,pac,10,2.2672e+05,2.2672e+05,42,MSLP 2-6 day eddy activity in box (Pa2; ERA5 pressure is in Pa)
+Q10,pac,11,2.7042e+05,2.7042e+05,42,MSLP 2-6 day eddy activity in box (Pa2; ERA5 pressure is in Pa)
+Q10,pac,12,3.0131e+05,3.0131e+05,42,MSLP 2-6 day eddy activity in box (Pa2; ERA5 pressure is in Pa)
+Q10,pac,1,2.6647e+05,2.6647e+05,42,MSLP 2-6 day eddy activity in box (Pa2; ERA5 pressure is in Pa)
+Q10,pac,2,2.737e+05,2.737e+05,42,MSLP 2-6 day eddy activity in box (Pa2; ERA5 pressure is in Pa)
+Q10,pac,3,2.6878e+05,2.6878e+05,42,MSLP 2-6 day eddy activity in box (Pa2; ERA5 pressure is in Pa)
+Q10,pac,4,2.1854e+05,2.1854e+05,42,MSLP 2-6 day eddy activity in box (Pa2; ERA5 pressure is in Pa)
+Q10,pac,5,1.425e+05,1.425e+05,42,MSLP 2-6 day eddy activity in box (Pa2; ERA5 pressure is in Pa)

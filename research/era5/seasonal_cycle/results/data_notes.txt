@@ -1,0 +1,4 @@
+archive atl: dropped 0 rows with an invalid date
+archive atl: 1016 events with an HF fix; seasons 2003-2025
+archive pac: dropped 1 rows with an invalid date
+archive pac: 902 events with an HF fix; seasons 2001-2025
