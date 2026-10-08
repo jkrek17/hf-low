@@ -1,0 +1,36 @@
+Station check (ERA5 proxy cases vs ISD reports), held-out seasons (odd start years), cases and controls as sampled
+held-out rows 568, cases 142 (tip 40, barrier 102); top quintile of the ingredient score (weighted) = score >= 1.06, 108 rows
+PCS: reports 104924, years 2005-2025; matched within +-1 h for 308 of 568 rows (cases 73 of 142)
+TAS: reports 120009, years 2005-2025; matched within +-1 h for 335 of 568 rows (cases 80 of 142)
+
+F5 (12 tests, BH): group minus comparison; season-block bootstrap 95% CI (held-out seasons)
+  A all cases      PCS  mean wind (kt)  +10.5 [+7.1, +14.4]  p 0.001 q 0.002  (n with report: 73 vs 235)
+  A all cases      PCS  share >= 34 kt  +0.190 [+0.080, +0.311]  p 0.002 q 0.005  (n with report: 73 vs 235)
+  A all cases      TAS  mean wind (kt)  +4.8 [+1.2, +8.0]  p 0.001 q 0.002  (n with report: 80 vs 255)
+  A all cases      TAS  share >= 34 kt  +0.000 [+0.000, +0.000]  p 1.000 q 1.000  (n with report: 80 vs 255)
+  A tip cases      PCS  mean wind (kt)  +23.5 [+14.1, +29.7]  p 0.001 q 0.002  (n with report: 23 vs 235)
+  A tip cases      PCS  share >= 34 kt  +0.436 [+0.129, +0.678]  p 0.007 q 0.015  (n with report: 23 vs 235)
+  A barrier cases  TAS  mean wind (kt)  +6.0 [+1.7, +9.1]  p 0.003 q 0.006  (n with report: 63 vs 255)
+  A barrier cases  TAS  share >= 34 kt  +0.000 [+0.000, +0.000]  p 1.000 q 1.000  (n with report: 63 vs 255)
+  B top quintile   PCS  mean wind (kt)  -0.5 [-3.2, +2.0]  p 0.644 q 0.967  (n with report: 68 vs 240)
+  B top quintile   PCS  share >= 34 kt  +0.002 [-0.048, +0.066]  p 0.946 q 1.000  (n with report: 68 vs 240)
+  B top quintile   TAS  mean wind (kt)  -1.8 [-3.1, -0.3]  p 0.028 q 0.047  (n with report: 70 vs 265)
+  B top quintile   TAS  share >= 34 kt  +0.000 [+0.000, +0.000]  p 1.000 q 1.000  (n with report: 70 vs 265)
+
+POST HOC, not pre-registered: station wind (kt) regressed on BASE + ingredients (weighted, held-out rows with a report)
+  PCS (n 308): GH +2.92 kt/SD [-0.32, +5.50]; GRAD -1.83 kt/SD [-4.17, +0.93]; STAB -0.48 kt/SD [-2.40, +1.10]; NAO -0.03 kt/SD [-2.55, +1.95]
+  TAS (n 335): GH +1.21 kt/SD [+0.14, +2.61]; GRAD -1.48 kt/SD [-2.34, -0.78]; STAB +0.02 kt/SD [-0.61, +0.68]; NAO +0.62 kt/SD [-0.25, +1.83]
+
+group means (weighted, kt):
+  PCS cases         mean 25.1, share >= 34 kt 0.233, n 73
+  PCS tip           mean 38.1, share >= 34 kt 0.478, n 23
+  PCS barrier       mean 19.2, share >= 34 kt 0.120, n 50
+  PCS controls      mean 14.6, share >= 34 kt 0.043, n 235
+  PCS top quintile  mean 14.8, share >= 34 kt 0.055, n 68
+  PCS rest          mean 15.3, share >= 34 kt 0.053, n 240
+  TAS cases         mean 9.2, share >= 34 kt 0.000, n 80
+  TAS tip           mean 4.5, share >= 34 kt 0.000, n 17
+  TAS barrier       mean 10.4, share >= 34 kt 0.000, n 63
+  TAS controls      mean 4.4, share >= 34 kt 0.000, n 255
+  TAS top quintile  mean 3.3, share >= 34 kt 0.000, n 70
+  TAS rest          mean 5.1, share >= 34 kt 0.000, n 265

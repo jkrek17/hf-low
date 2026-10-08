@@ -1,0 +1,20 @@
+POST HOC on all candidate times: 4559 times, 269 cases (ERA5 proxy, outcome Y_T)
+adjusted logistic on all times (pre-registered baseline), OR per SD [season-block 95% CI]:
+  GH    4.29 [3.12, 6.25]
+  GRAD  1.05 [0.74, 1.41]
+  NAO   1.23 [1.05, 1.47]
+
+matched on MSLP, lat, lon within month: up to 5 nearest controls, caliper 99 SD-distance: 269 sets, 5.00 controls per set, mean match distance 0.69; case-minus-control reference-low MSLP -6.3 hPa, lat +0.33, lon -0.15
+  GH    OR per SD 2.09 [1.38, 3.11]
+  GRAD  OR per SD 0.99 [0.71, 1.32]
+  NAO   OR per SD 1.39 [1.06, 1.87]
+
+matched on MSLP, lat, lon within month: up to 5 nearest controls, caliper 0.5 SD-distance: 212 sets, 3.76 controls per set, mean match distance 0.32; case-minus-control reference-low MSLP -1.0 hPa, lat -0.00, lon -0.18
+  GH    OR per SD 4.63 [2.90, 7.21]
+  GRAD  OR per SD 1.13 [0.78, 1.50]
+  NAO   OR per SD 1.40 [0.98, 2.08]
+
+matched on MSLP, lat, lon within month: up to 2 nearest controls, caliper 0.25 SD-distance: 127 sets, 1.55 controls per set, mean match distance 0.17; case-minus-control reference-low MSLP -0.2 hPa, lat -0.04, lon -0.07
+  GH    OR per SD 8.86 [4.41, 27.96]
+  GRAD  OR per SD 0.99 [0.57, 2.11]
+  NAO   OR per SD 1.45 [0.74, 2.36]

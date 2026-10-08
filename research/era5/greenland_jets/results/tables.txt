@@ -1,0 +1,26 @@
+Weighted share of low-in-region times with G_T >= 71.7 kt (ERA5 proxy), all 22 seasons, by tercile of two ingredients
+(z is in SD of the fit-half weighted distribution; 'low' = bottom tercile, 'high' = top tercile of the weighted sample)
+
+rows: GH tercile; columns: reference-low MSLP (high = shallow) tercile (cells: share, n cases/n rows)
+                             low                   mid                  high
+  low           0.132 (116/ 260)      0.006 (  3/  96)      0.015 (  2/  26)
+  mid           0.170 ( 70/ 135)      0.020 ( 12/ 121)      0.008 (  4/ 102)
+  high          0.121 ( 27/  64)      0.049 ( 21/  97)      0.016 ( 14/ 175)
+
+rows: GH tercile; columns: STAB tercile (cells: share, n cases/n rows)
+                             low                   mid                  high
+  low           0.062 ( 34/ 131)      0.089 ( 46/ 135)      0.093 ( 41/ 116)
+  mid           0.043 ( 24/ 124)      0.065 ( 31/ 115)      0.062 ( 31/ 119)
+  high          0.039 ( 16/  90)      0.034 ( 18/ 114)      0.048 ( 28/ 132)
+
+rows: GH tercile; columns: GRAD tercile (cells: share, n cases/n rows)
+                             low                   mid                  high
+  low           0.082 ( 66/ 204)      0.059 ( 24/  96)      0.102 ( 31/  82)
+  mid           0.054 ( 26/ 112)      0.048 ( 26/ 122)      0.067 ( 34/ 124)
+  high          0.021 (  5/  48)      0.038 ( 22/ 125)      0.049 ( 35/ 163)
+
+rows: reference-low MSLP (high = shallow) tercile; columns: STAB tercile (cells: share, n cases/n rows)
+                             low                   mid                  high
+  low           0.105 ( 63/ 164)      0.143 ( 78/ 166)      0.192 ( 72/ 129)
+  mid           0.018 (  8/  92)      0.016 (  8/  99)      0.035 ( 20/ 123)
+  high          0.007 (  3/  89)      0.018 (  9/  99)      0.014 (  8/ 115)
