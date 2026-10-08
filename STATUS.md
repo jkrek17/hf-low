@@ -337,6 +337,15 @@ Pre-registered (`PREREGISTRATION.md`, `efc74a5`, before any statistic). Archive 
 - Limits: the definition is not uniquely identified (at least 3 HF fixes alone also gives 22.4 and 20.5), the OPC area edges are recalled not sourced, the published authors' counting rule was not read, and the early archive seasons are short-counted so a direct overlap test is thin. A fresh Sonnet agent recomputed the numbers; the Atlantic linked chain differs by 0.2-0.3 events. Not checked: bootstrap intervals, the Chelton and Jelenak rows, the 5 degree area sensitivity.
 - Rows for Jason: none wrong; `results/linked_ids_for_review.csv` lists 21 possible split or duplicate ID pairs (0.6 and 0.3 events per season). Nothing edited in the archive or sheet.
 
+### Second cyclone tracker: `research/era5/second_tracker/` (integration branch, hf-low PR 116, merged as `72a8b0b`; plan `6c7b61d`, tracker code frozen `24d0216`; agenda RA-15)
+
+Pipeline A is the reference; the new trackers are M (MSLP minima, Murray-Simmonds style) and V (850 hPa vorticity, Hodges style), both on WeatherBench2 ERA5 at 1.5 degrees (a proxy), seasons 2004-05 to 2021-22 (the store ends January 2023). About 26 GB pulled with Jason's approval on the decision card.
+- **Answer: yes, the HF subset does not depend on the tracker.** Recall of A's 1,490 HF events (first HF fix 5 Oct-25 Apr; Atlantic 817, Pacific 673): M 88.9% / 92.3%, V 95.8% / 97.6% (Atl / Pac), 98.75% season-block lower bounds 86.2, 89.8, 93.7, 96.1, all at or above the registered 85%. Post hoc chance control (A's HF fixes moved 15 degrees east or 5 days later): M 1-17%, V 14-47%, so M is the cleaner confirmation.
+- Weak points: requiring half of all of A's fixes drops Atlantic recall to M 82.6%, V 80.5%; the reverse direction (most intense tracker tracks that are A HF events) is 29-46% against a ceiling of 54-62% when A is ranked by pressure, because HF is a gust label; M finds about half as many cyclones as A in total.
+- M's misses are short, shallow, mostly single-HF-fix Atlantic events, concentrated north of 60N (recall 85.1% vs 91.1%) and within 100 km of Greenland (74.4%). Results leaning on that subset (PR 29, 58, 71) are the most exposed; V does not miss them.
+- Not tested: whether PR 14, 41 or 47 keep their effect sizes under a second tracker (no gust on the new tracks). Gates: none opened or closed. Looks: none held out; first tracker-agreement look at the 18 seasons.
+- A fresh Sonnet agent recomputed event and track counts, the four recalls and the chance controls. Not independently checked: the 98.75% intervals, sensitivities, reverse direction, counts, weekly correlations, missed-event contrasts.
+
 ### Archive HF fixes per event: `research/era5/fixes_per_event/` (integration branch, hf-low PR 105, merged as `cbec936`; agenda RA-11)
 
 - Question: is the archive's fall in HF fixes per event (-0.18 per decade, 2004-05 to 2025-26) gradual or a step at a scatterometer change? Archive, 1861 events, 22 seasons; plan committed first (`5e16d30`, addendum `708f1b2`); 5 primary and 14 secondary tests, BH-FDR.
