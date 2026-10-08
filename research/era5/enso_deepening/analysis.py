@@ -110,8 +110,7 @@ add("S2", "rapid (B>=12) deepening latitude", fit(wtab(rapid, "latm"), "emi", C)
 add("S3", "bomb longitude with SON EMI + SON N34 + year", fit(T_lon, "emi_son", ["n34_son", "year"]))
 add("S4", "bomb latitude with SON EMI + SON N34 + year", fit(T_lat, "emi_son", ["n34_son", "year"]))
 # S5 position of lowest pressure, same bomb tracks
-bm = bombs[BOXMIN.loc[bombs.index].values]
-add("S5", "longitude of minimum-pressure fix of bomb tracks (min fix in box)", fit(wtab(bm, "lon_min"), "emi", C))
+add("S5", "longitude of minimum-pressure fix of bomb tracks", fit(wtab(bombs, "lon_min"), "emi", C))
 add("S6", "bomb longitude with N4-N3 instead of EMI", fit(T_lon, "n4mn3", C))
 add("S7", "bomb longitude without year term", fit(T_lon, "emi", ["n34"]))
 add("S8", "bomb longitude without N34 term", fit(T_lon, "emi", ["year"]))

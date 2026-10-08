@@ -20,7 +20,8 @@ def main(fixes, out):
     w = f[ok].copy()
     w["dp24"] = w.msl - w.msl2
     w["latm"] = (w.lat + w.lat2) / 2
-    w["lonm"] = (w.lon + w.lon2) / 2          # Pacific box 120-240E never straddles 0/360
+    dl = ((w.lon2 - w.lon + 180) % 360) - 180   # circular midpoint: Atlantic-to-Europe tracks cross 0/360
+    w["lonm"] = (w.lon + dl / 2) % 360
     w["B"] = w.dp24 * np.sin(np.radians(60)) / np.sin(np.radians(w.latm))
     w["tm"] = w.t + pd.Timedelta(hours=12)
     best = w.loc[w.groupby("tid").B.idxmax(), ["tid", "winter", "tm", "latm", "lonm", "B", "dp24"]].copy()

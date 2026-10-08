@@ -78,4 +78,4 @@ No model is fitted on one block and scored on another; all 47 winters, including
 
 ## Deviations (post hoc)
 
-None yet.
+1. Longitude midpoint was first an arithmetic mean, wrong across the 0/360 meridian (40 Atlantic-Europe tracks landed in the Pacific box); corrected to a circular midpoint. 2. S5's first run required the minimum-pressure fix to lie in the box; the registered definition does not, and is restored. Both versions are in the README; no decision-rule outcome changed. A 200-permutation smoke run preceded the reported run.
