@@ -126,6 +126,15 @@ Working defaults that sessions follow until Jason confirms or changes them. Jaso
 - Nulls exclude effects above about 0.7 hPa (depth), 0.04 Bergeron and 0.65 kt per SD. Season ICC of every outcome is -0.01 to 0.05.
 - All quoted numbers were recomputed by a fresh agent from the committed files. `results/HYPOTHESIS_AND_ORDER.md` records the order of the exploratory look, the plan and the run; it was written after the run and says so.
 
+### Frequency split: more cyclones or a larger HF share? (`research/era5/freq_split/`, hf-low PR 14, merged into the integration branch as `46097c8`)
+
+Pipeline A, ERA5 proxy. Plan committed first (`933e68f`); results `95809d1`. Oct-Apr 2004-05..2025-26, NAO (Atlantic) and PNA (Pacific) lagged to days -10..-4 before genesis, per SD.
+- Atlantic NAO: RR(HF) 1.096 = RR(all cyclones) 0.974 x RR(share) 1.125; the share carries it (f = 1.29, 95% bootstrap 1.07-1.78).
+- Pacific PNA: RR(HF) 1.072 = 1.028 x 1.043; not resolved (f = 0.61, -0.65 to 0.79). With a count-matched pressure cut the Pacific share is 1.111 (f = 0.79, 0.60-0.89) and holds in 1979-2000.
+- The same-time index gives 1.210 and 1.186 (the published effects); the lag removes more than half of the log effect.
+- ONI, Pacific NAO: null. Atlantic PNA on the share: 0.88 (exploratory, 1 of 52 distinct tests).
+- Verified by a fresh agent: the headline decomposition, odds ratios, same-time and depth values, the two main permutation p-values and the Atlantic leave-one-season-out range. Not independently checked: bootstrap intervals, the Jun-May, chain, other-index and joint rows, power figures and FDR q-values (listed in the README).
+
 ### ERA5 pipeline B: `event_fields.py`, `criterion.py`, `series.py` (integration branch)
 
 - A per-moment probability from four features, fitted on early (2004-05), late (2021-25), and full (2004 to 2025) windows.
@@ -210,7 +219,7 @@ Fix these as the files are next touched, in the same commit.
 ## Open work
 
 - Decision 1: the fixed-depth count test ran (hf-low PR 18). The ramp is not detectable, and the post hoc level offset needs independent confirmation. The buoy comparison (PR 17) did not provide it: it has under 10 % power against a drift that size and found the level moving the other way over 2001-04 (4 seasons). A comparison with the power needed would need NDBC's hull history and its post-2004 records, which the work containers cannot reach; ship reports (ICOADS) were not tried because that host is unreachable too. A pre-registered replication of the level test would be a second one, for example on pipeline B tracks or with 2001-03 held out.
-- Teleconnections and intensity: question 2 (more cyclones or more of them reaching HF, from the full track population) is queued. The Pacific PNA gust and HF-duration lead needs an independent check.
+- Teleconnections and intensity: question 2 is answered (frequency split, entry above). Open from it: the Pacific share disagrees between the gust and the pressure-depth definitions of "strong"; the cyclone count could change with storms moving across the fixed domain edges (not checked). The Pacific PNA gust and HF-duration lead from question 1 needs an independent check.
 - Intensity framework: skill by basin is not broken out; untested on operational (GFS) analyses; gale and storm thresholds deferred by Jason; the fitted model has not been applied to 1979-2003.
 - Pipeline B: put the basin term in the committed series; look at the over-prediction at high latitude.
 - Precursors: resolve the collision worklist (39 pairs: 31 sequential, 8 concurrent); recall on fast deepeners is not at parity and tuning was stopped deliberately; tropical and post-tropical systems are not parsed.
@@ -219,7 +228,7 @@ Fix these as the files are next touched, in the same commit.
 
 ## Future tasks
 
-Work nobody has started. A thread picking one up changes its status here in its ledger PR. Items marked "carried over" were already logged as open or deferred elsewhere and are copied here so Jason can prune them. Work already running (teleconnection question 1, question 2 more-vs-stronger storms, high-latitude Atlantic, HF wind structure, ERA5 wind drift vs buoys, the decision-1 count-drift test) is not listed. Started 2026-10-08.
+Work nobody has started. A thread picking one up changes its status here in its ledger PR. Items marked "carried over" were already logged as open or deferred elsewhere and are copied here so Jason can prune them. Work already running (teleconnection question 1, high-latitude Atlantic, HF wind structure, ERA5 wind drift vs buoys, the decision-1 count-drift test) is not listed. Started 2026-10-08.
 
 | # | Task | From | Data, and whether it needs a go-ahead | Status |
 |---|---|---|---|---|
