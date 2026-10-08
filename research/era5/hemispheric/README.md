@@ -115,4 +115,10 @@ be recomputed without the fields. Repeating `evaluate` is a further look at the 
 
 ## Verification
 
-(filled in after a fresh agent recomputes the quoted numbers)
+Two fresh Sonnet agents that had not seen the code or the README recomputed with their own implementations.
+
+**Matched (statistics, from `weekly_table.csv.gz` and the frozen coefficients):** held-out event totals (458, 421); SS(P|B1) +0.0555 and +0.0232; SS(N|B1) -0.0253 and -0.0132; the Atlantic P1 p at the 0.0001 floor and the Pacific P1 p (0.0002 to 0.0010 across seeds, the claimed 0.0011 is Monte Carlo noise); seasons won (9 of 11 Atlantic; Pacific 7 of 11 against the frozen B1, 8 of 11 if each model is compared with its own non-pattern terms); quintile rates (1.833/1.106, 1.788/0.788); attribution adjusted R-squared 0.134 and 0.300 (main effects only 0.125 and 0.299); pipeline A proxy transfer +0.0755 and +0.0157.
+
+**Matched (fields):** Z500, U250 and MSLP at six dates, three from WeatherBench2 (bit-exact) and three from ARCO (rms at most 0.008 m, 0.002 m/s, 0.001 hPa); no NaN outside SST; the SST mask is static and covers all land plus some coastal cells.
+
+**Not independently checked:** the EOF and ridge fits themselves (the verifier used the frozen coefficients), lambda selection, the swap, lag-2 and concurrent rows, the SOM, P3 and P4 intervals and p-values, the power simulation, the composite maps and half-to-half map correlations, FDR q values, S5 within-era, the post hoc rows PH1 to PH5, and the held-out rate ratios per SD. These come from `run.py`, `attribute.py` and `posthoc*.py` as committed.
