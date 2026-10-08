@@ -116,7 +116,7 @@ Tests: `python3 tests/fetch_hsf/test_fetch_hsf.py`, `python3 tests/hsf_parse/tes
 ### ERA5 proxy record
 
 - Call it a proxy everywhere it appears: file headers, column descriptions, figures, commit subjects. An event in it is "a cyclone whose ERA5 fields look like the ones OPC warned for as hurricane force", which is well defined and is not the archive.
-- It cannot be validated before the archive begins. The record starts in 1979; earlier years are a sensitivity check only, because of the observing-system change.
+- It cannot be validated before the archive begins. How far back an index may be used at all is a gate in `STATUS.md`, and it has moved more than once as evidence came in. Check it before extending or quoting any pre-archive figure. Gust-based and depth-based quantities have not behaved the same way before the archive, so a result for one says nothing about the other.
 - Two pipelines exist (`research/era5/hf_history/` and the `event_fields.py` / `criterion.py` / `series.py` set). They differ in domain, gust radius, low detection, months, labels, calibration window, and what they output. Name the pipeline with every number, and do not mix their outputs.
 - Gust features are taken over ocean points only. The archive is about wind over water, and land or terrain inside the radius adds error that varies with position.
 - Report skill in the terms a forecaster reads: POD, FAR, CSI, HSS, and bias, alongside AUC. Give leave-one-season-out ranges and the transfer to seasons outside the fit.
