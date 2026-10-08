@@ -1,0 +1,32 @@
+== hf24: base BSS +0.4192; gain = BSS(cand) - BSS(base), 90% CI over 18 seasons
+  H history                gain -0.0003 [-0.0006, -0.0000]  BSS +0.4189  p 0.1090  q(target) 0.145  q(family) 0.208  seasons better 9/18
+  A air-sea                gain +0.0000 [-0.0002, +0.0002]  BSS +0.4192  p 0.9274  q(target) 0.927  q(family) 0.949  seasons better 13/18
+  M moisture transport     gain -0.0004 [-0.0007, -0.0000]  BSS +0.4188  p 0.0972  q(target) 0.145  q(family) 0.208  seasons better 8/18
+  D diabatic               gain +0.0003 [-0.0001, +0.0007]  BSS +0.4195  p 0.2123  q(target) 0.239  q(family) 0.319  seasons better 10/18
+  J jet geometry           gain -0.0002 [-0.0004, -0.0000]  BSS +0.4189  p 0.0695  q(target) 0.145  q(family) 0.208  seasons better 6/18
+  L low-level wind         gain +0.0013 [+0.0008, +0.0019]  BSS +0.4205  p 0.0027  q(target) 0.012  q(family) 0.065  seasons better 14/18
+  P pressure environment   gain +0.0020 [+0.0006, +0.0034]  BSS +0.4212  p 0.0338  q(target) 0.101  q(family) 0.208  seasons better 13/18
+  K land                   gain +0.0005 [+0.0000, +0.0010]  BSS +0.4197  p 0.1129  q(target) 0.145  q(family) 0.208  seasons better 13/18
+  all1                     gain +0.0045 [+0.0028, +0.0059]  BSS +0.4236  p 0.0011  q(target) 0.010  q(family) nan  seasons better 15/18
+== hf24 onset: base BSS +0.2863; gain = BSS(cand) - BSS(base), 90% CI over 18 seasons
+  H history                gain -0.0005 [-0.0009, -0.0002]  BSS +0.2858  p 0.0283  q(target) 0.127  q(family) 0.208  seasons better 5/18
+  A air-sea                gain +0.0001 [-0.0002, +0.0003]  BSS +0.2864  p 0.7164  q(target) 0.716  q(family) 0.819  seasons better 10/18
+  M moisture transport     gain -0.0001 [-0.0005, +0.0003]  BSS +0.2862  p 0.6015  q(target) 0.677  q(family) 0.738  seasons better 9/18
+  D diabatic               gain +0.0002 [-0.0003, +0.0007]  BSS +0.2865  p 0.6004  q(target) 0.677  q(family) 0.738  seasons better 10/18
+  J jet geometry           gain -0.0003 [-0.0006, -0.0001]  BSS +0.2860  p 0.0531  q(target) 0.159  q(family) 0.208  seasons better 5/18
+  L low-level wind         gain +0.0011 [+0.0001, +0.0019]  BSS +0.2874  p 0.0738  q(target) 0.166  q(family) 0.208  seasons better 14/18
+  P pressure environment   gain +0.0019 [-0.0001, +0.0036]  BSS +0.2882  p 0.1280  q(target) 0.192  q(family) 0.220  seasons better 12/18
+  K land                   gain +0.0007 [+0.0000, +0.0012]  BSS +0.2870  p 0.1048  q(target) 0.189  q(family) 0.208  seasons better 12/18
+  all1                     gain +0.0039 [+0.0014, +0.0059]  BSS +0.2902  p 0.0181  q(target) 0.127  q(family) nan  seasons better 15/18
+== rapid deepening: base BSS +0.2807; gain = BSS(cand) - BSS(base), 90% CI over 18 seasons
+  H history                gain -0.0002 [-0.0007, +0.0003]  BSS +0.2806  p 0.5984  q(target) 0.791  q(family) 0.738  seasons better 7/18
+  A air-sea                gain +0.0000 [-0.0002, +0.0002]  BSS +0.2808  p 0.9490  q(target) 0.949  q(family) 0.949  seasons better 10/18
+  M moisture transport     gain +0.0035 [+0.0008, +0.0061]  BSS +0.2842  p 0.0444  q(target) 0.200  q(family) 0.208  seasons better 13/18
+  D diabatic               gain +0.0003 [-0.0006, +0.0011]  BSS +0.2810  p 0.6148  q(target) 0.791  q(family) 0.738  seasons better 9/18
+  J jet geometry           gain +0.0016 [+0.0002, +0.0030]  BSS +0.2823  p 0.0784  q(target) 0.224  q(family) 0.208  seasons better 11/18
+  L low-level wind         gain +0.0010 [+0.0000, +0.0019]  BSS +0.2818  p 0.0997  q(target) 0.224  q(family) 0.208  seasons better 12/18
+  P pressure environment   gain +0.0009 [-0.0001, +0.0019]  BSS +0.2817  p 0.1544  q(target) 0.278  q(family) 0.247  seasons better 13/18
+  K land                   gain +0.0002 [-0.0008, +0.0011]  BSS +0.2809  p 0.8033  q(target) 0.904  q(family) 0.876  seasons better 8/18
+  all1                     gain +0.0064 [+0.0042, +0.0087]  BSS +0.2872  p 0.0001  q(target) 0.000  q(family) nan  seasons better 17/18
+
+Groups meeting the pre-registered 'helps' rule: []

@@ -1,7 +1,8 @@
-"""Hart (2003) cyclone phase space, copied unchanged below this note from
-jkrek17/awips-tools cyclone_phase_space/cps/hart.py (2026-10-08) so that this
-research needs no checkout of that repository. Change it there first.
-"""
+# Hart (2003) cyclone phase space, copied from jkrek17/awips-tools
+# cyclone_phase_space/cps/hart.py (2026-10-08) so that this research needs no
+# checkout of that repository. Change it there first. The only edit here is
+# this header, which was a second string literal ahead of the __future__
+# import (a SyntaxError on every Python 3) and is now a comment.
 """
 Hart (2003) cyclone phase space parameters, pure numpy.
 
