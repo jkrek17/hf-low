@@ -1,0 +1,16 @@
+Power of the primary test (CR1 season-clustered Wald, positive OR, p < 0.05), planted OR per SD, 400 draws. Draws are independent given covariates, so power is an upper bound.
+definition  planted_OR  power  draws  fixes  events  seasons
+        D1        1.00 0.0225    400 112604    3904       25
+        D1        1.05 0.7350    400 112604    3904       25
+        D1        1.10 1.0000    400 112604    3904       25
+        D1        1.15 1.0000    400 112604    3904       25
+        D1        1.20 1.0000    400 112604    3904       25
+        D1        1.25 1.0000    400 112604    3904       25
+        D2        1.00 0.0175    400 112604    3904       25
+        D2        1.05 0.7050    400 112604    3904       25
+        D2        1.10 0.9925    400 112604    3904       25
+        D2        1.15 1.0000    400 112604    3904       25
+        D2        1.20 1.0000    400 112604    3904       25
+        D2        1.25 1.0000    400 112604    3904       25
+D1: minimum detectable OR per SD at 80% power = 1.062
+D2: minimum detectable OR per SD at 80% power = 1.067

@@ -118,4 +118,19 @@ Written to `research/era5/looks/ra24-trough-bombs.log` with a UTC stamp, not to 
 
 ## Deviations (post hoc)
 
-None yet.
+Logged in the order they happened. None changed a pre-registered test or the decision rule.
+
+1. *Implementation, before any trough coefficient was read.* V250 was pulled as well as U250 (PR 78's jet_up is a wind
+   speed, so the jet sensitivity needs both components); the pull therefore carried all three fields variables.
+   A first fields run without V250 (9.6 GB) was discarded and repeated. Total streamed: 79.4 GB surface pressure,
+   15.1 GB fields (kept), 9.6 GB fields (discarded), about 1.1 GB for the 3-month tracker check: about 105 GB,
+   against the roughly 85 GB approved. Bytes were not capped by anything but the plan; said here so it is on the record.
+2. *Implementation, before any outcome joined to a trough.* The first fix table was written with 4 significant digits
+   (lat/lon/pressure rounded) and was thrown away; tracks were re-linked and the table rewritten at full precision
+   before the tracker check and the features were computed. The tracker check was run on the second table.
+3. *Operationalisation.* Sensitivity 7 (spline against linear) is leave-one-season-out log-loss with a season bootstrap,
+   the reading of "season-bootstrap" that gives an out-of-sample comparison.
+4. **Post hoc, after the primary result was seen** (`posthoc.py`, `results/posthoc.csv`): the zonal-eddy effect D2
+   was far larger than D1, so the models were rerun with fixed effects for the 5.625 degree position cell of the fix,
+   and with those plus upstream jet speed. Both versions of every number are reported; the pre-registered verdict
+   is the one that stands.
