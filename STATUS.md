@@ -176,6 +176,15 @@ Pipeline A (ERA5 proxy), Atlantic, 2004-05 on; archive shares from the current p
 - Checked by a fresh verifier: the archive shares, pressure medians, location shares, mask counts and match rates. Not independently checked: the bootstrap intervals, the wind-direction split, the sea-ice interval, the station numbers. The verifier caught a sea-ice count error (28 events, now 25).
 - Not done: a trend in the high-latitude share, anything north of 67N, why the Pacific has so little.
 
+### Greenland jets: which ingredients give more coastal hurricane-force gusts? (`research/era5/greenland_jets/`, hf-low PR 58, merged into the integration branch as `4d6f5ed`)
+
+ERA5 proxy; outcome G_T is a regional gust metric (ocean within 300 km of Greenland, 58-72N, at least 400 km from any pipeline A low), not pipeline A's index. Pre-registered (`438172f`), Nov-Mar 2004-05 on, 4,559 low-in-region times, 269 cases (tip 69, barrier 200). Even seasons fit, odd held out, swap as replication; 35.5 GB pulled.
+- Ice-sheet MSLP is the one ingredient that held out: odds ratio 3.7 (fit) and 4.3 (held out) per SD (11 hPa), 4.0 and 3.4 in the swap; P(case) 3.7% to 19.9% from its 10th to 90th percentile. A Z500 blocking index agrees (2.7 per SD).
+- Cold-air supply (SST minus T2m): 1.4-1.9 per SD, not confirmed by the rule (pooled 1.54, q 0.065). Cross-strait gradient and NAO: null in the pre-registered family. Low motion: unresolved. High x depth interaction: +0.19, same sign in all fits, not supported (one-sided held-out p 0.067).
+- Held-out AUC 0.864 against 0.811 for depth and position alone; Brier skill +0.085 [-0.015, +0.185] over that baseline.
+- The pre-registered matched check failed to match (cases 13.5 hPa deeper than controls); post hoc matching on all times gives 4.6-8.9 per SD. Station check: cases and tip cases are windier at Prins Christian Sund, but ingredient-favoured times are not; the ERA5 high effect is not independently confirmed by stations.
+- Verified by a fresh agent: counts, odds ratios, skill, risk change, pooled and all-times fits, G_T at 10 times. Station counts did not reproduce (ISD files differ); means were close. Not checked: bootstrap p/q values, composite, swap, matched, post hoc.
+
 ### ENSO x PNA: does El Niño change what +PNA does to Pacific HF lows? (`research/era5/enso_pna/`, hf-low PR 34, merged into the integration branch as `9a59ed9`)
 
 Pipeline A, ERA5 proxy, Pacific, Oct-Apr 2004-05..2025-26 (22 seasons, 10,040 cyclones, 825 HF), PNA lagged to days -10..-4, ONI of the month of day -7. Plan committed first (`c6a085d`).
