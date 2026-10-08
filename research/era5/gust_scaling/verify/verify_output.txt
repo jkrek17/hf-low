@@ -1,0 +1,49 @@
+==== atl ====
+kept fixes 3271  storms 1094  seasons 22  dropped Dp<5: 32  fixes w/ any missing PNA day: 9  g800 min 71.7
+M2 slopes lnDp lnR lnSinLat ONI PNA: 0.3372 -0.0532 -0.1632 -0.0072 0.0021   sigma 0.1282  (const 4.2098, loglik 4924.380)
+profile max at sigma grid 0.1300 (grid step 0.01), profile loglik 4924.304 vs joint 4924.380
+M3 slopes lnDp lnSinLat ONI PNA: -0.1341 2.5927 0.0045 0.0161
+OLS ln g800 slopes lnDp lnR lnSinLat ONI PNA: 0.0835 -0.0159 -0.0738 -0.0029 0.0017
+corr lnDp-lnR -0.0383  lnDp-lng 0.3652  lnR-lng -0.2293  lnSin-lng -0.1959  lnDp-lnSin 0.0529
+PIT KS distance 0.0104
+bootstrap (500 season-block draws, 22 seasons): name est se z p
+  M2 lnDp      est   0.3372 se 0.0325 z  10.391 p 0.0000
+  M2 lnR       est  -0.0532 se 0.0088 z  -6.032 p 0.0000
+  M2 lnSinLat  est  -0.1632 se 0.0484 z  -3.371 p 0.0007
+  M2 ONI       est  -0.0072 se 0.0076 z  -0.948 p 0.3429
+  M2 PNA       est   0.0021 se 0.0066 z   0.311 p 0.7558
+  M3 ONI       est   0.0045 se 0.0137 z   0.326 p 0.7442
+  M3 PNA       est   0.0161 se 0.0141 z   1.138 p 0.2552
+  boot se of sigma 0.0056
+==== pac ====
+kept fixes 2663  storms 894  seasons 22  dropped Dp<5: 17  fixes w/ any missing PNA day: 4  g800 min 71.7
+M2 slopes lnDp lnR lnSinLat ONI PNA: 0.2604 -0.0428 -0.4837 -0.0064 0.0063   sigma 0.1241  (const 4.1921, loglik 4272.222)
+profile max at sigma grid 0.1200 (grid step 0.01), profile loglik 4271.911 vs joint 4272.222
+M3 slopes lnDp lnSinLat ONI PNA: -0.0746 2.3984 0.0185 0.0441
+OLS ln g800 slopes lnDp lnR lnSinLat ONI PNA: 0.0700 -0.0104 -0.1839 -0.0012 0.0023
+corr lnDp-lnR 0.0928  lnDp-lng 0.2462  lnR-lng -0.2110  lnSin-lng -0.2723  lnDp-lnSin 0.2942
+PIT KS distance 0.0158
+bootstrap (500 season-block draws, 22 seasons): name est se z p
+  M2 lnDp      est   0.2604 se 0.0263 z   9.916 p 0.0000
+  M2 lnR       est  -0.0428 se 0.0105 z  -4.067 p 0.0000
+  M2 lnSinLat  est  -0.4837 se 0.0619 z  -7.817 p 0.0000
+  M2 ONI       est  -0.0064 se 0.0098 z  -0.652 p 0.5142
+  M2 PNA       est   0.0063 se 0.0081 z   0.782 p 0.4340
+  M3 ONI       est   0.0185 se 0.0162 z   1.147 p 0.2512
+  M3 PNA       est   0.0441 se 0.0197 z   2.240 p 0.0251
+  boot se of sigma 0.0063
+==== BH q (family of 14) ====
+  atl M2 lnDp        p 0.0000 q 0.0000
+  atl M2 lnR         p 0.0000 q 0.0000
+  atl M2 lnSinLat    p 0.0007 q 0.0017
+  atl M2 ONI         p 0.3429 q 0.4801
+  atl M2 PNA         p 0.7558 q 0.7558
+  atl M3 ONI         p 0.7442 q 0.7558
+  atl M3 PNA         p 0.2552 q 0.3970
+  pac M2 lnDp        p 0.0000 q 0.0000
+  pac M2 lnR         p 0.0000 q 0.0001
+  pac M2 lnSinLat    p 0.0000 q 0.0000
+  pac M2 ONI         p 0.5142 q 0.5999
+  pac M2 PNA         p 0.4340 q 0.5523
+  pac M3 ONI         p 0.2512 q 0.3970
+  pac M3 PNA         p 0.0251 q 0.0502
