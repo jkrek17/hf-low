@@ -1,0 +1,9 @@
+in-scope HF storms 1832 (Atl 1007, Pac 825); out of scope 168
+HF_onset: joined 1832; match_km>25 0; g800 off by >0.5 kt 0 of 1832
+HF_peak: joined 742; match_km>25 0; g800 off by >0.5 kt 0 of 742
+onsets analysed 1832; tercile counts atl/bottom 258, atl/middle 317, atl/top 432, pac/bottom 223, pac/middle 249, pac/top 353
+primary: 3 of 22 pass BH q<0.05
+S1: 0 of 22 pass BH q<0.05
+S2: 4 of 22 pass BH q<0.05
+S3: 3 of 11 pass BH q<0.05
+S4: 0 of 22 pass BH q<0.05

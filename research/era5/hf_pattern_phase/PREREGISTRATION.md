@@ -25,4 +25,8 @@ The index is out of sample for every season, and PR 41 scored 2015-16 to 2025-26
 
 ## Deviations (post hoc)
 
-None yet.
+1. The g800 reproduction check is vacuous here: the extractor writes the catalog g800 into the table it compares with, and the verifier found g800 = g800_cat on all 1,832 onsets and 742 peaks (max difference 0.0 kt). It checks that the re-detected low is the catalog low (match <= 25 km held for all), not an independent gust recomputation.
+2. The S2 table's n column counts all storms with an index value (1,007 Atlantic, 825 Pacific), not the 928 and 768 that have a right-of-motion share (needs a heading and a 48-kt area). Slopes are unaffected.
+3. The 'bottom' column in the result tables is the top mean minus the stratified difference (reweighted onto the strata where both terciles are present), not the raw bottom-tercile mean.
+4. The pixel maps use 1,000 resamples, not 2,000 (descriptive).
+5. Held-out look numbering is provisional (see the looks log).

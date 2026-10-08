@@ -42,4 +42,10 @@ What had been looked at: counts only (3,316 deepening fixes on 2,274 storms; 1,2
 
 ## Deviations (post hoc)
 
-None yet.
+1. Stage B reported lags are labelled 0, -12 and -24 h in `stage_b_tests.csv` and 0, 12 and 24 in `conv_values.csv.gz` and the coverage file (hours before t0).
+2. Stage A standardises with population SD (ddof 0), stage B with sample SD (ddof 1), an inconsistency the verifier found; it changes d_std by under 1% at these sample sizes.
+3. The 'non' column in the result tables is the converter mean minus the stratified difference (reweighted onto strata where both groups are present).
+4. All 1,756 stage B lag rows snapped to a low within 150 km and every lag-0 row was within 25 km, so nothing was dropped by the position rules.
+5. Stage A expected about 450 matched pairs per basin; the matching found 374 Atlantic and 414 Pacific (788) with the stated 0.25 Bergeron limit, a count difference from the plan, not a change of rule.
+6. Pixel maps use 1,000 resamples, not 2,000 (descriptive).
+7. Rows near q = 0.05 flip with the resample stream (verifier at 100,000 resamples): primary atl jet250 t0 (q 0.048 committed, 0.049 verified), atl eady t0-24 h (0.057 committed, 0.049 verified), latitude-matched atl jet250 t0, and stage B atl stab lag 0 (0.060 committed, 0.0435 verified). The "19 of 48" and "1 of 30" counts are therefore good to about plus or minus 2.

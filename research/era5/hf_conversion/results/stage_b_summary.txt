@@ -1,0 +1,26 @@
+lag rows pulled 1756; snapped within 150 km 1756; usable (lag 0 within 25 km) 1756
+primary family: 1 of 30 pass BH q<0.05
+atl lag -0 h msl: 1407 of 14641 pixels pass BH q<0.05
+atl lag -0 h ws250: 0 of 14641 pixels pass BH q<0.05
+atl lag -0 h te: 0 of 14641 pixels pass BH q<0.05
+atl lag -0 h stab: 677 of 14641 pixels pass BH q<0.05
+atl lag -0 h d2m: 0 of 14641 pixels pass BH q<0.05
+atl lag -0 h gt: 0 of 14641 pixels pass BH q<0.05
+atl lag -24 h msl: 0 of 14641 pixels pass BH q<0.05
+atl lag -24 h ws250: 1016 of 14641 pixels pass BH q<0.05
+atl lag -24 h te: 1226 of 14641 pixels pass BH q<0.05
+atl lag -24 h stab: 0 of 14641 pixels pass BH q<0.05
+atl lag -24 h d2m: 8477 of 14641 pixels pass BH q<0.05
+atl lag -24 h gt: 0 of 14641 pixels pass BH q<0.05
+pac lag -0 h msl: 3066 of 14641 pixels pass BH q<0.05
+pac lag -0 h ws250: 863 of 14641 pixels pass BH q<0.05
+pac lag -0 h te: 0 of 14641 pixels pass BH q<0.05
+pac lag -0 h stab: 728 of 14641 pixels pass BH q<0.05
+pac lag -0 h d2m: 0 of 14641 pixels pass BH q<0.05
+pac lag -0 h gt: 0 of 14641 pixels pass BH q<0.05
+pac lag -24 h msl: 0 of 14641 pixels pass BH q<0.05
+pac lag -24 h ws250: 0 of 14641 pixels pass BH q<0.05
+pac lag -24 h te: 0 of 14641 pixels pass BH q<0.05
+pac lag -24 h stab: 0 of 14641 pixels pass BH q<0.05
+pac lag -24 h d2m: 0 of 14641 pixels pass BH q<0.05
+pac lag -24 h gt: 0 of 14641 pixels pass BH q<0.05

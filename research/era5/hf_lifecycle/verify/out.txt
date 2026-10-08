@@ -1,0 +1,119 @@
+storms in storms.csv: 10136  with fixes: 10134  missing from fixes: [389422, 436585]
+tracks with <2 00/12 fixes dropped: 209
+STAGE A: 26/28 rows match (28 expected); mismatches:
+   ('atl', 'dp12', 12) ['p ref 0.2439 mine 0.2189']
+   ('pac', 'msl', -36) ['p ref 0.2309 mine 0.2049']
+A atl msl -48 hf=993.932 sf=994.621 diff=-0.689 p=0.3838 q=0.3838 mde_sd=0.203 n=374/990
+A atl msl -36 hf=990.942 sf=993.506 diff=-2.564 p=0.0010 q=0.0012 mde_sd=0.150 n=553/1451
+A atl msl -24 hf=985.692 sf=991.069 diff=-5.377 p=0.0010 q=0.0012 mde_sd=0.152 n=798/2159
+A atl msl -12 hf=976.079 sf=987.316 diff=-11.237 p=0.0010 q=0.0012 mde_sd=0.128 n=989/3106
+A atl msl 0 hf=968.320 sf=984.480 diff=-16.160 p=0.0010 q=0.0012 mde_sd=0.100 n=1094/3879
+A atl msl 12 hf=969.641 sf=985.153 diff=-15.512 p=0.0010 q=0.0012 mde_sd=0.137 n=927/2887
+A atl msl 24 hf=973.909 sf=986.774 diff=-12.865 p=0.0010 q=0.0012 mde_sd=0.140 n=775/2050
+A atl dp12 -48 hf=-4.843 sf=-2.839 diff=-2.004 p=0.0010 q=0.0012 mde_sd=0.246 n=258/709
+A atl dp12 -36 hf=-6.144 sf=-3.218 diff=-2.926 p=0.0010 q=0.0012 mde_sd=0.181 n=391/1036
+A atl dp12 -24 hf=-8.325 sf=-4.521 diff=-3.805 p=0.0010 q=0.0012 mde_sd=0.169 n=576/1512
+A atl dp12 -12 hf=-11.527 sf=-5.547 diff=-5.981 p=0.0010 q=0.0012 mde_sd=0.134 n=814/2222
+A atl dp12 0 hf=-7.895 sf=-3.375 diff=-4.521 p=0.0010 q=0.0012 mde_sd=0.137 n=1020/3190
+A atl dp12 12 hf=1.718 sf=1.350 diff=0.368 p=0.2189 q=0.2270 mde_sd=0.135 n=927/2887
+A atl dp12 24 hf=4.736 sf=3.267 diff=1.469 p=0.0010 q=0.0012 mde_sd=0.145 n=775/2050
+A pac msl -48 hf=998.793 sf=997.762 diff=1.031 p=0.1539 q=0.1724 mde_sd=0.235 n=233/719
+A pac msl -36 hf=996.527 sf=995.717 diff=0.810 p=0.2049 q=0.2207 mde_sd=0.197 n=432/1292
+A pac msl -24 hf=990.383 sf=992.856 diff=-2.473 p=0.0010 q=0.0012 mde_sd=0.148 n=634/2188
+A pac msl -12 hf=979.559 sf=988.284 diff=-8.725 p=0.0010 q=0.0012 mde_sd=0.125 n=814/3265
+A pac msl 0 hf=969.997 sf=984.760 diff=-14.763 p=0.0010 q=0.0012 mde_sd=0.109 n=892/4060
+A pac msl 12 hf=969.129 sf=984.810 diff=-15.682 p=0.0010 q=0.0012 mde_sd=0.116 n=827/3389
+A pac msl 24 hf=972.171 sf=986.198 diff=-14.027 p=0.0010 q=0.0012 mde_sd=0.127 n=757/2626
+A pac dp12 -48 hf=-4.268 sf=-3.031 diff=-1.237 p=0.0420 q=0.0490 mde_sd=0.357 n=133/467
+A pac dp12 -36 hf=-5.846 sf=-4.356 diff=-1.490 p=0.0010 q=0.0012 mde_sd=0.204 n=265/805
+A pac dp12 -24 hf=-9.057 sf=-5.921 diff=-3.136 p=0.0010 q=0.0012 mde_sd=0.156 n=470/1416
+A pac dp12 -12 hf=-12.509 sf=-6.720 diff=-5.789 p=0.0010 q=0.0012 mde_sd=0.138 n=672/2299
+A pac dp12 0 hf=-9.688 sf=-4.478 diff=-5.211 p=0.0010 q=0.0012 mde_sd=0.117 n=855/3366
+A pac dp12 12 hf=-0.202 sf=0.995 diff=-1.197 p=0.0010 q=0.0012 mde_sd=0.139 n=827/3389
+A pac dp12 24 hf=3.962 sf=3.203 diff=0.759 p=0.0010 q=0.0012 mde_sd=0.106 n=757/2626
+A mde_std max abs diff: 0.007176118811911214  se max abs diff 0.026822720505109143  sd max diff 0.012535754445551106
+STAGE A first persistent lag:
+   atl msl mine -36 ref -36 OK
+   atl dp12 mine -48 ref -48 OK
+   pac msl mine -24 ref -24 OK
+   pac dp12 mine -48 ref -48 OK
+lc_values rows 4374 tracks 1000 sample tracks 1000 values tracks in sample True
+COVERAGE: 28/28 rows match (ref rows 28, mine 28)
+STAGE B: 49/56 rows match (56 expected; ref rows 56); mismatches:
+   ('atl', 'g48_rmax', -48) ['p ref 0.7866 mine 0.8596']
+   ('atl', 'gmax_r', -48) ['p ref 0.8926 mine 0.8406']
+   ('pac', 'msl_grad', -36) ['q ref 0.0402 mine 0.0588']
+   ('pac', 'g48_rmax', -36) ['p ref 0.5337 mine 0.5677']
+   ('pac', 'g48_rmax', -24) ['p ref 0.1699 mine 0.1399']
+   ('pac', 'gmax_r', -48) ['p ref 0.1499 mine 0.1709']
+   ('pac', 'gmax_r', -36) ['p ref 0.3038 mine 0.2629']
+B atl pc -48 hf=993.279 sf=995.463 diff=-2.185 p=0.2859 q=0.3406 mde_sd=0.542 n=78/48
+B atl pc -36 hf=989.954 sf=992.000 diff=-2.046 p=0.1999 q=0.2544 mde_sd=0.390 n=108/63
+B atl pc -24 hf=983.550 sf=990.975 diff=-7.424 p=0.0010 q=0.0018 mde_sd=0.293 n=151/109
+B atl pc -12 hf=975.030 sf=986.763 diff=-11.733 p=0.0010 q=0.0018 mde_sd=0.302 n=190/159
+B atl pc 0 hf=968.214 sf=983.710 diff=-15.496 p=0.0010 q=0.0018 mde_sd=0.238 n=250/250
+B atl pc 12 hf=969.836 sf=984.674 diff=-14.838 p=0.0010 q=0.0018 mde_sd=0.288 n=182/154
+B atl pc 24 hf=973.866 sf=986.108 diff=-12.242 p=0.0010 q=0.0018 mde_sd=0.387 n=155/108
+B atl msl_grad -48 hf=2.436 sf=1.990 diff=0.445 p=0.0030 q=0.0049 mde_sd=0.457 n=78/48
+B atl msl_grad -36 hf=2.681 sf=2.100 diff=0.581 p=0.0070 q=0.0109 mde_sd=0.457 n=108/63
+B atl msl_grad -24 hf=3.100 sf=2.111 diff=0.989 p=0.0010 q=0.0018 mde_sd=0.390 n=151/109
+B atl msl_grad -12 hf=3.830 sf=2.457 diff=1.372 p=0.0010 q=0.0018 mde_sd=0.296 n=190/159
+B atl msl_grad 0 hf=4.522 sf=2.724 diff=1.797 p=0.0010 q=0.0018 mde_sd=0.210 n=250/250
+B atl msl_grad 12 hf=4.141 sf=2.584 diff=1.557 p=0.0010 q=0.0018 mde_sd=0.271 n=182/154
+B atl msl_grad 24 hf=3.537 sf=2.378 diff=1.159 p=0.0010 q=0.0018 mde_sd=0.431 n=155/108
+B atl g48_rmax -48 hf=706.094 sf=692.934 diff=13.160 p=0.8596 q=0.8914 mde_sd=0.691 n=57/21
+B atl g48_rmax -36 hf=823.411 sf=837.816 diff=-14.405 p=0.9015 q=0.9179 mde_sd=0.471 n=78/30
+B atl g48_rmax -24 hf=823.777 sf=739.154 diff=84.623 p=0.0580 q=0.0812 mde_sd=0.376 n=132/62
+B atl g48_rmax -12 hf=906.933 sf=821.193 diff=85.741 p=0.0240 q=0.0354 mde_sd=0.401 n=184/120
+B atl g48_rmax 0 hf=966.368 sf=789.853 diff=176.515 p=0.0010 q=0.0018 mde_sd=0.201 n=250/250
+B atl g48_rmax 12 hf=968.725 sf=750.674 diff=218.050 p=0.0010 q=0.0018 mde_sd=0.275 n=178/133
+B atl g48_rmax 24 hf=926.085 sf=772.172 diff=153.913 p=0.0010 q=0.0018 mde_sd=0.357 n=143/68
+B atl gmax_r -48 hf=464.320 sf=482.070 diff=-17.750 p=0.8406 q=0.8914 mde_sd=0.509 n=78/48
+B atl gmax_r -36 hf=486.657 sf=540.602 diff=-53.945 p=0.4748 q=0.5426 mde_sd=0.555 n=108/63
+B atl gmax_r -24 hf=419.536 sf=586.257 diff=-166.721 p=0.0010 q=0.0018 mde_sd=0.320 n=151/109
+B atl gmax_r -12 hf=385.540 sf=542.833 diff=-157.293 p=0.0020 q=0.0034 mde_sd=0.317 n=190/159
+B atl gmax_r 0 hf=314.204 sf=397.534 diff=-83.330 p=0.0010 q=0.0018 mde_sd=0.253 n=250/250
+B atl gmax_r 12 hf=410.599 sf=471.725 diff=-61.127 p=0.0190 q=0.0287 mde_sd=0.247 n=182/154
+B atl gmax_r 24 hf=495.194 sf=511.445 diff=-16.252 p=0.6367 q=0.6991 mde_sd=0.340 n=155/108
+B pac pc -48 hf=998.304 sf=999.505 diff=-1.201 p=0.8566 q=0.8914 mde_sd=0.753 n=50/31
+B pac pc -36 hf=996.195 sf=996.198 diff=-0.003 p=0.9325 q=0.9325 mde_sd=0.623 n=92/53
+B pac pc -24 hf=990.467 sf=992.991 diff=-2.524 p=0.0960 q=0.1311 mde_sd=0.423 n=146/109
+B pac pc -12 hf=980.427 sf=989.801 diff=-9.374 p=0.0010 q=0.0018 mde_sd=0.335 n=199/172
+B pac pc 0 hf=970.514 sf=985.171 diff=-14.657 p=0.0010 q=0.0018 mde_sd=0.261 n=250/250
+B pac pc 12 hf=968.797 sf=984.747 diff=-15.950 p=0.0010 q=0.0018 mde_sd=0.313 n=222/179
+B pac pc 24 hf=971.487 sf=987.109 diff=-15.623 p=0.0010 q=0.0018 mde_sd=0.324 n=201/145
+B pac msl_grad -48 hf=2.030 sf=1.665 diff=0.365 p=0.2329 q=0.2898 mde_sd=0.753 n=50/31
+B pac msl_grad -36 hf=2.129 sf=1.798 diff=0.331 p=0.0410 q=0.0588 mde_sd=0.454 n=92/53
+B pac msl_grad -24 hf=2.641 sf=2.012 diff=0.629 p=0.0010 q=0.0018 mde_sd=0.326 n=146/109
+B pac msl_grad -12 hf=3.687 sf=2.446 diff=1.240 p=0.0010 q=0.0018 mde_sd=0.242 n=199/172
+B pac msl_grad 0 hf=4.772 sf=2.860 diff=1.912 p=0.0010 q=0.0018 mde_sd=0.245 n=250/250
+B pac msl_grad 12 hf=4.367 sf=2.703 diff=1.664 p=0.0010 q=0.0018 mde_sd=0.283 n=222/179
+B pac msl_grad 24 hf=3.699 sf=2.309 diff=1.389 p=0.0010 q=0.0018 mde_sd=0.335 n=201/145
+B pac g48_rmax -48 hf=641.500 sf=510.531 diff=130.969 p=0.4164 q=0.4858 mde_sd=1.623 n=30/9
+B pac g48_rmax -36 hf=624.761 sf=701.182 diff=-76.420 p=0.5677 q=0.6358 mde_sd=0.776 n=67/20
+B pac g48_rmax -24 hf=709.873 sf=791.490 diff=-81.617 p=0.1399 q=0.1866 mde_sd=0.435 n=126/67
+B pac g48_rmax -12 hf=835.751 sf=712.873 diff=122.878 p=0.0010 q=0.0018 mde_sd=0.288 n=194/137
+B pac g48_rmax 0 hf=955.301 sf=736.973 diff=218.328 p=0.0010 q=0.0018 mde_sd=0.206 n=250/250
+B pac g48_rmax 12 hf=980.858 sf=756.025 diff=224.832 p=0.0010 q=0.0018 mde_sd=0.238 n=219/137
+B pac g48_rmax 24 hf=952.746 sf=775.170 diff=177.576 p=0.0010 q=0.0018 mde_sd=0.352 n=190/86
+B pac gmax_r -48 hf=391.898 sf=533.088 diff=-141.190 p=0.1709 q=0.2226 mde_sd=0.736 n=50/31
+B pac gmax_r -36 hf=368.033 sf=433.219 diff=-65.186 p=0.2629 q=0.3200 mde_sd=0.506 n=92/53
+B pac gmax_r -24 hf=324.455 sf=529.483 diff=-205.028 p=0.0010 q=0.0018 mde_sd=0.358 n=146/109
+B pac gmax_r -12 hf=302.914 sf=400.797 diff=-97.883 p=0.0010 q=0.0018 mde_sd=0.272 n=199/172
+B pac gmax_r 0 hf=245.221 sf=341.065 diff=-95.844 p=0.0010 q=0.0018 mde_sd=0.196 n=250/250
+B pac gmax_r 12 hf=349.624 sf=435.624 diff=-86.000 p=0.0060 q=0.0096 mde_sd=0.307 n=222/179
+B pac gmax_r 24 hf=446.655 sf=543.454 diff=-96.799 p=0.0020 q=0.0034 mde_sd=0.264 n=201/145
+STAGE B first persistent lag:
+   atl pc mine -24 ref -24 OK
+   atl msl_grad mine -48 ref -48 OK
+   atl g48_rmax mine -12 ref -12 OK
+   atl gmax_r mine -24 ref -24 OK
+   pac pc mine -12 ref -12 OK
+   pac msl_grad mine -24 ref -36 MISMATCH
+   pac g48_rmax mine -12 ref -12 OK
+   pac gmax_r mine -24 ref -24 OK
+G800: rows with 00/12 UTC time, table g800>0, recomputed present: 2140; within 0.5 kt: 2140 (100.00%); max abs diff 0.00
+   lag0: n=474 share=100.00%
+   lag!=0: n=1666 share=100.00%
+   snapped: n=2140 share=100.00%
+rows with recomputed g800: 4104  of which 00/12 time: 2171
