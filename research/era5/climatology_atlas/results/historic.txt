@@ -1,0 +1,75 @@
+Candidate historic storms from the ERA5 PROXY (pipeline A), seasons 1979-80 to 2003-04. Nothing here is confirmed.
+Rank within the pre-2004 sample only. Gust ranks are within-era (pre-2001 gust drifts upward at fixed depth).
+Events: 2157 (atl 1150, pac 1007); 1979-2000: 1889.
+
+Median ERA5 minimum pressure (hPa) by era, as a depth sanity check (descriptive):
+  atl: 1979-2000 962.3 (n=1010); 2001-2003 965.2; 2004+ 963.4
+  pac: 1979-2000 964.0 (n=879); 2001-2003 963.6; 2004+ 964.1
+
+-- atl top 15 by depth (ERA5 min MSLP hPa / gust index kt / date of peak gust / position of peak gust)
+   19861215  minp 912  gust 102  (60.0N, -32.0E)  tc-linked=False  track 72089
+   19930110  minp 915  gust 108  (61.0N, -14.2E)  tc-linked=False  track 128894
+   19891029  minp 921  gust 80  (59.0N, -32.2E)  tc-linked=False  track 99844
+   19891224  minp 922  gust 83  (62.0N, -23.5E)  tc-linked=False  track 100785
+   19990115  minp 922  gust 94  (61.2N, -13.0E)  tc-linked=False  track 185946
+   19991231  minp 926  gust 92  (62.8N, -35.5E)  tc-linked=False  track 195288
+   19920301  minp 928  gust 95  (54.5N, -53.5E)  tc-linked=False  track 120373
+   20020201  minp 929  gust 93  (55.2N, -18.8E)  tc-linked=False  track 215022
+   19830105  minp 929  gust 92  (62.0N, -21.0E)  tc-linked=False  track 34572
+   19831226  minp 930  gust 84  (58.0N, -46.0E)  tc-linked=False  track 43671
+   19921129  minp 932  gust 78  (59.2N, -38.5E)  tc-linked=False  track 128249
+   20030308  minp 932  gust 95  (50.5N, -38.8E)  tc-linked=False  track 225197
+   19880115  minp 932  gust 87  (59.2N, -49.0E)  tc-linked=False  track 81931
+   19900102  minp 933  gust 84  (55.5N, -52.8E)  tc-linked=False  track 100803
+   19821219  minp 934  gust 92  (59.0N, -27.0E)  tc-linked=False  track 34285
+
+-- atl top 15 by gust (ERA5 min MSLP hPa / gust index kt / date of peak gust / position of peak gust)
+   19950909  minp 943  gust 116  (32.2N, -68.5E)  tc-linked=True  track 155120
+   19900108  minp 934  gust 110  (59.8N, -29.8E)  tc-linked=False  track 101000
+   19930110  minp 915  gust 108  (61.0N, -14.2E)  tc-linked=False  track 128894
+   19970304  minp 935  gust 103  (63.5N, -39.8E)  tc-linked=False  track 167834
+   19821210  minp 961  gust 103  (51.2N, -45.8E)  tc-linked=False  track 34186
+   20030905  minp 958  gust 103  (32.0N, -65.2E)  tc-linked=True  track 231091
+   19860113  minp 938  gust 102  (61.0N, -18.5E)  tc-linked=False  track 63190
+   19890922  minp 960  gust 102  (31.8N, -79.0E)  tc-linked=True  track 99001
+   19861215  minp 912  gust 102  (60.0N, -32.0E)  tc-linked=False  track 72089
+   19880208  minp 941  gust 101  (55.0N, -23.8E)  tc-linked=False  track 82385
+   20000208  minp 950  gust 101  (56.8N, -29.8E)  tc-linked=False  track 195889
+   19810916  minp 973  gust 101  (34.2N, -58.2E)  tc-linked=True  track 23006
+   19920101  minp 948  gust 100  (65.0N, 0.8E)  tc-linked=False  track 119319
+   19980902  minp 954  gust 100  (37.2N, -63.0E)  tc-linked=True  track 183118
+   19820122  minp 944  gust 100  (52.0N, -39.0E)  tc-linked=False  track 25461
+
+-- pac top 15 by depth (ERA5 min MSLP hPa / gust index kt / date of peak gust / position of peak gust)
+   19891029  minp 924  gust 104  (43.0N, 160.2E)  tc-linked=True  track 99891
+   19811002  minp 924  gust 116  (39.0N, 152.2E)  tc-linked=True  track 23441
+   19811221  minp 925  gust 88  (51.0N, 172.8E)  tc-linked=False  track 24927
+   19870402  minp 933  gust 80  (54.5N, 173.5E)  tc-linked=False  track 74098
+   19980223  minp 933  gust 80  (51.8N, 179.8E)  tc-linked=False  track 177097
+   19900118  minp 935  gust 88  (45.5N, 173.2E)  tc-linked=False  track 101131
+   19991117  minp 936  gust 78  (54.8N, 170.5E)  tc-linked=False  track 194661
+   19831107  minp 936  gust 120  (30.5N, 147.0E)  tc-linked=True  track 42955
+   19920110  minp 936  gust 88  (39.8N, 165.5E)  tc-linked=False  track 119466
+   20000131  minp 936  gust 78  (48.2N, 174.5E)  tc-linked=False  track 195752
+   20010101  minp 937  gust 97  (41.8N, 153.0E)  tc-linked=False  track 204760
+   20011223  minp 938  gust 77  (49.8N, 176.2E)  tc-linked=False  track 214409
+   19871215  minp 938  gust 81  (57.0N, 177.5E)  tc-linked=False  track 81441
+   20021227  minp 938  gust 83  (54.5N, 167.8E)  tc-linked=False  track 223916
+   19990321  minp 938  gust 93  (53.0N, 175.5E)  tc-linked=False  track 187185
+
+-- pac top 15 by gust (ERA5 min MSLP hPa / gust index kt / date of peak gust / position of peak gust)
+   19831107  minp 936  gust 120  (30.5N, 147.0E)  tc-linked=True  track 42955
+   19811002  minp 924  gust 116  (39.0N, 152.2E)  tc-linked=True  track 23441
+   19891007  minp 951  gust 112  (33.5N, 145.0E)  tc-linked=True  track 99429
+   19860522  minp 954  gust 111  (28.0N, 153.0E)  tc-linked=True  track 66374
+   19861008  minp 951  gust 111  (35.5N, 144.2E)  tc-linked=True  track 71028
+   19970903  minp 955  gust 110  (35.2N, 146.8E)  tc-linked=True  track 173806
+   19910927  minp 955  gust 109  (39.2N, 135.8E)  tc-linked=True  track 117494
+   20000924  minp 946  gust 109  (38.2N, 177.0E)  tc-linked=True  track 202971
+   19860929  minp 950  gust 106  (34.2N, 146.5E)  tc-linked=True  track 70791
+   19971022  minp 956  gust 106  (27.0N, 140.5E)  tc-linked=True  track 175081
+   19930927  minp 958  gust 105  (30.8N, 150.0E)  tc-linked=True  track 136332
+   20000205  minp 951  gust 105  (41.0N, 182.8E)  tc-linked=False  track 195828
+   19891029  minp 924  gust 104  (43.0N, 160.2E)  tc-linked=True  track 99891
+   19951221  minp 943  gust 104  (42.0N, 182.5E)  tc-linked=False  track 157235
+   19800804  minp 943  gust 103  (28.5N, 144.5E)  tc-linked=False  track 11848
