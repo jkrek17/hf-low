@@ -1,0 +1,24 @@
+RA-11 power (planted effects on detrended real events; alpha 0.05; 22 seasons; steps by season-block bootstrap)
+rejection rates (fraction of 1000 runs with p<0.05):
+null (nothing planted)             P1 0.05 | steps P2 0.17 P3 0.07 P4 0.08 P5 0.07
+linear -0.181 /decade              P1 0.71 | steps P2 0.19 P3 0.37 P4 0.55 P5 0.56
+step -0.40 at P2                   P1 0.19 | steps P2 0.33 P3 0.16 P4 0.15 P5 0.10
+step -0.40 at P3                   P1 0.69 | steps P2 0.28 P3 0.92 P4 0.59 P5 0.25
+step -0.40 at P4                   P1 0.91 | steps P2 0.23 P3 0.78 P4 0.99 P5 0.58
+step -0.40 at P5                   P1 0.91 | steps P2 0.15 P3 0.31 P4 0.54 P5 1.00
+
+S2 picks (truth=step P2): step 0.74, linear 0.04, tie 0.22
+S2 picks (truth=step P3): step 0.84, linear 0.04, tie 0.12
+S2 picks (truth=step P4): step 0.80, linear 0.04, tie 0.16
+S2 picks (truth=step P5): step 0.77, linear 0.05, tie 0.17
+S2 vs P2 step when truth is linear: step 0.04, linear 0.73, tie 0.23
+S2 vs P3 step when truth is linear: step 0.08, linear 0.58, tie 0.34
+S2 vs P4 step when truth is linear: step 0.06, linear 0.48, tie 0.46
+S2 vs P5 step when truth is linear: step 0.07, linear 0.48, tie 0.45
+
+MDE: smallest planted step (fixes per event) detected in >=80% of 400 runs, per date
+  P2 MDE >0.80   (size:power 0.10:0.19 0.15:0.14 0.20:0.18 0.25:0.23 0.30:0.26 0.40:0.31 0.50:0.50 0.60:0.61 0.80:0.72)
+  P3 MDE 0.4   (size:power 0.10:0.15 0.15:0.26 0.20:0.36 0.25:0.57 0.30:0.71 0.40:0.91 0.50:0.98 0.60:1.00 0.80:1.00)
+  P4 MDE 0.3   (size:power 0.10:0.22 0.15:0.44 0.20:0.54 0.25:0.77 0.30:0.89 0.40:0.99 0.50:1.00 0.60:1.00 0.80:1.00)
+  P5 MDE 0.25   (size:power 0.10:0.18 0.15:0.36 0.20:0.59 0.25:0.81 0.30:0.92 0.40:1.00 0.50:1.00 0.60:1.00 0.80:1.00)
+  linear slope MDE (per decade, P1 t-test) 0.25
