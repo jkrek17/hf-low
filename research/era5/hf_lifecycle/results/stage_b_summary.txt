@@ -1,0 +1,4 @@
+sample 1000; stats rows new 3374 (snapped 3104), lag 0 1000 (match<=25 km 1000)
+g800 reproduction at 00/12 UTC lags: 1666 fixes with a table value > 0 (29 more have table 0 = not computed, left out); within 0.5 kt 1.0000; within 1 kt 1.0000; max 0.0 kt
+primary family: 39 of 56 pass BH q<0.05
+{"atl_pc": -24, "atl_msl_grad": -48, "atl_g48_rmax": -12, "atl_gmax_r": -24, "pac_pc": -12, "pac_msl_grad": -36, "pac_g48_rmax": -12, "pac_gmax_r": -24}

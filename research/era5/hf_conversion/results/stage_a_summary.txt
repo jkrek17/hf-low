@@ -1,0 +1,7 @@
+eligible fixes 3316 on 2274 storms; converting 1287 fixes / 966 storms
+one fix per storm per group: converters 966, non-converters 1589; storms in both groups 281
+matched pairs 788 (Atlantic 374, Pacific 414); converters unmatched 178; mean |d ndr24| 0.029
+missing share at t0: jet250 0.00, eady 0.00, sstgrad 0.06, sst_t500 0.03, tcwv 0.00, flux 0.00, vadv500 0.00, div300 0.00
+primary: 19 of 48 pass BH q<0.05
+change: 0 of 16 pass BH q<0.05
+latitude-matched: 17 of 48 pass BH q<0.05

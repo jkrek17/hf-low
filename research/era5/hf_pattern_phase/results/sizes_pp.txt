@@ -1,0 +1,7 @@
+1062 distinct times; sample 300
+  instantaneous_10m_wind_gust: 3.18 MB per time
+  mean_sea_level_pressure: 2.17 MB per time
+  10m_u_component_of_wind: 3.31 MB per time
+  10m_v_component_of_wind: 3.33 MB per time
+  2m_dewpoint_temperature: 2.37 MB per time
+per time, 6 variables: 14.37 MB; whole pull 15.3 GB; without t2m 12.7 GB

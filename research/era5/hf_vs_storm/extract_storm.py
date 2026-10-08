@@ -39,7 +39,7 @@ from multiprocessing import Pool
 HERE = os.path.dirname(os.path.abspath(__file__))
 RES = os.path.join(HERE, "..", "hf_history", "results")
 OWN = os.path.join(HERE, "results")
-WORK = os.path.join(os.environ.get("ERA5_WORK", os.path.join(HERE, "work")), "hf_vs_storm")
+WORK = os.path.join(os.environ.get("ERA5_WORK", os.path.join(HERE, "work")), os.environ.get("HFVS_SUB", "hf_vs_storm"))
 
 ARCO = "https://storage.googleapis.com/gcp-public-data-arco-era5/ar/full_37-1h-0p25deg-chunk-1.zarr-v3"
 WB2 = ("https://storage.googleapis.com/weatherbench2/datasets/era5/"
@@ -235,7 +235,7 @@ def one_time(job):
 
 
 def jobs():
-    T = pd.read_csv(os.path.join(OWN, "times_storm.csv"))
+    T = pd.read_csv(os.environ.get("HFVS_TIMES", os.path.join(OWN, "times_storm.csv")))
     S = pd.read_csv(os.path.join(OWN, "storms.csv"))
     C = pd.read_csv(os.path.join(RES, "era5_hf_catalog_tracks.csv"))
     pk = S.set_index("track").gust800_kt

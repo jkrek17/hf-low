@@ -1,0 +1,12 @@
+atl lag -48 h gust: HF 77, SF 45 rotated storms; 0 of 14641 pixels pass BH q<0.05
+atl lag -48 h msl: HF 77, SF 45 rotated storms; 0 of 14641 pixels pass BH q<0.05
+atl lag -24 h gust: HF 149, SF 100 rotated storms; 6448 of 14641 pixels pass BH q<0.05
+atl lag -24 h msl: HF 149, SF 100 rotated storms; 0 of 14641 pixels pass BH q<0.05
+atl lag 0 h gust: HF 236, SF 211 rotated storms; 9173 of 14641 pixels pass BH q<0.05
+atl lag 0 h msl: HF 236, SF 211 rotated storms; 7158 of 14641 pixels pass BH q<0.05
+pac lag -48 h gust: HF 50, SF 27 rotated storms; 0 of 14641 pixels pass BH q<0.05
+pac lag -48 h msl: HF 50, SF 27 rotated storms; 1191 of 14641 pixels pass BH q<0.05
+pac lag -24 h gust: HF 146, SF 102 rotated storms; 1326 of 14641 pixels pass BH q<0.05
+pac lag -24 h msl: HF 146, SF 102 rotated storms; 0 of 14641 pixels pass BH q<0.05
+pac lag 0 h gust: HF 240, SF 226 rotated storms; 8603 of 14641 pixels pass BH q<0.05
+pac lag 0 h msl: HF 240, SF 226 rotated storms; 4454 of 14641 pixels pass BH q<0.05

@@ -1,0 +1,128 @@
+fixes 159430 dtypes hf24 bool [False  True]
+eligible fixes 3316 storms 2274
+converting fixes 1287 storms 966
+atl elig fixes 1475 storms 1023 conv fixes 620 conv storms 468
+pac elig fixes 1841 storms 1251 conv fixes 667 conv storms 498
+
+PAIRS rows 1576
+members not eligible: 0
+label mismatch: 0
+ndr24 mismatch vs fixes: 0 basin mism 0 lat mism 0 msl mism 0
+dup (track,grp): 0 dup (track,time): 0
+grp counts {0: 788, 1: 788} pair sizes {2: 788}
+basin differs 0 mon differs 0 max|dndr| 0.2490000000000001 n>=0.25 0
+mon vs time month mismatch 0 season check 0
+pairs per basin {'pac': 414, 'atl': 374}
+noncv reused (time,track): 0
+tracks in both groups 149
+unique storms per grp {0: 788, 1: 788}
+
+t0 pair members missing env row: 0 (NaN jet250 incl.) env index dup: 0
+
+=== stage A primary (48): mine rows 48, ref rows 48
+unmatched keys: 0
+MISMATCH ['atl', 'jet250', 't0'] ['q-pass 0.0530 vs 0.0480']
+MISMATCH ['atl', 'sst_t500', 't0'] ['p 0.1689 vs 0.2209']
+MISMATCH ['atl', 'sstgrad', 't0'] ['p 0.3828 vs 0.3518']
+MISMATCH ['pac', 'eady', 't0-24h'] ['p 0.5327 vs 0.4998']
+MISMATCH ['pac', 'jet250', 't0-24h'] ['p 0.4338 vs 0.4078', 'mde_std 0.4172 vs 0.3965']
+MISMATCH ['pac', 'sst_t500', 't0'] ['p 0.6737 vs 0.6317']
+MISMATCH ['pac', 'sst_t500', 't0-24h'] ['p 0.4878 vs 0.5267']
+MISMATCH ['pac', 'sstgrad', 't0-12h'] ['p 0.7756 vs 0.8146']
+MISMATCH ['pac', 'sstgrad', 't0-24h'] ['p 0.2979 vs 0.2749', 'mde_std 0.5907 vs 0.5583']
+MISMATCH ['pac', 'vadv500', 't0-24h'] ['p 0.1419 vs 0.0860', 'mde_std 0.5876 vs 0.5610']
+matched 38, mismatched 10
+ max|q diff|=0.0724 max|p diff|=0.0560 max|diff dev| in SD=0.0000
+ max|se rel diff|=0.058
+
+=== stage A change (16): mine rows 16, ref rows 16
+unmatched keys: 0
+MISMATCH ['atl', 'flux', 't0 minus t0-24h'] ['p 0.9945 vs 0.9475']
+MISMATCH ['atl', 'sst_t500', 't0 minus t0-24h'] ['p 0.5297 vs 0.5507', 'mde_std 0.5088 vs 0.5433']
+MISMATCH ['pac', 'div300', 't0 minus t0-24h'] ['p 0.8356 vs 0.8106']
+MISMATCH ['pac', 'eady', 't0 minus t0-24h'] ['mde_std 0.3514 vs 0.3302']
+MISMATCH ['pac', 'jet250', 't0 minus t0-24h'] ['p 0.2049 vs 0.1779']
+MISMATCH ['pac', 'sst_t500', 't0 minus t0-24h'] ['p 0.1449 vs 0.1739']
+matched 10, mismatched 6
+ max|q diff|=0.0960 max|p diff|=0.0470 max|diff dev| in SD=0.0000
+ max|se rel diff|=0.064
+
+=== stage A latmatched (48): mine rows 48, ref rows 48
+unmatched keys: 0
+MISMATCH ['atl', 'jet250', 't0'] ['q-pass 0.0453 vs 0.0581']
+MISMATCH ['atl', 'sst_t500', 't0'] ['p 0.1579 vs 0.1849']
+MISMATCH ['atl', 'sst_t500', 't0-12h'] ['p 0.4828 vs 0.5157']
+MISMATCH ['atl', 'sst_t500', 't0-24h'] ['p 0.0260 vs 0.0510']
+MISMATCH ['atl', 'sstgrad', 't0'] ['p 0.9335 vs 0.8686']
+MISMATCH ['atl', 'sstgrad', 't0-12h'] ['p 0.5717 vs 0.5417']
+MISMATCH ['atl', 'tcwv', 't0'] ['p 0.8076 vs 0.8526']
+MISMATCH ['pac', 'eady', 't0-24h'] ['p 0.6007 vs 0.6457']
+MISMATCH ['pac', 'sst_t500', 't0'] ['p 0.2049 vs 0.1799']
+MISMATCH ['pac', 'sstgrad', 't0-12h'] ['p 0.8046 vs 0.8576']
+MISMATCH ['pac', 'sstgrad', 't0-24h'] ['p 0.8546 vs 0.8796']
+MISMATCH ['pac', 'tcwv', 't0'] ['p 0.3488 vs 0.3708']
+MISMATCH ['pac', 'tcwv', 't0-24h'] ['p 0.4408 vs 0.4948']
+MISMATCH ['pac', 'vadv500', 't0-24h'] ['p 0.2589 vs 0.2149', 'mde_std 0.6244 vs 0.5919']
+matched 34, mismatched 14
+ max|q diff|=0.0726 max|p diff|=0.0650 max|diff dev| in SD=0.0000
+ max|se rel diff|=0.055
+
+=== confounds (10): mine rows 10, ref rows 10
+unmatched keys: 0
+MISMATCH ['atl', 'lat', 't0'] ['p 0.8436 vs 0.7756']
+matched 9, mismatched 1
+ max|q diff|=0.0680 max|p diff|=0.0680 max|diff dev| in SD=0.0000
+ max|se rel diff|=0.029
+ ref confound q vs p:
+   basin    var         p         q
+0   atl    lat  0.775612  0.775612
+1   atl    age  0.001000  0.001428
+2   atl    msl  0.001000  0.001428
+3   atl  speed  0.090955  0.101061
+4   atl   dp12  0.001000  0.001428
+5   pac    lat  0.001000  0.001428
+6   pac    age  0.001000  0.001428
+7   pac    msl  0.001000  0.001428
+8   pac  speed  0.004998  0.006247
+9   pac   dp12  0.001000  0.001428
+ my q
+   basin    var         p         q
+0   atl    lat  0.843578  0.843578
+1   atl    age  0.001999  0.002856
+2   atl    msl  0.001000  0.001666
+3   atl  speed  0.101949  0.113277
+4   atl   dp12  0.001000  0.001666
+5   pac    lat  0.001000  0.001666
+6   pac    age  0.001000  0.001666
+7   pac    msl  0.001000  0.001666
+8   pac  speed  0.011994  0.014993
+9   pac   dp12  0.001000  0.001666
+
+conv_sample rows 1000 conv_values rows 1756 lag values [np.int64(0), np.int64(12), np.int64(24)]
+conv_sample rows not in pairs.csv: 0 pairs per basin/grp {('atl', 0): 250, ('atl', 1): 250, ('pac', 0): 250, ('pac', 1): 250} pairs complete: {2: 500}
+conv_values lag0 rows == conv_sample rows?  1000 1000
+
+=== coverage rows 12 mismatches: 0
+Empty DataFrame
+Columns: [basin, grp, lag, n_m, usable_m, n_r, usable_r]
+Index: []
+lag0 snapped false / match_km>25 counts: 0 0
+
+=== stage B (30): mine rows 30, ref rows 30
+unmatched keys: 0
+MISMATCH ['atl', 'baroc', -12] ['p 0.2449 vs 0.2729']
+MISMATCH ['atl', 'jet_cos', -12] ['p 0.7266 vs 0.7656']
+MISMATCH ['atl', 'jet_cos', 0] ['p 0.7116 vs 0.6717']
+MISMATCH ['atl', 'stab', 0] ['q-pass 0.0450 vs 0.0600']
+MISMATCH ['atl', 'thetae850', 0] ['p 0.8466 vs 0.8986']
+MISMATCH ['pac', 'jet_cos', -24] ['mde_std 0.6230 vs 0.5891']
+MISMATCH ['pac', 'jet_dist', -24] ['mde_std 0.8763 vs 0.8475']
+MISMATCH ['pac', 'jet_dist', -12] ['p 0.5577 vs 0.5897']
+MISMATCH ['pac', 'jet_dist', 0] ['p 0.4698 vs 0.4438']
+MISMATCH ['pac', 'stab', -24] ['p 0.1569 vs 0.1349']
+MISMATCH ['pac', 'stab', 0] ['p 0.8466 vs 0.9075']
+MISMATCH ['pac', 'thetae850', -24] ['p 0.3478 vs 0.3088']
+MISMATCH ['pac', 'thetae850', -12] ['p 0.4798 vs 0.4538']
+matched 17, mismatched 13
+ max|q diff|=0.0560 max|p diff|=0.0610 max|diff dev| in SD=0.0000
+ max|se rel diff|=0.057

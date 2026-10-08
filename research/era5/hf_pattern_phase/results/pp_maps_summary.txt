@@ -1,0 +1,8 @@
+atl gust: top 397, bottom 242 rotated storms; 3762 of 14641 pixels pass BH q<0.05
+atl ws: top 397, bottom 242 rotated storms; 0 of 14641 pixels pass BH q<0.05
+atl msl: top 397, bottom 242 rotated storms; 4117 of 14641 pixels pass BH q<0.05
+atl d2m: top 397, bottom 242 rotated storms; 0 of 14641 pixels pass BH q<0.05
+pac gust: top 330, bottom 210 rotated storms; 0 of 14641 pixels pass BH q<0.05
+pac ws: top 330, bottom 210 rotated storms; 0 of 14641 pixels pass BH q<0.05
+pac msl: top 330, bottom 210 rotated storms; 5033 of 14641 pixels pass BH q<0.05
+pac d2m: top 330, bottom 210 rotated storms; 0 of 14641 pixels pass BH q<0.05
