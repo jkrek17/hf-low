@@ -1,0 +1,13 @@
+{
+ "nperm": 2000,
+ "nboot": 2000,
+ "seed": 20261008,
+ "n_tracks_window": {
+  "atl": 9656,
+  "pac": 10040
+ },
+ "missing_fix": {
+  "atl": 14,
+  "pac": 9
+ }
+}
