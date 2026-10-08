@@ -33,6 +33,13 @@ What had been looked at: counts only (3,316 deepening fixes on 2,274 storms; 1,2
 - 22 seasons are the bootstrap unit; storms in the same week share an environment.
 - Held-out looks: none scored, no model fitted. Transitioning tropical cyclones are in.
 
+## Stage B size and N (written before the pull)
+
+- Sized by HEAD requests (`results/sizes_surface.txt`: MSLP 2.17, dewpoint 2.37, t2m 2.34, SST 1.37 MB per time) and by three real single-level fetches (u250 3.6, v250 3.7, T850 2.6, q850 3.4 MB; `arco_level`), 21.5 MB per time. The plan assumed about 2.5 MB per level; the measured cost is 3.3 MB, a 30% higher level cost.
+- **N = 250 pairs per basin** (the cap): 500 pairs, 1,000 members, 1,756 lag rows, **1,576 distinct times**, 33.9 GB (under the 40 GB cap; the lag rows are fewer than 3 x 1,000 because a storm's t0 - 12 h or t0 - 24 h fix often does not exist). Pairs drawn at random with seed 20261012 from the 788 stage A pairs (`results/conv_sample.csv`, `times_conv.csv`; `select_conv.py`).
+- Whole-set pulls for the three follow-up tests so far: Test 2 15.3 GB (done), Test 3 stage B about 16.7 GB (sized, running), this test about 33.9 GB; about 66 GB against the 94 GB Jason approved.
+- Dry run on 8 times passed (all 8 lows snapped, no all-NaN scalar). Wind speeds at 250 hPa are in m/s, theta-e is Bolton (1980), stability is SST minus 2 m temperature over ocean points (at least 50 in the 500 km disc), baroclinicity is |grad T850| in K per 100 km.
+
 ## Deviations (post hoc)
 
 None yet.

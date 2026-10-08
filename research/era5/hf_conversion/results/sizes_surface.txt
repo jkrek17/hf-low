@@ -1,0 +1,6 @@
+1576 distinct times; sample 300
+  mean_sea_level_pressure: 2.17 MB per time
+  2m_dewpoint_temperature: 2.37 MB per time
+  2m_temperature: 2.34 MB per time
+  sea_surface_temperature: 1.37 MB per time
+per time, 6 variables: 8.25 MB; whole pull 13.0 GB; without t2m 10.8 GB

@@ -1,0 +1,1 @@
+sample 1000 storms ({('atl', 'HF_peak'): 250, ('atl', 'SF_peak'): 250, ('pac', 'HF_peak'): 250, ('pac', 'SF_peak'): 250}); lags with a 00/12 track bracket: 3374 of 6000; missing by lag {-48: 774, -36: 644, -24: 439, -12: 221, 12: 201, 24: 347}; distinct times 3123
