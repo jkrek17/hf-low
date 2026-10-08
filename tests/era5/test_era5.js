@@ -5,7 +5,7 @@ var fs = require('fs'), path = require('path'), vm = require('vm'), assert = req
 var ROOT = path.join(__dirname, '..', '..');
 var ctx = { window: {} };
 vm.createContext(ctx);
-['assets/js/era5.js', 'data/era5-tracks.js'].forEach(function (f) {
+['assets/js/era5.js', 'data/era5-tracks.js', 'data/era5-null.js', 'data/era5-peaks.js'].forEach(function (f) {
   vm.runInContext(fs.readFileSync(path.join(ROOT, 'docs', f), 'utf8'), ctx, { filename: f });
 });
 var HF = ctx.window.HF, RAW = ctx.window.HF_ERA5;
@@ -54,6 +54,26 @@ test('committed data: 4,157 events, 79,476 fixes, fixes in range, none lost in e
   var pre = all.filter(function (e) { return e.season < 2001; }).length;
   assert.ok(pre > 0 && pre < all.length);
   assert.strictEqual(HF.era5.filter(all, { basin: 'all', season0: 1979, season1: 2025 }).length, 4157);
+});
+test('peaks: decode and filter; 75,087 cyclones, the HF-equivalent ones are exactly the 4,157 events', function () {
+  var raw = ctx.window.HF_ERA5_PEAKS, P = HF.era5.decodePeaks(raw);
+  assert.strictEqual(P.n, 75087); assert.strictEqual(raw.meta.events, 75087);
+  var hf = 0; for (var i = 0; i < P.n; i++) hf += P.hf[i];
+  assert.strictEqual(hf, 4157);
+  var all = HF.era5.filterPeaks(P, { basin: 'all', season0: 0, season1: 9999 });
+  assert.strictEqual(all.length, 75087);
+  var atl = HF.era5.filterPeaks(P, { basin: 'atl', season0: 0, season1: 9999 }).length;
+  var pac = HF.era5.filterPeaks(P, { basin: 'pac', season0: 0, season1: 9999 }).length;
+  assert.strictEqual(atl + pac, 75087);
+  var post = HF.era5.filterPeaks(P, { basin: 'all', season0: 2004, season1: 2025 }).length;
+  assert.ok(post > 0 && post < 75087);
+  var jan = HF.era5.filterPeaks(P, { basin: 'all', season0: 0, season1: 9999, months: { 1: true } }).length;
+  assert.ok(jan > 0 && jan < 75087);
+});
+test('null cases: 4,154 tracks, none reaches the threshold, 6-hourly fixes', function () {
+  var nul = HF.era5.decode(ctx.window.HF_ERA5_NULL);
+  assert.strictEqual(nul.length, 4154);
+  nul.forEach(function (e) { assert.ok(e.peakGust < 71.7, e.key + ' null case at or above threshold'); });
 });
 console.log('\n' + passed + ' passed, ' + failed + ' failed');
 process.exit(failed ? 1 : 0);

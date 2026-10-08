@@ -14,6 +14,9 @@
      f.season0, f.season1   inclusive season start years
      f.months  {1: true, ...} or empty/undefined for every month (the month
                of the track's first fix, as for the archive step view)
+   decodePeaks(raw) / filterPeaks(P, f): the same for the all-cyclone peak
+   positions (parallel typed arrays; filterPeaks returns indices).
+
    The class filter, the pressure cut and the text search describe archive
    fields the proxy does not have, so they are not applied. */
 
@@ -56,5 +59,36 @@ window.HF = window.HF || {};
     });
   }
 
-  HF.era5 = { decode: decode, filter: filter };
+  /** The all-cyclone population: one peak position per cyclone (the full
+      tracks were never stored), as parallel arrays so 75,087 points stay
+      cheap. thr is the pipeline A threshold from raw.meta. */
+  function decodePeaks(raw) {
+    var ev = raw.ev, n = ev.length, thr = raw.meta.threshold_kt;
+    var P = { n: n, thr: thr, basin: new Uint8Array(n), season: new Uint16Array(n), month: new Uint8Array(n),
+              hf: new Uint8Array(n), sp: new Float32Array(n), cp: new Float32Array(n), lam: new Float32Array(n),
+              gust: new Float32Array(n), minP: new Float32Array(n) };
+    for (var i = 0; i < n; i++) {
+      var r = ev[i], lat = r[4] / 4, lon = r[5] / 4;
+      P.basin[i] = r[1]; P.season[i] = r[2]; P.month[i] = Math.floor(r[3] / 10000) % 100;
+      P.gust[i] = r[6] / 10; P.hf[i] = r[6] / 10 >= thr ? 1 : 0; P.minP[i] = r[7] / 10;
+      P.sp[i] = Math.sin(lat * Math.PI / 180); P.cp[i] = Math.cos(lat * Math.PI / 180); P.lam[i] = lon * Math.PI / 180;
+    }
+    return P;
+  }
+
+  /** Indices of the peaks that pass the same filter as filter(). */
+  function filterPeaks(P, f) {
+    var months = f.months || {}, anyMonth = false, k, out = [];
+    for (k in months) if (months[k]) { anyMonth = true; break; }
+    var b = f.basin === 'atl' ? 0 : f.basin === 'pac' ? 1 : -1;
+    for (var i = 0; i < P.n; i++) {
+      if (b >= 0 && P.basin[i] !== b) continue;
+      if (P.season[i] < f.season0 || P.season[i] > f.season1) continue;
+      if (anyMonth && !months[P.month[i]]) continue;
+      out.push(i);
+    }
+    return out;
+  }
+
+  HF.era5 = { decode: decode, filter: filter, decodePeaks: decodePeaks, filterPeaks: filterPeaks };
 })(window.HF);
