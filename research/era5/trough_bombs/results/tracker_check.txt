@@ -1,0 +1,5 @@
+catalog points before 2004-06: 71472; low re-detected at same time and position 71472 (100.0000%); pressure within 0.2 hPa 71472 (100.0000%)
+in-domain 00/12 catalog points 30388; found among forecast fixes 30388 (100.0000%); same basin 30388
+catalog tracks with in-domain points 4311; mapped to exactly one re-linked track 4311; to several 0
+missing in-domain points by year: {}
+{} <- catalog points whose low was not re-detected, by year
