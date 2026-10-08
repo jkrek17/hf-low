@@ -180,6 +180,14 @@
           <option value="boxes">HF-centre hours per season (boxes)</option>
           <option value="motion">Mean motion while HF (arrows)</option>
           <option value="historic">1979-2003 candidates (ERA5 proxy)</option>
+          <option value="gust">ERA5 gust climatology (proxy)</option>
+        </select>
+        <label for="atlasField" id="atlasFieldLabel" hidden>Field</label>
+        <select id="atlasField" hidden>
+          <option value="annmax">Mean annual maximum gust</option>
+          <option value="f50">Share of times at or above 50 kt</option>
+          <option value="f64">Share of times at or above 64 kt</option>
+          <option value="f717">Share of times at or above 71.7 kt</option>
         </select>
         <label for="atlasSrc">Source</label>
         <select id="atlasSrc">
@@ -188,6 +196,7 @@
         </select>
       </div>
       <script type="text/plain" id="atlasLoader" src="atlas.js"></script>
+      <script type="text/plain" id="gustLoader" src="gust-climo.js"></script>
       <p class="tool-note" id="mapNote"></p>
       <button type="button" class="btn" id="era5FocusClear" hidden>Clear highlighted storm</button>
     </div>

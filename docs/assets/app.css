@@ -507,7 +507,7 @@ main { padding: 0 var(--sp-5) var(--sp-6); }
 }
 .panel-tools .tool-note { margin-left: auto; text-align: right; }
 .atlas-tools { display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; }
-.atlas-tools[hidden] { display: none; }
+.atlas-tools[hidden], .atlas-tools [hidden] { display: none; }
 .atlas-tools label { font-size: var(--fs-sm); color: var(--ink-2); }
 .tool-note { margin: 0; font-size: var(--fs-sm); color: var(--ink-2); font-variant-numeric: tabular-nums; }
 
