@@ -185,6 +185,15 @@ ERA5 proxy; outcome G_T is a regional gust metric (ocean within 300 km of Greenl
 - The pre-registered matched check failed to match (cases 13.5 hPa deeper than controls); post hoc matching on all times gives 4.6-8.9 per SD. Station check: cases and tip cases are windier at Prins Christian Sund, but ingredient-favoured times are not; the ERA5 high effect is not independently confirmed by stations.
 - Verified by a fresh agent: counts, odds ratios, skill, risk change, pooled and all-times fits, G_T at 10 times. Station counts did not reproduce (ISD files differ); means were close. Not checked: bootstrap p/q values, composite, swap, matched, post hoc.
 
+### NAO share without barrier winds (`research/era5/nao_share_barrier/`, hf-low PR 63, merged into the integration branch as `e5e88cd`)
+
+Pipeline A, ERA5 proxy. Plan committed first (`d642ff7`); 20 pre-registered tests, BH over all 20 (9 pass). Atlantic, Oct-Apr 2004-05..2025-26, NAO lagged days -10..-4, PR 14's setup (reproduced exactly: 9,636 tracks, 1,003 HF, RR(share) 1.125).
+- **Answer: barrier-type fixes carry none of the NAO share effect.** Without terrain-type fixes (PR 29 rule) RR(share) is 1.141 (1.06-1.21) against 1.125; paired difference +1.4% (-1.1 to +3.8), detectable 3.5%. Masks: 100 km 1.129, 300 km 1.132, centre-only 1.150. Only 109 of 1,003 HF cyclones are barrier-only; their NAO count RR 0.98 (0.79-1.22) is unresolved.
+- Greenland high (ice-sheet MSLP, lagged, 1 SD 9.7 hPa; corr with NAO -0.69) in the model: NAO share RR falls to 1.039 (0.93-1.15), mediation prediction supported (q 0.044). But the high lowers the share (0.870/SD) and does the same with barrier fixes removed (0.862): it works on storm HF, not barrier flow.
+- Cutting everything north of 60N (both sides): 1.091 (0.99-1.19), unresolved; this is location (NAO shifts storms north, PR 11), not wind type.
+- Verified by a fresh agent: counts, all point estimates, three bootstrap SEs. Not independently checked: permutation p, q-values, leave-one-season-out ranges, interval for the mediation ratio, minimum detectable effects.
+- New committed file `gh_daily.csv` (daily Greenland-high index, 12 UTC, 2004-09-21..2026-04-28; 11 GB pulled).
+
 ### ENSO x PNA: does El Niño change what +PNA does to Pacific HF lows? (`research/era5/enso_pna/`, hf-low PR 34, merged into the integration branch as `9a59ed9`)
 
 Pipeline A, ERA5 proxy, Pacific, Oct-Apr 2004-05..2025-26 (22 seasons, 10,040 cyclones, 825 HF), PNA lagged to days -10..-4, ONI of the month of day -7. Plan committed first (`c6a085d`).
