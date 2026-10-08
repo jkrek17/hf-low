@@ -1,0 +1,20 @@
+test                                                            label outcome basin   winters   gamma  se_cr1   ci_lo   ci_hi  p_two  p_joint  n_tracks  n_winters  betaNAO  betaPNA    y_sd  p_one
+  P1     primary: Atlantic, lagged, 1979-2000, minimum-pressure basin     lon   atl 1979-2000 -0.6752  0.4436 -1.5412  0.1625 0.1569   0.3373      4364         22  -0.9053  -0.6401 27.6946 0.9215
+  P1     primary: Atlantic, lagged, 1979-2000, minimum-pressure basin     lat   atl 1979-2000 -0.1489  0.1379 -0.3890  0.2302 0.3453   0.3373      4364         22   1.0004   0.0280  9.8147 0.8274
+  S3                                               basin at first fix     lon   atl 1979-2000 -0.6960  0.3548 -1.4840 -0.0042 0.0766   0.1998      4405         22  -0.3575  -0.3130 29.1487 0.9617
+  S3                                               basin at first fix     lat   atl 1979-2000 -0.0856  0.1590 -0.3723  0.2897 0.6373   0.1998      4405         22   1.0892  -0.0320 10.4322 0.6814
+  S4                                  same-time predictors (contrast)     lon   atl 1979-2000 -0.3888  0.4367 -1.3110  0.5498 0.3736   0.5000      4364         22  -0.8716  -0.5428 27.6946 0.8132
+  S4                                  same-time predictors (contrast)     lat   atl 1979-2000 -0.1246  0.1363 -0.3827  0.1846 0.3876   0.5000      4364         22   2.2906  -0.1074  9.8147 0.8062
+  S5 bridge: source era 2001-2013 (positive control, not independent)     lon   atl 2001-2013  0.6299  0.3909 -0.1416  1.4919 0.1102   0.2676      2743         13  -0.5776  -0.7577 27.1882 0.0551
+  S5 bridge: source era 2001-2013 (positive control, not independent)     lat   atl 2001-2013 -0.2033  0.2552 -0.7427  0.3602 0.4865   0.2676      2743         13   1.3855  -0.1258  9.8004 0.7568
+  S6                                       Pacific control, 1979-2000     lon   pac 1979-2000 -0.2314  0.3062 -0.8375  0.4006 0.4683   0.7147      5740         22   0.9441   0.1740 29.6682 0.7658
+  S6                                       Pacific control, 1979-2000     lat   pac 1979-2000 -0.0747  0.1826 -0.3918  0.3645 0.6885   0.7147      5740         22   0.1508  -0.0233  8.4963 0.6558
+
+id                               test      p   q_BH
+P1                 P1 lon (one-sided) 0.9215 0.9617
+S1                  S1 lat, two-sided 0.3453 0.8057
+S2                      S2 joint 2 df 0.3373 0.8057
+S3 S3 first-fix basin lon (one-sided) 0.9617 0.9617
+S4       S4 same-time lon (one-sided) 0.8132 0.9617
+S5          S5 bridge lon (one-sided) 0.0551 0.3857
+S6         S6 Pacific lon (two-sided) 0.4683 0.8195
