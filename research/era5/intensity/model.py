@@ -92,11 +92,19 @@ def clim_probs(Dtr, Dte, target, ncls):
     return p
 
 
+def events(target):
+    """Outcome columns scored as yes/no events: rapid decay and rapid deepening, or HF."""
+    return (0, 4) if target == "cls" else (1,)
+
+
 def loso(D, target, ncls):
-    """Leave-one-season-out probabilities for every model."""
+    """Leave-one-season-out probabilities for every model, and for each yes/no
+    event the probability cut that makes the training seasons' forecast count
+    equal their observed count (bias 1), applied unchanged to the held-out season."""
     rows = D.index[D[target] >= 0] if target == "cls" else D.index
     S = D.loc[rows]
     P = {k: np.zeros((len(S), ncls)) for k in ["clim"] + list(SETS)}
+    CUT = {k: np.zeros((len(S), ncls)) for k in SETS}
     for s in sorted(S.season.unique()):
         te = (S.season == s).values
         tr = ~te
@@ -107,7 +115,35 @@ def loso(D, target, ncls):
             prep = Prep(Dtr[cols].values.astype(float))
             m = fit(prep(Dtr[cols].values.astype(float)), y)
             P[name][te] = m.predict_proba(prep(Dte[cols].values.astype(float)))
-    return S, P
+            ptr = m.predict_proba(prep(Dtr[cols].values.astype(float)))
+            for k in events(target):
+                CUT[name][te, k] = np.quantile(ptr[:, k], 1 - np.mean(y == k))
+    return S, P, CUT
+
+
+def table(fc, ob):
+    """POD, FAR, CSI, HSS, bias from yes/no forecasts and observations."""
+    a = np.sum(fc & ob); b = np.sum(fc & ~ob); c = np.sum(~fc & ob); d = np.sum(~fc & ~ob)
+    n = a + b + c + d
+    ex = ((a + b) * (a + c) + (c + d) * (b + d)) / n
+    return dict(pod=a / max(a + c, 1), far=b / max(a + b, 1), csi=a / max(a + b + c, 1),
+                hss=(a + d - ex) / max(n - ex, 1), bias=(a + b) / max(a + c, 1), n_obs=int(a + c))
+
+
+def categorical(S, P, CUT, target, w):
+    """Forecaster-style scores at the training-count-matched cut, pooled and by season."""
+    y = S[target].astype(int).values
+    seas = S.season.values
+    names = {0: "rapid decay", 4: "rapid deepening", 1: target}
+    for k in events(target):
+        w(f"  yes/no {names[k]} at the count-matched cut (bias 1 in training): "
+          "POD FAR CSI HSS bias, then the held-out-season HSS range")
+        for name in SETS:
+            fc, ob = P[name][:, k] >= CUT[name][:, k], y == k
+            t = table(fc, ob)
+            hs = [table(fc[seas == s], ob[seas == s])["hss"] for s in np.unique(seas) if ob[seas == s].sum() >= 5]
+            w(f"    {name:11s} POD {t['pod']:.2f} FAR {t['far']:.2f} CSI {t['csi']:.2f} HSS {t['hss']:.2f} "
+              f"bias {t['bias']:.2f}  (n_obs {t['n_obs']}; season HSS {min(hs):.2f}-{max(hs):.2f})")
 
 
 def rps(p, y):
@@ -206,7 +242,7 @@ def main(fx, ev, outdir):
     for target, ncls, labels in (("cls", 5, CLASSES), ("hf24", 2, ["no", "yes"]), ("hf48", 2, ["no", "yes"])):
         D[target] = D[target].astype(int) if target != "cls" else D[target]
         Dt = D
-        S, P = loso(Dt, target, ncls)
+        S, P, CUT = loso(Dt, target, ncls)
         y = S[target].astype(int).values
         seas = S.season.values
         if target == "cls":
@@ -242,6 +278,7 @@ def main(fx, ev, outdir):
         else:
             rel["rapid deepening"] = reliability(P["full"][:, 4], (y == 4).astype(int))
             rel["rapid decay"] = reliability(P["full"][:, 0], (y == 0).astype(int))
+        categorical(S, P, CUT, target, w)
         # drift: skill of the full model by decade of the held-out season
         dec = (seas // 10) * 10
         parts = []

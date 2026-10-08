@@ -1,0 +1,126 @@
+Fixes: 159430 in-domain 00/12 UTC fixes on 36598 tracks, seasons 2004-2025 (22 seasons)
+Class target available for 100025 fixes (5 dropped as |NDR| > 3.0, 59400 where the track ends within 24 h)
+Class frequencies: rapid decay 0.007, decay 0.186, steady 0.607, deepening 0.165, rapid deepening 0.034
+HF frequencies: now 0.018, within 24 h 0.034, within 48 h 0.043
+
+== cls: leave-one-season-out RPSS vs basin-month climatology (90 % CI over seasons), seasons 2004-2025 (n = 22)
+  clim   +0.000 [+0.000, +0.000]  AUC(rapid deepening) 0.734  AUC(rapid decay) 0.711
+  state  +0.242 [+0.238, +0.246]  AUC(rapid deepening) 0.918  AUC(rapid decay) 0.941
+  hart   +0.290 [+0.286, +0.294]  AUC(rapid deepening) 0.945  AUC(rapid decay) 0.944
+  full   +0.305 [+0.300, +0.309]  AUC(rapid deepening) 0.950  AUC(rapid decay) 0.948
+  full_nogust +0.301 [+0.297, +0.305]  AUC(rapid deepening) 0.950  AUC(rapid decay) 0.945
+  gain hart over state: +0.047 [+0.045, +0.050]
+  gain full over hart: +0.015 [+0.014, +0.016]
+  gain full over state: +0.062 [+0.060, +0.064]
+  gain full over full_nogust: +0.003 [+0.003, +0.004]
+  yes/no rapid decay at the count-matched cut (bias 1 in training): POD FAR CSI HSS bias, then the held-out-season HSS range
+    state       POD 0.15 FAR 0.85 CSI 0.08 HSS 0.14 bias 1.00  (n_obs 746; season HSS 0.02-0.30)
+    hart        POD 0.16 FAR 0.84 CSI 0.09 HSS 0.16 bias 0.99  (n_obs 746; season HSS 0.04-0.30)
+    full        POD 0.18 FAR 0.82 CSI 0.10 HSS 0.18 bias 1.01  (n_obs 746; season HSS 0.05-0.30)
+    full_nogust POD 0.18 FAR 0.82 CSI 0.10 HSS 0.17 bias 1.01  (n_obs 746; season HSS 0.02-0.32)
+  yes/no rapid deepening at the count-matched cut (bias 1 in training): POD FAR CSI HSS bias, then the held-out-season HSS range
+    state       POD 0.36 FAR 0.64 CSI 0.22 HSS 0.34 bias 1.00  (n_obs 3434; season HSS 0.27-0.40)
+    hart        POD 0.47 FAR 0.53 CSI 0.30 HSS 0.45 bias 1.00  (n_obs 3434; season HSS 0.37-0.52)
+    full        POD 0.49 FAR 0.51 CSI 0.32 HSS 0.47 bias 1.00  (n_obs 3434; season HSS 0.41-0.53)
+    full_nogust POD 0.49 FAR 0.51 CSI 0.32 HSS 0.47 bias 1.00  (n_obs 3434; season HSS 0.39-0.54)
+  full model skill by decade: 2000s +0.299, 2010s +0.302, 2020s +0.314
+
+== hf24: leave-one-season-out BSS vs basin-month climatology (90 % CI over seasons), seasons 2004-2025 (n = 22)
+  clim   +0.000 [+0.000, +0.000]  AUC 0.756
+  state  +0.370 [+0.359, +0.381]  AUC 0.963
+  hart   +0.385 [+0.373, +0.396]  AUC 0.967
+  full   +0.423 [+0.411, +0.435]  AUC 0.972
+  full_nogust +0.380 [+0.368, +0.393]  AUC 0.966
+  gain hart over state: +0.015 [+0.011, +0.018]
+  gain full over hart: +0.038 [+0.035, +0.042]
+  gain full over state: +0.053 [+0.049, +0.057]
+  gain full over full_nogust: +0.042 [+0.039, +0.046]
+  onset only (not HF at t, n=156507, base rate 0.022):
+    clim   +0.000 [+0.000, +0.000]  AUC 0.761
+    state  +0.221 [+0.212, +0.230]  AUC 0.950
+    hart   +0.246 [+0.235, +0.258]  AUC 0.956
+    full   +0.291 [+0.279, +0.305]  AUC 0.963
+    full_nogust +0.261 [+0.247, +0.277]  AUC 0.958
+    gain full over state: +0.070 [+0.064, +0.077]
+  yes/no hf24 at the count-matched cut (bias 1 in training): POD FAR CSI HSS bias, then the held-out-season HSS range
+    state       POD 0.56 FAR 0.44 CSI 0.39 HSS 0.55 bias 1.00  (n_obs 5399; season HSS 0.49-0.61)
+    hart        POD 0.58 FAR 0.42 CSI 0.41 HSS 0.56 bias 1.00  (n_obs 5399; season HSS 0.50-0.62)
+    full        POD 0.60 FAR 0.40 CSI 0.43 HSS 0.59 bias 1.00  (n_obs 5399; season HSS 0.53-0.65)
+    full_nogust POD 0.57 FAR 0.43 CSI 0.40 HSS 0.56 bias 1.00  (n_obs 5399; season HSS 0.49-0.63)
+  full model skill by decade: 2000s +0.403, 2010s +0.421, 2020s +0.444
+
+== hf48: leave-one-season-out BSS vs basin-month climatology (90 % CI over seasons), seasons 2004-2025 (n = 22)
+  clim   +0.000 [+0.000, +0.000]  AUC 0.756
+  state  +0.315 [+0.305, +0.326]  AUC 0.944
+  hart   +0.336 [+0.324, +0.347]  AUC 0.950
+  full   +0.374 [+0.362, +0.386]  AUC 0.957
+  full_nogust +0.346 [+0.334, +0.358]  AUC 0.953
+  gain hart over state: +0.021 [+0.017, +0.025]
+  gain full over hart: +0.038 [+0.034, +0.041]
+  gain full over state: +0.059 [+0.055, +0.063]
+  gain full over full_nogust: +0.028 [+0.025, +0.031]
+  onset only (not HF at t, n=156507, base rate 0.031):
+    clim   +0.000 [+0.000, +0.000]  AUC 0.759
+    state  +0.199 [+0.189, +0.208]  AUC 0.929
+    hart   +0.231 [+0.218, +0.243]  AUC 0.937
+    full   +0.271 [+0.256, +0.284]  AUC 0.947
+    full_nogust +0.252 [+0.237, +0.267]  AUC 0.944
+    gain full over state: +0.071 [+0.065, +0.079]
+  yes/no hf48 at the count-matched cut (bias 1 in training): POD FAR CSI HSS bias, then the held-out-season HSS range
+    state       POD 0.52 FAR 0.48 CSI 0.35 HSS 0.50 bias 1.00  (n_obs 6809; season HSS 0.44-0.56)
+    hart        POD 0.54 FAR 0.46 CSI 0.37 HSS 0.52 bias 1.00  (n_obs 6809; season HSS 0.46-0.58)
+    full        POD 0.57 FAR 0.43 CSI 0.40 HSS 0.55 bias 1.00  (n_obs 6809; season HSS 0.48-0.61)
+    full_nogust POD 0.55 FAR 0.45 CSI 0.38 HSS 0.53 bias 1.00  (n_obs 6809; season HSS 0.48-0.60)
+  full model skill by decade: 2000s +0.351, 2010s +0.372, 2020s +0.398
+
+== Drift: trained 2004-2014, tested 2015-2025
+  cls: early-trained skill on 2015-2025 +0.309 (compare the leave-one-season-out decades above)
+  hf24: early-trained skill on 2015-2025 +0.426 (compare the leave-one-season-out decades above)
+
+== Reliability of the full model (leave-one-season-out): bin, n, mean forecast, observed frequency
+  rapid deepening
+    0.00-0.05  n= 86365  fc 0.005  obs 0.005
+    0.05-0.10  n=  4357  fc 0.072  obs 0.064
+    0.10-0.20  n=  3833  fc 0.143  obs 0.144
+    0.20-0.30  n=  1978  fc 0.245  obs 0.265
+    0.30-0.40  n=  1222  fc 0.346  obs 0.353
+    0.40-0.50  n=   912  fc 0.449  obs 0.465
+    0.50-0.60  n=   627  fc 0.547  obs 0.555
+    0.60-0.70  n=   430  fc 0.647  obs 0.614
+    0.70-0.80  n=   242  fc 0.745  obs 0.719
+    0.80-0.90  n=    58  fc 0.833  obs 0.828
+    0.90-1.00  n=     1  fc 0.905  obs 1.000
+  rapid decay
+    0.00-0.05  n= 96165  fc 0.003  obs 0.003
+    0.05-0.10  n=  2286  fc 0.070  obs 0.077
+    0.10-0.20  n=  1149  fc 0.138  obs 0.138
+    0.20-0.30  n=   308  fc 0.240  obs 0.166
+    0.30-0.40  n=    81  fc 0.342  obs 0.309
+    0.40-0.50  n=    21  fc 0.439  obs 0.238
+    0.50-0.60  n=     9  fc 0.537  obs 0.000
+    0.60-0.70  n=     5  fc 0.678  obs 0.600
+    0.70-0.80  n=     1  fc 0.731  obs 0.000
+  hf24
+    0.00-0.05  n=142516  fc 0.004  obs 0.004
+    0.05-0.10  n=  5237  fc 0.071  obs 0.074
+    0.10-0.20  n=  4042  fc 0.142  obs 0.158
+    0.20-0.30  n=  1954  fc 0.245  obs 0.260
+    0.30-0.40  n=  1336  fc 0.348  obs 0.341
+    0.40-0.50  n=   944  fc 0.447  obs 0.462
+    0.50-0.60  n=   746  fc 0.548  obs 0.535
+    0.60-0.70  n=   727  fc 0.649  obs 0.630
+    0.70-0.80  n=   666  fc 0.750  obs 0.730
+    0.80-0.90  n=   608  fc 0.852  obs 0.822
+    0.90-1.00  n=   654  fc 0.947  obs 0.934
+  hf48
+    0.00-0.05  n=136511  fc 0.006  obs 0.005
+    0.05-0.10  n=  7379  fc 0.071  obs 0.073
+    0.10-0.20  n=  5780  fc 0.142  obs 0.147
+    0.20-0.30  n=  2745  fc 0.245  obs 0.268
+    0.30-0.40  n=  1816  fc 0.347  obs 0.352
+    0.40-0.50  n=  1293  fc 0.447  obs 0.442
+    0.50-0.60  n=  1008  fc 0.550  obs 0.531
+    0.60-0.70  n=   923  fc 0.647  obs 0.629
+    0.70-0.80  n=   767  fc 0.749  obs 0.748
+    0.80-0.90  n=   650  fc 0.851  obs 0.823
+    0.90-1.00  n=   558  fc 0.942  obs 0.934
