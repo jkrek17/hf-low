@@ -57,4 +57,5 @@ Plain reading: the forecast form leaves about +0.03 BSS on the table, mostly bec
 
 ## Verification
 
-VERIFY_PLACEHOLDER
+A fresh Sonnet agent, writing its own LOSO code from `PREREG.md` and `intensity/model.py` without reading this directory's scripts or results, recomputed and matched: BSS of M0, M1, M2, M3 (0.4228, 0.4549, 0.4334, 0.4455); the M1-M0 gain +0.0321 (its interval [0.0263, 0.0372] against [0.0261, 0.0375], different seed) and 21 of 22 seasons; onset-only, Atlantic and Pacific gains; the temporal split (0.4264, 0.4523, +0.0259); HSS 0.588 and 0.615; the three g800 strata shares of fixes and of the gain; S5-S8; and post hoc M3b (0.4496), the Hart-only spline gain (+0.0112) and Hart plus g800 (+0.0141).
+**Not independently checked:** sign-flip p and q values, the S9 and S10 single tests, the training-quantile HSS contrast, partial dependence and H-squared, PH1 shares, PH2, the 'seven other predictors' PH4 line, and the verbal decision-rule wording.
