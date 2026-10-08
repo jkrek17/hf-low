@@ -9,7 +9,7 @@ Last updated: 2026-10-08, after the gust-drift findings and the reconciliation o
 | Branch | Head | Was | What it holds |
 |---|---|---|---|
 | `main` | | | The archive CSVs, the site, the build and publish tools, the site tests, and the session rules. No research code. |
-| `claude/exciting-fermat-8vcvgq` | `8c95de7` | integration branch | **All of the research:** precursor recovery, ERA5 pipelines A and B, per-cyclone P(HF), the gust-drift finding (`c9dc994`) and its recomputation (`drift_check.py`, `c55e74d`, hf-low PR 8), collision review. Has `main` merged in, so sessions here load the rules. |
+| `claude/exciting-fermat-8vcvgq` | `57b389f` | integration branch | **All of the research:** precursor recovery, ERA5 pipelines A and B, per-cyclone P(HF), the gust-drift finding (`c9dc994`) and its recomputation (`drift_check.py`, `c55e74d`, hf-low PR 8), the near-storm intensity framework (`research/era5/intensity/`, hf-low PRs 7 and 12), pipeline A's full track population, collision review. Has `main` merged in, so sessions here load the rules. |
 | `claude/hf-lows-qc-mode` | `0800e90` | new during the split | Everything on the integration branch, plus a QC mode for the page that writes corrections to the spreadsheet. |
 | `claude/era5-hf-history` | `b964cd1` | PR 80, with PR 82 merged in | Superseded: fully contained in the integration branch. |
 | `claude/era5-hf-probability` | `71013e5` | PR 82 | Superseded: fully contained in the integration branch. |
@@ -27,7 +27,7 @@ The merges on 2026-10-08 (`2b9af76`, `0b479db`, `0800e90`) had no conflicts. Aft
    - With depth held fixed at track level, the drift estimates are +0.1 to +0.6 kt/decade, each with an se of 0.2 to 0.5. That bounds the count bias at about +1 to +6 events per decade over 1979-2000, the same size as the possible real rise.
    - So neither `c9dc994`'s "cannot be carried back" nor the walk-back's "counts are fine" is supported. A trend in A that spans 2001 may be anywhere from a fifth to all artefact.
 
-   **The choice for Jason:** (a) start gust-based counts at 2001 or later, (b) use them from 1979 with the bounded bias stated, or (c) settle it first. Settling it needs A's full sub-threshold track population, which is not committed, or an independent pre-2001 wind record such as scatterometer data from 1991.
+   **The choice for Jason:** (a) start gust-based counts at 2001 or later, (b) use them from 1979 with the bounded bias stated, or (c) settle it first. Settling it needs A's full sub-threshold track population, now committed (`research/era5/hf_history/results/all_tracks.csv.gz`, hf-low PR 12), or an independent pre-2001 wind record such as scatterometer data from 1991.
 2. **Two ERA5 pipelines.** A and B were built in parallel and differ in almost every definition (table below). Keep both with distinct names and purposes, or retire one?
 3. **Research into `main`.** None of it is there yet. The integration branch now holds all of it and could go in as one pull request. Before decision 1 is settled, or after?
 4. **Validation floor year.** Files say the proxy "cannot be validated before 2001" in some places and "before 2004" in others. The pipeline B session's position is that `RECORD_START = 2004` must gate every window, because the archive was still starting before then. Confirm 2004 as the statement of record?
@@ -45,6 +45,12 @@ Working defaults that sessions follow until Jason confirms or changes them. Jaso
   - Pressure-depth counts are the cross-check before 2001.
   - Fitting and testing stay at 2004-05 and later.
   - A separate thread is testing ERA5 winds against buoy and ship records from before 2001, to try to settle decision 1 without the 370 GB re-run.
+
+- **Intensity framework working choices** (thread "Cyclone phase-space intensity framework"; details in `research/era5/intensity/README.md`):
+  - Population: every pipeline A low below 1010 hPa in domain at 00/12 UTC, not only catalog events.
+  - A class needs the track to survive 24 h, so rapid decay is under-counted. |NDR| > 3 is dropped as a tracker relink.
+  - Transitioning tropical cyclones are left in.
+  - L2 logistic with C = 1, never tuned. Outcomes are ERA5's own (perfect prognosis).
 
 ## What exists
 
@@ -71,6 +77,12 @@ Working defaults that sessions follow until Jason confirms or changes them. Jaso
 - Per-cyclone P(HF) (`probability.py`, `results/probability.txt`): a logistic fit on the same gust index, P = 0.5 at 73.6 kt; a Pacific term is reported alongside as marginal.
 - Tested against the gust drift (`research/era5/drift_check-result.txt`, section 6): its 800 km gust at fixed MSLP 955-975 hPa rises +0.665 kt/decade over 1979-2000 (t = +2.44), flat from 2004 (t = +0.61). Density at the threshold, 8.82 events per kt per season, sets how far a drift moves the count. The README now carries the caveat.
 - Reproduction streams about 370 GB and needs go-ahead.
+
+### Near-storm intensity framework: `research/era5/intensity/` (integration branch)
+
+- Hart phase space (B, -V_T lower, -V_T upper) plus nine environment predictors at every pipeline A low fix at 00/12 UTC, on a 1.5 degree grid. Logistic models give P(24 h intensity class: rapid decay, decay, steady, deepening, rapid deepening, in Bergerons) and P(pipeline A gust index reaches 71.7 kt within 24 h and 48 h). ERA5 proxy throughout.
+- Fitted and tested on 2004-05 to 2025-26 only (22 seasons, 159,430 fixes), leave-one-season-out against basin-month climatology. Full model: class RPSS 0.305 (storm state alone 0.242); rapid deepening HSS 0.47 (state 0.34, state plus Hart 0.45); HF within 24 h BSS 0.423, POD 0.60, FAR 0.40, CSI 0.43, HSS 0.59, bias 1.00; HF onset within 24 h BSS 0.291 (state 0.221); rapid decay weak, HSS 0.18. Trained 2004-14 and tested 2015-25: RPSS 0.309, BSS 0.426. All quoted values recomputed independently (hf-low PR 12 comment).
+- Committed: code, `results/skill.txt`, `coefficients.csv`, `model.json`, phase diagrams, and the 2004-2025 input tables that reproduce the numbers. Pre-registration and post-hoc changes are logged in its README ("Analysis history").
 
 ### ERA5 pipeline B: `event_fields.py`, `criterion.py`, `series.py` (integration branch)
 
@@ -100,7 +112,6 @@ Working defaults that sessions follow until Jason confirms or changes them. Jaso
 ## What does not exist
 
 - Any research code or data on `main`.
-- Pipeline A's full track population. Only events and null cases are committed, which limits any fixed-depth test of its index (see `drift_check-result.txt` section 6).
 - The basin term in the committed pipeline B series.
 - Validation of either ERA5 pipeline before the archive begins. There is nothing to validate against.
 - Repair of the archive position errors the tracker found. They are listed, not fixed.
@@ -148,7 +159,8 @@ Fix these as the files are next touched, in the same commit.
 
 ## Open work
 
-- Settling whether gust-based counts drift before 2001 (decision 1). It needs pipeline A's full sub-threshold track population, which means a re-run that streams about 370 GB and needs go-ahead, or a pre-2001 wind record independent of ERA5.
+- Settling whether gust-based counts drift before 2001 (decision 1). Pipeline A's full sub-threshold track population is now committed (`hf_history/results/all_tracks.csv.gz`: 75,087 tracks 1979-2025, one row each with gust index and minimum pressure; thresholded at 71.7 kt it reproduces the catalog's 2,254 / 1,903 events), so the fixed-depth count test can run without a new pull.
+- Intensity framework: skill by basin is not broken out; untested on operational (GFS) analyses; gale and storm thresholds deferred by Jason; the fitted model has not been applied to 1979-2003.
 - Pipeline B: put the basin term in the committed series; look at the over-prediction at high latitude.
 - Precursors: resolve the collision worklist (39 pairs: 31 sequential, 8 concurrent); recall on fast deepeners is not at parity and tuning was stopped deliberately; tropical and post-tropical systems are not parsed.
 - The unexplained +2.6 residual in the explosive share (commit `a9be84c`).
