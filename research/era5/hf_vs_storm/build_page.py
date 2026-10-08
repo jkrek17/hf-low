@@ -82,12 +82,12 @@ pre.v {{ white-space:pre-wrap; font-family:var(--mono); font-size:.8rem; backgro
 <li>Sea-surface temperature does not differ. Column water vapour does not differ days ahead; at onset it is lower in the Atlantic box (-0.28 kg/m2) and not different in the Pacific.</li></ul></div>
 <div><h3>At the storm</h3><ul>
 <li>An HF low is deeper and tighter. Central MSLP is 971 against 984 hPa in the Atlantic and 974 against 985 hPa in the Pacific, the pressure gradient within 500 km is about 60% steeper, and the strongest gust sits closer in (302 against 407 km Atlantic, 233 against 333 km Pacific).</li>
-<li>The wind area is wider at onset: the 48-kt gust area reaches about 155 km farther out. At the same central pressure the Atlantic difference shrinks to 42 km and the Pacific one disappears.</li>
+<li>The wind area is wider at onset: the 48-kt gust area reaches about 155 km farther out. Matched on central pressure, the Atlantic difference is +39 km at onset (q 0.041) and +42 km at peak (q 0.024); the Pacific one disappears (-0.4 and +4 km).</li>
 <li>Gusts are a little peakier relative to sustained wind (gust factor 1.51 against 1.47 Atlantic, 1.52 against 1.48 Pacific) and the air within 500 km is moister.</li>
 <li>No difference was detected in where the wind sits relative to the track: about three quarters of the 48-kt area is right of motion in both groups (detectable only above about 0.2 SD).</li></ul></div>
 <div><h3>What this cannot say</h3><ul>
 <li>Differences in gust and 10 m wind between the groups are true by construction, since HF is defined by the gust index.</li>
-<li>The groups are at different points of life at the anchor (HF onset about 34 to 37 h after the track starts, storm-force peak 29 to 33 h) and the HF lows sit 3 to 6 degrees farther south, which is part of the dewpoint difference.</li>
+<li>The groups are at different points of life at the anchor (HF onset about 34 to 37 h after the track starts, storm-force peak 29 to 33 h) and the HF onsets sit 2.6 degrees (Atlantic) and 5.7 degrees (Pacific) farther south than the storm-force peaks, and the dewpoint is the raw value, not an anomaly, so the moisture difference is confounded with latitude. A larger share of the HF anchors' 1,200 km circle is open ocean (owned-ocean fraction 0.13 to 0.15 higher), which affects the gust-area measures.</li>
 <li>These are composites, not forecasts or causes. 2 m temperature was not pulled.</li></ul></div>
 </div>
 </section>
@@ -121,7 +121,7 @@ pre.v {{ white-space:pre-wrap; font-family:var(--mono); font-size:.8rem; backgro
 <p style="font-size:.9rem;color:var(--muted)">Pre-registered family of 28 tests (7 measures x 2 basins x 2 comparisons), BH over all 28; 23 pass q&lt;0.05. Sample 400 HF and 400 storm-force lows per basin, matched by month. Differences in maximum gust and 10 m wind are left out of the family because they exist by construction. The intervals use 2,000 season-block bootstraps, so q cannot go below about 0.001.</p>
 <h3>At the same depth (HF peak against storm-force peak, matched on central MSLP)</h3>
 <div class="scroll">{scal_table(s1)}</div>
-<p style="font-size:.9rem;color:var(--muted)">Secondary, own family. The tighter gradient, smaller radius of maximum gust, higher gust factor and moister air remain when central pressure is matched. The wider 48-kt area does not, outside the Atlantic.</p>
+<p style="font-size:.9rem;color:var(--muted)">Secondary, own family. The tighter gradient, smaller radius of maximum gust, higher gust factor and moister air remain when central pressure is matched. The wider 48-kt area remains in the Atlantic (+42 km) and not in the Pacific (+4 km). The same match at HF onset gives +39 km (q 0.041) and -0.4 km.</p>
 </section>
 
 <section>
