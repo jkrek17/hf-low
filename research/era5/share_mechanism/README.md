@@ -82,7 +82,8 @@ p-tested. Bootstrap p floors are 0.001 (2,000 draws). Secondary variants are the
 1. `part1.py`: the bootstrap-stability guard for fractions assumed a positive share effect, so the Greenland-high secondary (negative effect) returned missing intervals on the first run. Made direction-neutral (sign of the observed effect) and rerun; no primary number changed.
 2. `power_m.py`: the first run bisected the planted direct coefficient over a range where M is not monotonic (planted M came out negative); the range was restricted to non-negative coefficients and the simulation rerun.
 3. The preregistration quotes 789 Pacific HF cyclones with a deepening fix (counted over genesis months Oct-Apr); the weekly window holds 788 (one starts on day 210, outside it). Window edge, not an error.
-4. A 20-draw test run of `part2.py` was read before the full run (same seed, same estimates; intervals only changed).
+4. Look numbers 7/8 are provisional; final numbers are assigned by timestamp when PR 85 merges and the log conflict is resolved.
+5. A 20-draw test run of `part2.py` was read before the full run (same seed, same estimates; intervals only changed).
 
 ## Independent check
 
