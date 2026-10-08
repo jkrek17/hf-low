@@ -61,6 +61,7 @@
   <button type="button" role="tab" class="tab is-active" data-panel="map" aria-selected="true">Map</button>
   <button type="button" role="tab" class="tab" data-panel="clim" aria-selected="false">Climatology</button>
   <button type="button" role="tab" class="tab" data-panel="events" aria-selected="false">Events</button>
+  <button type="button" role="tab" class="tab" data-panel="strong" aria-selected="false">Strongest storms</button>
   <button type="button" role="tab" class="tab" data-panel="tele" aria-selected="false">Teleconnections</button>
   <button type="button" role="tab" class="tab" data-panel="method" aria-selected="false">Method</button>
   <button type="button" role="tab" class="tab" data-panel="qc" aria-selected="false" id="tab-qc-btn" hidden>QC</button>
@@ -160,14 +161,20 @@
       <label class="check" title="Every ERA5 cyclone in the pipeline A population (75,087) as one dot at its peak position; the full tracks were never stored">
         <input type="checkbox" id="fEra5Peaks"> all cyclones (peak positions)
       </label>
+      <label class="check" title="Colour the ERA5 proxy tracks by the model's probability of a hurricane-force-equivalent gust within 24 h of each fix, instead of one flat colour (research/era5/hf_probability_tracks, a proxy)">
+        <input type="checkbox" id="fEra5Prob" disabled> colour tracks by P(HF within 24 h)
+      </label>
       <label class="check" title="Seasons before 2001-02 are for comparison within that era only: the gust index drifts upward there">
         <input type="checkbox" id="fEra5Pre" disabled> ERA5 before 2001-02 (within-era only)
       </label>
       <script type="text/plain" id="era5NullLoader" src="data/era5-null.js"></script>
       <script type="text/plain" id="era5PeaksLoader" src="data/era5-peaks.js"></script>
       <script type="text/plain" id="era5Loader" src="data/era5-tracks.js"></script>
+      <script type="text/plain" id="era5ProbLoader" src="data/era5-prob.js"></script>
+      <script type="text/plain" id="era5ListsLoader" src="data/era5-lists.js"></script>
       <button type="button" class="btn" id="fitBounds">Fit to events</button>
       <p class="tool-note" id="mapNote"></p>
+      <button type="button" class="btn" id="era5FocusClear" hidden>Clear highlighted storm</button>
     </div>
 
     <!-- Playback transport. Shown only while the Playback layer is active
@@ -363,6 +370,42 @@
       are not comparable across it.
       <button type="button" class="link-btn" id="tableBasisLink">Read why</button>
     </p>
+  </section>
+
+  <!-- Strongest storms ------------------------------------------------- -->
+  <!-- The strongest ERA5 proxy storms (pipeline A), from research/era5/hf_probability_tracks
+       (by pressure and by depth against the monthly norm, 1979-2025) and
+       research/era5/gust_climo (by gust index, ranked WITHIN era only). The
+       filters bar does not apply: these are fixed top-25 lists. Rows with a
+       track on the map link to it. The data file is fetched when the tab is
+       first opened. -->
+  <section class="panel" id="panel-strong" role="tabpanel">
+    <div class="panel-tools">
+      <div class="filter">
+        <label for="strongList">Ranked by</label>
+        <select id="strongList">
+          <option value="minp">Lowest central pressure, 1979-2025</option>
+          <option value="depth">Depth against the monthly norm, 1979-2025</option>
+          <option value="gust">Gust index, within each era</option>
+        </select>
+      </div>
+      <div class="filter">
+        <label for="strongBasin">Basin</label>
+        <select id="strongBasin">
+          <option value="all">Both basins</option>
+          <option value="atl">Atlantic</option>
+          <option value="pac">Pacific</option>
+        </select>
+      </div>
+      <p class="tool-note" id="strongNote"></p>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table" id="strongTable">
+        <thead></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p class="table-basis" id="strongBasis"></p>
   </section>
 
   <!-- Teleconnections ------------------------------------------------- -->

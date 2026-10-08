@@ -5,7 +5,7 @@ var fs = require('fs'), path = require('path'), vm = require('vm'), assert = req
 var ROOT = path.join(__dirname, '..', '..');
 var ctx = { window: {} };
 vm.createContext(ctx);
-['assets/js/era5.js', 'data/era5-tracks.js', 'data/era5-null.js', 'data/era5-peaks.js'].forEach(function (f) {
+['assets/js/era5.js', 'data/era5-tracks.js', 'data/era5-null.js', 'data/era5-peaks.js', 'data/era5-prob.js', 'data/era5-lists.js'].forEach(function (f) {
   vm.runInContext(fs.readFileSync(path.join(ROOT, 'docs', f), 'utf8'), ctx, { filename: f });
 });
 var HF = ctx.window.HF, RAW = ctx.window.HF_ERA5;
@@ -74,6 +74,59 @@ test('null cases: 4,154 tracks, none reaches the threshold, 6-hourly fixes', fun
   var nul = HF.era5.decode(ctx.window.HF_ERA5_NULL);
   assert.strictEqual(nul.length, 4154);
   nul.forEach(function (e) { assert.ok(e.peakGust < 71.7, e.key + ' null case at or above threshold'); });
+});
+test('pClass: edges 5%, 20%, 50%, 80%; -1 is unscored', function () {
+  var c = HF.era5.pClass;
+  assert.deepStrictEqual([c(-1), c(0), c(0.049), c(0.05), c(0.199), c(0.2), c(0.5), c(0.79), c(0.8), c(1)].join(), '0,1,1,2,2,3,4,4,5,5');
+});
+test('attachProb: an edge takes the larger P of its two ends; unmatched tracks get none', function () {
+  var t = HF.era5.decode(small);
+  var n = HF.era5.attachProb(t, { p: { '1': [100, -1, 600], '2': [-1, 30] } });
+  assert.strictEqual(n, 2);
+  assert.strictEqual(t[0].pfix.join(), '0.1,-1,0.6');
+  assert.strictEqual(Array.prototype.join.call(t[0].ec), '0,2,4');       // max(0.1, none) -> 5-20%; max(none, 0.6) -> 50-80%
+  assert.strictEqual(Array.prototype.join.call(t[1].ec), '0,1');                 // 3% -> under 5%
+  assert.strictEqual(t[2].ec, null);
+});
+test('P(HF) sidecar: every scored fix is a 00/12 UTC fix of a catalog track, P in [0, 1]', function () {
+  var raw = ctx.window.HF_ERA5_PROB, ev = HF.era5.decode(ctx.window.HF_ERA5), nu = HF.era5.decode(ctx.window.HF_ERA5_NULL);
+  var by = {}; ev.concat(nu).forEach(function (e) { by[e.key.slice(5)] = e; });
+  var tracks = Object.keys(raw.p), scored = 0, pre = 0;
+  assert.strictEqual(tracks.length, raw.meta.tracks);
+  tracks.forEach(function (id) {
+    var e = by[id], row = raw.p[id];
+    assert.ok(e, 'track ' + id + ' is not a mapped track');
+    assert.strictEqual(row.length, e.fixes.length, 'track ' + id + ' length');
+    var hh = e.start % 100;
+    row.forEach(function (v, i) {
+      if (v < 0) return;
+      assert.ok(v <= 1000, 'P out of range');
+      assert.ok((hh + 6 * i) % 24 === 0 || (hh + 6 * i) % 24 === 12, 'track ' + id + ' fix ' + i + ' is not 00/12 UTC');
+      scored++; if (e.season < 2004) pre++;
+    });
+  });
+  assert.strictEqual(scored, raw.meta.scored_fixes);
+  assert.ok(pre > 0 && pre < scored);
+});
+test('strongest-storm lists: 150 rows, every track on the map, gust ranks within an era only', function () {
+  var L = ctx.window.HF_ERA5_LISTS, ev = HF.era5.decode(ctx.window.HF_ERA5), nu = HF.era5.decode(ctx.window.HF_ERA5_NULL);
+  var ids = {}; ev.concat(nu).forEach(function (e) { ids[e.key.slice(5)] = 1; });
+  assert.strictEqual(L.rows.length, 150);
+  L.rows.forEach(function (r) { assert.ok(ids[r[3]], 'track ' + r[3] + ' not on the map'); });
+  var g = L.rows.filter(function (r) { return r[0] === 'gust'; });
+  assert.strictEqual(g.length, 50);
+  ['1979-2000', '2004-2025'].forEach(function (era) {
+    var e = g.filter(function (r) { return r[10] === era; }).sort(function (a, b) { return a[2] - b[2]; });
+    assert.strictEqual(e.length, 25);
+    e.forEach(function (r, i) {
+      assert.strictEqual(r[2], i + 1);
+      if (i) assert.ok(r[8] <= e[i - 1][8], 'gust not descending in ' + era);
+      assert.ok(era === '1979-2000' ? r[4] < 2001 : r[4] >= 2004, 'season outside its era');
+    });
+  });
+  ['minp', 'depth'].forEach(function (k) {
+    assert.strictEqual(L.rows.filter(function (r) { return r[0] === k; }).length, 50);
+  });
 });
 console.log('\n' + passed + ' passed, ' + failed + ' failed');
 process.exit(failed ? 1 : 0);
