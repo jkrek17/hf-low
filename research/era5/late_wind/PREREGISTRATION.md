@@ -130,4 +130,11 @@ count **one look at 2015-25 (look 11 of this log by the coordinator's count)** a
 
 ## Deviations (post hoc)
 
-None yet.
+Logged after the run (the plan text above is unchanged):
+
+1. The events table has no onset-time column. Onset time is the earliest in-domain pipeline A fix with g800 >= 71.7 kt in
+   `era5_hf_catalog_tracks.csv` (the rule `lifecycle.py` uses), and the check against `fixes.csv` passed for all 1,886 events.
+2. Jun-Aug onsets are folded into the Sep-Nov month group (the plan named three groups and did not place them).
+3. Post hoc, added after seeing the results and labelled so in the README: `posthoc.py` (a) joint model with season-clustered intervals, (b) the pressure at onset
+   compared with the minimum, because 63% of late storms turned out to have onset on the very fix of the minimum.
+4. T4 came out in the opposite sign to the expectation written above. It is reported as contrary, not re-signed.
