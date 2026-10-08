@@ -50,4 +50,8 @@ not 4,364 tracks. The lead's nominal +1.11 was therefore detectable at about 67%
 
 ## Numbers independently recomputed
 
-(see the verification note below, filled in after the check)
+A fresh Sonnet agent rebuilt the sample and models from the raw PR 38 tables and the CPC files with its own code. It reproduced: track counts (4,364 / 2,743 / 5,740), gamma for P1 (-0.675), S1 latitude (-0.149), S5 (+0.630), S6 (-0.231),
+the CR1 SE (0.444) and the sign-flip p (0.157, 200,000 draws), and the longitude unwrapping (Atlantic 262..370, no stray fixes). Its first window rule was mis-worded in its brief and dropped 31 March in leap years;
+the calendar rule used here (genesis 3 Dec - 31 Mar inclusive) matches exactly.
+
+**Not independently recomputed:** the winter-pairs bootstrap intervals, the power simulation (null SE 0.46, MDE 1.29), S3 and S4, the BH q values, and the power percentages quoted (67%, 22%, normal approximation by hand).
