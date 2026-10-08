@@ -1,0 +1,22 @@
+POST HOC diagnostics (not pre-registered). ERA5 proxy, outcome Y_T (G_T >= 71.7 kt), all 22 seasons unless stated
+weighted-sample correlations with GH are below; unweighted over the 1,076 sample rows: GRAD +0.42, STAB +0.15, NAO -0.59, depth +0.56, x +0.15, y -0.31, Dcf +0.14
+within cases only, GH with: depth +0.61, x +0.09, y -0.42, Dcf +0.05
+  pre-registered baseline (linear depth, quadratic position) all seasons        GH OR per SD 3.70 [2.50, 6.09]
+  pre-registered baseline (linear depth, quadratic position) even-start seasons GH OR per SD 3.69 [2.18, 11.12]
+  pre-registered baseline (linear depth, quadratic position) odd-start seasons  GH OR per SD 4.34 [2.25, 10.79]
+  + depth squared and cubed                               all seasons        GH OR per SD 3.60 [2.39, 6.09]
+  + depth squared and cubed                               even-start seasons GH OR per SD 3.62 [2.13, 11.77]
+  + depth squared and cubed                               odd-start seasons  GH OR per SD 4.16 [2.05, 11.67]
+  + depth squared and depth x position                    all seasons        GH OR per SD 4.07 [2.82, 6.78]
+  + depth squared and depth x position                    even-start seasons GH OR per SD 4.00 [2.56, 12.11]
+  + depth squared and depth x position                    odd-start seasons  GH OR per SD 4.96 [2.77, 13.26]
+  depth in weighted terciles (+ linear within)            all seasons        GH OR per SD 3.67 [2.49, 6.13]
+  depth in weighted terciles (+ linear within)            even-start seasons GH OR per SD 3.56 [2.10, 11.24]
+  depth in weighted terciles (+ linear within)            odd-start seasons  GH OR per SD 4.36 [2.28, 11.11]
+
+restricted to the deepest weighted tercile of reference-low MSLP (<= 972 hPa): 214 cases in 462 rows
+  baseline                       GH OR per SD 3.83 [2.47, 7.83]
+  baseline + depth squared       GH OR per SD 3.71 [2.37, 7.83]
+  deepest tercile, STAB OR per SD 1.84 [1.29, 3.44]
+  deepest tercile, GRAD OR per SD 0.81 [0.49, 1.11]
+  deepest tercile, NAO OR per SD 0.85 [0.64, 1.10]

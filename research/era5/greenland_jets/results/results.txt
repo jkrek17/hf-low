@@ -1,0 +1,73 @@
+Greenland jets analysis, PRIMARY (fit on even start years, test on odd); ERA5 proxy; outcome G_T (not pipeline A's index); 2000 season-block bootstraps
+sample: fit half 508 rows (127 cases, 11 seasons); test half 568 rows (142 cases, 11 seasons)
+weighted base rate of G_T >= 71.7 kt among low-in-region times: fit half 0.0568, test half 0.0611
+SD used for 'per SD' (weighted, fit half): GH 11.24, GRAD 6.74, STAB 2.24, NAO 0.71, GBI 107.15
+missing: NAO 0, motion 57 rows, GBI 153
+
+F1 primary family (9 tests, BH q within the fit half), outcome Y_T, logit scale per SD  [33s]
+test      fit-half est [95% CI]   p      q   |  test-half est [95% CI]   p(2-sided)  same sign + one-sided p<0.05?  -> supported
+GH    +1.305 [+0.793, +2.404] p 0.001 q 0.005 | +1.467 [+0.777, +2.445] p 0.001  same sign True, one-sided p 0.001  -> SUPPORTED
+GRAD  +0.065 [-0.296, +0.302] p 0.758 q 0.758 | -0.227 [-0.921, +0.623] p 0.637  same sign False, one-sided p 1.000  -> not supported
+STAB  +0.340 [-0.332, +1.065] p 0.302 q 0.544 | +0.621 [+0.236, +1.049] p 0.005  same sign True, one-sided p 0.003  -> not supported
+NAO   -0.051 [-0.597, +0.324] p 0.756 q 0.758 | -0.023 [-0.289, +0.307] p 0.867  same sign True, one-sided p 0.434  -> not supported
+MOT   Wald 3.57 (u +0.206, v -0.375/kt) p 0.153 q 0.345 | Wald 6.21 (u +0.165, v -0.197) p 0.059  -> not supported
+X1    +0.194 [+0.048, +0.527] p 0.015 q 0.044 | +0.195 [-0.059, +0.594] p 0.133  same sign True, one-sided p 0.067  -> not supported
+X2    -0.028 [-0.589, +0.217] p 0.725 q 0.758 | -0.044 [-0.495, +0.398] p 0.846  same sign True, one-sided p 0.423  -> not supported
+X3    -0.306 [-0.742, -0.119] p 0.007 q 0.029 | +0.136 [-0.185, +0.484] p 0.355  same sign False, one-sided p 1.000  -> not supported
+X4    -0.105 [-0.678, +0.327] p 0.516 q 0.758 | -0.094 [-0.646, +0.394] p 0.722  same sign True, one-sided p 0.361  -> not supported
+odds ratio per SD, fit half: GH 3.69 [2.21, 11.06], GRAD 1.07 [0.74, 1.35], STAB 1.40 [0.72, 2.90], NAO 0.95 [0.55, 1.38]
+odds ratio per SD, test half: GH 4.34 [2.18, 11.53], GRAD 0.80 [0.40, 1.86], STAB 1.86 [1.27, 2.86], NAO 0.98 [0.75, 1.36]
+
+pooled all seasons (fit-half z-scores, NOT out of sample), odds ratio per SD [season-block 95% CI]; p, q over the 9:
+  GH    3.70 [2.54, 6.71] p 0.001 q 0.009
+  GRAD  0.97 [0.64, 1.39] p 0.867 q 0.867
+  STAB  1.54 [1.10, 2.18] p 0.019 q 0.065
+  NAO   0.98 [0.79, 1.18] p 0.799 q 0.867
+  MOT  Wald 8.51, u +0.176, v -0.252 per kt, p 0.024, q 0.065
+  X1    1.19 [1.02, 1.43] p 0.029 q 0.065
+  X2    0.95 [0.76, 1.16] p 0.577 q 0.742
+  X3    0.90 [0.71, 1.11] p 0.319 q 0.574
+  X4    0.89 [0.64, 1.19] p 0.439 q 0.658
+
+baseline terms, pooled fit (logit per z, M1): depth -2.30, x -0.86, y +0.97, trend +0.08
+
+Out-of-sample skill: M1 and M0 fitted on the fit half, scored on the test half (weights restore all low-in-region times)
+  AUC  M1 0.864 [0.828, 0.896]  M0 0.811 [0.758, 0.849]
+  Brier  M1 0.0461  M0 0.0503  month climatology 0.0574
+  Brier skill M1 vs M0 +0.085 [-0.015, +0.185]; M1 vs month climatology +0.197 [+0.068, +0.295]; M0 vs month climatology +0.123 [+0.050, +0.187]
+
+Plain-words effects on the test-half population (fit-half M1; mean predicted P(Y_T) 0.062):
+  ingredient at its 10th -> 90th percentile (z), P(G_T >= 71.7 kt):
+  GH    z -1.33 -> +1.07:  0.037 -> 0.199  (x5.35)
+  GRAD  z -1.35 -> +1.26:  0.058 -> 0.065  (x1.12)
+  STAB  z -1.09 -> +1.27:  0.049 -> 0.083  (x1.68)
+  NAO   z -1.13 -> +1.43:  0.065 -> 0.060  (x0.92)
+
+F2 classes: barrier cases (tip cases removed) against controls; 5 main-effect tests, own BH
+  barrier: fit half 98 cases, test half 102 cases
+    GH    OR 4.08 [2.46, 17.67] p 0.001 q 0.003 | test OR 6.26 [3.43, 15.84] p 0.001
+    GRAD  OR 1.38 [0.77, 2.33] p 0.230 q 0.383 | test OR 1.04 [0.48, 2.65] p 0.883
+    STAB  OR 1.05 [0.40, 2.15] p 0.873 q 0.873 | test OR 1.67 [1.03, 2.77] p 0.040
+    NAO   OR 0.94 [0.51, 1.56] p 0.703 q 0.873 | test OR 1.05 [0.76, 1.33] p 0.868
+    MOT   Wald p 0.155 q 0.383 | test p 0.032
+  tip: 29 cases in the fit half and 40 in the test half; the fit half is under the 40-case rule when below 40 -> described, not modelled
+    tip cases minus weighted controls, GH: -0.69 SD (n tip 69; descriptive)
+    tip cases minus weighted controls, GRAD: -0.51 SD (n tip 69; descriptive)
+    tip cases minus weighted controls, STAB: +0.09 SD (n tip 69; descriptive)
+    tip cases minus weighted controls, NAO: +0.57 SD (n tip 69; descriptive)
+    tip cases minus weighted controls, GBI: -1.06 SD (n tip 51; descriptive)
+
+F3 continuous G_T (kt per SD), weighted least squares, 5 tests, own BH
+  GH    +4.52 kt [+3.23, +5.84] p 0.001 q 0.003 | test +4.46 [+2.13, +6.69] p 0.001
+  GRAD  +0.22 kt [-0.91, +1.18] p 0.794 q 0.794 | test +0.50 [-0.52, +2.13] p 0.403
+  STAB  +0.79 kt [-0.98, +3.05] p 0.382 q 0.636 | test +0.24 [-0.97, +1.20] p 0.689
+  NAO   -0.29 kt [-1.90, +1.05] p 0.608 q 0.761 | test +0.67 [-0.42, +1.99] p 0.208
+  MOT  Wald p 0.001 q 0.003 | test p 0.017
+
+F4 GBI (Z500, WeatherBench2 1.5 degree, times before 2023-01-10): 2 tests
+  fit half: GBI replaces GH: OR per SD 2.79 [1.33, 9.60] p 0.019 q 0.038 (113 cases, 10 seasons)
+  fit half: GBI added to M1: OR per SD 0.74 [0.20, 3.24] p 0.729 q 0.729 (113 cases, 10 seasons)
+  test half: GBI replaces GH: OR per SD 2.66 [1.25, 7.48] p 0.023 q 0.046 (118 cases, 9 seasons)
+  test half: GBI added to M1: OR per SD 0.71 [0.38, 1.65] p 0.443 q 0.443 (118 cases, 9 seasons)
+
+ingredient correlations (sample, unweighted): GH-GRAD +0.42; GH-STAB +0.15; GH-NAO -0.59; GRAD-STAB +0.38; GRAD-NAO -0.07; STAB-NAO +0.28
