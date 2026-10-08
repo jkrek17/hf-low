@@ -107,3 +107,7 @@ outcome definition unchanged, will be logged. Nothing is re-picked after the res
 ## Deviations (post hoc)
 
 None yet.
+
+### Clarification written before the k = 2, 3 runs (not a deviation)
+
+For PR 63, the tested quantity P3 is the mediation difference (share effect of the NAO given the Greenland high minus the NAO share effect alone); its p is the original's bootstrap p. The reported ratio next to it is RR(NAO share given the high) (k = 1: 1.039, against 1.125 alone). P1 is the difference between the share effect without terrain-type fixes and the original (k = 1 ratio 1.141); its p is the original's permutation p. At k = 1 the control reproduces these (1.125, 1.141, 1.039, F4 0.870).
