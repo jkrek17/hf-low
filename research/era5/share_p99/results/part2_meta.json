@@ -1,0 +1,44 @@
+{
+ "ref": {
+  "n_window_cyclones": 19696,
+  "n_deepening_with_ref": 8660,
+  "n_deepening": 9468,
+  "n_complete_case": 7532,
+  "atl": {
+   "n": 3285,
+   "hf": 754
+  },
+  "pac": {
+   "n": 4247,
+   "hf": 691
+  }
+ },
+ "M": {
+  "n_window_cyclones": 19696,
+  "n_deepening_with_ref": 8660,
+  "n_deepening": 9468,
+  "n_complete_case": 7532,
+  "atl": {
+   "n": 3285,
+   "hf": 750
+  },
+  "pac": {
+   "n": 4247,
+   "hf": 705
+  }
+ },
+ "P99": {
+  "n_window_cyclones": 19696,
+  "n_deepening_with_ref": 8660,
+  "n_deepening": 9468,
+  "n_complete_case": 7532,
+  "atl": {
+   "n": 3285,
+   "hf": 768
+  },
+  "pac": {
+   "n": 4247,
+   "hf": 741
+  }
+ }
+}
