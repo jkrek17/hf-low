@@ -1,0 +1,5 @@
+basin,outcome,vars,coef_int,OR_int_per_sd2,gain,lo,hi,p,ev_test
+atl,BOMB,jet250xtrough_up,-0.041783,0.95908,0.60211,-0.86571,2.2397,0.26087,791
+atl,HFON,jet250xtrough_up,-0.05426,0.94719,1.728,-1.891,5.1043,0.2059,1018
+pac,BOMB,jet250xtrough_up,0.00092568,1.0009,0.020465,-0.0093938,0.054159,0.13793,964
+pac,HFON,jet250xtrough_up,-0.014088,0.98601,0.37338,-0.13663,0.87436,0.11894,759

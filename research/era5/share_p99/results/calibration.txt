@@ -1,0 +1,19 @@
+PULL GATE: fixes pulled 12772; with owned cells 12772; re-derived g800 within 0.5 kt of catalog: 100.0000% (12772 of 12772); max diff 0.05 kt; matched centre > 0 km: 0
+calibration-season fixes with g800 >= 60 kt and no pulled percentile: 0 (must be 0)
+Calibration seasons 2021-22..2025-26, matching on 00/12 UTC fixes: 469 archive events, 444 matched to a track
+M: cut 69.8 kt  n_obs=459  n_fc=461  bias=1.00  pod=0.75  far=0.25  csi=0.60  hss=0.73
+   atl  n_obs=239  n_fc=244  bias=1.02  pod=0.75  far=0.27  csi=0.59  hss=0.72
+   pac  n_obs=220  n_fc=217  bias=0.99  pod=0.75  far=0.24  csi=0.61  hss=0.74
+   leave-one-season-out cut: 2021: 70.2, 2022: 69.8, 2023: 69.7, 2024: 69.7, 2025: 70.0
+P99: cut 64.2 kt  n_obs=459  n_fc=460  bias=1.00  pod=0.74  far=0.26  csi=0.59  hss=0.73
+   atl  n_obs=239  n_fc=257  bias=1.08  pod=0.75  far=0.30  csi=0.56  hss=0.70
+   pac  n_obs=220  n_fc=203  bias=0.92  pod=0.74  far=0.20  csi=0.62  hss=0.75
+   leave-one-season-out cut: 2021: 64.4, 2022: 64.4, 2023: 63.9, 2024: 64.1, 2025: 64.4
+P98: cut 62.0 kt  n_obs=459  n_fc=457  bias=1.00  pod=0.73  far=0.27  csi=0.57  hss=0.71
+   atl  n_obs=239  n_fc=250  bias=1.05  pod=0.73  far=0.30  csi=0.55  hss=0.69
+   pac  n_obs=220  n_fc=207  bias=0.94  pod=0.73  far=0.23  csi=0.60  hss=0.74
+   leave-one-season-out cut: 2021: 62.1, 2022: 62.0, 2023: 61.7, 2024: 62.0, 2025: 62.2
+
+Archive agreement at the fitted cuts, M against P99, pooled: season-block bootstrap of the HSS difference (5 seasons, 2000 draws)
+HSS(P99) - HSS(M) = -0.006, 95% interval [-0.025, +0.012] (descriptive, not a decision rule)
+calibration-season tracks whose label differs between M and P99: 107 of 461 M-positive

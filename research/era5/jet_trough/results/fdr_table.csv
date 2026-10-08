@@ -1,0 +1,57 @@
+family,basin,outcome,test,p,q
+primary,atl,BOMB,jet250 T1,0.00049975,0.0022846
+primary,atl,BOMB,jet250 T2,0.85357,0.97441
+primary,atl,BOMB,jet250 T3,0.9955,0.9995
+primary,atl,BOMB,trough_up T1,0.057471,0.14147
+primary,atl,BOMB,trough_up T2,0.053473,0.14147
+primary,atl,BOMB,trough_up T3,0.003998,0.015992
+primary,atl,HFON,jet250 T1,0.00049975,0.0022846
+primary,atl,HFON,jet250 T2,0.00049975,0.0022846
+primary,atl,HFON,jet250 T3,0.021489,0.062514
+primary,atl,HFON,trough_up T1,0.50375,0.67166
+primary,atl,HFON,trough_up T2,0.084958,0.18124
+primary,atl,HFON,trough_up T3,0.7971,0.97441
+primary,pac,BOMB,jet250 T1,0.00049975,0.0022846
+primary,pac,BOMB,jet250 T2,0.074963,0.17134
+primary,pac,BOMB,jet250 T3,0.9995,0.9995
+primary,pac,BOMB,trough_up T1,0.22339,0.3404
+primary,pac,BOMB,trough_up T2,0.83608,0.97441
+primary,pac,BOMB,trough_up T3,0.10745,0.20225
+primary,pac,HFON,jet250 T1,0.00049975,0.0022846
+primary,pac,HFON,jet250 T2,0.94103,0.9995
+primary,pac,HFON,jet250 T3,0.88306,0.97441
+primary,pac,HFON,trough_up T1,0.097451,0.1949
+primary,pac,HFON,trough_up T2,0.72314,0.92562
+primary,pac,HFON,trough_up T3,0.29035,0.40397
+primary,atl,BOMB,jet x trough interaction,0.26087,0.37945
+primary,atl,HFON,jet x trough interaction,0.2059,0.32944
+primary,pac,BOMB,jet x trough interaction,0.13793,0.2323
+primary,pac,HFON,jet x trough interaction,0.11894,0.21145
+primary,atl,HF24,trough added to framework,0.0054973,0.019546
+primary,pac,HF24,trough added to framework,0.00049975,0.0022846
+primary,atl,BOMB,trough added to framework,0.012494,0.03998
+primary,pac,BOMB,trough added to framework,0.00049975,0.0022846
+secondary,atl,BOMB,jet_up T1,0.00049975,0.0029985
+secondary,atl,BOMB,jet_up T2,0.32134,0.64268
+secondary,atl,BOMB,jet_up T3,0.084958,0.29128
+secondary,atl,BOMB,trough_loc T1,0.22239,0.53101
+secondary,atl,BOMB,trough_loc T2,0.81609,0.97931
+secondary,atl,BOMB,trough_loc T3,0.69915,0.97931
+secondary,atl,HFON,jet_up T1,0.10745,0.32234
+secondary,atl,HFON,jet_up T2,0.56522,0.90435
+secondary,atl,HFON,jet_up T3,0.024988,0.09995
+secondary,atl,HFON,trough_loc T1,0.9905,0.9965
+secondary,atl,HFON,trough_loc T2,0.9965,0.9965
+secondary,atl,HFON,trough_loc T3,0.56072,0.90435
+secondary,pac,BOMB,jet_up T1,0.00049975,0.0029985
+secondary,pac,BOMB,jet_up T2,0.0064968,0.031184
+secondary,pac,BOMB,jet_up T3,0.77111,0.97931
+secondary,pac,BOMB,trough_loc T1,0.00049975,0.0029985
+secondary,pac,BOMB,trough_loc T2,0.94203,0.9965
+secondary,pac,BOMB,trough_loc T3,0.68966,0.97931
+secondary,pac,HFON,jet_up T1,0.00049975,0.0029985
+secondary,pac,HFON,jet_up T2,0.95852,0.9965
+secondary,pac,HFON,jet_up T3,0.78311,0.97931
+secondary,pac,HFON,trough_loc T1,0.24338,0.53101
+secondary,pac,HFON,trough_loc T2,0.17741,0.4731
+secondary,pac,HFON,trough_loc T3,0.49275,0.90435

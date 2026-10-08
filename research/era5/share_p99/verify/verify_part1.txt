@@ -1,0 +1,23 @@
+pop tracks {'atl': 9656, 'pac': 10040} dup track ids 0
+fix_p99 rows unmatched in fixes_2004: 0
+counts per basin/label: HF, D, HD
+atl ref HF 1007 D 4521 HD 901
+atl M HF 995 D 4521 HD 889
+atl P99 HF 1051 D 4521 HD 931
+atl P98 HF 1039 D 4521 HD 928
+pac ref HF 825 D 4947 HD 788
+pac M HF 841 D 4947 HD 805
+pac P99 HF 877 D 4947 HD 840
+pac P98 HF 890 D 4947 HD 851
+(3) D tracks with M label != P99 label
+atl 218 M-only 88 P99-only 130
+pac 235 M-only 100 P99-only 135
+(2) RR: label basin claimed recomputed(pop-only lag) recomputed(lag incl pre-Oct1 tracks)
+ref atl 1.252 1.2519 1.2519 MATCH
+ref pac 1.137 1.1384 1.1375 MATCH
+M atl 1.203 1.2056 1.2037 MISMATCH
+M pac 1.137 1.1385 1.1375 MATCH
+P99 atl 1.18 1.1801 1.18 MATCH
+P99 pac 1.14 1.1406 1.1404 MATCH
+P98 atl 1.18 1.1803 1.1797 MATCH
+P98 pac 1.151 1.1508 1.1509 MATCH

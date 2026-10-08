@@ -1,0 +1,1 @@
+fixes pulled 12772; with owned cells 12772; re-derived g800 within 0.5 kt of catalog: 100.0000% (12772 of 12772); max diff 0.05 kt; matched centre > 0 km: 0

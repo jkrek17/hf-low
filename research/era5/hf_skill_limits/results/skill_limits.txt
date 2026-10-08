@@ -1,0 +1,115 @@
+Pipeline A, ERA5 proxy. 159430 fixes, 22 seasons 2004-2025, hf24 base rate 0.0339, hf_now 0.0183, onset (not HF at t) 156507 fixes
+hf24 positives 5399; peak of the two 12-hourly fixes in the window is >= 71.7 kt for 3880 (0.719); the rest reach HF only at a 06/18 UTC point (not in the committed table)
+Refit check: full-model BSS vs basin-month climatology +0.423 (PR 12 reported +0.423)
+
+== Q1 error by stratum (count-matched cut; 2145 misses, 2140 false alarms, total Brier loss 2923)
+stratum | share of fixes | share of Brier loss | share of misses | share of false alarms | base rate | POD | FAR | HSS [90% CI over seasons] | HSS vs rest, p
+hf_now                       |  0.018 |  0.186 |  0.108 |  0.251 |  0.662 | 0.88 | 0.24 |  0.36 [ 0.34,  0.39] | rest  0.46 p 0.001 q 0.002
+onset                        |  0.982 |  0.814 |  0.892 |  0.749 |  0.022 | 0.45 | 0.51 |  0.46 [ 0.44,  0.47] | rest  0.36 p 0.001 q 0.002
+Atlantic                     |  0.471 |  0.562 |  0.556 |  0.579 |  0.040 | 0.60 | 0.41 |  0.58 [ 0.56,  0.60] | rest  0.60 p 0.297 q 0.330
+Pacific                      |  0.529 |  0.438 |  0.444 |  0.421 |  0.028 | 0.60 | 0.38 |  0.60 [ 0.58,  0.62] | rest  0.58 p 0.297 q 0.330
+Atlantic >= 60N              |  0.141 |  0.131 |  0.146 |  0.100 |  0.027 | 0.48 | 0.43 |  0.51 [ 0.47,  0.54] | rest  0.60 p 0.001 q 0.002
+Atlantic < 60N               |  0.330 |  0.431 |  0.410 |  0.479 |  0.046 | 0.63 | 0.40 |  0.60 [ 0.58,  0.61] | rest  0.58 p 0.291 q 0.330
+month Oct-Nov                |  0.158 |  0.207 |  0.214 |  0.186 |  0.041 | 0.56 | 0.41 |  0.56 [ 0.53,  0.58] | rest  0.60 p 0.021 q 0.030
+month Dec-Feb                |  0.247 |  0.548 |  0.507 |  0.637 |  0.078 | 0.65 | 0.41 |  0.59 [ 0.57,  0.60] | rest  0.57 p 0.301 q 0.330
+month Mar-Apr                |  0.164 |  0.168 |  0.193 |  0.125 |  0.031 | 0.48 | 0.41 |  0.52 [ 0.49,  0.55] | rest  0.60 p 0.001 q 0.002
+month May-Sep                |  0.431 |  0.077 |  0.086 |  0.052 |  0.007 | 0.61 | 0.28 |  0.66 [ 0.62,  0.70] | rest  0.57 p 0.005 q 0.008
+g800 g<55                    |  0.852 |  0.279 |  0.413 |  0.035 |  0.007 | 0.06 | 0.56 |  0.11 [ 0.09,  0.13] | rest  0.57 p 0.001 q 0.002
+g800 55-65                   |  0.101 |  0.322 |  0.324 |  0.363 |  0.086 | 0.50 | 0.53 |  0.43 [ 0.41,  0.46] | rest  0.64 p 0.001 q 0.002
+g800 65-71.7                 |  0.028 |  0.213 |  0.155 |  0.351 |  0.256 | 0.71 | 0.48 |  0.43 [ 0.41,  0.45] | rest  0.59 p 0.001 q 0.002
+g800 >=71.7                  |  0.018 |  0.186 |  0.108 |  0.251 |  0.662 | 0.88 | 0.24 |  0.36 [ 0.34,  0.39] | rest  0.46 p 0.001 q 0.002
+24h change: rapid decay      |  0.005 |  0.019 |  0.013 |  0.028 |  0.150 | 0.75 | 0.42 |  0.59 [ 0.54,  0.63] | rest  0.59 p 0.985 q 0.985
+24h change: decay            |  0.116 |  0.137 |  0.117 |  0.167 |  0.045 | 0.70 | 0.38 |  0.64 [ 0.61,  0.67] | rest  0.58 p 0.001 q 0.002
+24h change: steady           |  0.381 |  0.235 |  0.206 |  0.298 |  0.022 | 0.66 | 0.42 |  0.61 [ 0.58,  0.63] | rest  0.58 p 0.109 q 0.147
+24h change: deepening        |  0.104 |  0.250 |  0.253 |  0.237 |  0.083 | 0.61 | 0.38 |  0.58 [ 0.55,  0.60] | rest  0.59 p 0.485 q 0.507
+24h change: rapid deepening  |  0.022 |  0.251 |  0.332 |  0.092 |  0.407 | 0.49 | 0.22 |  0.42 [ 0.39,  0.44] | rest  0.59 p 0.001 q 0.002
+24h change: track ends / no class |  0.373 |  0.107 |  0.078 |  0.178 |  0.006 | 0.54 | 0.65 |  0.42 [ 0.39,  0.44] | rest  0.60 p 0.001 q 0.002
+age <24h                     |  0.368 |  0.417 |  0.436 |  0.409 |  0.033 | 0.51 | 0.47 |  0.50 [ 0.48,  0.52] | rest  0.63 p 0.001 q 0.002
+age 24-72h                   |  0.437 |  0.455 |  0.431 |  0.482 |  0.039 | 0.66 | 0.37 |  0.63 [ 0.62,  0.64] | rest  0.55 p 0.001 q 0.002
+age >72h                     |  0.195 |  0.129 |  0.133 |  0.108 |  0.025 | 0.63 | 0.32 |  0.65 [ 0.61,  0.69] | rest  0.58 p 0.001 q 0.002
+
+== H1 knife-edge: share of misses + false alarms whose 24 h peak gust is within 6 kt of 71.7
+  a) 12-hourly peak as is (positives reached only at a 06/18 point count by their 12-hourly peak): 0.520 [0.510, 0.530]  (n errors 4285)
+  b) positives reached only at a 06/18 point placed on the cut: 0.570 [0.558, 0.581]  (n errors 4285)
+  misses n=2145: within 6 kt 0.802 (b); peak gust quartiles (12-hourly) [70.3, 73.2, 76.5]
+  false alarms n=2140: within 6 kt 0.336 (b); peak gust quartiles (12-hourly) [57.4, 63.2, 66.9]
+  false alarms: HF reached 24-48 h later (hf48) 0.083; storm reaches HF at some time 0.438; never HF 0.562
+  misses: already HF at t 0.108; storm-onset misses (not HF at t) 0.892
+
+== H2 onset share of Brier loss: 0.814 (0.982 of fixes)
+   90% CI over seasons [0.804, 0.824]
+   BSS vs climatology: all +0.423; onset fixes +0.291; already-HF fixes +0.681
+
+== Q2 oracle fits (use the realised future; diagnostic, not a forecast). Rows: track survives 24 h and |NDR| <= 3 (class available)
+  base (PR 12 full)                    BSS +0.436 [+0.422, +0.449]  AUC 0.964
+  + realised 12 h pressure change      BSS +0.498 [+0.485, +0.511]  AUC 0.973
+  + realised 24 h deepening rate       BSS +0.506 [+0.490, +0.521]  AUC 0.975
+  + both                               BSS +0.517 [+0.502, +0.530]  AUC 0.976
+  H3 oracle (b) gain over base: +0.070 [+0.064, +0.076] (rule: >= 0.10)
+  24 h deepening rate (Bergerons) explained by the full predictor set: LOSO R2 0.483 (all fixes; PR 12 class RPSS 0.305)
+  same, fixes not yet HF: R2 0.483
+
+== Q3 knife-edge: forecasting the 24 h peak gust (not-yet-HF fixes whose track survives 24 h and has both 12-hourly fixes)
+  n 86328; peak gust mean 40.4 kt, SD 21.4; LOSO linear R2 0.669; residual SD 12.3 kt
+  fraction of fixes with peak gust within 3 kt of the cut: 0.027; HF base rate in this set 0.0283
+  BSS and HSS if the gust forecast error were smaller at fixed truth (forecast pulled toward the truth by k; Gaussian-error forecaster; climatology = not-yet-HF base rate)
+  k = 1 is the linear gust model, a consistency check on the logistic model's onset BSS 0.29 / HSS about 0.5
+    k 1.00  error SD 12.3 kt  BSS +0.087  HSS 0.41
+    k 0.75  error SD  9.2 kt  BSS +0.344  HSS 0.54
+    k 0.50  error SD  6.2 kt  BSS +0.569  HSS 0.69
+    k 0.35  error SD  4.3 kt  BSS +0.695  HSS 0.79
+    k 0.25  error SD  3.1 kt  BSS +0.779  HSS 0.86
+    error SD  2 kt (k 0.16)  BSS +0.854  HSS 0.91
+    error SD  4 kt (k 0.32)  BSS +0.717  HSS 0.81
+    error SD  6 kt (k 0.49)  BSS +0.580  HSS 0.69
+    error SD  8 kt (k 0.65)  BSS +0.438  HSS 0.60
+    error SD 10 kt (k 0.81)  BSS +0.284  HSS 0.50
+
+== Q3b (post hoc) the same with a residual SD that depends on the predicted gust (bands of the linear prediction)
+    predicted -1000000000..30     n  22053  residual SD  17.3 kt  observed HF rate 0.0001
+    predicted     30..40     n  14932  residual SD  14.0 kt  observed HF rate 0.0003
+    predicted     40..50     n  22217  residual SD   8.7 kt  observed HF rate 0.0023
+    predicted     50..60     n  16735  residual SD   7.9 kt  observed HF rate 0.0244
+    predicted     60..70     n   7872  residual SD   8.1 kt  observed HF rate 0.1179
+    predicted     70..80     n   2238  residual SD   8.9 kt  observed HF rate 0.3798
+    predicted     80..1000000000 n    281  residual SD   9.8 kt  observed HF rate 0.7224
+    k 1.00  BSS +0.175  HSS 0.41   (k=1 should sit near the logistic onset BSS 0.29 / HSS 0.46)
+    k 0.75  BSS +0.379  HSS 0.53   (k=1 should sit near the logistic onset BSS 0.29 / HSS 0.46)
+    k 0.50  BSS +0.574  HSS 0.68   (k=1 should sit near the logistic onset BSS 0.29 / HSS 0.46)
+    k 0.35  BSS +0.693  HSS 0.79   (k=1 should sit near the logistic onset BSS 0.29 / HSS 0.46)
+    k 0.25  BSS +0.777  HSS 0.85   (k=1 should sit near the logistic onset BSS 0.29 / HSS 0.46)
+
+== Q2c concurrent diagnosis: HF now (g800 >= 71.7) from the full predictors WITHOUT g800, same fix (no forecasting; LOSO)
+  base rate 0.0183  BSS +0.437 [+0.419, +0.453]  AUC 0.982  POD 0.60 FAR 0.40 HSS 0.60
+
+== Q4 skill by lead (HF at exactly t+h among fixes not HF at t; full predictors; LOSO; BSS vs basin-month climatology)
+  +12 h: base rate 0.0096  BSS +0.232 [+0.214, +0.250]  AUC 0.976  POD 0.42 FAR 0.58 HSS 0.41
+  +24 h: base rate 0.0109  BSS +0.163 [+0.150, +0.175]  AUC 0.959  POD 0.34 FAR 0.66 HSS 0.33
+  +36 h: base rate 0.0089  BSS +0.108 [+0.092, +0.122]  AUC 0.947  POD 0.26 FAR 0.74 HSS 0.25
+  +48 h: base rate 0.0062  BSS +0.070 [+0.056, +0.082]  AUC 0.935  POD 0.21 FAR 0.79 HSS 0.21
+
+== Q5 archive label (category HF only; archive fixes matched to the nearest same-time ERA5 fix of any track within 600 km; 06/18 UTC fixes matched to the nearest 00/12 UTC fix within 6 h and 800 km)
+  archive HF fixes 2004-05..2025-26: 5649; matched to a pipeline A track point 5425 (0.960); unmatched 224
+  matched tracks 1835; archive events (IDs) 1043; events with at least one matched fix 1038
+  archive-label positives 5118 of 159430 fixes (ERA5 label 5399; both 3513)
+  ERA5 hf24 label as a forecast of the archive label (ceiling)   POD 0.69 FAR 0.35 CSI 0.50 HSS 0.66 bias 1.05
+     ... fixes with hf_now == 0 only                             POD 0.62 FAR 0.39 CSI 0.44 HSS 0.61 bias 1.01
+  PR 12 model at its ERA5-count cut, vs the archive label        POD 0.57 FAR 0.46 CSI 0.39 HSS 0.54 bias 1.05
+  PR 12 model at the archive-count cut, vs the archive label     POD 0.56 FAR 0.44 CSI 0.38 HSS 0.54 bias 1.00
+  PR 12 model vs the ERA5 label (as reported)                    POD 0.60 FAR 0.40 CSI 0.43 HSS 0.59 bias 1.00
+  HSS ceiling (ERA5 label vs archive label): 0.657 [0.638, 0.674]
+  HSS PR 12 model vs archive label: 0.543 [0.528, 0.559]
+  HSS PR 12 model vs ERA5 label: 0.589 [0.577, 0.601]
+
+== Q6 ERA5 central pressure minus archive pressure at matched archive HF fixes (same-time matches only, 00/12 UTC)
+  archive <950     n   347  ERA5 - archive: mean  +1.8 hPa, median  +1.6
+  archive 950-960  n   647  ERA5 - archive: mean  +0.8 hPa, median  +0.9
+  archive 960-970  n   845  ERA5 - archive: mean  +0.2 hPa, median  +0.5
+  archive 970-980  n   574  ERA5 - archive: mean  -0.3 hPa, median  +0.1
+  archive >=980    n   250  ERA5 - archive: mean  -0.2 hPa, median  -0.2
+  all n 2663: mean +0.4, median +0.6; matched-distance median 61 km
+
+== Confirmatory tests (Holm over 3; bounds are the lower 5% season-bootstrap limits)
+  H1 knife-edge >= 60%: (a) 0.520, lower 0.510; (b) 0.570, lower 0.558  -> rule needs lower >= 0.50
+  H2 onset share of Brier loss >= 80%: 0.814, lower 0.804
+  H3 oracle deepening gain >= 0.10: +0.070, lower +0.064

@@ -1,0 +1,5 @@
+floor 55 kt: 3934 times, 2287 tracks. ERA5 10m_u_component_of_wind 13.06 GB; HRES 10m_u_component_of_wind 10.17 GB; ERA5 10m_v_component_of_wind 13.16 GB; HRES 10m_v_component_of_wind 10.33 GB; TOTAL 46.72 GB
+floor 60 kt: 3506 times, 1515 tracks. ERA5 10m_u_component_of_wind 11.64 GB; HRES 10m_u_component_of_wind 9.06 GB; ERA5 10m_v_component_of_wind 11.73 GB; HRES 10m_v_component_of_wind 9.20 GB; TOTAL 41.63 GB
+floor 65 kt: 2999 times, 944 tracks. ERA5 10m_u_component_of_wind 9.96 GB; HRES 10m_u_component_of_wind 7.75 GB; ERA5 10m_v_component_of_wind 10.03 GB; HRES 10m_v_component_of_wind 7.87 GB; TOTAL 35.61 GB
+ERA5 mean_sea_level_pressure (ownership), HEAD sizes: floor 60 kt 7.62 GB (3506 times); floor 65 kt 6.52 GB (2999 times). Gust for 150 validation times ~0.5 GB.
+PLANNED: floor 65 kt = 35.61 + 6.52 + ~0.5 = ~42.6 GB (under 50 GB, no go-ahead needed).

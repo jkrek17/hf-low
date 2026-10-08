@@ -1,0 +1,195 @@
+Jet speed / upstream trough depth: threshold or smooth ramp (ERA5 proxy, pipeline A, framework fixes)
+Fit seasons 2004-05..2014-15, held out 2015-16..2025-26. Run 2026-10-08; 824 s.
+
+== Primary tests (held-out log-loss gains, season bootstrap, BH over all 32 primary tests)
+ family basin outcome                      test         p        q
+primary   atl    BOMB                 jet250 T1 0.0004998 0.002285
+primary   atl    BOMB                 jet250 T2    0.8536   0.9744
+primary   atl    BOMB                 jet250 T3    0.9955   0.9995
+primary   atl    BOMB              trough_up T1   0.05747   0.1415
+primary   atl    BOMB              trough_up T2   0.05347   0.1415
+primary   atl    BOMB              trough_up T3  0.003998  0.01599
+primary   atl    HFON                 jet250 T1 0.0004998 0.002285
+primary   atl    HFON                 jet250 T2 0.0004998 0.002285
+primary   atl    HFON                 jet250 T3   0.02149  0.06251
+primary   atl    HFON              trough_up T1    0.5037   0.6717
+primary   atl    HFON              trough_up T2   0.08496   0.1812
+primary   atl    HFON              trough_up T3    0.7971   0.9744
+primary   pac    BOMB                 jet250 T1 0.0004998 0.002285
+primary   pac    BOMB                 jet250 T2   0.07496   0.1713
+primary   pac    BOMB                 jet250 T3    0.9995   0.9995
+primary   pac    BOMB              trough_up T1    0.2234   0.3404
+primary   pac    BOMB              trough_up T2    0.8361   0.9744
+primary   pac    BOMB              trough_up T3    0.1074   0.2023
+primary   pac    HFON                 jet250 T1 0.0004998 0.002285
+primary   pac    HFON                 jet250 T2     0.941   0.9995
+primary   pac    HFON                 jet250 T3    0.8831   0.9744
+primary   pac    HFON              trough_up T1   0.09745   0.1949
+primary   pac    HFON              trough_up T2    0.7231   0.9256
+primary   pac    HFON              trough_up T3    0.2904    0.404
+primary   atl    BOMB  jet x trough interaction    0.2609   0.3794
+primary   atl    HFON  jet x trough interaction    0.2059   0.3294
+primary   pac    BOMB  jet x trough interaction    0.1379   0.2323
+primary   pac    HFON  jet x trough interaction    0.1189   0.2114
+primary   atl    HF24 trough added to framework  0.005497  0.01955
+primary   pac    HF24 trough added to framework 0.0004998 0.002285
+primary   atl    BOMB trough added to framework   0.01249  0.03998
+primary   pac    BOMB trough added to framework 0.0004998 0.002285
+
+== Secondary variables (separate BH family of 24)
+   family basin outcome          test         p        q
+secondary   atl    BOMB     jet_up T1 0.0004998 0.002999
+secondary   atl    BOMB     jet_up T2    0.3213   0.6427
+secondary   atl    BOMB     jet_up T3   0.08496   0.2913
+secondary   atl    BOMB trough_loc T1    0.2224    0.531
+secondary   atl    BOMB trough_loc T2    0.8161   0.9793
+secondary   atl    BOMB trough_loc T3    0.6992   0.9793
+secondary   atl    HFON     jet_up T1    0.1074   0.3223
+secondary   atl    HFON     jet_up T2    0.5652   0.9043
+secondary   atl    HFON     jet_up T3   0.02499  0.09995
+secondary   atl    HFON trough_loc T1    0.9905   0.9965
+secondary   atl    HFON trough_loc T2    0.9965   0.9965
+secondary   atl    HFON trough_loc T3    0.5607   0.9043
+secondary   pac    BOMB     jet_up T1 0.0004998 0.002999
+secondary   pac    BOMB     jet_up T2  0.006497  0.03118
+secondary   pac    BOMB     jet_up T3    0.7711   0.9793
+secondary   pac    BOMB trough_loc T1 0.0004998 0.002999
+secondary   pac    BOMB trough_loc T2     0.942   0.9965
+secondary   pac    BOMB trough_loc T3    0.6897   0.9793
+secondary   pac    HFON     jet_up T1 0.0004998 0.002999
+secondary   pac    HFON     jet_up T2    0.9585   0.9965
+secondary   pac    HFON     jet_up T3    0.7831   0.9793
+secondary   pac    HFON trough_loc T1    0.2434    0.531
+secondary   pac    HFON trough_loc T2    0.1774   0.4731
+secondary   pac    HFON trough_loc T3    0.4928   0.9043
+
+== Verdicts, primary variables (literal pre-registered rule, then amended wording)
+basin outcome       var     q_T1     q_T2    q_T3  knot  knot_lo  knot_hi unit  OR_per_sd_line  OR_across_knot              literal_rule                                                     amended
+  atl    BOMB    jet250 0.002285   0.9744  0.9995 128.6    126.2    130.8   kt           2.868           3.126               smooth ramp             smooth ramp (straight line as good as one knot)
+  atl    BOMB trough_up   0.1415   0.1415 0.01599 48.12    45.44    262.9    m           1.231          0.9947 cannot tell / no relation                     no relation detected beyond storm state
+  atl    HFON    jet250 0.002285 0.002285 0.06251 104.7    78.62    120.3   kt           1.288           1.084               smooth ramp nonlinear; kink and sharp smooth curve cannot be told apart
+  atl    HFON trough_up   0.6717   0.1812  0.9744 98.51    46.55    277.9    m           1.151          0.9089 cannot tell / no relation                     no relation detected beyond storm state
+  pac    BOMB    jet250 0.002285   0.1713  0.9995 153.3      133    158.1   kt           2.665            2.05               smooth ramp             smooth ramp (straight line as good as one knot)
+  pac    BOMB trough_up   0.3404   0.9744  0.2023 39.58    36.66    197.3    m           1.238           0.847 cannot tell / no relation                     no relation detected beyond storm state
+  pac    HFON    jet250 0.002285   0.9995  0.9744   155    96.11    155.8   kt           1.481           1.225               smooth ramp             smooth ramp (straight line as good as one knot)
+  pac    HFON trough_up   0.1949   0.9256   0.404 54.94    39.55    215.4    m          0.8978          0.6911 cannot tell / no relation                     no relation detected beyond storm state
+
+== Thresholds table (main), key columns
+basin outcome       var  ev_fit  ev_test  knot  knot_pct  knot_lo  knot_hi  slope_pre  slope_post  or_per_sd_lin  OR_knot_hinge  OR_knot_spl  T1_gain   T1_lo  T1_hi  T2_gain    T2_lo  T2_hi  T3_gain   T3_lo  T3_hi  T3rev_gain   T3rev_p
+  atl    BOMB    jet250     730      791 128.6      77.5    126.2    130.8      1.862      0.5998          2.868          3.126        3.073    297.5   251.5  341.2   -6.226   -16.14  3.377   -3.977  -6.261 -1.553       3.977  0.004998
+  atl    BOMB trough_up     730      791 48.12        10    45.44    262.9    -0.2471      0.2355          1.231         0.9947         1.01    11.77 -0.4834  23.57     2.31 -0.05836  4.745    3.927   1.514  6.326      -3.927    0.9965
+  atl    HFON    jet250     913     1018 104.7      47.5    78.62    120.3    -0.1725      0.3737          1.288          1.084         1.04    43.86   33.58  53.96    13.63    9.635  17.61    4.293  0.6537  8.059      -4.293     0.979
+  atl    HFON trough_up     913     1018 98.51      27.5    46.55    277.9    -0.4854      0.2422          1.151         0.9089        1.122  0.03864  -5.668  5.966    6.831   -1.095  14.68   -1.894  -5.805  1.898       1.894    0.2034
+  pac    BOMB    jet250     949      964 153.3      87.5      133    158.1      1.481      0.1942          2.665           2.05        1.888    261.6   227.9  294.7    15.17   -2.067  31.93   -4.854  -7.269 -2.535       4.854 0.0009995
+  pac    BOMB trough_up     949      964 39.58        10    36.66    197.3    -0.6724      0.2748          1.238          0.847       0.7739    6.056  -6.904  18.38   -5.124   -13.41   3.61    2.309 -0.7664    5.1      -2.309    0.8931
+  pac    HFON    jet250     775      759   155        90    96.11    155.8     0.6267    -0.07574          1.481          1.225        1.206    52.68   39.55   65.6   -5.358   -11.45 0.2788   -4.442  -10.32  1.429       4.442    0.1174
+  pac    HFON trough_up     775      759 54.94        15    39.55    215.4     -1.029    -0.01741         0.8978         0.6911       0.6582    4.925  -1.208   11.4   -4.223   -15.56  8.374    1.038  -2.074  4.084      -1.038    0.7101
+
+== Adjusted probabilities (held-out covariates, fit-season model), percentiles of the variable: hinge / spline / line
+basin outcome       var   x10   x50   x90  P10_hinge  P10_spl  P10_lin  P50_hinge  P50_spl  P50_lin  P90_hinge  P90_spl  P90_lin
+  atl    BOMB    jet250 73.65 107.9 144.1   0.001091  0.00143 0.003851    0.01205  0.01277  0.01473    0.06123   0.0643  0.05513
+  atl    BOMB trough_up 48.12 152.4 277.8    0.02201   0.0219  0.02279    0.02803   0.0296  0.02857    0.03796  0.03681  0.03734
+  atl    HFON    jet250 72.13 106.3 142.8    0.02173  0.02265  0.01641     0.0187  0.01701  0.02134      0.028  0.03041  0.02798
+  atl    HFON trough_up 46.71 149.8 274.7    0.02387  0.02157  0.02027    0.02104  0.02325  0.02315    0.02769  0.02606  0.02711
+  pac    BOMB    jet250 65.67   111 157.9   0.001901  0.00172 0.004682    0.01331  0.01267  0.01659    0.06625  0.06351  0.05501
+  pac    BOMB trough_up 39.58 138.4 252.4    0.02586  0.02567  0.02762    0.03324  0.03673  0.03434     0.0454  0.04284  0.04376
+  pac    HFON    jet250 63.93 107.3   155   0.006123  0.01149 0.008796    0.01203 0.009833  0.01325    0.02305    0.023  0.02022
+  pac    HFON trough_up 38.41 137.5 252.5    0.02118   0.0206  0.02041    0.01759  0.01815  0.01855    0.01727  0.01712  0.01656
+
+== Jet x trough interaction (spline each, product of standardised variables added)
+basin outcome             vars  coef_int  OR_int_per_sd2    gain        lo      hi      p  ev_test
+  atl    BOMB jet250xtrough_up  -0.04178          0.9591  0.6021   -0.8657    2.24 0.2609      791
+  atl    HFON jet250xtrough_up  -0.05426          0.9472   1.728    -1.891   5.104 0.2059     1018
+  pac    BOMB jet250xtrough_up 0.0009257           1.001 0.02047 -0.009394 0.05416 0.1379      964
+  pac    HFON jet250xtrough_up  -0.01409           0.986  0.3734   -0.1366  0.8744 0.1189      759
+
+== Added skill: framework full vs + trough (held-out seasons)
+target  scope                 model  n_test  ev_test    BSS  BSS_lo  BSS_hi  gain_brier_vs_full  gain_lo  gain_hi    p_gain    POD    FAR    HSS   bias
+  HF24 pooled                  full   79110     2822 0.4264  0.4098  0.4418                   0        0        0         1 0.5985 0.3843 0.5927  0.972
+  HF24 pooled           full+trough   79110     2822 0.4305  0.4137  0.4456               10.84    6.778    14.96 0.0004998 0.6013 0.3838 0.5944 0.9759
+  HF24 pooled full+trough+loc+jetup   79110     2822 0.4309  0.4143  0.4461               12.02    7.945    16.12 0.0004998 0.5999 0.3848 0.5931 0.9752
+  HF24    atl                  full   37522     1601 0.4112  0.3867  0.4361                   0        0        0         1 0.5859 0.3796 0.5855 0.9444
+  HF24    atl           full+trough   37522     1601 0.4131  0.3885  0.4384               2.906   0.9298    5.007  0.005497 0.5815 0.3789 0.5835 0.9363
+  HF24    atl full+trough+loc+jetup   37522     1601 0.4134  0.3886  0.4389               3.291    1.398    5.359  0.001499 0.5809 0.3775 0.5838 0.9332
+  HF24    pac                  full   41588     1221 0.4458  0.4112  0.4761                   0        0        0         1 0.6265  0.387 0.6081  1.022
+  HF24    pac           full+trough   41588     1221 0.4527  0.4179  0.4829               7.933    4.213    11.71 0.0004998 0.6265  0.387 0.6081  1.022
+  HF24    pac full+trough+loc+jetup   41588     1221 0.4534   0.419  0.4832               8.733    4.998    12.56 0.0004998 0.6249 0.3876 0.6069   1.02
+  BOMB pooled                  full   49562     1755 0.2924  0.2806  0.3031                   0        0        0         1  0.494  0.517 0.4695  1.023
+  BOMB pooled           full+trough   49562     1755  0.296  0.2846  0.3062               5.992    4.369    7.627 0.0004998 0.4997  0.513 0.4744  1.026
+  BOMB pooled full+trough+loc+jetup   49562     1755 0.3013  0.2891  0.3125                14.7    9.813    19.48 0.0004998 0.5014 0.5089 0.4775  1.021
+  BOMB    atl                  full   23846      791 0.2682  0.2456  0.2914                   0        0        0         1 0.4905 0.5446 0.4535  1.077
+  BOMB    atl           full+trough   23846      791 0.2722  0.2494  0.2943               2.973   0.8699    4.926   0.01249 0.4855 0.5445 0.4512  1.066
+  BOMB    atl full+trough+loc+jetup   23846      791 0.2826  0.2587  0.3062               10.74    6.277    15.54 0.0004998 0.4968 0.5299 0.4649  1.057
+  BOMB    pac                  full   25716      964 0.3123  0.2991  0.3273                   0        0        0         1 0.5062 0.4959 0.4859  1.004
+  BOMB    pac           full+trough   25716      964 0.3156  0.3025  0.3306                3.02    1.649    4.565 0.0004998 0.5145 0.4892 0.4936  1.007
+  BOMB    pac full+trough+loc+jetup   25716      964 0.3167  0.3014  0.3343               3.957  -0.2203    7.923   0.06197 0.5124 0.4897 0.4923  1.004
+
+== Jet x trough terciles (fit-season terciles per basin)
+basin period  jet_tercile  trough_tercile  jet_lo  trough_lo    n  n_elig  bomb_freq  n_notHF  hfon_freq  hf24_all_freq      both  bomb_only  hf_only  neither  fw_P_hf24  fw_P_bomb  hf24_obs_test  bomb_obs_test
+  atl    fit            1               1     NaN        NaN 5158    3203   0.001249     5121   0.005272        0.01047 0.0006244  0.0006244  0.01592   0.9828        NaN        NaN            NaN            NaN
+  atl    fit            1               2     NaN      113.4 3890    2364   0.001269     3864   0.004141       0.007969         0   0.001269  0.01142   0.9873        NaN        NaN            NaN            NaN
+  atl    fit            1               3     NaN      191.6 3454    2058   0.001458     3402    0.01764        0.02577 0.0004859  0.0009718  0.03401   0.9645        NaN        NaN            NaN            NaN
+  atl    fit            2               1   95.08        NaN 4389    2805    0.01176     4364   0.007791        0.01185  0.003565     0.0082   0.0139   0.9743        NaN        NaN            NaN            NaN
+  atl    fit            2               2   95.08      113.4 4438    2939   0.009867     4397   0.008187        0.01374  0.002382   0.007486  0.01633   0.9738        NaN        NaN            NaN            NaN
+  atl    fit            2               3   95.08      191.6 3674    2366    0.01226     3586    0.02566        0.03947  0.004227    0.00803  0.05156   0.9362        NaN        NaN            NaN            NaN
+  atl    fit            3               1   118.6        NaN 2955    1833    0.06874     2916    0.02641        0.03418   0.02619    0.04255  0.02619   0.9051        NaN        NaN            NaN            NaN
+  atl    fit            3               2   118.6      113.4 4173    2739    0.07338     4084    0.03942        0.05104   0.02848    0.04491  0.04308   0.8835        NaN        NaN            NaN            NaN
+  atl    fit            3               3   118.6      191.6 5373    3683      0.082     5029    0.08153         0.1219   0.03856    0.04344    0.126    0.792        NaN        NaN            NaN            NaN
+  atl   test            1               1     NaN        NaN 5451    3299   0.003031     5394   0.006674        0.01578  0.001819   0.001212  0.02395    0.973    0.01466   0.003896        0.01578       0.003031
+  atl   test            1               2     NaN      113.4 3561    2187  0.0004572     3534   0.006508        0.01151         0  0.0004572    0.016   0.9835   0.007586   0.002971        0.01151      0.0004572
+  atl   test            1               3     NaN      191.6 3135    1833   0.002182     3090      0.011        0.01882         0   0.002182  0.02782     0.97    0.01713   0.003015        0.01882       0.002182
+  atl   test            2               1   95.08        NaN 4799    3001    0.01666     4758     0.0103        0.01605  0.005998    0.01066  0.01899   0.9643    0.01415    0.01234        0.01605        0.01666
+  atl   test            2               2   95.08      113.4 3980    2592    0.01042     3927   0.008913        0.01608 0.0007716   0.009645  0.02199   0.9676    0.01738    0.01361        0.01608        0.01042
+  atl   test            2               3   95.08      191.6 3549    2304    0.01302     3444    0.02642        0.04311  0.002604    0.01042  0.05816   0.9288    0.04268    0.01502        0.04311        0.01302
+  atl   test            3               1   118.6        NaN 3438    2120    0.08349     3367    0.04158        0.05352   0.03915    0.04434  0.04528   0.8712    0.04193    0.06711        0.05352        0.08349
+  atl   test            3               2   118.6      113.4 4203    2804    0.07026     4084    0.04432        0.06186   0.03352    0.03673  0.05243   0.8773    0.05583    0.06859        0.06186        0.07026
+  atl   test            3               3   118.6      191.6 5406    3706     0.0796     5056    0.08485         0.1252   0.04182    0.03778   0.1225   0.7979     0.1259     0.0876         0.1252         0.0796
+  pac    fit            1               1     NaN        NaN 5257    3136  0.0009566     5239   0.003054       0.005897 0.0003189  0.0006378 0.009566   0.9895        NaN        NaN            NaN            NaN
+  pac    fit            1               2     NaN      101.8 4544    2566   0.001559     4538  0.0008814       0.001981 0.0007794  0.0007794 0.002728   0.9957        NaN        NaN            NaN            NaN
+  pac    fit            1               3     NaN      175.7 4471    2402   0.002082     4464   0.000672       0.001118         0   0.002082 0.001665   0.9963        NaN        NaN            NaN            NaN
+  pac    fit            2               1   91.94        NaN 5332    3289    0.01003     5302   0.005658       0.009002  0.002432   0.007601  0.01155   0.9784        NaN        NaN            NaN            NaN
+  pac    fit            2               2   91.94      101.8 4827    2997    0.01034     4800   0.005833       0.009323  0.002336   0.008008  0.01134   0.9783        NaN        NaN            NaN            NaN
+  pac    fit            2               3   91.94      175.7 4114    2480     0.0121     4059   0.009116        0.01483  0.002016    0.01008  0.02097   0.9669        NaN        NaN            NaN            NaN
+  pac    fit            3               1   124.2        NaN 3687    2389     0.0992     3606    0.04576         0.0594   0.03935    0.05986  0.04856   0.8522        NaN        NaN            NaN            NaN
+  pac    fit            3               2   124.2      101.8 4900    3250    0.08769     4767      0.043        0.06061   0.03538    0.05231  0.05292   0.8594        NaN        NaN            NaN            NaN
+  pac    fit            3               3   124.2      175.7 5684    3964    0.08098     5413    0.05302         0.0811   0.03103    0.04995  0.07745   0.8416        NaN        NaN            NaN            NaN
+  pac   test            1               1     NaN        NaN 5610    3322   0.001806     5573   0.004127        0.01034  0.001505   0.000301  0.01565   0.9825   0.007733   0.002852        0.01034       0.001806
+  pac   test            1               2     NaN      101.8 4223    2281          0     4217  0.0002371      0.0009472         0          0 0.001754   0.9982   0.002695   0.002137      0.0009472              0
+  pac   test            1               3     NaN      175.7 3843    2068  0.0004836     3836  0.0005214       0.001821         0  0.0004836 0.002901   0.9966    0.00445   0.001431       0.001821      0.0004836
+  pac   test            2               1   91.94        NaN 5922    3670     0.0109     5881   0.005271       0.009625  0.003815   0.007084  0.01172   0.9774    0.01075    0.01431       0.009625         0.0109
+  pac   test            2               2   91.94      101.8 4376    2749    0.01164     4342   0.005527        0.01165  0.002546   0.009094  0.01528   0.9731    0.01309     0.0135        0.01165        0.01164
+  pac   test            2               3   91.94      175.7 3794    2340    0.01026     3741   0.008287        0.01344  0.001282   0.008974  0.02009   0.9697    0.02119    0.01158        0.01344        0.01026
+  pac   test            3               1   124.2        NaN 4033    2628     0.1088     3954    0.05235        0.06496   0.04985    0.05898  0.04528   0.8459    0.05247    0.09613        0.06496         0.1088
+  pac   test            3               2   124.2      101.8 4623    3128    0.08824     4493    0.04028        0.05862   0.03197    0.05627  0.04923   0.8625    0.05677    0.08438        0.05862        0.08824
+  pac   test            3               3   124.2      175.7 5164    3530     0.0847     4865    0.05324        0.08908   0.03399    0.05071  0.08754   0.8278    0.09442    0.08657        0.08908         0.0847
+
+== Sensitivities (not in the FDR family): tag, key results
+       tag basin outcome            var  ev_test  knot  knot_pct  or_per_sd_lin  OR_knot_hinge  T1_gain      T1_p  T2_gain      T2_p  T3_gain      T3_p
+    lead24   atl    BOMB         jet250      259 77.22        10          2.273          1.309    52.67 0.0004998    1.211    0.2324    1.855   0.09545
+    lead24   atl    BOMB      trough_up      259 101.9        30          1.034         0.9843  -0.6001    0.9155    3.277  0.001499   0.6431    0.1824
+    lead24   atl    HFON         jet250      488 83.41      17.5          1.787         0.9868    69.48 0.0004998     17.1  0.007996    8.677 0.0004998
+    lead24   atl    HFON      trough_up      488 108.6      32.5          1.197          1.043   -5.128    0.8246    8.815  0.006497    3.248 0.0009995
+    lead24   pac    BOMB         jet250      239 133.9      67.5          2.437          2.442    64.12 0.0004998    1.313    0.1974   -2.431     0.984
+    lead24   pac    BOMB      trough_up      239 36.74        10         0.7916         0.5789    1.651    0.3103  -0.9379    0.6202  -0.5946    0.6842
+    lead24   pac    HFON         jet250      310 81.12        20          1.878         0.5541    72.13 0.0004998    13.95   0.03548   -2.706    0.8951
+    lead24   pac    HFON      trough_up      310 81.28        25         0.9125         0.8214     3.55   0.04448   0.1179    0.4928  -0.2366    0.5622
+    octapr   atl    BOMB         jet250      720 129.2        70          2.868          3.163    265.4 0.0004998   -1.916    0.6302   -1.175    0.8026
+    octapr   atl    BOMB      trough_up      720 60.07        10          1.234          1.106     8.27    0.1099    1.937  0.004998    2.593  0.001499
+    octapr   atl    HFON         jet250      940 104.4        40           1.38          1.197    54.21 0.0004998    5.983 0.0004998    1.936    0.3103
+    octapr   atl    HFON      trough_up      940 96.18        20          1.203          1.014   0.1743    0.4853    3.782   0.05047   0.1157    0.4908
+    octapr   pac    BOMB         jet250      898 155.7      82.5          2.534          1.949    229.5 0.0004998    10.91   0.09695   -2.301    0.9925
+    octapr   pac    BOMB      trough_up      898  54.9        10           1.16         0.9059    4.872    0.1554   -4.207    0.8436    1.506    0.1724
+    octapr   pac    HFON         jet250      712 159.9      87.5          1.584          1.211    59.56 0.0004998   0.7915    0.4398    1.369    0.2484
+    octapr   pac    HFON      trough_up      712 54.37        10         0.8944         0.6799    3.698    0.1544   -9.298    0.9425   0.5348    0.4183
+unadjusted   atl    BOMB         jet250      791 128.6      77.5          3.573          4.463      629 0.0004998   -6.176    0.8121   -4.482    0.9985
+unadjusted   atl    BOMB      trough_up      791 48.12        10          1.313          0.828    17.13   0.05347    7.252   0.03798    5.589  0.009495
+unadjusted   atl    HFON         jet250     1018 101.3      42.5          2.587          2.012    508.9 0.0004998    15.61 0.0004998    0.119    0.5007
+unadjusted   atl    HFON      trough_up     1018 92.23        25          1.973          1.155    148.6 0.0004998    24.57   0.01249    5.744   0.04998
+unadjusted   pac    BOMB         jet250      964 153.3      87.5          4.303          3.779    873.9 0.0004998    6.436    0.2914   -6.435         1
+unadjusted   pac    BOMB      trough_up      964 39.58        10          1.085         0.7716     1.96    0.3238   -1.551    0.6362    3.503    0.1334
+unadjusted   pac    HFON         jet250      759   155        90          3.744          3.155    663.4 0.0004998   -8.891    0.8656   -10.88    0.9175
+unadjusted   pac    HFON      trough_up      759 87.79      27.5          1.216           0.99    8.666    0.2124    7.555    0.1154     2.16    0.1184
+      eddy   atl    BOMB trough_up_eddy      791 181.4      62.5          1.781          1.721    80.92 0.0004998   -2.626    0.8516  -0.8199    0.7536
+      eddy   atl    HFON trough_up_eddy     1018 97.52      27.5          1.374         0.9749    30.05 0.0004998    8.837   0.07596    1.636   0.02849
+      eddy   pac    BOMB trough_up_eddy      964 193.9        50          1.678          1.742    118.1 0.0004998    15.45 0.0004998    2.521  0.004998
+      eddy   pac    HFON trough_up_eddy      759 133.6        30          1.171          1.155     5.71    0.1004    0.243    0.3523   0.9898   0.06647

@@ -1,0 +1,85 @@
+study,basin,quantity,k,est,lo,hi,p,se_log,pipeline,q_A,est_k1,se_k1,same_sign_as_k1,mde_rr,verdict
+PR14,atl,RR(HF_k),1,1.0959,1.0281,1.1554,0.0049975,0.029031,A proxy,,1.0959,0.029031,True,1.0847,
+PR14,atl,RR(share_k),1,1.1254,1.0448,1.1969,0.00049975,0.033784,A proxy,,1.1254,0.033784,True,1.0992,
+PR14,atl,f,1,1.2902,1.0686,1.7783,,,A proxy,,1.2902,,True,,
+PR14,atl,RR(all),1,0.97378,0.95556,0.99486,0.0049975,0.010278,A proxy,,0.97378,0.010278,True,1.0292,
+PR14,pac,RR(HF_k),1,1.0719,1.0095,1.1393,0.047476,0.032964,A proxy,,1.0719,0.032964,True,1.0967,
+PR14,pac,RR(share_k),1,1.0431,0.98785,1.1015,0.23938,0.029413,A proxy,,1.0431,0.029413,True,1.0858,
+PR14,pac,f,1,0.60767,-0.65016,0.79469,,,A proxy,,0.60767,,True,,
+PR14,pac,RR(all),1,1.0276,1.0145,1.0403,0.0029985,0.0062041,A proxy,,1.0276,0.0062041,True,1.0175,
+PR14,atl,RR(HF_k),2,1.109,1,1.2034,0.024488,0.04579,A proxy,0.025467,1.0959,0.029031,True,1.1368,holds; vs k=1: same within noise
+PR14,atl,RR(share_k),2,1.1388,1.0118,1.2471,0.007996,0.051645,A proxy,0.0094498,1.1254,0.033784,True,1.1556,holds; vs k=1: same within noise
+PR14,atl,f,2,1.2569,1.0046,2.1326,,,A proxy,,1.2902,,True,,
+PR14,atl,RR(all),2,0.97378,0.95556,0.99486,0.0049975,0.010278,A proxy,,0.97378,0.010278,True,1.0292,
+PR14,pac,RR(HF_k),2,1.1283,1.0308,1.2123,0.0054973,0.0424,A proxy,0.0071464,1.0719,0.032964,True,1.1261,holds; vs k=1: same within noise
+PR14,pac,RR(share_k),2,1.098,1.0053,1.1772,0.028486,0.040407,A proxy,0.028486,1.0431,0.029413,True,1.1198,holds; vs k=1: same within noise
+PR14,pac,f,2,0.77422,0.26167,0.88723,,,A proxy,,0.60767,,True,,
+PR14,pac,RR(all),2,1.0276,1.0145,1.0403,0.0029985,0.0062041,A proxy,,1.0276,0.0062041,True,1.0175,
+PR14,atl,RR(HF_k),3,1.1371,0.99056,1.2621,0.022988,0.060406,A proxy,0.024904,1.0959,0.029031,True,1.1843,holds; vs k=1: same within noise
+PR14,atl,RR(share_k),3,1.1678,1.0086,1.3084,0.0069965,0.064794,A proxy,0.0086623,1.1254,0.033784,True,1.1989,holds; vs k=1: same within noise
+PR14,atl,f,3,1.2067,0.78267,2.0087,,,A proxy,,1.2902,,True,,
+PR14,atl,RR(all),3,0.97378,0.95556,0.99486,0.0049975,0.010278,A proxy,,0.97378,0.010278,True,1.0292,
+PR14,pac,RR(HF_k),3,1.1518,1.0294,1.2729,0.0054973,0.054868,A proxy,0.0071464,1.0719,0.032964,True,1.1661,holds; vs k=1: same within noise
+PR14,pac,RR(share_k),3,1.1208,1.0052,1.2383,0.021989,0.053418,A proxy,0.024857,1.0431,0.029413,True,1.1613,holds; vs k=1: same within noise
+PR14,pac,f,3,0.80713,0.22982,0.90793,,,A proxy,,0.60767,,True,,
+PR14,pac,RR(all),3,1.0276,1.0145,1.0403,0.0029985,0.0062041,A proxy,,1.0276,0.0062041,True,1.0175,
+PR64,atl,RR(HF_k),1,1.2911,1.236,1.3689,0.00049975,0.025309,A proxy,,1.2911,0.025309,True,1.0734,
+PR64,atl,RR(share_k),1,1.2711,1.2099,1.3544,0.00049975,0.028298,A proxy,,1.2711,0.028298,True,1.0825,
+PR64,atl,RR(all),1,1.0158,0.99821,1.0345,0.11694,0.0090616,A proxy,,1.0158,0.0090616,True,1.0257,
+PR64,atl,f,1,0.93873,0.86294,1.0064,,,A proxy,,0.93873,,True,,
+PR64,atl,share channel part of change,1,0.92088,0.81954,1.0002,,,A proxy,,0.92088,,True,,
+PR64,atl,count channel part of change,1,0.057424,-0.0035166,0.13945,,,A proxy,,0.057424,,True,,
+PR64,pac,RR(HF_k),1,1.1654,1.0935,1.2614,0.00049975,0.037,A proxy,,1.1654,0.037,True,1.1092,
+PR64,pac,RR(share_k),1,1.1287,1.0665,1.21,0.00049975,0.032783,A proxy,,1.1287,0.032783,True,1.0961,
+PR64,pac,RR(all),1,1.0325,1.0167,1.051,0.0014993,0.0081374,A proxy,,1.0325,0.0081374,True,1.023,
+PR64,pac,f,1,0.79086,0.67101,0.87611,,,A proxy,,0.79086,,True,,
+PR64,pac,share channel part of change,1,0.8086,0.71733,0.903,,,A proxy,,0.8086,,True,,
+PR64,pac,count channel part of change,1,0.16097,0.08388,0.24511,,,A proxy,,0.16097,,True,,
+PR64,atl,RR(HF_k),2,1.3156,1.2336,1.4128,0.00049975,0.032581,A proxy,0.00092811,1.2911,0.025309,True,1.0955,holds; vs k=1: same within noise
+PR64,atl,RR(share_k),2,1.2952,1.2102,1.3966,0.00049975,0.034339,A proxy,0.00092811,1.2711,0.028298,True,1.1009,holds; vs k=1: same within noise
+PR64,atl,RR(all),2,1.0158,0.99821,1.0345,0.11694,0.0090616,A proxy,,1.0158,0.0090616,True,1.0257,
+PR64,atl,f,2,0.94292,0.86307,1.0064,,,A proxy,,0.93873,,True,,
+PR64,atl,share channel part of change,2,0.9217,0.82924,0.99977,,,A proxy,,0.92088,,True,,
+PR64,atl,count channel part of change,2,0.055899,-0.0026837,0.13089,,,A proxy,,0.057424,,True,,
+PR64,pac,RR(HF_k),2,1.2185,1.1241,1.3467,0.00049975,0.045722,A proxy,0.00092811,1.1654,0.037,True,1.1366,holds; vs k=1: larger
+PR64,pac,RR(share_k),2,1.1801,1.0948,1.2943,0.00049975,0.042268,A proxy,0.00092811,1.1287,0.032783,True,1.1256,holds; vs k=1: larger
+PR64,pac,RR(all),2,1.0325,1.0167,1.051,0.0014993,0.0081374,A proxy,,1.0325,0.0081374,True,1.023,
+PR64,pac,f,2,0.838,0.73847,0.9084,,,A proxy,,0.79086,,True,,
+PR64,pac,share channel part of change,2,0.85346,0.77547,0.93106,,,A proxy,,0.8086,,True,,
+PR64,pac,count channel part of change,2,0.11737,0.054676,0.18489,,,A proxy,,0.16097,,True,,
+PR64,atl,RR(HF_k),3,1.3851,1.2827,1.5101,0.00049975,0.040424,A proxy,0.00092811,1.2911,0.025309,True,1.1198,holds; vs k=1: larger
+PR64,atl,RR(share_k),3,1.3636,1.262,1.4912,0.00049975,0.041437,A proxy,0.00092811,1.2711,0.028298,True,1.123,holds; vs k=1: larger
+PR64,atl,RR(all),3,1.0158,0.99821,1.0345,0.11694,0.0090616,A proxy,,1.0158,0.0090616,True,1.0257,
+PR64,atl,f,3,0.95194,0.88896,1.0055,,,A proxy,,0.93873,,True,,
+PR64,atl,share channel part of change,3,0.93068,0.84601,0.99824,,,A proxy,,0.92088,,True,,
+PR64,atl,count channel part of change,3,0.045743,-0.00097568,0.10777,,,A proxy,,0.057424,,True,,
+PR64,pac,RR(HF_k),3,1.2642,1.155,1.4174,0.00049975,0.053642,A proxy,0.00092811,1.1654,0.037,True,1.1621,holds; vs k=1: larger
+PR64,pac,RR(share_k),3,1.2243,1.1231,1.3614,0.00049975,0.050584,A proxy,0.00092811,1.1287,0.032783,True,1.1522,holds; vs k=1: larger
+PR64,pac,RR(all),3,1.0325,1.0167,1.051,0.0014993,0.0081374,A proxy,,1.0325,0.0081374,True,1.023,
+PR64,pac,f,3,0.86342,0.77336,0.92539,,,A proxy,,0.79086,,True,,
+PR64,pac,share channel part of change,3,0.87961,0.81637,0.94692,,,A proxy,,0.8086,,True,,
+PR64,pac,count channel part of change,3,0.094768,0.040872,0.15324,,,A proxy,,0.16097,,True,,
+PR41,atl,RR(HF_k) archive,1,1.2355,1.1616,1.3325,0.00049975,0.035231,archive,,1.2355,0.035231,True,1.1037,
+PR41,pac,RR(HF_k) archive,1,1.1926,1.1032,1.3087,0.00049975,0.042952,archive,,1.1926,0.042952,True,1.1278,
+PR41,atl,RR(HF_k) archive,2,1.268,1.1814,1.3783,0.00049975,0.035815,archive,0.00092811,1.2355,0.035231,True,1.1055,holds; vs k=1: same within noise
+PR41,pac,RR(HF_k) archive,2,1.2147,1.1078,1.3733,0.00049975,0.052801,archive,0.00092811,1.1926,0.042952,True,1.1593,holds; vs k=1: same within noise
+PR41,atl,RR(HF_k) archive,3,1.3509,1.2627,1.4605,0.00049975,0.036178,archive,0.00092811,1.2355,0.035231,True,1.1066,holds; vs k=1: larger
+PR41,pac,RR(HF_k) archive,3,1.2747,1.1456,1.4607,0.00049975,0.061179,archive,0.00092811,1.1926,0.042952,True,1.1868,holds; vs k=1: larger
+PR63,atl,P1 share without terrain-type fixes (RR),1,1.141,1.0643,1.2134,0.00049975,0.034012,A proxy,,1.141,0.034012,True,1.0999,
+PR63,atl,P2 retained: share without terrain-type fixes / share (descriptive),1,1.0139,0.98924,1.0381,0.239,0.012356,A proxy,,1.0139,0.012356,True,1.0352,
+PR63,atl,P3 mediation (share given Greenland high / share),1,0.92346,0.86985,0.98683,0.02,0.031793,A proxy,,0.92346,0.031793,True,1.0931,
+PR63,atl,"F4 Greenland high on share, per SD",1,0.86996,0.82285,0.9242,0.00049975,0.029856,A proxy,,0.86996,0.029856,True,1.0872,
+PR63,atl,NAO share given Greenland high (RR),1,1.0392,0.93411,1.1475,,,A proxy,,1.0392,,True,,
+PR63,atl,"NAO share, original (RR)",1,1.1254,1.0474,1.1948,,,A proxy,,1.1254,,True,,
+PR63,atl,P1 share without terrain-type fixes (RR),2,1.1561,1.045,1.2619,0.0034983,0.049633,A proxy,0.0053503,1.141,0.034012,True,1.1491,holds; vs k=1: paired difference not computed
+PR63,atl,P2 retained: share without terrain-type fixes / share (descriptive),2,1.0152,0.99024,1.0419,0.23,0.012988,A proxy,,1.0139,0.012356,True,1.037,
+PR63,atl,P3 mediation (share given Greenland high / share),2,0.88144,0.82392,0.94854,0.001,0.036249,A proxy,0.0017333,0.92346,0.031793,True,1.1068,holds; vs k=1: paired difference not computed
+PR63,atl,"F4 Greenland high on share, per SD",2,0.83185,0.76594,0.90966,0.00049975,0.043523,A proxy,0.00092811,0.86996,0.029856,True,1.1296,holds; vs k=1: paired difference not computed
+PR63,atl,NAO share given Greenland high (RR),2,1.0038,0.87724,1.1385,,,A proxy,,1.0392,,True,,
+PR63,atl,"NAO share, original (RR)",2,1.1388,1.0212,1.2441,,,A proxy,,1.1254,,True,,
+PR63,atl,P1 share without terrain-type fixes (RR),3,1.174,1.0295,1.3084,0.003998,0.062085,A proxy,0.0057749,1.141,0.034012,True,1.1899,holds; vs k=1: paired difference not computed
+PR63,atl,P2 retained: share without terrain-type fixes / share (descriptive),3,1.0054,0.99108,1.0209,0.466,0.0078486,A proxy,,1.0139,0.012356,True,1.0222,
+PR63,atl,P3 mediation (share given Greenland high / share),3,0.88952,0.82907,0.95878,0.002,0.038274,A proxy,0.00325,0.92346,0.031793,True,1.1131,holds; vs k=1: paired difference not computed
+PR63,atl,"F4 Greenland high on share, per SD",3,0.82395,0.74168,0.92393,0.00049975,0.057252,A proxy,0.00092811,0.86996,0.029856,True,1.1739,holds; vs k=1: paired difference not computed
+PR63,atl,NAO share given Greenland high (RR),3,1.0387,0.9022,1.1861,,,A proxy,,1.0392,,True,,
+PR63,atl,"NAO share, original (RR)",3,1.1678,1.0163,1.3072,,,A proxy,,1.1254,,True,,

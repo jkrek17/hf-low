@@ -1,0 +1,17 @@
+Arm A restricted to times up to 2023-01-09 (WeatherBench2); baseline scored on the same fixes.
+Arm A: sampled fixes 10333; case-time risk sets 740, cases 766, controls 5244; sampled non-case-time fixes 4323; seasons with cases 19
+  arm baseline       group  k      lr      p_lr    p_boot  p_decision  heldout_ll_gain_per_case  heldout_signflip_p    dBSS_S  dBSS_lo5  dBSS_hi95  dBSS_signflip_p  tree_dBSS_S  q_within_arm  q_secondary
+0   A       M1      A_stab  1 0.04318    0.8354    0.8666      0.8666                 -0.002245             0.00184 -0.002871 -0.008965    0.00197           0.4531          NaN        0.8666          NaN
+1   A       M1    A_trough  1   1.596    0.2065    0.1496      0.2065                -6.148e-05               0.986 -0.001182 -0.008792   0.005464           0.8191          NaN        0.2753          NaN
+2   A       M1  A_omega700  1    4.54   0.03312   0.02728     0.03312                  0.001722              0.5645 -0.005673  -0.01422   0.001801           0.2929          NaN        0.1325          NaN
+3   A       M1       A_all  3   6.648   0.08402   0.07766     0.08402                -0.0006246              0.8746 -0.005592  -0.01853   0.006823            0.484      -0.1779         0.168          NaN
+4   A       M0      A_stab  1   1.728    0.1887    0.2694      0.2694                  -0.00103              0.6452  0.001792 -0.001801   0.005298           0.4258          NaN           NaN       0.2694
+5   A       M0    A_trough  1   11.59 0.0006648  0.002542    0.002542                  0.005686              0.3533  0.006882 -0.004847    0.01743           0.3061          NaN           NaN      0.00339
+6   A       M0  A_omega700  1   13.31 0.0002643 0.0006269   0.0006269                  0.006979              0.2351  0.003877 -0.009747    0.01578           0.6665          NaN           NaN     0.001254
+7   A       M0       A_all  3   31.68 6.118e-07 4.499e-05   4.499e-05                   0.01451              0.1206  0.009712 -0.007443    0.02579           0.3547          NaN           NaN      0.00018
+  arm                     subset  cases     lr  p_decision
+0   A                   Atlantic    441   3.15      0.5511
+1   A                    Pacific    325  2.376      0.5414
+2   A             dp12 available    438  12.66      0.0404
+3   A  dp12 missing (new storms)    328 0.8909       0.869
+4   A      matched controls only    163 0.4099      0.9382

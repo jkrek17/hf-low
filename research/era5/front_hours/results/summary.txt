@@ -1,0 +1,22 @@
+RA-16: SST-front strength vs HF-centre hours, box 40-45N 160-170E. Pipeline A (ERA5 proxy). Plan: PREREGISTRATION.md.
+Seasons: primary 2007-2025 (n=19); sensitivity 2004-2025 (n=22).
+Box HF-centre hours per season, 2007-2025: mean 47.1, SD 26.0, min 6, max 114; seasons with zero 0.
+Storms per season in box: mean 5.1. Largest single-storm share of a season's box fixes: median 0.33, max 1.00.
+Lag-1 autocorrelation 2007-2025: FRONT_SON 0.50, hours -0.50. Corr(FRONT_SON, FRONT_DJF) = 0.84.
+Analytic MDE |rho| (80% power, two-sided 0.05): n=19 0.60, n=22 0.57; with alpha 0.05/11: n=19 0.73.
+
+id   n   rho    95% (Fisher / bootstrap for S10)   p(perm)  q(BH,11)  test
+P1   19 +0.220 [-0.26, +0.61]  0.3584  0.486  FRONT(SON) vs H, 2007-25
+S1   22 +0.294 [-0.16, +0.64]  0.1800  0.486  FRONT(SON) vs H, 2004-25, product dummy removed
+S2   19 -0.237 [-0.62, +0.24]  0.3251  0.486  FRONT_KE(SON) vs H
+S3   19 +0.204 [-0.28, +0.60]  0.3974  0.486  FRONT_OE(SON) vs H
+S4   19 +0.098 [-0.37, +0.53]  0.6855  0.746  FRONT(DJF) concurrent vs H
+S5   19 +0.210 [-0.27, +0.61]  0.3881  0.486  FRONT(SON) vs H deepening-phase
+S6   19 -0.079 [-0.51, +0.39]  0.7464  0.746  FRONT(SON) vs H mature/decay-phase
+S7   19 +0.218 [-0.26, +0.61]  0.3637  0.486  FRONT(SON) vs storm count
+S8   19 +0.270 [-0.22, +0.65]  0.2615  0.486  FRONT(SON) vs archive box fixes, 2013-14 dummy removed
+S9   19 +0.217 [-0.28, +0.62]  0.3720  0.486  FRONT(SON) vs H, year removed
+S10  19 +0.288 [-0.39, +0.84]  0.3877  0.486  rho(S5) - rho(S6), season bootstrap
+
+Tests with q < 0.10: 0 of 11; with raw p < 0.05: 0.
+P1 effect size: quasi-Poisson ratio of box fixes per SD of FRONT(SON) 1.08 (95% robust 0.93-1.26).

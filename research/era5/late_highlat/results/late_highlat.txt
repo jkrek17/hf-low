@@ -1,0 +1,17 @@
+RA-26 late HF onset, high-latitude Atlantic. ERA5 PROXY, pipeline A, 2004-05..2025-26, non-TC. Terrain-flagged fixes kept unless stated.
+events total 1886, Atlantic 1039, group (Atlantic, onset max >=60N) 283: late 151, non-late 132, LATE6 66, terrain-flagged 145; dropped 0
+wind direction available for 282 of 283; late with wdir 150
+
+test                                               nL   nN   late    non   diff          95% CI       p       q pow.25  MDE80
+P1 barrier share, onset fix, LATE                 151  132  0.384  0.394 -0.010 [-0.119, 0.120]  0.8506  0.9385   0.98  0.173
+S1 coast <=300 km                                 151  132  0.980  0.894  0.086 [ 0.027, 0.149]  0.0080  0.0800   1.00  0.090
+S2 centre distance >400 km                        151  132  0.391  0.417 -0.026 [-0.134, 0.089]  0.6087  0.9181   0.99  0.160
+S3 northerly wind at max                          150  132  0.540  0.545 -0.005 [-0.120, 0.113]  0.9385  0.9385   0.99  0.169
+S4 barrier, LATE6                                  66  217  0.455  0.369  0.086 [-0.048, 0.220]  0.1999  0.6663   0.95  0.193
+S5 barrier, terrain-flagged removed                68   70  0.338  0.357 -0.019 [-0.197, 0.170]  0.8346  0.9385   0.75  0.266
+S6 barrier at peak-gust fix                       151  132  0.404  0.348  0.055 [-0.069, 0.188]  0.3768  0.9181   0.97  0.181
+S7 maximum within 400 km of centre                151  132  0.609  0.583  0.026 [-0.101, 0.134]  0.6427  0.9181   0.99  0.166
+S8 barrier, Atlantic south of 60N (contrast)      202  554  0.129  0.065  0.064 [ 0.011, 0.137]  0.0170  0.0850   1.00  0.090
+S9 adjusted OR barrier (late vs non-late)        OR 0.85 [0.49,1.47] p 0.5553 q 0.9181  n 283
+tests passing BH q<0.05: 0 of 10
+decision rule on P1: NO (well powered)
