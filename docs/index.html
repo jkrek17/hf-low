@@ -137,6 +137,7 @@
         <button type="button" class="seg" data-layer="density" aria-pressed="false">Fix density</button>
         <button type="button" class="seg" data-layer="genesis" aria-pressed="false">First fix</button>
         <button type="button" class="seg" data-layer="peak" aria-pressed="false">Peak intensity</button>
+        <button type="button" class="seg" data-layer="prob" aria-pressed="false" title="Every scored ERA5 proxy track, each edge coloured by the model's probability of a hurricane-force-equivalent gust within 24 h">HF probability</button>
         <button type="button" class="seg" data-layer="atlas" aria-pressed="false">Atlas</button>
         <button type="button" class="seg" data-layer="playback" aria-pressed="false">Playback</button>
       </div>
@@ -174,6 +175,21 @@
       <script type="text/plain" id="era5ProbLoader" src="data/era5-prob.js"></script>
       <script type="text/plain" id="era5ListsLoader" src="data/era5-lists.js"></script>
       <button type="button" class="btn" id="fitBounds">Fit to events</button>
+      <div class="atlas-tools" id="probTools" hidden>
+        <label class="check" title="Before 2004 the tables score only the catalog events and their matched null cases, for comparison within that era">
+          <input type="checkbox" id="probPre" checked> include 1979-2003 (catalog events and matched null cases only; ERA5 proxy)
+        </label>
+        <div class="filter">
+          <label for="probMin">Show edges at or above</label>
+          <select id="probMin">
+            <option value="1">All (including under 5 %)</option>
+            <option value="2">5 % and above</option>
+            <option value="3">20 % and above</option>
+            <option value="4">50 % and above</option>
+          </select>
+        </div>
+        <script type="text/plain" id="allpLoader" src="data/era5-allprob.js"></script>
+      </div>
       <div class="atlas-tools" id="atlasTools" hidden>
         <label for="atlasView">Atlas view</label>
         <select id="atlasView">

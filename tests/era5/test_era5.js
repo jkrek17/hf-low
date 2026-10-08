@@ -5,7 +5,7 @@ var fs = require('fs'), path = require('path'), vm = require('vm'), assert = req
 var ROOT = path.join(__dirname, '..', '..');
 var ctx = { window: {} };
 vm.createContext(ctx);
-['assets/js/era5.js', 'data/era5-tracks.js', 'data/era5-null.js', 'data/era5-peaks.js', 'data/era5-prob.js', 'data/era5-lists.js', 'data/atlas.js', 'data/gust-climo.js'].forEach(function (f) {
+['assets/js/era5.js', 'data/era5-tracks.js', 'data/era5-null.js', 'data/era5-peaks.js', 'data/era5-prob.js', 'data/era5-lists.js', 'data/atlas.js', 'data/gust-climo.js', 'data/era5-allprob.js'].forEach(function (f) {
   vm.runInContext(fs.readFileSync(path.join(ROOT, 'docs', f), 'utf8'), ctx, { filename: f });
 });
 var HF = ctx.window.HF, RAW = ctx.window.HF_ERA5;
@@ -174,6 +174,26 @@ test('gust climatology: 1 degree windows, ocean-only blocks, values in range and
     });
     for (var i = 0; i < n; i++) if (w.f.annmax[i] >= 0) assert.ok(w.f.f717[i] <= w.f.f64[i] && w.f.f64[i] <= w.f.f50[i]);
   });
+});
+test('all-tracks P(HF): counts, decode of a known track, filter', function () {
+  var R = ctx.window.HF_ERA5_ALLP, D = HF.era5.decodeAllP(R);
+  assert.strictEqual(R.meta.tracks, 40909); assert.strictEqual(D.n, 40909); assert.strictEqual(D.nfix, 189818);
+  assert.strictEqual(JSON.stringify(R.meta.by_kind), JSON.stringify({ low_2004_2025: 36598, event_pre2004: 2157, null_pre2004: 2154 }));
+  var i = -1; for (var a = 0; a < D.n; a++) if (D.id[a] === 330264) { i = a; break; }
+  assert.ok(i >= 0);
+  var k = D.off[i];
+  assert.strictEqual(D.off[i + 1] - k, 8);
+  assert.strictEqual(D.lat[k], 50.5); assert.strictEqual(D.lon[k], -21.75);        // 338.25 E in the source table
+  assert.strictEqual(D.p[k + 1], 860); assert.strictEqual(D.cls[k + 1], 5);
+  assert.strictEqual(HF.era5.fixTimeLabel(D, k), '23 Dec 2013 00 UTC');
+  assert.strictEqual(D.month[i], 12);
+  var all = HF.era5.filterAllP(D, { basin: 'all', season0: 0, season1: 9999 });
+  assert.strictEqual(all.length, 40909);
+  var s04 = HF.era5.filterAllP(D, { basin: 'all', season0: 2004, season1: 9999 });
+  assert.strictEqual(s04.length, 36598);
+  var atl = HF.era5.filterAllP(D, { basin: 'atl', season0: 2004, season1: 9999, months: { 1: true } });
+  assert.ok(atl.length > 500 && atl.length < s04.length);
+  for (var q = 0; q < atl.length; q++) { assert.strictEqual(D.basin[atl[q]], 0); assert.strictEqual(D.month[atl[q]], 1); }
 });
 console.log('\n' + passed + ' passed, ' + failed + ' failed');
 process.exit(failed ? 1 : 0);

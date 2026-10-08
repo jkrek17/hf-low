@@ -119,6 +119,60 @@ window.HF = window.HF || {};
     return n;
   }
 
-  HF.era5 = { decode: decode, filter: filter, decodePeaks: decodePeaks, filterPeaks: filterPeaks,
+  /** Every track the P(HF) tables score (data/era5-allprob.js), as parallel
+      arrays: one entry per track (id, basin, season, kind, month, first fix
+      offset, count) and one per fix (trig for projection, P in 0..1000 and its
+      class, time as 12-hour steps since 1979-01-01 00 UTC). See
+      tools/build_era5_allprob.py for the wire format. */
+  var EPOCH_MS = Date.UTC(1979, 0, 1);
+  function decodeAllP(raw) {
+    var T = raw.t, n = T.length, nf = 0, i, j;
+    for (i = 0; i < n; i++) nf += T[i][5].length / 4;
+    var D = { n: n, nfix: nf, id: new Int32Array(n), basin: new Uint8Array(n), season: new Uint16Array(n),
+              kind: new Uint8Array(n), month: new Uint8Array(n), off: new Int32Array(n + 1),
+              sp: new Float32Array(nf), cp: new Float32Array(nf), lam: new Float32Array(nf),
+              lat: new Float32Array(nf), lon: new Float32Array(nf),
+              p: new Uint16Array(nf), cls: new Uint8Array(nf), step: new Int32Array(nf) };
+    var k = 0;
+    for (i = 0; i < n; i++) {
+      var r = T[i], f = r[5], lat4 = 0, lon4 = 0, st = r[4];
+      D.id[i] = r[0]; D.basin[i] = r[1]; D.season[i] = r[2]; D.kind[i] = r[3];
+      D.month[i] = new Date(EPOCH_MS + r[4] * 43200000).getUTCMonth() + 1;
+      D.off[i] = k;
+      for (j = 0; j < f.length; j += 4, k++) {
+        st += f[j]; lat4 += f[j + 1]; lon4 += f[j + 2];
+        var lat = lat4 / 4, lon = lon4 / 4;
+        D.lat[k] = lat; D.lon[k] = lon;
+        D.sp[k] = Math.sin(lat * Math.PI / 180); D.cp[k] = Math.cos(lat * Math.PI / 180); D.lam[k] = lon * Math.PI / 180;
+        D.p[k] = f[j + 3]; D.cls[k] = pClass(f[j + 3] / 1000); D.step[k] = st;
+      }
+    }
+    D.off[n] = k;
+    return D;
+  }
+
+  /** Track indices that pass basin ('all' | 'atl' | 'pac'), season range and
+      the month chips (month of the track's first fix), as an Int32Array. */
+  function filterAllP(D, f) {
+    var months = f.months || {}, anyMonth = false, k, out = [];
+    for (k in months) if (months[k]) { anyMonth = true; break; }
+    var b = f.basin === 'atl' ? 0 : f.basin === 'pac' ? 1 : -1;
+    for (var i = 0; i < D.n; i++) {
+      if (b >= 0 && D.basin[i] !== b) continue;
+      if (D.season[i] < f.season0 || D.season[i] > f.season1) continue;
+      if (anyMonth && !months[D.month[i]]) continue;
+      out.push(i);
+    }
+    return Int32Array.from(out);
+  }
+
+  /** UTC date and hour of fix k, "24 Dec 2013 12 UTC". */
+  var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function fixTimeLabel(D, k) {
+    var d = new Date(EPOCH_MS + D.step[k] * 43200000);
+    return d.getUTCDate() + ' ' + MON[d.getUTCMonth()] + ' ' + d.getUTCFullYear() + ' ' + (d.getUTCHours() < 10 ? '0' : '') + d.getUTCHours() + ' UTC';
+  }
+
+  HF.era5 = { decodeAllP: decodeAllP, filterAllP: filterAllP, fixTimeLabel: fixTimeLabel, decode: decode, filter: filter, decodePeaks: decodePeaks, filterPeaks: filterPeaks,
               pClass: pClass, attachProb: attachProb, P_EDGES: P_EDGES };
 })(window.HF);
