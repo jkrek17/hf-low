@@ -22,6 +22,7 @@ record of what the pilot found. Since then:
   phase space and environment give 24 h intensity-class probabilities and the
   chance of reaching pipeline A's HF gust index within 24 or 48 h. It is fitted
   and tested on 2004-05 onward only.
+- `hf_structure/` is the storm-relative climatology of HF-strength gust fields (where the HF-equivalent gust sits around the low and how large the area is, by basin, life-cycle stage and Hart phase), 2004-05 onward, ERA5 proxy on pipeline A's tracks.
 - `stationarity2` reversed the pre-1979 gradient result described below.
 
 ## The store
@@ -150,3 +151,4 @@ distance to the era being extrapolated to.
     stationarity.py     the observing-era gate described above
     hf_history/         pipeline A (its own README)
     intensity/          near-storm intensity framework on pipeline A tracks (its own README)
+    hf_structure/       storm-relative HF gust structure and area on pipeline A tracks (its own README)
