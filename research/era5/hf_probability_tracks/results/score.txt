@@ -1,0 +1,12 @@
+Fixes 159430 on 36598 tracks, seasons 2004-2025 (n = 22); hf24 base rate 0.0339
+
+Leave-one-season-out Brier skill vs basin-month climatology, hf24 (PR 12 `full` = 0.423, HSS 0.59):
+  F: BSS 0.4228  POD 0.60 FAR 0.40 CSI 0.43 HSS 0.59 bias 1.00
+  N: BSS 0.3804  POD 0.57 FAR 0.43 CSI 0.40 HSS 0.56 bias 1.00
+  S: BSS 0.2624  POD 0.47 FAR 0.53 CSI 0.31 HSS 0.46 bias 1.00
+
+Pre-2004: 30388 fixes on 4311 catalog tracks, seasons 1979-2003 (8311 catalog tracks over 1979-2025)
+  mean P_S over fixes: events 0.156, null cases 0.045
+  mean P_S - P_Sg (what the gust predictor adds): +0.0145; 1979-2000 +0.0139, 2001-2003 +0.0184
+
+2004+ catalog fixes 28245: correlation of LOSO P_S with P_N 0.847, with P_F 0.814
