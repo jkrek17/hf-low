@@ -17,7 +17,7 @@
     maxPressure: 1010,
     bombOnly: false,
     search: '',
-    layer: 'tracks',       // 'tracks' | 'density' | 'genesis' | 'peak' | 'atlas' | 'prob' | 'playback'
+    layer: 'tracks',       // 'tracks' | 'density' | 'genesis' | 'peak' | 'atlas' | 'prob' | 'bymonth' | 'playback'
     currents: false,   // ocean currents background layer - independent of `layer`, off by default
     era5: false,       // ERA5 proxy tracks under the Tracks layer, off by default
     era5null: false,   // ... matched null-case tracks
@@ -27,6 +27,7 @@
     era5focusPan: false,   // rotate the globe to the focused track once it has loaded
     atlas: { view: 'boxes', src: 'archive', field: 'annmax' },   // the Atlas layer
     strong: { list: 'minp', basin: 'all' },   // the Strongest storms tab   // key of the ERA5 track picked from the Strongest list, drawn whatever the filters say
+    monthEra5: true,   // By month: add the ERA5 proxy storms of earlier seasons (teal), on by default
     probMin: 1,        // HF probability layer: draw edges at or above this P class (1 = all)
     probPre: true,     // HF probability layer: include 1979-2003 (catalog events and matched nulls only)
     era5pre: false,    // ... and before 2001-02 (within-era comparison only), off by default
@@ -1084,6 +1085,8 @@
     return null;
   }
 
+  var monthEra5N = null;   // ERA5 tracks drawn under the By month layer, or null when off
+
   function setEra5OnGlobe() {
     var ev = null, nul = null, peaks = null, focus = null;
     if (state.layer === 'tracks' && state.era5focus) {
@@ -1100,6 +1103,19 @@
         peaks = { P: era5Data.peaks, idx: HF.era5.filterPeaks(era5Data.peaks, f) };
         era5Shown.peaks = peaks.idx.length;
       }
+    }
+    monthEra5N = null;
+    if (state.layer === 'bymonth' && state.monthEra5 && ensureEra5('ev')) {
+      // The month being shown, from the seasons before the archive range on
+      // screen (the archive draws the rest), so one storm is never in both.
+      var mm = play.moy, chips = state.months || {}, anyChip = false, ck;
+      for (ck in chips) if (chips[ck]) { anyChip = true; break; }
+      var only = {}; only[mm] = true;
+      var s1 = (state.season0 == null ? DATA.recordStart : state.season0) - 1;
+      ev = (anyChip && !chips[mm]) ? [] : HF.era5.filter(era5Data.ev, {
+        basin: state.basin === 'both' ? 'all' : state.basin, season0: 0, season1: s1, months: only
+      });
+      monthEra5N = ev.length; era5Shown.ev = ev.length;
     }
     var probOn = state.era5 && state.era5prob && attachEra5Prob() && era5Attached.ev;
     HF.globe.setEra5(ev, nul, peaks, { prob: !!probOn, focus: focus });
@@ -1342,14 +1358,18 @@
     }
   }
 
+  /** The globe's own layer name. "By month" is the Playback machinery in its
+      calendar-month step, so the globe, note and legend treat it as playback. */
+  function mapLayer() { return state.layer === 'bymonth' ? 'playback' : state.layer; }
+
   function renderMap(lows) {
-    HF.globe.render(lows, state.selectedKey, state.layer);
+    HF.globe.render(lows, state.selectedKey, mapLayer());
     HF.globe.setCurrentsVisible(state.currents);
     setEra5OnGlobe();
     renderPlayback(lows);
     renderLegend(lows);
 
-    var layer = state.layer;
+    var layer = mapLayer();
     var note = document.getElementById('mapNote');
     if (layer === 'playback') {
       note.textContent = playbackNote(lows);
@@ -1443,7 +1463,7 @@
   function renderLegend(lows) {
     lows = lows || [];
     var box = HF.clear(document.getElementById('mapLegend'));
-    var layer = state.layer;
+    var layer = mapLayer();
 
     if (layer === 'prob') {
       appendProbLegend(box);
@@ -1993,7 +2013,7 @@
   };
 
   function pbEl(id) { return document.getElementById(id); }
-  function isPlayback() { return state.layer === 'playback'; }
+  function isPlayback() { return mapLayer() === 'playback'; }
   function plural(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
 
   function sameLows(a, b) {
@@ -2111,6 +2131,7 @@
       var e = stepEntry();
       play.active = e ? e.count : 0;
       HF.globe.setPlaybackFrame(moyly() ? play.engine.stepMoy(play.moy) : monthly() ? play.engine.stepMonth(play.ym) : play.engine.step(play.season), { kind: 'step' });
+      if (state.layer === 'bymonth') setEra5OnGlobe();
       return;
     }
     var frame = currentClock().at(play.t, play.tail);
@@ -2135,11 +2156,13 @@
   function setText(el, text) { if (el.textContent !== text) el.textContent = text; }
 
   function updateReadout() {
+    if (play.engine && play.mode === 'step') syncStepButtons();
     var date, count;
     if (play.mode === 'step') {
       var e = stepEntry();
       date = e ? e.label : '--';
       count = e ? (e.empty ? 'no events' : plural(e.count, 'event', 'events')) : '';
+      if (monthEra5N != null) count += ' · ' + monthEra5N + ' ERA5 proxy';
     } else {
       date = currentClock().label(play.t);
       count = play.active + ' active';
@@ -2308,6 +2331,27 @@
     if (play.tickKey !== key) { buildTicks(entries); play.tickKey = key; }
   }
 
+  function syncStepButtons() {
+    var i = stepIndex(), n = stepList().length, noun = stepNoun().replace('calendar ', '');
+    var prev = pbEl('pbPrev'), next = pbEl('pbNext');
+    prev.disabled = i <= 0;
+    next.disabled = i >= n - 1;
+    setText(pbEl('pbPrevText'), 'Prev ' + noun);
+    setText(pbEl('pbNextText'), 'Next ' + noun);
+  }
+
+  /** Previous / next entry in the step list (a month, calendar month or
+      season). Pauses a running Play, as the scrubber does. */
+  function stepBy(d) {
+    if (play.mode !== 'step') return;
+    if (play.playing) setPlaying(false, true);
+    var ni = Math.max(0, Math.min(stepList().length - 1, stepIndex() + d));
+    setStepIndex(ni);
+    if (monthly()) syncMonthPicker(); else syncSeasonPicker();
+    onTimeChanged(true);
+    syncStepButtons();
+  }
+
   function syncPlayButton() {
     var btn = pbEl('pbPlay');
     // The accessible name IS the visible text, so it can never disagree
@@ -2340,7 +2384,13 @@
     var radios = document.querySelectorAll('input[name="pbMode"]');
     Array.prototype.forEach.call(radios, function (r) { r.checked = r.value === play.mode; });
     Array.prototype.forEach.call(document.querySelectorAll('input[name="pbUnit"]'), function (r) { r.checked = r.value === play.unit; });
-    pbEl('pbUnitWrap').hidden = play.mode !== 'step';
+    var bym = state.layer === 'bymonth';
+    pbEl('pbModeWrap').hidden = bym;
+    pbEl('pbUnitWrap').hidden = play.mode !== 'step' || bym;
+    pbEl('pbPrev').hidden = pbEl('pbNext').hidden = play.mode !== 'step';
+    pbEl('pbEra5Wrap').hidden = !bym;
+    pbEl('pbEra5').checked = state.monthEra5;
+    syncStepButtons();
     pbEl('pbSeasonWrap').hidden = play.mode === 'composite' || monthly() || moyly();
     pbEl('pbMonthWrap').hidden = !monthly();   // moy: the scrubber's twelve ticks are the picker
     pbEl('pbTailWrap').hidden = play.mode === 'step';
@@ -2443,6 +2493,7 @@
     var changed = bar.hidden === on;
     bar.hidden = !on;
     document.body.classList.toggle('pb-active', on);
+    document.body.classList.toggle('pb-bymonth', on && state.layer === 'bymonth');
     if (changed) resizeActiveView();
     if (!on) {
       if (play.playing) setPlaying(false, true);
@@ -2470,7 +2521,10 @@
       return 'One season on its own calendar. Circle size grows as pressure falls; tails fade with age.' + tail;
     }
     if (play.unit === 'moy') {
-      return 'Every event whose first fix falls in each calendar month, all seasons overlaid, so the track can be compared month against month. Circles mark each event’s lowest analyzed pressure.' + tail;
+      return 'Every event whose first fix falls in each calendar month, all seasons overlaid, so the track can be compared month against month. Circles mark each event’s lowest analyzed pressure.' +
+        (state.layer === 'bymonth' && state.monthEra5
+          ? ' Teal lines are ERA5 proxy storms (pipeline A) from the seasons before the archive range on screen, back to 1979-80: a reanalysis proxy, not direct observation, and its gust index drifts before 2001-02, so compare where the storms went, not how many.'
+          : '') + tail;
     }
     if (play.unit === 'month') {
       return 'Each calendar month’s events, drawn whole, in the month their first fix falls. Circles mark each event’s lowest analyzed pressure; months cross-fade.' + tail;
@@ -2487,6 +2541,14 @@
     row.appendChild(dot);
     row.appendChild(document.createTextNode(step ? 'Lowest pressure; larger = deeper' : 'Storm now; larger = deeper'));
     box.appendChild(row);
+    if (state.layer === 'bymonth' && state.monthEra5) {
+      var er = HF.el('div', { class: 'legend-row' });
+      var sw = HF.el('span', { class: 'legend-fade' });
+      sw.style.background = HF.cssVar('--era5') || '#17776f';
+      er.appendChild(sw);
+      er.appendChild(document.createTextNode('ERA5 proxy track, earlier seasons: not direct observation'));
+      box.appendChild(er);
+    }
 
     if (lows.some(function (l) { return l.cls !== 'low'; })) {
       var row2 = HF.el('div', { class: 'legend-row' });
@@ -2549,6 +2611,15 @@
     });
 
     pbEl('pbPlay').addEventListener('click', function () { setPlaying(!play.playing); });
+    pbEl('pbEra5').addEventListener('change', function (e) {
+      state.monthEra5 = e.target.checked;
+      pbEl('mapNote').textContent = playbackNote(play.lows);
+      renderLegend(play.lows);
+      onTimeChanged(true);
+      if (!state.monthEra5) setEra5OnGlobe();
+    });
+    pbEl('pbPrev').addEventListener('click', function () { stepBy(-1); });
+    pbEl('pbNext').addEventListener('click', function () { stepBy(1); });
 
     // The scrubber is a native <input type=range>: focusable, with the
     // platform's own slider semantics for assistive technology and Home/End
@@ -2839,6 +2910,15 @@
       seg.addEventListener('click', function () {
         var prev = state.layer;
         state.layer = seg.dataset.layer;
+        if (state.layer === 'bymonth' && prev !== 'bymonth') {
+          // All events of one calendar month, all seasons pooled; paused, so
+          // the first view is a still picture to step from.
+          play.mode = 'step'; play.unit = 'moy'; play.moy = 1; play.clock = null; play.tickKey = '';
+          play.byMonthUsed = true;
+        } else if (state.layer === 'playback' && prev !== 'playback' && play.byMonthUsed) {
+          play.mode = 'composite'; play.t = 0; play.clock = null; play.tickKey = '';
+          play.byMonthUsed = false;
+        }
         Array.prototype.forEach.call(document.querySelectorAll('.seg'), function (s) {
           s.classList.toggle('is-active', s === seg);
           // The active layer used to be shown by colour alone; aria-pressed
@@ -2847,6 +2927,12 @@
         });
         render();
         if (state.layer === 'playback' && prev !== 'playback') startPlaybackOnEntry();
+        if (state.layer === 'bymonth' && prev !== 'bymonth') {
+          // The controls sit above the globe and the globe starts below the
+          // first screen on most displays; bring both into view.
+          var bar = pbEl('pbBar');
+          if (bar && bar.scrollIntoView) bar.scrollIntoView({ block: 'start', behavior: 'auto' });
+        }
       });
     });
     buildPlaybackControls();

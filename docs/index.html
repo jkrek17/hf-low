@@ -142,6 +142,7 @@
         <button type="button" class="seg" data-layer="peak" aria-pressed="false">Peak intensity</button>
         <button type="button" class="seg" data-layer="prob" aria-pressed="false" title="Every scored ERA5 proxy track, each edge coloured by the model's probability of a hurricane-force-equivalent gust within 24 h">HF probability</button>
         <button type="button" class="seg" data-layer="atlas" aria-pressed="false">Atlas</button>
+        <button type="button" class="seg" data-layer="bymonth" aria-pressed="false" title="All events of one calendar month, all seasons together; step through the months">By month</button>
         <button type="button" class="seg" data-layer="playback" aria-pressed="false">Playback</button>
       </div>
       <!-- Independent of the layer switch above: a background context layer
@@ -226,7 +227,7 @@
          screen-reader behaviour is the browser's own, not reimplemented. -->
     <div class="transport" id="pbBar" role="group" aria-label="Playback controls" hidden>
       <div class="transport-row">
-        <fieldset class="filter pb-modes">
+        <fieldset class="filter pb-modes" id="pbModeWrap">
           <legend>Mode</legend>
           <div class="pb-mode-set">
             <label class="pb-mode"><input type="radio" name="pbMode" value="composite" checked><span>Composite</span></label>
@@ -265,6 +266,8 @@
         </div>
       </div>
       <div class="transport-row transport-main">
+        <button type="button" class="btn pb-step" id="pbPrev" hidden><span aria-hidden="true">&lsaquo;</span> <span id="pbPrevText">Previous</span></button>
+        <button type="button" class="btn pb-step" id="pbNext" hidden><span id="pbNextText">Next</span> <span aria-hidden="true">&rsaquo;</span></button>
         <button type="button" class="btn pb-play" id="pbPlay"><span class="pb-glyph" aria-hidden="true"></span><span id="pbPlayText">Play</span></button>
         <div class="pb-scrub-wrap">
           <input type="range" class="pb-scrub" id="pbScrub" min="0" max="1" step="1" value="0" aria-label="Playback position" aria-describedby="pbHint">
@@ -272,6 +275,9 @@
         </div>
         <p class="pb-readout"><span class="pb-date" id="pbDate">&ndash;</span> <span class="pb-count" id="pbCount"></span></p>
       </div>
+      <label class="check pb-era5opt" id="pbEra5Wrap" hidden title="ERA5 reanalysis hurricane-force-equivalent storms (pipeline A, a proxy) for the seasons before the archive range on screen, back to 1979-80, drawn in teal under the archive's tracks">
+        <input type="checkbox" id="pbEra5" checked> ERA5 proxy storms from earlier seasons, 1979 on (teal; not direct observation)
+      </label>
       <p class="transport-hint" id="pbHint">Arrow keys move the position by one day; Shift+arrow by six hours; Page Up and Page Down by a week; Home and End jump to the ends.</p>
       <p class="transport-status" id="pbStatus"></p>
     </div>
