@@ -1,0 +1,48 @@
+check,basin,contrast,estimate,lo,hi,p
+"PH1 archive HF count minus v250 eddy (paired, 17 seasons)",pac,D_Jan,0.3136,0.1004,0.4918,0.01099
+"PH1 archive HF count minus v250 eddy (paired, 17 seasons)",pac,M,0.6218,0.336,0.9383,0.0009995
+"PH2 fraction of pipeline A HF contrast carried by the HF share, f",pac,D_Jan,0.6107,-2.821,4.426,
+"PH2 fraction of pipeline A HF contrast carried by the HF share, f",pac,M,0.8424,0.7473,0.9189,
+PH4 Q1 ln rate difference Jan-Dec,pac,Jan-Dec,0.07126,-0.07757,0.2174,0.3888
+PH4 Q1 ln rate difference Feb-Jan,pac,Feb-Jan,-0.3197,-0.5462,-0.09068,0.002999
+PH4 Q2 ln rate difference Jan-Dec,pac,Jan-Dec,-0.02174,-0.1628,0.1154,0.7956
+PH4 Q2 ln rate difference Feb-Jan,pac,Feb-Jan,-0.205,-0.409,-0.02869,0.02599
+"PH1 archive HF count minus v250 eddy (paired, 17 seasons)",atl,D_Jan,0.07565,-0.144,0.3231,0.5577
+"PH1 archive HF count minus v250 eddy (paired, 17 seasons)",atl,M,0.4905,0.3523,0.6354,0.0009995
+"PH2 fraction of pipeline A HF contrast carried by the HF share, f",atl,D_Jan,-0.5918,-1.858,5.781,
+"PH2 fraction of pipeline A HF contrast carried by the HF share, f",atl,M,1.053,0.9676,1.13,
+PH4 Q1 ln rate difference Jan-Dec,atl,Jan-Dec,0.1021,-0.04088,0.2637,0.1889
+PH4 Q1 ln rate difference Feb-Jan,atl,Feb-Jan,0.02851,-0.169,0.2287,0.8146
+PH4 Q2 ln rate difference Jan-Dec,atl,Jan-Dec,0.05689,-0.1611,0.2915,0.6267
+PH4 Q2 ln rate difference Feb-Jan,atl,Feb-Jan,0.03192,-0.1895,0.2541,0.7746
+"PH3 archive first-HF latitude, Pacific: seasons with Jan below mean(Dec,Feb) / seasons with all three months",pac,D_Jan by season,-2.067,17,21,
+PH5 Q1: share of bootstrap draws in which the maximum month is this one,pac,month 12,0.194,1,,
+PH5 Q1: share of bootstrap draws in which the maximum month is this one,pac,month 1,0.8055,1,,
+PH5 Q1: share of bootstrap draws in which the maximum month is this one,pac,month 2,0.0005,1,,
+PH5 Q2: share of bootstrap draws in which the maximum month is this one,pac,month 12,0.6295,12,,
+PH5 Q2: share of bootstrap draws in which the maximum month is this one,pac,month 1,0.368,12,,
+PH5 Q2: share of bootstrap draws in which the maximum month is this one,pac,month 2,0.0025,12,,
+PH5 Q3: share of bootstrap draws in which the maximum month is this one,pac,month 12,0,6,,
+PH5 Q3: share of bootstrap draws in which the maximum month is this one,pac,month 1,0,6,,
+PH5 Q3: share of bootstrap draws in which the maximum month is this one,pac,month 2,0,6,,
+PH5 Q4: share of bootstrap draws in which the maximum month is this one,pac,month 12,0.468,1,,
+PH5 Q4: share of bootstrap draws in which the maximum month is this one,pac,month 1,0.48,1,,
+PH5 Q4: share of bootstrap draws in which the maximum month is this one,pac,month 2,0.052,1,,
+PH5 Q7: share of bootstrap draws in which the maximum month is this one,pac,month 12,0.588,12,,
+PH5 Q7: share of bootstrap draws in which the maximum month is this one,pac,month 1,0.412,12,,
+PH5 Q7: share of bootstrap draws in which the maximum month is this one,pac,month 2,0,12,,
+PH5 Q1: share of bootstrap draws in which the maximum month is this one,atl,month 12,0.05,2,,
+PH5 Q1: share of bootstrap draws in which the maximum month is this one,atl,month 1,0.3655,2,,
+PH5 Q1: share of bootstrap draws in which the maximum month is this one,atl,month 2,0.5845,2,,
+PH5 Q2: share of bootstrap draws in which the maximum month is this one,atl,month 12,0.1165,2,,
+PH5 Q2: share of bootstrap draws in which the maximum month is this one,atl,month 1,0.3415,2,,
+PH5 Q2: share of bootstrap draws in which the maximum month is this one,atl,month 2,0.542,2,,
+PH5 Q3: share of bootstrap draws in which the maximum month is this one,atl,month 12,0,4,,
+PH5 Q3: share of bootstrap draws in which the maximum month is this one,atl,month 1,0,4,,
+PH5 Q3: share of bootstrap draws in which the maximum month is this one,atl,month 2,0,4,,
+PH5 Q4: share of bootstrap draws in which the maximum month is this one,atl,month 12,0.1975,2,,
+PH5 Q4: share of bootstrap draws in which the maximum month is this one,atl,month 1,0.303,2,,
+PH5 Q4: share of bootstrap draws in which the maximum month is this one,atl,month 2,0.4995,2,,
+PH5 Q7: share of bootstrap draws in which the maximum month is this one,atl,month 12,0.1155,1,,
+PH5 Q7: share of bootstrap draws in which the maximum month is this one,atl,month 1,0.6625,1,,
+PH5 Q7: share of bootstrap draws in which the maximum month is this one,atl,month 2,0.222,1,,
