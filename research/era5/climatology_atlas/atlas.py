@@ -73,9 +73,9 @@ def load_archive():
     return pd.DataFrame(ev), pd.concat(fx, ignore_index=True)
 
 
-def load_proxy():
+def load_proxy(first=FIRST, last=LAST):
     C = pd.read_csv(os.path.join(HFH, "era5_hf_catalog.csv"))
-    E = C[(C.role == "event") & (C.season >= FIRST) & (C.season <= LAST)].set_index("track")
+    E = C[(C.role == "event") & (C.season >= first) & (C.season <= last)].set_index("track")
     T = pd.read_csv(os.path.join(HFH, "era5_hf_catalog_tracks.csv"))
     T = T[T.track.isin(E.index)].copy()
     T["t"] = pd.to_datetime(T.time.astype(str), format="%Y%m%d%H")

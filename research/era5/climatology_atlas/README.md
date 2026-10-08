@@ -20,7 +20,7 @@ Reproduce (reads committed files only, no ERA5 access; about 4 minutes):
     python3 -I research/era5/climatology_atlas/historic.py
     python3 -I research/era5/climatology_atlas/figures.py
 
-Files: `atlas.py` (tables), `figures.py` (ten figures), `historic.py` (1979-2003 candidate list); `results/*.csv` (every table
+Files: `atlas.py` (tables), `figures.py` (ten figures), `historic.py` (1979-2003 candidate list), `era1979.py` (extension back to 1979, four figures); `results/*.csv` (every table
 behind a figure), `results/events_archive.csv` and `events_proxy.csv` (one row per event, the inputs to every table), `results/fig*.png`.
 
 ## What the atlas says
@@ -72,6 +72,33 @@ tropical-cyclone-linked events dominate the Pacific gust list (flagged). As a pl
 Atlantic storm is 10 January 1993 (915 hPa, 61.0N 14.2W), the date of the Braer storm; that date was recalled from memory, not
 checked against a source. The median ERA5 minimum pressure of events differs little between eras (Atlantic 962.3 in 1979-2000, 963.4 from 2004; Pacific 964.0 and 964.1), a descriptive check only.
 
+## Extension back to 1979 (ERA5 proxy only; `era1979.py`, `results/era1979/`)
+
+**Warning, on every figure and table in this section: this is ERA5 pipeline A, a proxy, not direct observation. Gust-based levels are not comparable
+across 2001 (decision 1), and no 1979-2025 trend is estimated or claimed.** There is no archive before 2001 and it is incomplete to 2004, so the
+earlier seasons have the proxy only.
+
+How the early seasons are used:
+- **Gust-based events are shown in three separate eras and never pooled:** E1 1979-80 to 2000-01 (22 seasons, 1,889 events), E2 2001-02 to
+  2003-04 (3 seasons, 268 events, archive incomplete) and E3 2004-05 to 2025-26 (22 seasons, 2,000 events). What is compared by eye is shape
+  (month shares, latitude, depth, speed), not level (fig11, fig12, fig14, `monthly_by_era.csv`, `era_summary.csv`).
+- **The one continuous series is depth-based** (fig13, `season_series_1979_2025.csv`): pipeline A tracks whose ERA5 minimum MSLP is at or below 967 hPa (Atlantic) or
+  965 hPa (Pacific). The cut is fixed by a rule decided before looking at earlier seasons: the integer hPa at which the 2004-05 to 2025-26 mean
+  annual count of all tracks matches the mean annual count of gust-based events (Atlantic 52.6 against 50.2, Pacific 40.3 against 40.7). No trend line is drawn.
+  Caveats: ERA5 pressure over the open ocean before about 1990 is less constrained by observations, and depth-only and gust-only storms are
+  different populations (PR 52: in the Pacific the depth-only storms sit about 8.8 degrees farther north).
+
+What the three eras show (descriptive, all proxy):
+- Depth-based events per season: Atlantic 52.2 (sd 8.9) in E1 and 52.6 (sd 9.8) in E3; Pacific 42.8 (sd 8.6) and 40.3 (sd 7.9). Highest depth-based seasons 1979-2025: Atlantic 1989-90 (78),
+  2013-14 and 2006-07 (72); Pacific 2002-03 (61), 2015-16 (58), 1997-98 (57).
+- Gust-based events per season, read within an era only: Atlantic 45.9 (E1) and 50.2 (E3); Pacific 40.0 and 40.7. We do not read the Atlantic difference as climate: it is
+  in the direction and of the size that the pre-2001 gust drift could produce, and the drift cannot be separated from a real change (STATUS, decision 1).
+- Shape is similar: the share of an era's October-April events falling in December-February is 64% (E1) and 61% (E3) in the Atlantic; in the Pacific December-January
+  holds 41% and 45%. The median track-minimum ERA5 MSLP of events (E1, E3) is 962.0 and 963.1 hPa (Atlantic), 963.7 and 963.6 hPa (Pacific); the catalog's own `minp` column, a slightly different definition, gives 962.3 and 963.4 (Atlantic) and 964.0 and 964.1 (Pacific), the values in `historic.txt`. The median latitude of the first HF-equivalent fix is
+  56.2N (E1) and 53.5N (E3) in the Atlantic and 41.8N and 42.2N in the Pacific. The busiest Atlantic box is the same in E1 as in E3 (60-65N, 40-30W).
+- The strongest storms of the early era are in the candidate list above (`historic.txt`); the "HF probability tracks since 1979" thread owns the
+  strongest-storm list and P(HF) tracks, and its outputs should supersede that list where they overlap.
+
 ## What is not here, and what the map thread could show
 
 - Not done: genesis maps before 2004 (about 370 GB of ERA5, needs Jason's go-ahead); a sea-state climatology (wave pull not sized); the
@@ -98,3 +125,8 @@ ranks 1-2, the Pacific minimum and the era medians. All matched to the rounding 
 **Not independently checked:** bootstrap intervals (all of them); translation speeds and the motion-field figures (including the 61% and 77% north-east
 shares); the month-by-month first-HF latitudes; the share of events inside October-April; the ten deepest archive pressures; the November-to-April
 tropical-cyclone shares; the historic lists beyond the entries named above, and the Braer-storm date. The figures were inspected by eye, not recomputed.
+
+The 1979 extension was checked by a second fresh Sonnet agent: event counts per era, the depth cuts (967 and 965 hPa), the depth-based and gust-based seasonal means and sds,
+the highest depth-based seasons, the first-HF latitudes, the Pacific December-January shares and the busiest Atlantic box (the same in E1 and E3) all match. Two items differed from
+the first draft and are corrected above: the median pressures use two definitions (the E3 track-minimum values were verified in the first round; the E1 track-minimum values were not independently checked,
+the catalog-column medians were), and the Atlantic December-February share in E1 is 0.643 by exact counts (the text says 64%).

@@ -49,7 +49,7 @@ def main():
                 w(f"   {r.date}  minp {r.minp:.0f}  gust {r.gust800_kt:.0f}  ({r.peak_lat:.1f}N, {r.lon:.1f}E)  tc-linked={bool(r.tc)}  track {int(r.track)}")
                 rows.append(dict(basin=b, ranked_by=how, track=int(r.track), season=int(r.season), date=r.date, minp=r.minp,
                                  gust800_kt=r.gust800_kt, lat=r.peak_lat, lon=r.lon, tc_linked=bool(r.tc)))
-    pd.DataFrame(rows).to_csv(os.path.join(RES, "historic_storms.csv"), index=False, float_format="%.1f")
+    pd.DataFrame(rows).assign(caveat="ERA5 proxy, not observation; candidate only; gust ranks within-era").to_csv(os.path.join(RES, "historic_storms.csv"), index=False, float_format="%.1f")
     open(os.path.join(RES, "historic.txt"), "w").write("\n".join(out) + "\n")
     print("\n".join(out))
 
