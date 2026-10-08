@@ -176,12 +176,12 @@ Pipeline A, ERA5 proxy, Pacific, Oct-Apr 2004-05..2025-26 (22 seasons, 10,040 cy
 - Lead, not in the primary tests: for a count-matched depth cut (965.0 hPa, 1979-2025) ONI does have a total effect, 1.066 per SD (1.013-1.119), about a quarter through PNA. Gust and depth disagree again.
 - 55 tests in the BH family; lowest q 0.099. Verified by a fresh agent: counts, coefficients, SEs, indirect effect, depth cut and results, three phase-table cells. Not checked: bootstrap intervals, permutation p and q, secondary cells, the mediated shares (README lists them).
 
-### Hemispheric state vs HF lows: `research/era5/hemispheric/` (hf-low PR 41, draft until verified)
+### Hemispheric state vs HF lows: `research/era5/hemispheric/` (hf-low PR 41, merged into the integration branch)
 
 ERA5 proxy predictors (Z500, 250 hPa wind, SST; 5.6 degrees; 7-day mean of days -7 to -1) against the archive's weekly HF counts, Oct-Apr. Plan committed first (`1ff3201`), models frozen before the look (`4947105`), results `0a1f46e`. Fitted on 2004-05 to 2014-15, scored once on 2015-16 to 2025-26.
 - Held-out deviance skill of the field pattern over month + previous-week count: Atlantic +5.6% (p 0.0001, q 0.0003), Pacific +2.3% (p 0.0011, q 0.0013). Lagged NAO/PNA/ONI/MJO model: -2.5% and -1.3%. Swap split +4.2% and +2.6%. Lead of 8-14 days: +2.2% (p 0.09) and +0.25% (p 0.23). SOM regimes weak.
 - Named indices and their products explain adjusted R-squared 0.13 (Atlantic) and 0.30 (Pacific) of the pattern index. Power: 80% at a rate ratio of 1.15 per SD.
-- Not a cause, 11 held-out seasons, ERA5 is a proxy. Post hoc checks and deviations are logged in the plan. Verification status is in the README of the folder.
+- Not a cause, 11 held-out seasons, ERA5 is a proxy. Post hoc checks and deviations are logged in the plan. Two fresh agents recomputed the held-out skill, p-values, quintile rates, attribution R-squared, proxy transfer and six days of fields; the fits, power, maps, swap, lag-2, SOM and post hoc rows were not independently checked (list in the folder README).
 
 ### ERA5 pipeline B: `event_fields.py`, `criterion.py`, `series.py` (integration branch)
 
