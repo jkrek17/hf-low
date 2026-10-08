@@ -169,6 +169,70 @@ which groups matter, not as physical signs.
   the predictor definitions. The per-season HSS range is the more honest
   spread.
 
+## Analysis history: what was fixed before fitting, and what changed after
+
+This section is written for the project's Science Q&A ledger. It
+separates the choices made before any skill was seen from the changes made
+afterwards.
+
+**Fixed before fitting.** These were proposed in the project thread on
+2026-10-08 and confirmed by Jason before any code ran:
+
+- Target wind: HF only, using the gust index. Gale and storm force are
+  deferred.
+- Model: logistic regression.
+- Years: all available.
+
+The following were also set before any full-data fit:
+
+- Class cut points at ±0.3 and ±1 Bergeron.
+- Hart's terms at 500 km; jet and upstream terms at 1000 km.
+- 00/12 UTC sampling.
+- Climatology reference by basin and month.
+- Leave-one-season-out validation.
+- L2 penalty with C = 1, never tuned.
+- The |NDR| > 3 relink cut, chosen from the label distribution on the
+  catalog sample, not from model skill.
+
+**Looked at before the full fit.** Two things were seen early:
+
+- A pipeline smoke test fitted the models on catalog tracks for seasons
+  2010-2012. Those seasons are inside the later test window. Its skill
+  numbers were seen and changed no design choice.
+- The phase diagrams were first drawn from 1979-2026 data, which led to
+  widening the plot axes.
+
+**Changed afterwards, with the reason:**
+
+1. Storm motion moved from a centred to a backward difference, because the
+   centred one used the next fix. This was found by reading the code before
+   any full-data fit.
+2. The fit and test window narrowed twice, both times because project rules
+   were tightened on the gust-drift evidence, not because of results:
+   - 1979-2025 became HF from 2001.
+   - Then everything moved to 2004-05 onward.
+
+   The first two full runs were stopped before they reported anything.
+3. Yes/no scores at the count-matched cut (POD, FAR, CSI, HSS, bias) were
+   added at the project's request for forecaster-style scores. That run was
+   also stopped before it reported.
+4. The committed inputs are rounded to 3 decimals so they fit under the
+   repository's size limit. Re-running from them moved 4 rapid-deepening
+   and 1 rapid-decay labels and changed reported values by at most 0.01.
+   `skill.txt` is the re-run.
+
+The held-out results in `skill.txt` were looked at once, from one full run
+and its re-run on the rounded inputs. No predictor, threshold or setting was
+changed after seeing them.
+
+**Weaker results, kept in full.** They are all in the table above and in
+`skill.txt`:
+
+- Rapid decay has an HSS of 0.18.
+- Beyond Hart's terms, the environment adds only 0.015 RPSS to the classes.
+- Rapid decay over-forecasts above 0.2.
+- The intervals measure season-to-season sampling only.
+
 ## Files
 
     fixes.py   pipeline A track points -> forecast fixes, storm state, outcomes
