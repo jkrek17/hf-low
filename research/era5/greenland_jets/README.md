@@ -138,3 +138,9 @@ ERA5_WORK=... python3 research/era5/greenland_jets/{matched,station,composite,ta
 ## Departures from the plan
 
 None to the pre-registered tests. Additions are listed above and labelled.
+
+## Verification
+
+A fresh Sonnet agent with its own code recomputed, from the committed files (and ERA5 for claim 7): the counts (4,559 times; 269 cases; tip 69, barrier 200; 127/142 per half), the base rates, the discovery and held-out odds ratios (GH 3.69 and 4.34, STAB 1.40 and 1.86, GRAD 1.07, NAO 0.95), held-out AUC (0.864, 0.811), Brier skill (+0.085 against M0, +0.197 against month climatology), the 3.7% to 19.9% risk change, the pooled fit (GH 3.70, GRAD 0.97, STAB 1.54, NAO 0.98), the all-times fit (GH 4.29, NAO 1.23), and G_T at 10 times (all within 0.24 kt, labels identical). All matched.
+
+**Station numbers: means reproduced, counts not.** The verifier found 360 of 568 held-out rows with a report at Prins Christian Sund (we report 308), and S3 now returns 404 for some years. Its weighted means were 24.8 kt at cases (we 25.1), 38.15 kt at tip cases (we 38.1, 50.0% against our 47.8% at or above 34 kt), 15.05 kt at controls (we 14.6, 5.3% against 4.3%). The ISD files differ between downloads, so read the station section as approximate. Not independently recomputed: bootstrap intervals, p-values and q-values (seeds are fixed, so they reproduce from the code), the composite map, the swap, the matched and post hoc results, and the Tasiilaq numbers.
