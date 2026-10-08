@@ -89,4 +89,9 @@ Verification: a fresh Sonnet agent recomputes sample counts, the frozen model's 
 numbers it did not recompute are listed.
 
 ## Deviations (post hoc)
-(none yet)
+Logged 2026-10-08 ~19:10Z, before any Stage B score or any Stage A score was computed.
+1. **Stage B size.** GEFS reforecast records are 0.5 degree and one level only: actual pull 1.345 GB (7,567 responses), not the 11 GB estimated.
+2. **Stage B fields.** 12 UTC step of each forecast day only (forecast hours 12, 36, ..., 156), the plain mean of seven days; no 00 UTC steps.
+3. **Regridding.** GEFS 0.5 degree fields are linearly interpolated onto the 0.25 degree grid and then passed to `fields.regrid` unchanged (area-weighted onto 5.625 degrees).
+4. **No detrend.** PR 41's per-cell linear trend over 1979-2021 ERA5 has no GEFS equivalent on 15 seasons; anomalies are model-climatology anomalies only (as written above).
+5. **Frozen weights cannot be applied as committed.** `frozen_primary.json` holds only the ridge betas; the EOF vectors, mean map, PC standard deviations and latitude weights were pickled in an ERA5 workdir that is not in the repository, and the committed PC scores cannot be inverted. Stage B's index is therefore not computed yet. Planned fix (needs the thread's pulls to stay under 50 GB; decided after Stage A's real byte count): rebuild the primary-split EOFs by re-running `hemispheric/run.py freeze` (about 15-17 GB of ERA5, deterministic), then apply only the Z500 and U250 blocks of the frozen betas (the SST block is dropped because GEFS has no SST here; stated, and reported with a note that the ERA5 index with SST is a different quantity). B.1 compares the GEFS-based index with the same z+u-only index computed from ERA5 for the same windows (discovery-period fit), not with `oos_index`, because `oos_index` is a leave-one-season-out index from 22 separate fits and cannot be reproduced from one frozen fit.
