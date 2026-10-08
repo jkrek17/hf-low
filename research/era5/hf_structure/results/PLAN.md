@@ -51,3 +51,27 @@ Terrain-affected fixes (maximum gust within 100 km of Greenland or Iceland) are
 flagged and the headline repeated without them; they are not investigated here.
 
 Null or contrary results are reported in full in `structure.txt`.
+
+## Fixed choices (set before the full run; `composite.py` at `2076a8d` implements them)
+
+- Ownership radius 1200 km; index radius 800 km (pipeline A's own).
+- Thresholds: HF-equivalent gust 71.7 kt (pipeline A calibration); also reported,
+  not tested: gust 64, 48, 34 kt; core area >= 90% and >= 80% of the storm's
+  own maximum gust; sustained wind 64, 51.2 (64/1.25, Jelenak et al.), 48, 34 kt.
+- Quadrants: 90 degree sectors clockwise from the direction of motion (FR, RR,
+  RL, FL) and from north (NE, SE, SW, NW). Motion = bearing from the point 6 h
+  before to 6 h after.
+- Stages: hours from track minimum MSLP, -12 / +-6 / +12 h cut points.
+  Hart: B 10 m and VTL 0 cut points, 00/12 UTC only.
+- Terrain flag: maximum gust within 100 km of land whose nearest land point is
+  at or north of 59N between 285E and 350E.
+- Composite box +-1500 km at 25 km, bilinear; frequency = share of fixes with an
+  owned-ocean box point at or above 71.7 kt.
+- Intervals: 90%, 1000 storm resamples, seed 7.
+- Every comparison listed above is reported, whatever it shows.
+
+## Deviations log
+
+Any change after the full results are seen goes here, with both versions reported.
+
+- (none yet)
