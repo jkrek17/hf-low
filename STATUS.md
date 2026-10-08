@@ -2,7 +2,7 @@
 
 The ledger for this repository: what is in flight, what exists, what does not, and what may not be relied on yet. Read it at the start of a session and update it at the end, in the same pull request as the work. When this file and git disagree, git is right and this file gets fixed.
 
-Last updated: 2026-10-08 (jet/trough thresholds, PR 78). Earlier: 2026-10-08 (P(HF) along tracks back to 1979 added; count reconciliation with published OPC counts added; hemispheric pattern channels added; extra predictors for P(HF) added; climatology atlas added; HF-share environment ingredients before it; hemispheric pattern search before it), after Jason decided decision 1 (within-era only), and after the gust-drift findings and the reconciliation of `c9dc994` were recomputed from committed data (`c55e74d`, merged into the integration branch as `8c95de7`). Earlier the same day this repository (`jkrek17/hf-low`) was split from `jkrek17/awips-tools`. Commit hashes below are this repository's. Pull request numbers refer to `jkrek17/awips-tools` unless they say otherwise.
+Last updated: 2026-10-08 (skill limits of P(HF), PR 68; jet/trough thresholds, PR 78). Earlier: 2026-10-08 (P(HF) along tracks back to 1979 added; count reconciliation with published OPC counts added; hemispheric pattern channels added; extra predictors for P(HF) added; climatology atlas added; HF-share environment ingredients before it; hemispheric pattern search before it), after Jason decided decision 1 (within-era only), and after the gust-drift findings and the reconciliation of `c9dc994` were recomputed from committed data (`c55e74d`, merged into the integration branch as `8c95de7`). Earlier the same day this repository (`jkrek17/hf-low`) was split from `jkrek17/awips-tools`. Commit hashes below are this repository's. Pull request numbers refer to `jkrek17/awips-tools` unless they say otherwise.
 
 ## Threads
 
@@ -145,6 +145,17 @@ Working defaults that sessions follow until Jason confirms or changes them. Jaso
 - Tier 1 pull was 42 GB. **Tier 2 dropped, no gate open:** its groups (stability, trough depth, warm-conveyor ascent) were answered by RA-20 (hf-low PR 90, `research/era5/explosive_onset/`) on a case-control set: no forecast skill added over the boosted tree (BSS change <= +0.002). Not run here. WeatherBench2's potential-vorticity array is empty, so PV was dropped.
 - Side fix: `intensity/hart.py` had a header that made it unimportable; it is now a comment.
 - A fresh Sonnet verifier recomputed the sample, base, groups L, P, D, K, all-eight and onset-only figures. Not independently checked: p and q values, groups H, A, M, J individually, rapid-deepening, HSS and basin tables.
+
+### Skill limits of P(HF within 24 h): `research/era5/hf_skill_limits/` (integration branch, hf-low PR 68, merged as `e25354e`)
+
+- Question: why does the PR 12 hf24 model stop at HSS 0.59 (onset-only BSS 0.29)? Pipeline A, ERA5 proxy, 159,430 fixes, 22 seasons 2004-05 to 2025-26, leave-one-season-out. Plan in `PREREG.md` was committed before outcomes; its deviations log was written afterwards.
+- Result: the same fields diagnose HF at the same time (no forecast, no gust) only to HSS 0.60 (BSS 0.437); with the tier-1 wind and gradient fields 0.69-0.70. The forecast is near what the fields can say. Realised 24 h deepening given as an oracle adds +0.070 BSS (0.436 to 0.506). Onset fixes are 98% of fixes and 81.4% of the Brier loss; about 41% of misses are storms under 55 kt now; 56% of false alarms are storms that never reach HF. Lead: onset BSS 0.232, 0.163, 0.108, 0.070 at +12, +24, +36, +48 h.
+- Label: the ERA5 hf24 label scored against the archive's HF fixes gives HSS 0.657; the PR 12 model scores 0.543 against the archive. ERA5 minus archive central pressure +0.4 hPa overall, +1.8 hPa below 950 hPa.
+- Pre-registered tests: H1 (errors within 6 kt of the cut, at least 60%) not met, 0.52 to 0.57; H2 (onset at least 80% of loss) met, 0.814; H3 (oracle gain at least 0.10) not met, +0.070.
+- Moisture and latent heating (Amendment 1): tcwv, flux, air-sea, IVT and precipitation add +0.0005 BSS to the forecast, +0.005 to the R2 of the 24 h deepening rate, and nothing among rapid deepeners (-0.001). The registered miss-versus-hit test was confounded by the model score and is not interpretable. Warm-conveyor ascent aloft remains untested.
+- Post hoc (exploratory, one default run): boosted trees on the same predictors BSS 0.456, HSS 0.61 (+0.03 BSS over the logistic). Candidate pre-registered follow-up.
+- Tier 2 gate: unchanged (needs Jason). This result weakens the case: the evolution slice it could act on is at most +0.07 BSS with perfect hindsight.
+- Verification: a fresh Sonnet agent recomputed sample counts, BSS, misses and false alarms, loss shares, concurrent diagnosis, lead, oracle and the archive-label figures; all matched within about 0.005, and two README figures were corrected. Not independently checked: strata intervals and q values, H1, Q3/Q3b, the pressure-bias table, `diagnosis_extra.py`, `moisture.py`.
 
 ### Second analysis system at the HF threshold: `research/era5/second_analysis/` (integration branch, hf-low PR 98)
 
