@@ -30,7 +30,7 @@ north of 60N, not untrustworthy: the extra false alarms are 18 points of FAR
 | Index needs the Greenland 300 km band (events losing HF) | 20.4% of events; 43.7% of those peaking >= 60N | |
 | Peak >= 60N share with the Greenland 300 km band removed | 24.0% (from 34.0%) | |
 | Index needs the Greenland 100 km band | 5.5% of events | 4.2-6.9 |
-| Index needs sea-ice points (> 0.15) | 2.5% of events | 1.9-3.2 |
+| Index needs sea-ice points (> 0.15) | 2.3% of events (5.6% of those peaking >= 60N) | 1.6-3.0 |
 | FAR >= 60N vs < 60N (peak position) | 0.443 vs 0.258, difference +0.185 | 0.122-0.244 |
 | POD >= 60N vs < 60N (archive position) | 0.759 vs 0.744, difference +0.014 | -0.040 to +0.071 |
 | Archive match rate, events needing the 300 km band vs not | 47.1% vs 73.3% | |
@@ -62,7 +62,7 @@ north of 60N, not untrustworthy: the extra false alarms are 18 points of FAR
   recommendation if FAR north of 60N exceeded FAR south by more than 0.10 with
   an interval excluding zero. It did (+0.185, 0.122-0.244). The other
   trigger, more than 10% of events depending on points within 100 km of
-  Greenland or on sea ice, was not met (5.5% and 2.5%). Recall does not
+  Greenland or on sea ice, was not met (5.5% and 2.3%). Recall does not
   differ (+0.014, interval spans zero), which is a null with moderate power:
   the interval allows a difference of about 7 points either way.
 - **Station check.** At Prins Christian Sund the mean wind is 36 kt (median)
@@ -90,6 +90,16 @@ confidence (47% archive match against 73%). A hard mask at 100 km is cheap
 
 ## Deviations and limits
 
+- Error caught by the verifier: the first run took the sea-ice maximum over
+  non-blank fixes only, which counted 28 events (2.5%, CI 1.9-3.2) as losing HF
+  without ice points. Blank means ice was not fetched (fix south of 55N) and the
+  index there is unchanged; with that fixed it is 25 events (2.3%, CI 1.6-3.0).
+  The corrected 25 was recomputed by the verifier; its interval and the 5.6%
+  were not. Nothing else changed. Both versions are in git history.
+- Consistent with a separate thread: the wind-structure thread (PR #27) found
+  14% of Atlantic HF fixes have their gust maximum within 100 km of Greenland
+  or Iceland. Here 13.4% of the 3,303 fixes do (12.8% Greenland alone). Different
+  fix sets and code, so this is agreement, not a check.
 - The agenda's 37.5% used 1,005 events; the current payload gives 377 of
   1,011 (37.3%). Logged in `PLAN.md`.
 - Pipeline A's domain stops at 67N and the archive's latest Atlantic fix is

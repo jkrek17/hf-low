@@ -238,6 +238,9 @@ if len(tj):
 
 # 5. masks on the track index
 say("\n5. Track index with terrain, ice, or remote points removed (events 2004-05 on)")
+# Ice was only fetched for fixes >= 55N; a blank g800_ice is an unchanged index at that fix.
+# (A first version took the max over non-blank rows only, which over-counted losses.)
+G["g800_ice"] = G.g800_ice.fillna(G.g800)
 mx = G.groupby("track")[["g800", "g800_gl100", "g800_gl300", "g800_land50", "g800_ice", "g800_r400"]].max()
 E5 = ev.set_index("track").join(mx, how="left")
 # events with no HF-strength in-domain fix should not exist; report if any
@@ -249,8 +252,6 @@ for col, lab in (("g800_gl100", "ocean within 100 km of Greenland removed"),
                  ("g800_ice", "points under sea ice > 0.15 removed (fixes >= 55N only)"),
                  ("g800_r400", "only points within 400 km of the centre")):
     v = E5[col]
-    if col == "g800_ice":
-        v = v.fillna(E5.g800)          # ice only fetched >= 55N; south of that no ice in this domain
     lost = v < THR
     hi = E5.peak_lat >= 60
     say(f"   {lab:58s} lose HF: all {100 * lost.mean():5.1f}% ({lost.sum()})  peak>=60N {100 * lost[hi].mean():5.1f}%  "

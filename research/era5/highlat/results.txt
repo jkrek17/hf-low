@@ -49,10 +49,10 @@ HIGH-LATITUDE ATLANTIC HF LOWS  (archive 2004-05..2025-26; ERA5 pipeline A proxy
    ocean within 100 km of Greenland removed                   lose HF: all   5.5% (61)  peak>=60N  12.3%  peak<60N   2.1%
    ocean within 300 km of Greenland removed                   lose HF: all  20.4% (225)  peak>=60N  43.7%  peak<60N   8.4%
    ocean within 50 km of any land removed                     lose HF: all   2.5% (28)  peak>=60N   4.5%  peak<60N   1.5%
-   points under sea ice > 0.15 removed (fixes >= 55N only)    lose HF: all   2.5% (28)  peak>=60N   5.9%  peak<60N   0.8%
+   points under sea ice > 0.15 removed (fixes >= 55N only)    lose HF: all   2.3% (25)  peak>=60N   5.6%  peak<60N   0.5%
    only points within 400 km of the centre                    lose HF: all  13.2% (146)  peak>=60N  20.5%  peak<60N   9.5%
    share lost under g800_gl100: 95% CI [4.2, 6.9] %
-   share lost under g800_ice: 95% CI [1.9, 3.2] %
+   share lost under g800_ice: 95% CI [1.6, 3.0] %
    peak>=60N share if Greenland 300 km band removed: 24.0% (now 34.0%)
 
 6. Terrain-dependent ERA5 events against the archive
