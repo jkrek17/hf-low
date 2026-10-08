@@ -27,7 +27,7 @@ Why the earlier test could not see it: `/mnt/project-files/teleconnection-test/R
 | ONI (monthly), 1978-2026 | `cpc_indices/oni_1978_2002.txt` plus `docs/data/teleconnections.json` |
 | MJO as ten longitude indices, pentad, 1978-2026 | `cpc_indices/proj_norm_order.ascii`. A longitude series, not RMM phases. Sign: negative = enhanced convection. The monthly mean of the 100E-140E series correlates 0.4-0.5 with ONI (`teleconnections.json`, `conventionEvidence`), so the raw series carry ENSO. Stage 2 high-passes them. |
 | AO (daily) | `teleconnections.json`, from 2001 only |
-| QBO, polar vortex | Not on hand. Both are derivable from ERA5 zonal-mean wind (WeatherBench2 and ARCO are reachable; a 10 hPa, 60N daily series is under 10 GB) |
+| QBO, polar vortex | Not on hand. **Correction (2026-10-08, before any fit):** the first version of this row said a 10 hPa, 60N daily series is under 10 GB. It is not derivable within the 50 GB gate: WeatherBench2 has 13 levels and the highest is 50 hPa, and ARCO stores all 37 levels per hourly field (about 118 MB), so a daily 10 hPa series would stream on the order of 2 TB. T5 below was therefore withdrawn (see `README.md`). |
 | HF-equivalent event with **peak position** (`peak_lat`, `peak_lon`) | `hf_history/results/all_tracks.csv.gz`: 75,087 tracks, 1979-2025. Position is where the 800 km gust index peaks. |
 | **Genesis position** for all tracks | **Not committed** for 1979-2003. Fix-level files exist for 2004+ only (`intensity/results/fixes_2004.csv.gz`, 00/12 UTC). Rebuilding earlier fixes means re-running the extraction (~370 GB, gated). So stage 2 uses **peak position**, not genesis position. Where "genesis" appears below, read "where the low is strongest". |
 
@@ -84,7 +84,7 @@ Picked on mechanism, distinctness from the two sibling threads, and the power co
 | T2 | PNA x MJO, Pacific | the direct Pacific wave-train version; fast indices; moderate power |
 | T3 | NAO x PNA, Atlantic | Pacific-to-Atlantic linkage, both fast; the best-powered pair |
 | T4 | ONI x NAO, Atlantic | the second ENSO combination; low power, so a null here will be called inconclusive unless the interval is tight |
-| T5 | NAO x polar vortex, Atlantic | the one distinct-region modulator; needs a derived 10 hPa index; contingent on that derivation passing its own check (rule in the plan) |
+| T5 | NAO x polar vortex, Atlantic | the one distinct-region modulator; needed a derived 10 hPa index. **Withdrawn before any fit**: the index cannot be derived within the pull limit (row above) |
 
 Tests #1 and #2 of this catalog (ONI x PNA; ENSO flavour x Kuroshio) are the two sibling threads. They are
 members of the family. Their primary p-values enter a joint false-discovery correction at the end if their
