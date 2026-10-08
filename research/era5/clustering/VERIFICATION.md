@@ -1,0 +1,9 @@
+# Independent recomputation
+
+A fresh agent (Sonnet) implemented the specification in `PREREGISTRATION.md` from scratch, without reading the analysis code or write-ups, from the committed inputs. Script `verify/verify_numbers.py`, output `verify/verify_output.txt` (seed 12345; 500 refitted simulations for dispersion, 2000 for gaps, 4000 permutations for Knox).
+
+**Matched** (exact for counts; within Monte Carlo error for simulated expectations and p-values): event counts in and out of the window (archive, pipeline A 2004-2025 and 1979-2003); observed Pearson dispersion for 7- and 30-day blocks (archive, both basins, to 0.001); E (within 0.01); gap counts and their expectations (archive and pipeline A 2004-2025); Knox pair counts and expectations for the archive and both pipeline A periods; the Knox p-values; the archive Pacific and both pipeline A index coefficients (RR per SD); the archive Atlantic Knox ratios by time separation (post hoc breakdown).
+
+**One difference, reconciled.** Archive Atlantic NAO rate ratio per SD: reported 1.064, verifier 1.0525. Cause: the CPC NAO file has two missing days (2006-10-26, 2007-01-26). The analysis requires a full 7-day lag window, so 14 lagged cells are set to the mean (anomaly 0); the verifier averaged the available days instead. Rerun with the verifier's rule, the analysis code gives 1.0525, so the difference is that choice and nothing else. Both are non-significant (permutation p about 0.12); the README quotes 1.064 as computed and notes the other.
+
+**Not independently checked:** bootstrap intervals, the share-explained bootstrap, N2 and the other conditioning models, the local-grid (M4) tests and field significance, the power tables, the sensitivity variants, the deep-cyclone tier (R3), the conditioned Knox ratios and the pattern-index conditioning (post hoc), and the pipeline A per-basin figures not listed above.
