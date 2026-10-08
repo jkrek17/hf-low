@@ -113,5 +113,5 @@ out(f"S6 HRES index = {sl:.3f} x ERA5 index + {ic:.2f} kt; correlation {np.corrc
 n_hf = int((agg.idx1200 >= HF_CUT).sum()); (hh, tab), ca7, cb7 = agreement(agg, "E99", "H99", n_hf)
 bb = boot(agg, hs_fn("E99", "H99")); out(f"S7 99th-percentile index instead of the maximum: HSS {hh:.3f}, CI [{np.nanpercentile(bb,2.5):.3f}, {np.nanpercentile(bb,97.5):.3f}]")
 # S8 sample floor 60 within this sample
-s60 = agg[agg.gust >= 60]; h60 = prim(s60)[0]; out(f"S8 sample restricted to ERA5 gust index >= 60 kt (n {len(s60)}): HSS {h60:.3f}")
+s70 = agg[agg.gust >= 70]; out(f"S8 sample restricted to ERA5 gust index >= 70 kt (n {len(s70)}): HSS {prim(s70)[0]:.3f}")
 open(os.path.join(HERE, f"results/analysis_{floor}.txt"), "w").write("\n".join(L) + "\n")

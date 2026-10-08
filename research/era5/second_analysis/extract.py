@@ -4,10 +4,10 @@ ERA5 (ARCO 0.25 degree hourly) and the IFS HRES t0 analysis (WeatherBench2 hres_
 results/sample_fixes_<floor>.csv. Centres and ownership come from ERA5 lows re-detected with hf_structure's code (pipeline A's rule,
 which reproduced the catalog g800 for 99.98% of fixes), so only the wind field differs between the two systems. Per fix: the maximum
 10 m wind speed (kt) over ocean cells within 800 km that the fix owns, and the 99th percentile of the same cells, in each system.
-Validation times also read the ERA5 gust and require pipeline A's g800 back. One CSV per time under $ERA5_WORK/second_analysis/,
+The 150 validation times (fixed by seed, inside the same run) also read the ERA5 gust and require pipeline A's g800 back. One CSV per time under $ERA5_WORK/second_analysis/,
 resumable; raw fields are never written.
 
-Run: python3 -I research/era5/second_analysis/extract.py <repo_root> <floor_kt> [n_proc] [--validate]
+Run: python3 -I research/era5/second_analysis/extract.py <repo_root> <floor_kt> [n_proc]
 """
 import sys, os, time, urllib.request, numpy as np, pandas as pd
 from multiprocessing import Pool
@@ -15,9 +15,9 @@ from scipy.spatial import cKDTree
 import numcodecs
 root, floor = sys.argv[1], int(sys.argv[2])
 nproc = int(sys.argv[3]) if len(sys.argv) > 3 and not sys.argv[3].startswith("--") else 8
-VALIDATE = "--validate" in sys.argv
+VALIDATE = False
 HERE = os.path.join(root, "research/era5/second_analysis")
-WORK = os.path.join(os.environ.get("ERA5_WORK", os.path.join(HERE, "work")), f"floor{floor}" + ("_val" if VALIDATE else ""))
+WORK = os.path.join(os.environ.get("ERA5_WORK", os.path.join(HERE, "work")), f"floor{floor}")
 os.makedirs(WORK, exist_ok=True)
 os.environ["ERA5_WORK"] = os.environ.get("ERA5_WORK", os.path.join(HERE, "work"))
 sys.path.insert(0, os.path.join(root, "research/era5/hf_structure"))
@@ -29,9 +29,8 @@ HRES_T0 = np.datetime64("2016-01-01T00")
 _codec = numcodecs.Blosc()
 BAND = XYZ[R0:R1]
 S = pd.read_csv(os.path.join(HERE, f"results/sample_fixes_{floor}.csv"))
-if VALIDATE:
-    rng = np.random.default_rng(20261008)
-    ut = np.array(sorted(S.time.unique())); S = S[S.time.isin(rng.choice(ut, 150, replace=False))]
+rng = np.random.default_rng(20261008)
+VAL_TIMES = set(int(x) for x in rng.choice(np.array(sorted(S.time.unique())), 150, replace=False))   # 150 times also read for the gust, to check ownership
 
 
 def fetch_h(url):
@@ -58,7 +57,8 @@ def one_time(stamp):
     msl, b = hs.fetch(f"{ARCO}/mean_sea_level_pressure/{ti}.0.0"); nb += b
     hu, b = fetch_h(f"{HRES}/10m_u_component_of_wind/{th}.0.0"); nb += b
     hv, b = fetch_h(f"{HRES}/10m_v_component_of_wind/{th}.0.0"); nb += b
-    if VALIDATE:
+    VAL = int(stamp) in VAL_TIMES
+    if VAL:
         gust, b = hs.fetch(f"{ARCO}/instantaneous_10m_wind_gust/{ti}.0.0"); nb += b; gust = gust * KT
     wE = np.hypot(eu, ev) * KT; wH = np.hypot(hu, hv) * KT
     lows = hs.detect(msl / 100.0)
@@ -76,7 +76,7 @@ def one_time(stamp):
         if r8.any():
             e, h = wE[R0:R1][r8], wH[R0:R1][r8]
             row.update(wE_max=float(e.max()), wH_max=float(h.max()), wE_p99=float(np.percentile(e, 99)), wH_p99=float(np.percentile(h, 99)))
-            if VALIDATE:
+            if VAL:
                 row["g800_re"] = float(gust[R0:R1][r8].max()); row["g800"] = float(fx.g800)
         rows.append(row)
     tmp = path + ".tmp"; pd.DataFrame(rows).to_csv(tmp, index=False); os.replace(tmp, path)
@@ -87,7 +87,7 @@ def one_time(stamp):
 if __name__ == "__main__":
     stamps = [str(t) for t in sorted(S.time.unique())]
     todo = [s for s in stamps if not os.path.exists(os.path.join(WORK, f"{s}.csv"))]
-    print(f"{len(stamps)} times, {len(todo)} to do, floor {floor}, validate={VALIDATE}", flush=True)
+    print(f"{len(stamps)} times, {len(todo)} to do, floor {floor}", flush=True)
     t0 = time.time(); done = 0
     with Pool(nproc) as p:
         for st, nb in p.imap_unordered(one_time, todo):

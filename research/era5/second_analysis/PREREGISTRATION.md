@@ -29,8 +29,8 @@ the unexplained part the noise ceiling can account for.
 
 - Pipeline A tracks, seasons 2016-17 to 2021-22 (June to May; the HRES store ends 2023-01-08, so 2022-23 is incomplete and left out).
 - A track is in the sample when its maximum 00/12 UTC in-domain gust index `g800` (as in the fix table) is at least the **floor**.
-  Floor rule, decided now: **55 kt** (the agenda's near-threshold band starts there) if the exact pull at 55 kt is at most 40 GB,
-  otherwise 60 kt. The sample is all 00/12 UTC in-domain fixes of those tracks (00/12 only because those are the fixes in the table;
+  Floor rule, decided now: **55 kt** (the agenda's near-threshold band starts there) if the pull at 55 kt is at most 40 GB,
+  otherwise 60 kt (but see deviation 1: 65 kt was used). The sample is all 00/12 UTC in-domain fixes of those tracks (00/12 only because those are the fixes in the table;
   06/18 UTC fixes are not used in either system, so timing is identical in both).
 - Positives for matching: tracks in the sample with gust index at least 71.7 kt (count per `results/sample_fixes_<floor>.csv`).
 
@@ -81,7 +81,7 @@ two thirds of PR 85's effect.
 - S5 fix-level agreement with the same cuts.
 - S6 linear relation of the track indices (slope, correlation, residual SD, mean HRES minus ERA5) and the ratio of 99th percentiles.
 - S7 the 99th percentile of the owned cells instead of the maximum.
-- S8 sample restricted to gust index >= 60 kt.
+- S8 sample restricted to gust index >= 70 kt.
 
 ## Power and what this cannot show
 
@@ -111,4 +111,10 @@ See `results/sizes.txt`. No go-ahead needed if total streaming is under 50 GB. R
 
 ## Deviations (post hoc)
 
-None yet.
+1. **Floor set to 65 kt, not 55 (made before any field was read).** The floor rule above was written against the u and v sizes
+   alone (`results/sizes.txt`: 46.7 GB at 55 kt, 41.6 GB at 60, 35.6 GB at 65). It left out ERA5 mean sea-level pressure, which the
+   extraction needs to re-detect lows and assign ownership (HEAD sizes 7.6 GB at 60 kt, 6.5 GB at 65 kt), and the gust objects for
+   the 150 validation times (about 0.5 GB). With those, 60 kt would stream about 49.8 GB, too close to the 50 GB line to rely on an
+   estimate, so I take 65 kt: 35.6 + 6.5 + 0.5 = about 42.6 GB. Consequence: tracks with a gust index of 55 to 65 kt are out, so
+   the agenda's "55 to 71.7 kt" band is only covered from 65 kt; 944 tracks, 429 with a gust index at or above 71.7 kt. S8 now
+   restricts to gust index at or above 70 kt instead of 60.
