@@ -238,8 +238,9 @@ Work nobody has started. A thread picking one up changes its status here in its 
 | 13 | Do the archive and the ERA5 proxy agree on the intensity-teleconnection relation? | Carried over: science question 6 | Archive CSVs on `main`, 2004-05 on, with a season trend term for the fixes-per-event drift. No pull. | Not started |
 | 14 | Does the environment (jet, Eady growth, SST gradient) carry the teleconnection signal? | Carried over: science question 7 | Near-storm thread's environment fields and fitted outputs (hf-low PR 12). No pull. | Not started |
 | 15 | Do teleconnection states change how often transitioning tropical cyclones become HF lows? Low power. | Carried over: science question 8 | `research/era5/tc_candidates.csv`, pipeline A catalog. No pull. | Not started |
+| 16 | A properly powered buoy drift test: does ERA5 wind drift against buoys before 2001, to help settle decision 1? | Carried over from the buoy drift thread | NDBC hull and anemometer metadata, plus moored-buoy records after 2004. NDBC, MEDS, ICOADS and CDS are blocked by this environment's network policy, so the network allowlist must be widened first. Size any pull before running. | Not started; blocked on network access |
 
-Sources: `research/era5/intensity/README.md` (integration branch); `/mnt/project-files/climatology-agenda/hf-climatology-agenda.md`; `/mnt/project-files/science-questions/teleconnection-intensity-questions.md` (question 3 was answered with question 1).
+Sources: `research/era5/intensity/README.md` (integration branch); the buoy drift thread (item 16); `/mnt/project-files/climatology-agenda/hf-climatology-agenda.md`; `/mnt/project-files/science-questions/teleconnection-intensity-questions.md` (question 3 was answered with question 1).
 
 ## Fixes wanted in the sheet
 
