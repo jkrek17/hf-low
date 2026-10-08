@@ -137,6 +137,22 @@ correlate at r = 0.62 (Atlantic) and 0.70 (Pacific).
 | 2024-25 | 46 | 43 | 42 | 42 |
 | 2025-26 | 58 | 66 | 32 | 43 |
 
+## Life cycle
+
+`lifecycle.py` reads the committed catalog and track files only (no ERA5
+access) and writes `results/lifecycle.txt` and `results/lifecycle_events.csv`.
+Proxy, seasons 2004-05 to 2025-26, tropical-cyclone-linked events left out
+(1,886 events). An HF fix is an in-domain fix at or above 71.7 kt.
+
+    genesis -> first HF fix     median 36 h (quartiles 24/48), n = 1,152 with genesis observed
+    time at HF                  median 12 h (quartiles 6/24); 35% a single 6-hourly fix
+    onset before min pressure   71% (Atlantic 66%, Pacific 77%)
+    peak gust vs min pressure   before 54%, same fix 26%, after 20%
+    ERA5 vs archive onset       median 0 h, within 12 h for 88% of 1,244 matched events
+
+`results/lifecycle-plan.md` records the method and says it was written after
+the run. Every number above was recomputed by an independent agent.
+
 ## Files
 
     results/era5_hf_catalog.csv          one row per event or null case
@@ -145,6 +161,7 @@ correlate at r = 0.62 (Atlantic) and 0.70 (Pacific).
     results/skill.txt                    calibration and transfer report
     results/threshold.json
     results/probability.txt, probability.json  the P(HF) fits
+    results/lifecycle.txt, lifecycle_events.csv, lifecycle-plan.md  life cycle
 
 Catalog columns: `role` (event / null_case), `null_for` (the event track a
 null is matched to), `gust800_kt` (track index), `minp` (hPa), `peak_*` (the
