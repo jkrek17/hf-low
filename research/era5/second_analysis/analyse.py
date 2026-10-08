@@ -10,6 +10,7 @@ HF_CUT = 71.7
 NB, SEED = 5000, 20261008
 S = pd.read_csv(os.path.join(HERE, f"results/sample_fixes_{floor}.csv"))
 D = pd.concat([pd.read_csv(f) for f in sorted(glob.glob(os.path.join(work, "*.csv")))], ignore_index=True)
+D = D.drop(columns=["g800", "g800_re"], errors="ignore")   # validation columns, checked separately
 F = S.merge(D, on=["track", "time"], how="left")
 L = []
 def out(s=""): L.append(s); print(s)
