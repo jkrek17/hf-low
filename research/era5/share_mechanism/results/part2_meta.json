@@ -1,0 +1,86 @@
+{
+ "primary": {
+  "n_window_cyclones": 19696,
+  "n_deepening_with_ref": 8660,
+  "n_deepening": 9468,
+  "n_complete_case": 7532,
+  "atl": {
+   "n": 3285,
+   "hf": 754
+  },
+  "pac": {
+   "n": 4247,
+   "hf": 691
+  }
+ },
+ "S1_ref_first_deepening_fix": {
+  "n_window_cyclones": 19696,
+  "n_deepening_with_ref": 9468,
+  "n_deepening": 9468,
+  "n_complete_case": 8299,
+  "atl": {
+   "n": 3670,
+   "hf": 835
+  },
+  "pac": {
+   "n": 4629,
+   "hf": 786
+  }
+ },
+ "S2_plus_secondary_set": {
+  "n_window_cyclones": 19696,
+  "n_deepening_with_ref": 8660,
+  "n_deepening": 9468,
+  "n_complete_case": 7532,
+  "atl": {
+   "n": 3285,
+   "hf": 754
+  },
+  "pac": {
+   "n": 4247,
+   "hf": 691
+  }
+ },
+ "S3_fixed_depth_HF": {
+  "n_window_cyclones": 19696,
+  "n_deepening_with_ref": 8660,
+  "n_deepening": 9468,
+  "n_complete_case": 7532,
+  "atl": {
+   "n": 3285,
+   "hf": 711
+  },
+  "pac": {
+   "n": 4247,
+   "hf": 692
+  }
+ },
+ "S5_seasonal_cycle_left_in": {
+  "n_window_cyclones": 19696,
+  "n_deepening_with_ref": 8660,
+  "n_deepening": 9468,
+  "n_complete_case": 7532,
+  "atl": {
+   "n": 3285,
+   "hf": 754
+  },
+  "pac": {
+   "n": 4247,
+   "hf": 691
+  }
+ },
+ "S4_atl_le60N": {
+  "n_window_cyclones": 16373,
+  "n_deepening_with_ref": 7415,
+  "n_deepening": 8032,
+  "n_complete_case": 6409,
+  "atl": {
+   "n": 2162,
+   "hf": 503
+  },
+  "pac": {
+   "n": 4247,
+   "hf": 691
+  }
+ }
+}
