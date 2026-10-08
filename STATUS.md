@@ -2,7 +2,7 @@
 
 The ledger for this repository: what is in flight, what exists, what does not, and what may not be relied on yet. Read it at the start of a session and update it at the end, in the same pull request as the work. When this file and git disagree, git is right and this file gets fixed.
 
-Last updated: 2026-10-08, after Jason decided decision 1 (within-era only), and after the gust-drift findings and the reconciliation of `c9dc994` were recomputed from committed data (`c55e74d`, merged into the integration branch as `8c95de7`). Earlier the same day this repository (`jkrek17/hf-low`) was split from `jkrek17/awips-tools`. Commit hashes below are this repository's. Pull request numbers refer to `jkrek17/awips-tools` unless they say otherwise.
+Last updated: 2026-10-08 (hemispheric pattern search added), after Jason decided decision 1 (within-era only), and after the gust-drift findings and the reconciliation of `c9dc994` were recomputed from committed data (`c55e74d`, merged into the integration branch as `8c95de7`). Earlier the same day this repository (`jkrek17/hf-low`) was split from `jkrek17/awips-tools`. Commit hashes below are this repository's. Pull request numbers refer to `jkrek17/awips-tools` unless they say otherwise.
 
 ## Threads
 
@@ -175,6 +175,13 @@ Pipeline A, ERA5 proxy, Pacific, Oct-Apr 2004-05..2025-26 (22 seasons, 10,040 cy
 - Pathway (pre-registered P2): ONI -> PNA +0.150 SD per SD, PNA -> HF 1.071 per SD, indirect effect 1.010 (0.999-1.022; p 0.036, x2 = 0.072). Total ONI effect on HF counts 1.018 (0.915-1.079), so the share carried through PNA is undefined. Well-powered null above 3%, not a proof of zero.
 - Lead, not in the primary tests: for a count-matched depth cut (965.0 hPa, 1979-2025) ONI does have a total effect, 1.066 per SD (1.013-1.119), about a quarter through PNA. Gust and depth disagree again.
 - 55 tests in the BH family; lowest q 0.099. Verified by a fresh agent: counts, coefficients, SEs, indirect effect, depth cut and results, three phase-table cells. Not checked: bootstrap intervals, permutation p and q, secondary cells, the mediated shares (README lists them).
+
+### Hemispheric state vs HF lows: `research/era5/hemispheric/` (hf-low PR 41, merged into the integration branch)
+
+ERA5 proxy predictors (Z500, 250 hPa wind, SST; 5.6 degrees; 7-day mean of days -7 to -1) against the archive's weekly HF counts, Oct-Apr. Plan committed first (`1ff3201`), models frozen before the look (`4947105`), results `0a1f46e`. Fitted on 2004-05 to 2014-15, scored once on 2015-16 to 2025-26.
+- Held-out deviance skill of the field pattern over month + previous-week count: Atlantic +5.6% (p 0.0001, q 0.0003), Pacific +2.3% (p 0.0011, q 0.0013). Lagged NAO/PNA/ONI/MJO model: -2.5% and -1.3%. Swap split +4.2% and +2.6%. Lead of 8-14 days: +2.2% (p 0.09) and +0.25% (p 0.23). SOM regimes weak.
+- Named indices and their products explain adjusted R-squared 0.13 (Atlantic) and 0.30 (Pacific) of the pattern index. Power: 80% at a rate ratio of 1.15 per SD.
+- Not a cause, 11 held-out seasons, ERA5 is a proxy. Post hoc checks and deviations are logged in the plan. Two fresh agents recomputed the held-out skill, p-values, quintile rates, attribution R-squared, proxy transfer and six days of fields; the fits, power, maps, swap, lag-2, SOM and post hoc rows were not independently checked (list in the folder README).
 
 ### ERA5 pipeline B: `event_fields.py`, `criterion.py`, `series.py` (integration branch)
 
