@@ -63,7 +63,7 @@ Report each check as passed, failed, or not checked with the reason. "Not checke
 
 ### 5. Close
 
-- Update `STATUS.md`: heads, what exists, gates opened or closed, what is unfinished, what superseded what.
+- Update `STATUS.md` on `main` (its own small pull request when your work is on a research branch): heads, what exists, gates opened or closed, what is unfinished, what superseded what.
 - Search for sentences your change made false: `git grep -n -i -E "there is no|does not exist|not yet|still starts|no .* exists"` over READMEs and docstrings in the area you touched. Fix them in the same commit.
 - When a number replaces an earlier one, the commit body says which and why ("supersedes 16% in <hash>: the calibration sample was wrong").
 - Leave the pull request as a draft unless Jason asked for it to be ready.
