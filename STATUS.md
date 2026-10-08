@@ -282,6 +282,13 @@ Pre-registered (`PREREGISTRATION.md`, `efc74a5`, before any statistic). Archive 
 - Result: **no usable forecast gain.** DeltaBSS in the stratum over the tree baseline is -0.006 to +0.002 for every group; the +0.005 bar is excluded for omega700 (upper 95% +0.0018). Within-time tests: B1 gust concentration q 0.028 within arm, 0.050 over the nine primary tests; B4 shear/convergence 0.029 and 0.052; all else not significant. Effects about 1.1-1.2 per SD. Arm A omega700 has the predicted sign (1.14 per SD) but q 0.13. Against the logistic baseline 8 of 9 groups separate cases, which looks like curvature the trees already hold (not tested). 12 of 64 tests pass FDR over the whole set.
 - Looks: two at 2015-25 (#15, #16 by the agenda count). A fresh Sonnet agent recomputed the counts, LR statistics and p for all groups, the B1 coefficients and three DeltaBSS values; not independently checked: bootstrap p, q values, sign-flip and held-out tests, intervals, subsets, tree check, power and MDEs. Which q decides the call was fixed after seeing results (listed as a deviation).
 
+### Late high-latitude Atlantic HF onset: `research/era5/late_highlat/` (hf-low PR 94, merged into the integration branch as `973cc08`)
+
+- Question (agenda RA-26, follows from RA-7 / hf-low PR 86): are late HF onsets north of 60N in the Atlantic the ones with the gust maximum in barrier flow (within 300 km of land, more than 400 km from the centre)? ERA5 proxy, pipeline A, 2004-05 to 2025-26, non-TC; 283 events (151 late, 132 non-late). Plan committed first (`eb0d5a5`); terrain-flagged fixes kept (145 of 283), removed in a sensitivity run.
+- Result: **no, well powered**. Barrier share 38.4% of late against 39.4% of non-late (difference -1.0 points, 95% season-block interval -11.9 to +12.0; power 0.98 at a 25-point gap, minimum detectable 17 points). 0 of 10 tests pass BH-FDR. Maxima within 400 km of the centre 61% vs 58%; wind from the north 54.0% vs 54.5%; coast within 300 km 98% vs 89% (q 0.08). PR 86's high-latitude odds ratio is not explained by this pattern; the explanation is open.
+- A fresh Sonnet verifier recomputed all counts and shares and the P1 interval. Not independently checked: S6, the other intervals, p and q, the adjusted logistic, power and minimum-detectable figures.
+- Looks: one at 2015-25 (16th by the agenda count), none pre-2001 (`research/era5/looks/late_highlat.log`).
+
 ### ERA5 pipeline B: `event_fields.py`, `criterion.py`, `series.py` (integration branch)
 
 - A per-moment probability from four features, fitted on early (2004-05), late (2021-25), and full (2004 to 2025) windows.
