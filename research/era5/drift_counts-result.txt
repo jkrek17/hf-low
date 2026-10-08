@@ -1,0 +1,124 @@
+Pipeline A thresholded counts at fixed depth, 1979-2000 (drift_counts.py)
+==============================================================================
+Plan committed before running: drift_counts_plan.md (fe0d0cc). Pipeline A is an ERA5
+PROXY; nothing before 2001 is validated. OLS slopes per decade on season, n = seasons.
+
+0. DATA
+   75087 tracks, seasons 1979-2025; events (index >= 71.7 kt): 4157 (atl 2254, pac 1903).
+   1979-2000: 34834 tracks, 1889 events, 85.9 events per season
+   2004-2025: 35456 tracks, 2000 events, 90.9 events per season
+
+1. PRIMARY TEST T1: depth-standardised excess, basin x 5 hPa strata, rates from 2004-2025
+   season  observed  expected  excess
+   1979        87      94.8    -7.8
+   1980        79      91.0   -12.0
+   1981        79      82.6    -3.6
+   1982        84      93.2    -9.2
+   1983        91      90.1    +0.9
+   1984        74      90.1   -16.1
+   1985        97      90.0    +7.0
+   1986        84     100.2   -16.2
+   1987        87      92.1    -5.1
+   1988        69      89.9   -20.9
+   1989        86     100.9   -14.9
+   1990        67      93.0   -26.0
+   1991        87      94.4    -7.4
+   1992        95      93.6    +1.4
+   1993        89      91.9    -2.9
+   1994        90      95.4    -5.4
+   1995        81      92.9   -11.9
+   1996        89      91.5    -2.5
+   1997        92      91.2    +0.8
+   1998        93      87.9    +5.1
+   1999        94     101.9    -7.9
+   2000        95      99.5    -4.5
+   strata in 1979-2000 with no 2004-2025 tracks (pooled rate used): 0
+   mean excess 1979-2000: -7.23 events per season (observed 85.9, expected 93.1)
+   T1: excess (obs - exp | depth), 1979-2000                  n=22    +2.77 events/decade  95% CI [ -3.03,  +8.57]  t=+1.00  p=0.330
+       observed events alone, 1979-2000                       n=22    +5.13 events/decade  95% CI [ -0.26, +10.53]  t=+1.98  p=0.061
+       expected from depth alone, 1979-2000                   n=22    +2.36 events/decade  95% CI [ -0.69,  +5.41]  t=+1.62  p=0.122
+   T1 with rates from 1979-2000 itself                        n=22    +3.00 events/decade  95% CI [ -2.73,  +8.73]  t=+1.09  p=0.288
+   T1 control: excess 2004-2025 (rates 2004-2025)             n=22    -0.06 events/decade  95% CI [ -6.54,  +6.42]  t=-0.02  p=0.985
+
+2. SECONDARY TEST T2: logistic, exceed ~ stratum FE + season, 1979-2000, season-clustered se
+   season coefficient +0.0590 per decade (log-odds), se 0.0376, z=+1.57; 28670 tracks in 26 strata with variation
+   implied: +3.61 events/decade (95% CI -1.19 to +8.42), from AME x 1583 tracks per season
+   control 2004-2025: coefficient -0.0012, se 0.0491, z=-0.02; implied -0.07 events/decade
+   Descriptive, per 5 hPa bin, both basins pooled: trend in share reaching 71.7 kt, 1979-2000
+   (no multiplicity correction)
+     minp <945    tracks   143  mean share 0.947  trend -0.0385 /decade  t=-1.56
+     minp 945-950 tracks   162  mean share 0.796  trend +0.0441 /decade  t=+0.86
+     minp 950-955 tracks   305  mean share 0.673  trend -0.0519 /decade  t=-1.23
+     minp 955-960 tracks   532  mean share 0.549  trend +0.0352 /decade  t=+1.24
+     minp 960-965 tracks   752  mean share 0.403  trend +0.0332 /decade  t=+1.25
+     minp 965-970 tracks  1062  mean share 0.276  trend +0.0372 /decade  t=+1.76
+     minp 970-975 tracks  1398  mean share 0.155  trend +0.0060 /decade  t=+0.42
+     minp 975-980 tracks  1897  mean share 0.077  trend -0.0066 /decade  t=-0.64
+     minp 980-985 tracks  2534  mean share 0.040  trend +0.0033 /decade  t=+0.44
+     minp 985-990 tracks  3376  mean share 0.014  trend +0.0019 /decade  t=+0.62
+     minp 990-995 tracks  4538  mean share 0.003  trend +0.0008 /decade  t=+0.65
+     minp 995-1000 tracks  6340  mean share 0.001  trend -0.0005 /decade  t=-0.87
+     minp 1000-1005 tracks  7852  mean share 0.000  trend -0.0001 /decade  t=-0.34
+     minp >=1005  tracks  3943  mean share 0.000  trend -0.0002 /decade  t=-0.54
+
+3. POWER (as planned): shift every 1979-2000 index by d * (season - 1989.5)/10 kt
+   count drift +1 events/decade <- index drift 0.11 kt/decade; power 6%
+   count drift +3 events/decade <- index drift 0.26 kt/decade; power 17%
+   count drift +6 events/decade <- index drift 0.58 kt/decade; power 53%
+   c9dc994's +0.65 kt/decade would add +6.45 events/decade to T1; power 59%
+   minimum count drift detectable with 80% power: 8.19 events/decade
+
+4. ROBUSTNESS (pre-specified)
+   T1 with 2 hPa bins                                         n=22    +2.06 events/decade  95% CI [ -3.50,  +7.62]  t=+0.77  p=0.449
+   T1 with 10 hPa bins                                        n=22    +2.46 events/decade  95% CI [ -3.28,  +8.21]  t=+0.89  p=0.382
+   T1, atl only                                               n=22    -1.71 events/decade  95% CI [ -6.38,  +2.96]  t=-0.76  p=0.454
+   T1, pac only                                               n=22    +4.48 events/decade  95% CI [ +0.78,  +8.18]  t=+2.53  p=0.020
+   tracks deeper than 960 hPa, 1979-2000                      n=22    +4.32 tracks/decade  95% CI [ +0.13,  +8.51]  t=+2.15  p=0.044
+   mean track minp, 1979-2000                                 n=22    -0.02 hPa/decade  95% CI [ -0.25,  +0.21]  t=-0.21  p=0.837
+   tracks per season, 1979-2000                               n=22    -0.05 tracks/decade  95% CI [-26.36, +26.27]  t=-0.00  p=0.997
+
+6. POST HOC (not in the plan; added after seeing section 1): the LEVEL of the excess
+   T1 tests a ramp within 1979-2000. Section 1 also shows the whole period sits below the
+   depth expectation. Excess per season, rates from 2004-2025, compared with the 2004-2025
+   excess on the same rates (zero mean by construction), Welch t on seasons:
+   1979-2000  mean excess  -7.23 events/season (-7.8% of expected), se 2.61, t=-2.77, n=22
+   1979-1996  mean excess  -8.48 events/season (-9.2% of expected), se 2.75, t=-3.08, n=18
+   1997-2000  mean excess  -1.64 events/season (-1.7% of expected), se 3.45, t=-0.47, n=4
+   atl 1979-2000 mean excess  -4.01 events/season (-8.0%), t=-2.03
+   pac 1979-2000 mean excess  -3.22 events/season (-7.5%), t=-1.82
+   What the step does to a whole-record trend (seasons 1979-2025, both basins; 2001-03 kept):
+   observed pipeline A events, 1979-2025                      n=47    +2.39 events/decade  95% CI [ +0.34,  +4.43]  t=+2.35  p=0.023
+   expected from depth alone (2004-2025 rates), 1979-2025     n=47    -0.19 events/decade  95% CI [ -1.57,  +1.19]  t=-0.28  p=0.782
+   excess, 1979-2025                                          n=47    +2.58 events/decade  95% CI [ +0.71,  +4.44]  t=+2.78  p=0.008
+
+5. DECISION RULE (from the plan), on the T1 95% CI [-3.03, +8.57] events/decade:
+   (c) not settled; the CI replaces the +1 to +6 band
+   T2 sign: +; T1 sign: +
+
+7. READING
+   Written for the numbers above as committed. A fresh agent recomputed all eleven
+   quoted claims from all_tracks.csv.gz with its own code; all matched.
+
+   Pre-registered answer (rule (c)): a RAMP in depth-adjusted counts within 1979-2000 is
+   not detectable. T1 = +2.77 events/decade, 95% CI -3.0 to +8.6; T2 agrees in sign
+   (+3.6, z = +1.57). Power is 53% at +6 events/decade and 17% at +3; the smallest drift
+   detectable with 80% power is about +8. The full track population did not buy power,
+   because the noise is season-to-season variation in the excess, not track sampling.
+   By basin the ramp is Pacific (+4.5, t = +2.53) and not Atlantic (-1.7); with no
+   multiplicity correction and an opposite-signed partner this is not a finding.
+
+   Post hoc (section 6, labelled as such): the LEVEL differs. At the same ERA5 depth,
+   1979-2000 has 7.2 fewer gust-based events per season than 2004-2025 rates predict
+   (-7.8%, Welch t = -2.77; 1979-1996 -9.2%, t = -3.08), in both basins (-8.0%, -7.5%).
+   That offset carries pipeline A's whole-record trend: observed events +2.39 /decade
+   (t = +2.35) over 1979-2025, depth-expected events -0.19 (t = -0.28), excess +2.58
+   (t = +2.78). Its direction is the one c9dc994 predicted from the per-fix gust drift,
+   but it was not the planned test, it has not been replicated, and a real change in gust
+   at fixed depth would look the same. The independent buoy and ship comparison is the
+   test that can separate those.
+
+   For decision 1: thresholded counts before 2001 can be used for variation within that
+   era, but not for levels or trends across 2001. Pipeline A's 1979-2025 rise is not
+   supported as a climate signal: the depth-only expectation is flat. The planned test
+   cannot exclude a ramp of up to about +8.6 events/decade, and the post hoc level step
+   is the size of the whole trend.

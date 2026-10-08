@@ -10,12 +10,14 @@ defined, but it is not the archive and cannot be validated before 2001.
 
 **The gust index is not era-uniform.** At fixed MSLP (955-975 hPa) the 800 km
 gust rises +0.67 kt/decade over 1979-2000 (t = +2.44) and is flat after 2004,
-matching the drift pipeline B found in `c9dc994`. Whether that moves the
-thresholded event counts before 2001 is not settled: the committed data put
-it between about +1 and +6 events per decade (both basins), the same size as
-a real rise in deep storms over those years. See `../drift_check-result.txt`
-and decision 1 in `STATUS.md` on `main`. Quote any count or trend that uses
-seasons before 2001 with that caveat.
+matching the drift pipeline B found in `c9dc994`. On the full track population
+(`results/all_tracks.csv.gz`), a pre-registered test finds no detectable ramp
+in depth-adjusted counts within 1979-2000 (+2.8 events/decade, 95% CI -3.0 to
++8.6). But a post hoc level comparison finds 1979-2000 has 7.8% fewer events
+than the same depths give after 2004 (t = -2.77), and that offset accounts for
+the whole 1979-2025 trend in the table below. See `../drift_counts-result.txt`
+and decision 1 in `STATUS.md` on `main`. Use counts before 2001 for variation
+within that era, not for levels or trends across 2001.
 
 ## Definition
 
@@ -83,8 +85,9 @@ outside the fit.
 4,157 events (Atlantic 2,254, Pacific 1,903) and 4,154 null cases across 47
 seasons. Atlantic averages 48.0 per season (sd 8.1), Pacific 40.5 (sd 7.6).
 Atlantic shows a weak upward trend of +1.7 per decade (p = 0.05); Pacific
-none (+0.7, p = 0.42). Both trends span 2001 and so carry the gust-drift
-caveat above. Over 2006-2025, ERA5 and archive seasonal counts
+none (+0.7, p = 0.42). Both trends span 2001; the depth-expected count is flat
+over 1979-2025 (-0.19 per decade, both basins), so read them as the gust-drift
+offset above, not as a climate trend, until independent evidence says otherwise. Over 2006-2025, ERA5 and archive seasonal counts
 correlate at r = 0.62 (Atlantic) and 0.70 (Pacific).
 
 | season | Atl ERA5 | Atl archive | Pac ERA5 | Pac archive |
