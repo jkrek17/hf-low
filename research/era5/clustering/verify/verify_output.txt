@@ -1,0 +1,38 @@
+pipeA events with no position: 0
+
+=== A1 ===
+ARCH 2004-25 atl in 902 out 66
+ARCH 2004-25 pac in 810 out 46
+PIPE 2004-25 atl in 1013 out 89
+PIPE 2004-25 pac in 830 out 62
+PIPE 1979-2003 atl in 1070 out 81
+PIPE 1979-2003 pac in 914 out 94
+
+=== A2 (archive) ===
+atl L=7: phi=0.9449 simmean=1.0023 E=-0.0574 (reported -0.056)
+atl L=30: phi=1.1180 simmean=1.0087 E=0.1093 (reported 0.113)
+pac L=7: phi=0.9721 simmean=1.0038 E=-0.0317 (reported -0.028)
+pac L=30: phi=1.0827 simmean=1.0141 E=0.0686 (reported 0.077)
+
+=== A3 ===
+ARCH atl observed 311 expected 340.4
+ARCH pac observed 255 expected 280.1
+PIPE atl observed 399 expected 417.1
+PIPE pac observed 276 expected 291.7
+
+=== A4 ===
+ARCH 2004-25 atl obs 251 exp 209.1 ratio 1.2 p1 0.00024993751562109475
+ARCH 2004-25 pac obs 135 exp 110.8 ratio 1.22 p1 0.0032491877030742314
+PIPE 2004-25 atl obs 314 exp 262.8 ratio 1.19 p1 0.00024993751562109475
+PIPE 2004-25 pac obs 130 exp 115.0 ratio 1.13 p1 0.03924018995251187
+PIPE 1979-2003 atl obs 342 exp 285.4 ratio 1.2 p1 0.00024993751562109475
+PIPE 1979-2003 pac obs 112 exp 105.0 ratio 1.07 p1 0.20569857535616096
+
+=== A5 ===  (CPC rows {'atl': 28032, 'pac': 28032} NaN {'atl': 2, 'pac': 2} )
+ARCH atl exp(coef)=1.0525 p=0.1472 (sd ddof=1)  with ddof0: 1.0525
+ARCH pac exp(coef)=1.1201 p=0.0022 (sd ddof=1)  with ddof0: 1.1201
+PIPE atl exp(coef)=1.1221 p=0.0006 (sd ddof=1)  with ddof0: 1.1221
+PIPE pac exp(coef)=1.1043 p=0.0064 (sd ddof=1)  with ddof0: 1.1043
+
+=== A6 ===
+obs [ 59  85 100  99 228] exp [ 53.4  72.2  77.   88.1 226.1] ratio [1.1  1.18 1.3  1.12 1.01]
