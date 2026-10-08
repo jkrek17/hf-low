@@ -1,0 +1,29 @@
+PRIMARY FAMILY (within-time test vs the M1 tree baseline; p = larger of LR and season-bootstrap Wald):
+arm                    group  k     p_lr    p_boot  p_decision  q_within_arm  q_primary_all9     dBSS_S  dBSS_lo5  dBSS_hi95
+  B    B1 gust concentration  3 0.005557 3.972e-05    0.005557       0.02779         0.05001 -4.426e-05 -0.003861   0.003556
+  B    B2 pressure structure  3   0.1736   0.04104      0.1736         0.217          0.2604  -0.003457 -0.006647 -0.0001871
+  B          B3 wind vs gust  3   0.2356    0.0712      0.2356        0.2356          0.2651   0.001638 -0.003053   0.006606
+  B B4 shear and convergence  2  0.01524   0.01175     0.01524       0.02899         0.05218  -0.001974 -0.006184   0.002511
+  B                    B_all 11  0.01739  3.15e-10     0.01739       0.02899         0.05218  -0.002135 -0.009378   0.004818
+  A                   A_stab  1   0.8354    0.8666      0.8666        0.8666          0.8666  -0.002871 -0.008965    0.00197
+  A                 A_trough  1   0.2065    0.1496      0.2065        0.2753          0.2651  -0.001182 -0.008792   0.005464
+  A               A_omega700  1  0.03312   0.02728     0.03312        0.1325         0.07451  -0.005673  -0.01422   0.001801
+  A                    A_all  3  0.08402   0.07766     0.08402         0.168          0.1512  -0.005592  -0.01853   0.006823
+primary tests passing q<0.05: within arm 3 of 9; across all 9 0 of 9
+
+ALL TESTS RUN (64): passing q<0.05 over the whole set: 12
+                                                      test         p  q_all_tests
+   B B1 gust concentration vs M1: within-time LR/bootstrap  0.005557      0.02964
+   B B1 gust concentration vs M0: within-time LR/bootstrap 2.193e-06    4.679e-05
+ B B1 gust concentration vs M0: held-out log-lik sign-flip   0.00321      0.01868
+   B B2 pressure structure vs M0: within-time LR/bootstrap 0.0002305     0.002459
+         B B3 wind vs gust vs M0: within-time LR/bootstrap 2.839e-08    9.085e-07
+B B4 shear and convergence vs M0: within-time LR/bootstrap 6.337e-06    0.0001014
+                   B B_all vs M0: within-time LR/bootstrap 2.637e-10    1.688e-08
+                 B B_all vs M0: held-out log-lik sign-flip    0.0019      0.01351
+                A A_stab vs M1: held-out log-lik sign-flip   0.00184      0.01351
+                A A_trough vs M0: within-time LR/bootstrap  0.002542      0.01627
+              A A_omega700 vs M0: within-time LR/bootstrap 0.0006269     0.005732
+                   A A_all vs M0: within-time LR/bootstrap 4.499e-05    0.0005759
+
+SECONDARY (vs M0 logistic), within-time: 8 of 9 pass q<0.05 within the secondary family

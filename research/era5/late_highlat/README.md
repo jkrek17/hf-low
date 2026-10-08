@@ -46,7 +46,7 @@ planted-effect simulation). Minimum detectable difference at 80%: 0.17 (P1), 0.1
 
 ## Looks and verification
 
-- Held-out looks: one descriptive use of all 22 seasons, including 2015-25, counted as **look #16** at 2015-25 (agenda count); zero looks at pre-2001. Line added to `../hemispheric/results/heldout_looks.log`.
+- Held-out looks: one descriptive use of all 22 seasons, including 2015-25, counted as **look #16** at 2015-25 (agenda count); zero looks at pre-2001. Entry in `../looks/late_highlat.log` (own file, per the coordinator, to avoid log conflicts).
 - Verification: see `verify/VERIFICATION.md`.
 
 ## Reproduce

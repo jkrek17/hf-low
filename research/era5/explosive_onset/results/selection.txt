@@ -1,0 +1,9 @@
+fixes in table 159430; eligible (g800<55, not HF now) 135663; hf24 positives among all fixes 5399
+cases whose track leaves the domain within 24 h (kept) 32
+CASES 927 (Atlantic 531, Pacific 396), tracks 803, seasons 22
+cases per season: min 31, median 42, max 54
+case times 895; non-case times available 15173; sampled 600 (seed 20261008), weight 25.29 each
+eligible fixes at case times 7296; non-case (controls) 6369; controls per case 6.9
+deepening (dp12<=-3.6) controls at case times 857; cases that are deepening 383; cases with dp12 missing 393
+cases with >=1 matched control (same time, gust within 3 kt, dp12 within 2 hPa, or both dp12 missing): 198 of 927; median matches 0
+stratum base rate (eligible, all fixes) 0.0068

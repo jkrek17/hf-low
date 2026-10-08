@@ -1,0 +1,6 @@
+stratum fixes 135663, planted-effect simulations 60 per beta (beta = log odds ratio per SD of an independent feature)
+beta 0.00: BSS metric: mean DeltaBSS -0.0008 (sd 0.0035), detected 0.02; within-time metric: held-out log-lik gain per case -0.0006, detected 0.00
+beta 0.10: BSS metric: mean DeltaBSS -0.0009 (sd 0.0029), detected 0.00; within-time metric: held-out log-lik gain per case +0.0006, detected 0.00
+beta 0.20: BSS metric: mean DeltaBSS +0.0019 (sd 0.0043), detected 0.03; within-time metric: held-out log-lik gain per case +0.0054, detected 0.18
+beta 0.30: BSS metric: mean DeltaBSS +0.0047 (sd 0.0069), detected 0.07; within-time metric: held-out log-lik gain per case +0.0141, detected 0.62
+beta 0.45: BSS metric: mean DeltaBSS +0.0142 (sd 0.0097), detected 0.22; within-time metric: held-out log-lik gain per case +0.0304, detected 0.98

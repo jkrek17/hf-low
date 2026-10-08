@@ -1,0 +1,65 @@
+test,p,q_all_tests
+B B1 gust concentration vs M1: within-time LR/bootstrap,0.0055570728216684,0.029637721715564797
+B B1 gust concentration vs M1: held-out log-lik sign-flip,0.15141,0.3341462068965517
+B B1 gust concentration vs M1: BSS sign-flip,0.98532,0.98686
+B B2 pressure structure vs M1: within-time LR/bootstrap,0.1735987549858857,0.3630136884925397
+B B2 pressure structure vs M1: held-out log-lik sign-flip,0.98686,0.98686
+B B2 pressure structure vs M1: BSS sign-flip,0.10849,0.28930666666666666
+B B3 wind vs gust vs M1: within-time LR/bootstrap,0.2356171477124514,0.4365348571428571
+B B3 wind vs gust vs M1: held-out log-lik sign-flip,0.60937,0.7646814814814815
+B B3 wind vs gust vs M1: BSS sign-flip,0.61291,0.7646814814814815
+B B4 shear and convergence vs M1: within-time LR/bootstrap,0.0152369590332741,0.0723883087270228
+B B4 shear and convergence vs M1: held-out log-lik sign-flip,0.44336,0.6744409302325581
+B B4 shear and convergence vs M1: BSS sign-flip,0.47893,0.6884266666666666
+B B_all vs M1: within-time LR/bootstrap,0.0173949934588059,0.0723883087270228
+B B_all vs M1: held-out log-lik sign-flip,0.64433,0.7646814814814815
+B B_all vs M1: BSS sign-flip,0.62692,0.7646814814814815
+B B1 gust concentration vs M0: within-time LR/bootstrap,2.1932007402422067e-06,4.678828245850041e-05
+B B1 gust concentration vs M0: held-out log-lik sign-flip,0.00321,0.018676363636363637
+B B1 gust concentration vs M0: BSS sign-flip,0.23873,0.4365348571428571
+B B2 pressure structure vs M0: within-time LR/bootstrap,0.0002305401229949,0.0024590946452789334
+B B2 pressure structure vs M0: held-out log-lik sign-flip,0.09269,0.25792
+B B2 pressure structure vs M0: BSS sign-flip,0.069,0.2102857142857143
+B B3 wind vs gust vs M0: within-time LR/bootstrap,2.8391043111306207e-08,9.085133795617986e-07
+B B3 wind vs gust vs M0: held-out log-lik sign-flip,0.01765,0.0723883087270228
+B B3 wind vs gust vs M0: BSS sign-flip,0.03229,0.11774479469725227
+B B4 shear and convergence vs M0: within-time LR/bootstrap,6.33747986466794e-06,0.00010139967783468704
+B B4 shear and convergence vs M0: held-out log-lik sign-flip,0.04377,0.14006400000000002
+B B4 shear and convergence vs M0: BSS sign-flip,0.14815,0.3341462068965517
+B B_all vs M0: within-time LR/bootstrap,2.6369224567529373e-10,1.68763037232188e-08
+B B_all vs M0: held-out log-lik sign-flip,0.0019,0.013511111111111111
+B B_all vs M0: BSS sign-flip,0.53879,0.7347848387460992
+A A_stab vs M1: within-time LR/bootstrap,0.8665581811173684,0.9329066666666667
+A A_stab vs M1: held-out log-lik sign-flip,0.00184,0.013511111111111111
+A A_stab vs M1: BSS sign-flip,0.45314,0.6744409302325581
+A A_trough vs M1: within-time LR/bootstrap,0.2064900285404564,0.4129800570809128
+A A_trough vs M1: held-out log-lik sign-flip,0.98597,0.98686
+A A_trough vs M1: BSS sign-flip,0.8191,0.9196912280701754
+A A_omega700 vs M1: within-time LR/bootstrap,0.0331157235086022,0.11774479469725227
+A A_omega700 vs M1: held-out log-lik sign-flip,0.56455,0.7373714285714286
+A A_omega700 vs M1: BSS sign-flip,0.29288,0.5066032432432432
+A A_all vs M1: within-time LR/bootstrap,0.0840186148533282,0.2444177886642275
+A A_all vs M1: held-out log-lik sign-flip,0.8746,0.9329066666666667
+A A_all vs M1: BSS sign-flip,0.48405,0.6884266666666666
+A A_stab vs M0: within-time LR/bootstrap,0.2693818477639133,0.47890106269140137
+A A_stab vs M0: held-out log-lik sign-flip,0.6452,0.7646814814814815
+A A_stab vs M0: BSS sign-flip,0.42577,0.6646165853658537
+A A_trough vs M0: within-time LR/bootstrap,0.0025421698270261,0.016269886892967038
+A A_trough vs M0: held-out log-lik sign-flip,0.35329,0.567472
+A A_trough vs M0: BSS sign-flip,0.30608,0.5155031578947369
+A A_omega700 vs M0: within-time LR/bootstrap,0.0006269067695005,0.005731719035433143
+A A_omega700 vs M0: held-out log-lik sign-flip,0.23513,0.4365348571428571
+A A_omega700 vs M0: BSS sign-flip,0.66652,0.7755869090909091
+A A_all vs M0: within-time LR/bootstrap,4.499369359686771e-05,0.0005759192780399067
+A A_all vs M0: held-out log-lik sign-flip,0.12058,0.2964209258011269
+A A_all vs M0: BSS sign-flip,0.35467,0.567472
+"B 'all' model, subset Atlantic: within-time",0.1250525780723504,0.2964209258011269
+"B 'all' model, subset Pacific: within-time",0.1758347553635739,0.3630136884925397
+"B 'all' model, subset dp12 available: within-time",0.0180970771817557,0.0723883087270228
+"B 'all' model, subset dp12 missing (new storms): within-time",0.7385734720122651,0.8440839680140172
+"B 'all' model, subset matched controls only: within-time",0.1181554413984269,0.2964209258011269
+"A 'all' model, subset Atlantic: within-time",0.5510886290595745,0.7347848387460992
+"A 'all' model, subset Pacific: within-time",0.5414250343950562,0.7347848387460992
+"A 'all' model, subset dp12 available: within-time",0.0404022222892759,0.13609169613229777
+"A 'all' model, subset dp12 missing (new storms): within-time",0.8690368028179177,0.9329066666666667
+"A 'all' model, subset matched controls only: within-time",0.9381923132869084,0.9843329188583957
