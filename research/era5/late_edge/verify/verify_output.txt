@@ -1,0 +1,27 @@
+basin values in tracks of atl events: {'atl': 15740, nan: 2310, 'pac': 36}
+seasons: 22 NaN T2: 0
+
+== counts ==
+Atlantic: n=1039
+T2==1: n=283
+TOUCH all: n=343
+TOUCH & T2==1: n=129
+bufTOUCH all: n=522
+bufTOUCH & T2==1: n=212
+
+== logistic ==
+Full Atlantic: n=1039 clusters=22 OR=3.137 CI=[2.249,4.377] p=1.678e-11 se=0.1699
+E1 nonTOUCH: n=696 clusters=22 OR=2.969 CI=[2.040,4.321] p=1.304e-08 se=0.1914
+E2 TOUCH: n=343 clusters=22 OR=3.947 CI=[2.487,6.263] p=5.668e-09 se=0.2356
+E5 nonTOUCH LATE6: n=696 clusters=22 OR=2.276 CI=[1.415,3.662] p=0.0007006 se=0.2427
+E6 nonTOUCH no terrain: n=582 clusters=22 OR=3.376 CI=[2.234,5.100] p=7.528e-09 se=0.2105
+E7 nonTOUCH buffered: n=517 clusters=22 OR=2.507 CI=[1.402,4.483] p=0.001936 se=0.2965
+E4 nonTOUCH adj: n=696 clusters=22 OR=2.213 CI=[1.372,3.569] p=0.00112 se=0.2438
+E3 interaction OR: n=1039 clusters=22 OR=1.329 CI=[0.829,2.132] p=0.2376 se=0.2410
+terrain value counts: {False: 867, True: 172}
+
+== late shares in nonTOUCH ==
+T2==1: n=154 late=84 share=0.5455
+T2==0: n=542 late=156 share=0.2878
+(full) T2==1: n=283 late share=0.5336
+(full) T2==0: n=756 late share=0.2672

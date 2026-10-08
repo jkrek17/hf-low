@@ -1,0 +1,14 @@
+RA-26 follow-up: domain-edge artefact check. ERA5 PROXY, pipeline A, Atlantic non-TC events 2004-05..2025-26. Terrain-flagged fixes kept unless stated.
+Atlantic events 1039; T2 (onset max >=60N) 283; touching north/east edge 343 (T2: 129); buffered-touching 522 (T2: 212)
+CHECK full sample: OR 3.14 [2.25,4.38], late share hi/lo 0.534/0.267, n 1039
+
+test                                                               n  nhi  late hi  late lo    OR   95% CI (CR1)       boot CI       p      q  MDE80  pow2
+E1 T2, not touching (primary)                                    696  154    0.545    0.288  2.97 [ 2.04,  4.32] [ 2.05, 4.34]  0.0000  0.000   1.71  0.95
+E2 T2, touching                                                  343  129    0.519    0.215  3.95 [ 2.49,  6.26] [ 2.62, 6.58]  0.0000  0.000   1.93  0.84
+E3 interaction T2 x touch (log-OR difference, touch minus not)  1039  283      nan      nan  1.33 [ 0.83,  2.13] [  nan,  nan]  0.2376  0.238   1.96  0.82
+E4 T2, not touching, adjusted (marginal, speed, month)           696  154    0.545    0.288  2.21 [ 1.37,  3.57] [ 1.34, 3.52]  0.0011  0.002   1.98  0.81
+E5 T2, not touching, LATE6                                       696  154    0.221    0.111  2.28 [ 1.41,  3.66] [ 1.44, 3.61]  0.0007  0.001   1.97  0.81
+E6 T2, not touching, terrain-flagged removed                     582   65    0.554    0.269  3.38 [ 2.23,  5.10] [ 2.31, 5.21]  0.0000  0.000   1.80  0.91
+E7 T2, not touching (buffered definition)                        517   71    0.521    0.303  2.51 [ 1.40,  4.48] [ 1.47, 4.63]  0.0019  0.002   2.29  0.65
+tests passing BH q<0.05: 6 of 7
+decision rule on E1: PERSISTS
