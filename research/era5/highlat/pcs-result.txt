@@ -1,0 +1,7 @@
+PRINS CHRISTIAN SUND (ISD 043900) at Atlantic HF-strength times, pipeline A (ERA5 proxy), 2004-05 on
+station reports 2004-2025: 157380; station climatology of mean wind: median 9.9 kt, 95th pct 35.0, 99th 47.0
+CF: times  202, with a report  163; mean wind median  36.0 kt, >=34 kt  54.0%, >=48 kt  20.2%, >=64 kt   0.0%; gust reported 62 (median 54.5)
+HI: times  867, with a report  760; mean wind median  17.1 kt, >=34 kt  11.8%, >=48 kt   2.1%, >=64 kt   0.1%; gust reported 135 (median 37.9)
+LO: times 2025, with a report 1751; mean wind median  13.0 kt, >=34 kt  11.1%, >=48 kt   2.5%, >=64 kt   0.1%; gust reported 286 (median 39.1)
+CF: Spearman rank correlation, ERA5 index vs station mean wind: -0.18 (n=163)
+CF: station wind direction from W-NW (240-330) 47.2%, from N-E (330-120) 50.9% (n=161)
