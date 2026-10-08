@@ -1,0 +1,30 @@
+RA-27 second analysis system, floor 65 kt. ERA5 and IFS HRES t0 analysis 10 m sustained wind; pipeline A tracks, seasons 2016-2021. Proxy.
+fixes 7456; fixes with no owned ocean cell or no match 6; fixes with ERA5 match > 100 km: 0
+tracks 944 (Atlantic 499, Pacific 445); ERA5 gust index >= 71.7: 429
+
+== Primary: HSS of crossing, ERA5 vs HRES t0, sustained 10 m wind, count-matched cuts (matched to the number of tracks with ERA5 gust index >= 71.7) ==
+pooled: tracks 944, crossing 429, cuts ERA5 48.6 kt / HRES 53.1 kt, 2x2 (both, HRES only, ERA5 only, neither) = (np.int64(338), np.int64(91), np.int64(91), np.int64(424)); HSS 0.611, 95% CI [0.549, 0.660] (track bootstrap, cuts re-matched), SE 0.028; one-sided p(H0 HSS <= 0.6) = 0.4174
+  season-block bootstrap (6 seasons) 95% CI [0.566, 0.646]
+Atlantic: tracks 499, crossing 251, cuts ERA5 48.6 kt / HRES 52.9 kt, 2x2 (both, HRES only, ERA5 only, neither) = (np.int64(201), np.int64(50), np.int64(50), np.int64(198)); HSS 0.599, 95% CI [0.518, 0.671] (track bootstrap, cuts re-matched), SE 0.039; one-sided p(H0 HSS <= 0.6) = 0.5580
+Pacific: tracks 445, crossing 178, cuts ERA5 48.7 kt / HRES 53.6 kt, 2x2 (both, HRES only, ERA5 only, neither) = (np.int64(135), np.int64(43), np.int64(43), np.int64(224)); HSS 0.597, 95% CI [0.522, 0.691] (track bootstrap, cuts re-matched), SE 0.042; one-sided p(H0 HSS <= 0.6) = 0.4326
+basin difference (Atlantic - Pacific) +0.002, 95% CI [-0.123, +0.102], two-sided p 0.8276
+
+BH-FDR over the four primary tests (T1 pooled, T2 Atlantic, T3 Pacific: H0 HSS <= 0.6; T4 basin difference): T1 p 0.4174 q 0.7440, T2 p 0.5580 q 0.7440, T3 p 0.4326 q 0.7440, T4 p 0.8276 q 0.8276; passing q < 0.05: 0 of 4
+power: pooled bootstrap SE 0.028; one-sided 5% test of HSS <= 0.6 has 80% power against a true HSS of 0.670 (normal approximation)
+decision statistic: pooled HSS 0.611, 95% CI [0.549, 0.660]
+
+== Secondary (descriptive; intervals are track bootstrap) ==
+S2 P(HRES crosses | ERA5 index relative to its cut):
+         bin   n  frac_HRES_crosses
+ [0.0, 0.85)   8           0.000000
+[0.85, 0.95) 276           0.101449
+[0.95, 1.05) 399           0.385965
+[1.05, 1.15) 171           0.918129
+[1.15, 10.0)  90           1.000000
+S3a ERA5 sustained vs ERA5 gust (same system, different index): HSS 0.718 CI [0.672, 0.762], 2x2 (np.int64(363), np.int64(66), np.int64(66), np.int64(449))
+S3b HRES sustained vs ERA5 gust (cross system, cross index): HSS 0.581 CI [0.524, 0.632], 2x2 (np.int64(331), np.int64(98), np.int64(98), np.int64(417))
+S4 tracks with ERA5 gust index 65-80 kt (n 790), cuts as in the primary (48.6/53.1 kt): HSS 0.512, agreement share 0.777
+S5 fix level (fixes with ERA5 gust >= 71.7: 818; cuts 48.6/53.1 kt): HSS 0.687, 2x2 (np.int64(590), np.int64(228), np.int64(228), np.int64(6404))
+S6 HRES index = 1.171 x ERA5 index + -3.38 kt; correlation 0.791; residual SD 4.40 kt; SD of ERA5 index among tracks within 15% of its cut 3.28 kt (n 846); mean HRES - ERA5 +5.04 kt; ratio of 99th percentiles of the track indices 1.278
+S7 99th-percentile index instead of the maximum: HSS 0.799, CI [0.751, 0.833]
+S8 sample restricted to ERA5 gust index >= 70 kt (n 534): HSS 0.526
