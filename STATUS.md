@@ -129,6 +129,15 @@ Working defaults that sessions follow until Jason confirms or changes them. Jaso
 - A fresh Sonnet verifier recomputed counts, rate ratios, f, the decomposition, positions, S7 and the half-record splits. Not independently checked: p and q values, intervals, power, S1-S6.
 - Looks at the 2015-25 held-out seasons: this is the sixth; S7 is the second look at pre-2001 seasons (`hemispheric/results/heldout_looks.log`).
 
+### What turns cyclones into HF lows: `research/era5/share_mechanism/` (integration branch, hf-low PR 85, merged as `58e64ad`; agenda RA-17, RA-18 with RA-6)
+
+- Question: which factor of share = P(deepening) x P(HF | deepening) carries the PR 41 pattern's effect (PR 64), and how much runs through the near-storm environment. ERA5 proxy, pipeline A, 22 seasons 2004-05 to 2025-26, per SD of the out-of-sample pattern index. Plan committed first (`cb4892f`).
+- Conversion carries it. P(deepening) x1.009 Atlantic (0.99-1.03), x0.982 Pacific (0.96-1.00), both well-powered nulls; P(HF | deepening) x1.252 (1.19-1.33) / x1.137 (1.07-1.22), q 0.0015; fraction of the log effect in conversion 0.94 (0.83-1.06) / 1.06 (0.87-1.31); the agenda prediction (>= 70%) holds. Same with fixed-depth HF, deepening thresholds -2.4 and -6.0 hPa per 12 h, both halves, and Atlantic without peaks north of 60N. Greenland high (secondary): conversion x0.887, deepening x0.985 (q 0.28). NAO mixed (0.77, 0.39-1.05); PNA no net share effect.
+- Near environment (eight PR 47 ingredients at the fix 12 h before first deepening, g-formula): mediated fraction Atlantic 0.31 (0.19-0.47), rule verdict "little mediated" on the boundary (with the secondary set 0.34, 0.22-0.49, "partly"); Pacific 0.27 (0.02-0.72), unresolved. "At least half" is not supported in the Atlantic. A planted-effect check says a true Atlantic M of 0.3 reads "little" 85% of runs and 0.5 never; the Pacific cannot separate 0.3, 0.5 and 0.8. Within a month (RA-6) jet and Eady anomalies raise P(HF | deepening), odds ratios about 2 per SD in both basins; markers, not causes.
+- 28 of 40 pre-registered tests pass q < 0.05 within their family. Two post hoc code fixes are logged in its README. Look numbers at the 2015-25 seasons are provisional (README deviation 4; log in `hemispheric/results/heldout_looks.log`).
+- A fresh Sonnet agent recomputed the point estimates, sample sizes, rate ratios, M, odds ratios and the 143 HF cyclones without a deepening fix. Not independently checked: permutation p and BH q values and the 28-of-40 count, secondary variants, single-ingredient and unique parts, the power results, verdict wording.
+- No gate opened or closed. No 1979-2000 replication (no per-fix pressure history before 2004).
+
 ### Extra predictors for the P(HF) model: `research/era5/intensity_extra/` (integration branch, hf-low PR 56)
 
 - Question: which further predictors add out-of-sample skill to the PR 12 model? Pre-registered in `PREREG.md` (`b00e8f7`) before extraction. ERA5 proxy, pipeline A, 130,271 fixes, 18 seasons 2004-05 to 2021-22 (WeatherBench2 ends 2023-01-09), leave-one-season-out, BSS gain over the refitted base (0.4192).
