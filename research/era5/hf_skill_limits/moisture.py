@@ -73,4 +73,31 @@ w(f"H5 LOSO AUC of the six moisture proxies for miss vs hit: {auc:.3f} [{np.perc
 for c in moist:
     a_, b_ = r[r.miss == 1][c], r[r.miss == 0][c]
     w(f"   {c:7s} mean misses {a_.mean():8.3f} hits {b_.mean():8.3f} std diff {(a_.mean()-b_.mean())/r[c].std():+.2f}")
+
+# POST HOC (logged in PREREG.md): H5 as registered is confounded, because the miss/hit split is made by the model's own score,
+# which already tracks flux, IVT and precipitation. Repeat with the score as a covariate.
+r["lp"] = np.log(np.clip(pf[rd], 1e-6, 1 - 1e-6) / (1 - np.clip(pf[rd], 1e-6, 1 - 1e-6)))
+def auc_cols(cols):
+    pa = np.zeros(len(r))
+    for s in seasons:
+        te = (r.season == s).values
+        if te.sum() == 0: continue
+        X = r[cols].values.astype(float); pr = M.Prep(X[~te]); pa[te] = M.fit(pr(X[~te]), r.miss.values[~te]).predict_proba(pr(X[te]))[:, 1]
+    ab = []
+    for b in B:
+        idx = np.concatenate([np.where(r.season.values == seasons[i])[0] for i in b])
+        if r.miss.values[idx].min() != r.miss.values[idx].max(): ab.append(M.roc_auc_score(r.miss.values[idx], pa[idx]))
+    return M.roc_auc_score(r.miss, pa), np.percentile(ab, 5), np.percentile(ab, 95)
+for lab, cols in (("model score alone", ["lp"]), ("model score + six moisture proxies", ["lp"] + moist)):
+    a, lo, hi = auc_cols(cols); w(f"H5 post hoc, miss vs hit among rapid deepeners: {lab}: AUC {a:.3f} [{lo:.3f}, {hi:.3f}]")
+open(os.path.join(out, "moisture.txt"), "w").write("\n".join(L) + "\n")
+
+# POST HOC: the controlled AUC above is 1.000 by construction (a miss is defined by the score falling below the cut), so it says nothing.
+# The usable version: forecast gain from the moisture group restricted to rapid deepeners (realised class), same LOSO fits as H4.
+m_ = (sub.ndr24 >= 1.0).values
+a0, a1 = fb[m_].sum(), fm[m_].sum(); c0 = ((pc - yy) ** 2)[m_].sum()
+ss = lambda v: np.array([v[m_ & (sub.season == s).values].sum() for s in seasons])
+x0, x1, xc = ss(fb), ss(fm), ss((pc - yy) ** 2)
+gg = (x0.sum() - x1.sum()) / xc.sum(); ggb = (x0[B].sum(1) - x1[B].sum(1)) / xc[B].sum(1)
+w(f"Rapid deepeners only (n {m_.sum()}, HF rate {yy[m_].mean():.3f}): BSS gain from moisture {gg:+.4f} [{np.percentile(ggb,5):+.4f}, {np.percentile(ggb,95):+.4f}]; base BSS vs climatology {1 - x0.sum()/xc.sum():+.3f}")
 open(os.path.join(out, "moisture.txt"), "w").write("\n".join(L) + "\n")

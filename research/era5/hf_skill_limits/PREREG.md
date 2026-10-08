@@ -53,3 +53,7 @@ Moisture group = {tcwv, flux, airsea, ivt500, ivtmax, precip6}; base = PR 12 ful
 - **H4 (route).** Moisture group improves prediction of the 24 h deepening rate (linear, R2 gain) by at least 0.01, but improves hf24 given the realised deepening (oracle rows) by less than 0.005 BSS: i.e. it matters through deepening, not through wind.
 - **H5 (misses).** Among fixes with realised 24 h deepening above 1 Bergeron (rapid), misses differ from hits in the moisture group: jointly by a logistic of miss vs hit on the six standardised proxies, LOSO AUC; supported if AUC lower 5% bound > 0.55.
 Both are reported even if null; two tests, Holm.
+
+### Amendment 1 deviations (post hoc, logged after the outcomes)
+- H5 as registered (AUC of the six proxies for miss vs hit) is confounded by the model score; the follow-up with the score as a covariate is degenerate (AUC 1.000, a miss is defined by the score). Replaced by the rapid-deepener BSS gain, which is not a pre-registered test.
+- H4's deepening half was not met (+0.005 vs 0.01) and its wind half was met.
