@@ -1,0 +1,16 @@
+Pipeline A, ERA5 proxy; tier-1 sample 130271 fixes, 18 seasons
+H4a R2 for 24 h deepening rate: base 0.4718, with moisture 0.4771, gain +0.0053 [+0.0046, +0.0061] (n 81743)
+H4b hf24 BSS given realised deepening (oracle rows): base +0.4959, with moisture +0.4968, gain +0.0010 [-0.0000, +0.0019]
+     forecast (no oracle) BSS gain from moisture, same rows: +0.0005 [-0.0001, +0.0013]
+H4 verdict: deepening gain >= 0.01 no; wind-given-deepening gain < 0.005 yes
+H5 rapid deepeners reaching HF: 1124 fixes, misses 532 (0.473)
+H5 LOSO AUC of the six moisture proxies for miss vs hit: 0.905 [0.885, 0.923]
+   tcwv    mean misses   20.624 hits   20.058 std diff +0.07
+   flux    mean misses  130.609 hits  201.057 std diff -0.57
+   airsea  mean misses    1.823 hits    2.343 std diff -0.26
+   ivt500  mean misses    3.647 hits    4.483 std diff -0.45
+   ivtmax  mean misses    8.970 hits   11.449 std diff -0.71
+   precip6 mean misses    0.005 hits    0.007 std diff -0.74
+H5 post hoc, miss vs hit among rapid deepeners: model score alone: AUC 1.000 [1.000, 1.000]
+H5 post hoc, miss vs hit among rapid deepeners: model score + six moisture proxies: AUC 0.999 [0.999, 1.000]
+Rapid deepeners only (n 2834, HF rate 0.397): BSS gain from moisture -0.0012 [-0.0027, +0.0004]; base BSS vs climatology +0.397

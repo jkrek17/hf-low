@@ -1,0 +1,14 @@
+== all 159,430 fixes; n 159430
+  hf_now  full minus g800 (concurrent diagnosis)                                         logit         BSS +0.437 AUC 0.982 POD 0.60 FAR 0.40 HSS 0.60
+  hf_now  full minus g800 (concurrent diagnosis)                                         boosted trees BSS +0.466 AUC 0.985 POD 0.63 FAR 0.37 HSS 0.62
+  hf24    full (PR 12 predictors)                                                        logit         BSS +0.423 AUC 0.972 POD 0.60 FAR 0.40 HSS 0.59
+  hf24    full (PR 12 predictors)                                                        boosted trees BSS +0.456 AUC 0.976 POD 0.63 FAR 0.37 HSS 0.61
+== fixes with the tier-1 fields (seasons 2004-05..2021-22); n 130271
+  hf_now  full minus g800 (concurrent diagnosis)                                         logit         BSS +0.433 AUC 0.982 POD 0.60 FAR 0.40 HSS 0.60
+  hf_now  full minus g800 (concurrent diagnosis)                                         boosted trees BSS +0.457 AUC 0.985 POD 0.62 FAR 0.38 HSS 0.61
+  hf_now  ... plus tier-1 fields (850 hPa wind, ring gradient, high, jet, IVT, land fraction, ...) logit         BSS +0.558 AUC 0.990 POD 0.69 FAR 0.31 HSS 0.69
+  hf_now  ... plus tier-1 fields (850 hPa wind, ring gradient, high, jet, IVT, land fraction, ...) boosted trees BSS +0.567 AUC 0.991 POD 0.70 FAR 0.30 HSS 0.70
+  hf24    full (PR 12 predictors)                                                        logit         BSS +0.419 AUC 0.971 POD 0.60 FAR 0.40 HSS 0.58
+  hf24    full (PR 12 predictors)                                                        boosted trees BSS +0.449 AUC 0.975 POD 0.63 FAR 0.37 HSS 0.61
+  hf24    ... plus tier-1 fields                                                         logit         BSS +0.423 AUC 0.971 POD 0.60 FAR 0.40 HSS 0.59
+  hf24    ... plus tier-1 fields                                                         boosted trees BSS +0.455 AUC 0.976 POD 0.63 FAR 0.37 HSS 0.62
