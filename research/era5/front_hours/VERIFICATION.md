@@ -1,0 +1,3 @@
+# Verification (fresh Sonnet agent, plan and committed inputs only)
+Script `verify/verify_numbers.py`, output `verify/verify_output.txt`. MATCHED: box hours mean 47.1 / SD 26.0 / min 6 / max 114, 5.1 storms per season, Spearman rho for P1 and S1-S9 (P1 +0.220, permutation p 0.368), analytic MDE 0.60 (n=19) and 0.57 (n=22), lag-1 autocorrelations, corr(SON, DJF) 0.84.
+NOT independently checked: the SST front computation (`front_monthly.csv` taken as given), S10 bootstrap, BH q-values, quasi-Poisson ratio, Fisher intervals, largest-storm share, planted-effect power simulation, the 0.73 corrected MDE.
