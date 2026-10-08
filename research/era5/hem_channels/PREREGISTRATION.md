@@ -136,4 +136,14 @@ effects on pipeline A are a transfer, not a refit.
 
 ## Deviations (post hoc)
 
-None yet.
+Logged after the plan was committed (`44deb16`). None changes a pre-registered estimate or decision rule.
+
+1. The plan says 73 tracks are missing from the fixes table. 73 is the count over all months of 2004-05 to 2025-26; inside
+   the Oct-Apr window it is 23 (14 Atlantic, 9 Pacific). They are counted as local, as planned.
+2. A 20-permutation, 20-draw smoke run of `channels.py` and `secondary.py` was looked at before the full run, to test the code.
+   Its estimates were seen once. The only code change afterwards was removing a duplicated output row in the decomposition
+   table; no definition, test or rule was changed.
+3. Position intervals use the clustered SE with t on 21 df (the plan's wording "bootstrap" covers the rate-ratio tests; the
+   position tests have a permutation p and this analytic interval).
+4. The T3 power is the T2 scenario (planting the effect on the share), since both give RR(HF lows) equal to the planted value.
+5. S2 in the plan bundled two checks; they are reported as S2a (local split) and S2b (no previous-week term).
