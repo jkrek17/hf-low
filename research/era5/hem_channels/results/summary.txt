@@ -1,0 +1,167 @@
+HEMISPHERIC PATTERN CHANNELS, ERA5 proxy, pipeline A, seasons 2004-05..2025-26, per SD of the PR 41 out-of-sample index
+p: season-block permutation, two-sided, 2000 draws (floor 0.0005). CI: 95% season-block bootstrap (positions: clustered SE, t on 21 df).
+
+PRIMARY (24 tests)
+basin test          scale    est      lo     hi  se_log      p  loso_lo  loso_hi  q_all24  q_core6
+  atl   T1      RR per SD 1.0158  0.9982 1.0345  0.0091 0.1169   1.0119   1.0218   0.1403   0.1169
+  atl   T2      RR per SD 1.2711  1.2099 1.3544  0.0283 0.0005   1.2590   1.2839   0.0017   0.0007
+  atl   T3      RR per SD 1.2911  1.2360 1.3689  0.0253 0.0005   1.2795   1.3019   0.0017   0.0007
+  atl   T4      RR per SD 0.9755  0.9403 1.0146  0.0185 0.2864      NaN      NaN   0.3124      NaN
+  atl   T5      RR per SD 1.0219  1.0016 1.0449  0.0109 0.0470      NaN      NaN   0.0805      NaN
+  atl   T6      RR per SD 0.8997  0.7227 1.0892  0.1004 0.2529      NaN      NaN   0.2890      NaN
+  atl   T7      RR per SD 1.3188  1.2445 1.4232  0.0346 0.0005      NaN      NaN   0.0017      NaN
+  atl   T8      RR per SD 0.9546  0.9114 0.9970  0.0228 0.0755      NaN      NaN   0.1132      NaN
+  atl   T9 degrees per SD 0.3579 -0.0076 0.7234  0.1758 0.0550      NaN      NaN   0.0880      NaN
+  atl  T10 degrees per SD 0.9750  0.1834 1.7666  0.3806 0.0075      NaN      NaN   0.0164      NaN
+  atl  T11 degrees per SD 0.7843  0.1404 1.4282  0.3096 0.0275      NaN      NaN   0.0507      NaN
+  atl  T12 degrees per SD 1.4655  0.5100 2.4211  0.4595 0.0190      NaN      NaN   0.0380      NaN
+  pac   T1      RR per SD 1.0325  1.0167 1.0510  0.0081 0.0015   1.0299   1.0370   0.0036   0.0018
+  pac   T2      RR per SD 1.1287  1.0665 1.2100  0.0328 0.0005   1.1174   1.1476   0.0017   0.0007
+  pac   T3      RR per SD 1.1654  1.0935 1.2614  0.0370 0.0005   1.1521   1.1867   0.0017   0.0007
+  pac   T4      RR per SD 0.9754  0.9268 1.0314  0.0270 0.4738      NaN      NaN   0.4944      NaN
+  pac   T5      RR per SD 1.0377  1.0186 1.0588  0.0095 0.0010      NaN      NaN   0.0030      NaN
+  pac   T6      RR per SD 1.0011  0.8518 1.2125  0.0860 0.9875      NaN      NaN   0.9875      NaN
+  pac   T7      RR per SD 1.1638  1.0768 1.2769  0.0409 0.0005      NaN      NaN   0.0017      NaN
+  pac   T8      RR per SD 0.9399  0.8851 1.0023  0.0309 0.0980      NaN      NaN   0.1294      NaN
+  pac   T9 degrees per SD 0.5179  0.2405 0.7952  0.1334 0.0015      NaN      NaN   0.0036      NaN
+  pac  T10 degrees per SD 0.5302 -0.3615 1.4219  0.4288 0.1024      NaN      NaN   0.1294      NaN
+  pac  T11 degrees per SD 0.3990 -0.1215 0.9195  0.2503 0.0860      NaN      NaN   0.1214      NaN
+  pac  T12 degrees per SD 3.4323  1.4698 5.3949  0.9437 0.0005      NaN      NaN   0.0017      NaN
+
+Pass q_all24 < 0.05: 12 of 24; core six (T1-T3 x 2 basins) pass q_core6 < 0.05: 5 of 6
+
+DECOMPOSITION (+1 SD, summed over 660 weeks; fractions of the change in HF lows)
+basin                         term      est       lo       hi
+  atl                      count_e  -2.4488  -6.1216   1.2371
+  atl                      share_e -10.0269 -26.9161   9.2247
+  atl                      inter_e   0.2455  -0.2241   1.1717
+  atl                      count_l  19.8568   1.5390  43.2934
+  atl                      share_l 289.1936 230.6410 375.0497
+  atl                      inter_l   6.3313   0.5861  12.6139
+  atl                        total 303.1516 251.9448 380.9965
+  atl            base_entrant_frac   0.0993   0.0798   0.1193
+  atl       entrant_frac_of_change  -0.0403  -0.1027   0.0244
+  atl                   count_frac   0.0574  -0.0035   0.1394
+  atl                   share_frac   0.9209   0.8195   1.0002
+  atl                   inter_frac   0.0217   0.0018   0.0427
+  atl                 count_e_frac  -0.0081  -0.0207   0.0038
+  atl                 count_l_frac   0.0655   0.0046   0.1503
+  atl                 share_e_frac  -0.0331  -0.0920   0.0287
+  atl                 share_l_frac   0.9540   0.8606   1.0345
+  atl                 inter_e_frac   0.0008  -0.0007   0.0040
+  atl                 inter_l_frac   0.0209   0.0017   0.0404
+  atl entrant_excess_over_baseline  -0.1396  -0.2039  -0.0742
+  atl         f_share_of_log_RR_HF   0.9387   0.8629   1.0064
+  pac                      count_e  -3.4680 -10.7197   4.2152
+  pac                      share_e   0.1545 -20.6536  26.5690
+  pac                      inter_e  -0.0038  -1.1941   0.7859
+  pac                      count_l  25.8052  12.1193  38.1914
+  pac                      share_l 112.0540  50.9138 193.9491
+  pac                      inter_l   4.2275   1.2036   9.5024
+  pac                        total 138.7693  71.1832 235.6582
+  pac            base_entrant_frac   0.1709   0.1398   0.2036
+  pac       entrant_frac_of_change  -0.0239  -0.2115   0.1573
+  pac                   count_frac   0.1610   0.0839   0.2451
+  pac                   share_frac   0.8086   0.7173   0.9030
+  pac                   inter_frac   0.0304   0.0102   0.0492
+  pac                 count_e_frac  -0.0250  -0.1151   0.0254
+  pac                 count_l_frac   0.1860   0.0889   0.3313
+  pac                 share_e_frac   0.0011  -0.1670   0.2109
+  pac                 share_l_frac   0.8075   0.6065   0.9767
+  pac                 inter_e_frac  -0.0000  -0.0102   0.0069
+  pac                 inter_l_frac   0.0305   0.0143   0.0461
+  pac entrant_excess_over_baseline  -0.1948  -0.3972  -0.0064
+  pac         f_share_of_log_RR_HF   0.7909   0.6710   0.8761
+
+SECONDARY (own BH family)
+                                     check basin test    est     lo     hi      p  q_secondary
+                         S1 fixed-depth HF   atl   T1 1.0158 0.9983 1.0339 0.1174       0.1483
+                         S1 fixed-depth HF   atl   T2 1.2281 1.1494 1.3395 0.0005       0.0009
+                         S1 fixed-depth HF   atl   T3 1.2475 1.1720 1.3572 0.0005       0.0009
+                         S1 fixed-depth HF   atl    f 0.9292 0.8371 1.0075    NaN          NaN
+  S2a local, observed genesis (>=1000 hPa)   atl   T1 0.9926 0.9541 1.0330 0.6662       0.6662
+S2a local, mature at detection (<1000 hPa)   atl   T1 1.0502 1.0118 1.0924 0.0100       0.0137
+                 S2b no previous-week term   atl   T1 1.0158 0.9992 1.0341 0.1109       0.1439
+                 S2b no previous-week term   atl   T2 1.2598 1.2051 1.3262 0.0005       0.0009
+                 S2b no previous-week term   atl   T3 1.2797 1.2331 1.3414 0.0005       0.0009
+                 S2b no previous-week term   atl    f 0.9364 0.8595 1.0033    NaN          NaN
+                   S3 peak latitude <= 60N   atl   T1 1.0132 0.9851 1.0442 0.4013       0.4098
+                   S3 peak latitude <= 60N   atl   T2 1.2594 1.1884 1.3446 0.0005       0.0009
+                   S3 peak latitude <= 60N   atl   T3 1.2760 1.2082 1.3594 0.0005       0.0009
+                   S3 peak latitude <= 60N   atl    f 0.9463 0.8065 1.0626    NaN          NaN
+                       S4a seasons 2004-14   atl   T1 1.0173 0.9941 1.0470 0.1984       0.2215
+                       S4a seasons 2004-14   atl   T2 1.2741 1.1865 1.4126 0.0005       0.0009
+                       S4a seasons 2004-14   atl   T3 1.2961 1.2126 1.4382 0.0005       0.0009
+                       S4a seasons 2004-14   atl    f 0.9339 0.8187 1.0219    NaN          NaN
+                       S4b seasons 2015-25   atl   T1 1.0149 0.9893 1.0360 0.3538       0.3692
+                       S4b seasons 2015-25   atl   T2 1.2494 1.1733 1.3661 0.0005       0.0009
+                       S4b seasons 2015-25   atl   T3 1.2680 1.2009 1.3761 0.0005       0.0009
+                       S4b seasons 2015-25   atl    f 0.9377 0.8323 1.0413    NaN          NaN
+    S5 archive weekly HF lows (total only)   atl   T3 1.2355 1.1593 1.3291 0.0005       0.0009
+                       S6 add season trend   atl   T1 1.0151 0.9993 1.0331 0.1264       0.1556
+                       S6 add season trend   atl   T2 1.2682 1.2069 1.3475 0.0005       0.0009
+                       S6 add season trend   atl   T3 1.2873 1.2335 1.3650 0.0005       0.0009
+                       S6 add season trend   atl    f 0.9408 0.8644 1.0026    NaN          NaN
+                         S1 fixed-depth HF   pac   T1 1.0325 1.0150 1.0496 0.0015       0.0024
+                         S1 fixed-depth HF   pac   T2 1.1011 1.0282 1.1896 0.0040       0.0060
+                         S1 fixed-depth HF   pac   T3 1.1369 1.0623 1.2269 0.0005       0.0009
+                         S1 fixed-depth HF   pac    f 0.7505 0.4539 0.8893    NaN          NaN
+  S2a local, observed genesis (>=1000 hPa)   pac   T1 0.9787 0.9563 1.0023 0.1959       0.2215
+S2a local, mature at detection (<1000 hPa)   pac   T1 1.0793 1.0456 1.1153 0.0005       0.0009
+                 S2b no previous-week term   pac   T1 1.0302 1.0129 1.0465 0.0005       0.0009
+                 S2b no previous-week term   pac   T2 1.1404 1.0718 1.2265 0.0005       0.0009
+                 S2b no previous-week term   pac   T3 1.1749 1.0929 1.2763 0.0005       0.0009
+                 S2b no previous-week term   pac    f 0.8151 0.7185 0.8999    NaN          NaN
+                   S3 peak latitude <= 60N   pac   T1 1.0145 0.9955 1.0321 0.1414       0.1679
+                   S3 peak latitude <= 60N   pac   T2 1.1468 1.0819 1.2392 0.0005       0.0009
+                   S3 peak latitude <= 60N   pac   T3 1.1634 1.0902 1.2638 0.0005       0.0009
+                   S3 peak latitude <= 60N   pac    f 0.9051 0.8073 1.0368    NaN          NaN
+                       S4a seasons 2004-14   pac   T1 1.0505 1.0334 1.0754 0.0020       0.0031
+                       S4a seasons 2004-14   pac   T2 1.1339 1.0587 1.3085 0.0060       0.0087
+                       S4a seasons 2004-14   pac   T3 1.1912 1.1071 1.3938 0.0005       0.0009
+                       S4a seasons 2004-14   pac    f 0.7182 0.5394 0.8321    NaN          NaN
+                       S4b seasons 2015-25   pac   T1 1.0162 0.9908 1.0412 0.2204       0.2351
+                       S4b seasons 2015-25   pac   T2 1.1174 1.0107 1.2353 0.0175       0.0233
+                       S4b seasons 2015-25   pac   T3 1.1354 1.0141 1.2716 0.0080       0.0113
+                       S4b seasons 2015-25   pac    f 0.8738 0.6546 1.1666    NaN          NaN
+    S5 archive weekly HF lows (total only)   pac   T3 1.1926 1.1079 1.3076 0.0005       0.0009
+                       S6 add season trend   pac   T1 1.0340 1.0163 1.0517 0.0010       0.0017
+                       S6 add season trend   pac   T2 1.1318 1.0657 1.2232 0.0005       0.0009
+                       S6 add season trend   pac   T3 1.1703 1.0937 1.2743 0.0005       0.0009
+                       S6 add season trend   pac    f 0.7874 0.6735 0.8844    NaN          NaN
+     S7 1979-2000 depth HF, frozen pattern   atl   T1 0.9861 0.9704 1.0019 0.1434       0.1679
+     S7 1979-2000 depth HF, frozen pattern   atl   T2 1.2622 1.1814 1.3633 0.0005       0.0009
+     S7 1979-2000 depth HF, frozen pattern   atl   T3 1.2447 1.1681 1.3415 0.0005       0.0009
+     S7 1979-2000 depth HF, frozen pattern   atl    f 1.0639 0.9909 1.1521    NaN          NaN
+     S7 1979-2000 depth HF, frozen pattern   pac   T1 0.9875 0.9699 1.0044 0.2109       0.2301
+     S7 1979-2000 depth HF, frozen pattern   pac   T2 1.1723 1.1033 1.2532 0.0005       0.0009
+     S7 1979-2000 depth HF, frozen pattern   pac   T3 1.1575 1.0943 1.2372 0.0005       0.0009
+     S7 1979-2000 depth HF, frozen pattern   pac    f 1.0863 0.9707 1.2349    NaN          NaN
+
+POWER: RR per SD with 80% power (NaN = not reached by RR 1.20); positions: degrees per SD
+basin test  mde_rr_80  power_at_1p05  power_at_1p10
+  atl   T1      1.027          1.000          1.000
+  atl   T2      1.100          0.272          0.802
+  atl   T3      1.103          0.265          0.788
+  atl   T4      1.073          0.490          0.972
+  atl   T5      1.034          0.985          1.000
+  atl   T6        NaN          0.082          0.165
+  atl   T7      1.108          0.310          0.765
+  atl   T8      1.077          0.445          0.935
+  pac   T1      1.032          0.995          1.000
+  pac   T2      1.110          0.308          0.758
+  pac   T3      1.110          0.280          0.760
+  pac   T4      1.095          0.328          0.850
+  pac   T5      1.032          0.995          1.000
+  pac   T6        NaN          0.088          0.215
+  pac   T7      1.127          0.260          0.655
+  pac   T8      1.100          0.282          0.802
+basin test  mde_degrees_80
+  atl   T9            0.52
+  atl  T10            1.12
+  atl  T11            0.91
+  atl  T12            1.35
+  pac   T9            0.39
+  pac  T10            1.26
+  pac  T11            0.74
+  pac  T12            2.77
