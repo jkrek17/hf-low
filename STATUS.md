@@ -2,7 +2,7 @@
 
 The ledger for this repository: what is in flight, what exists, what does not, and what may not be relied on yet. Read it at the start of a session and update it at the end, in the same pull request as the work. When this file and git disagree, git is right and this file gets fixed.
 
-Last updated: 2026-10-08 (extra predictors for P(HF) added; climatology atlas added; HF-share environment ingredients before it; hemispheric pattern search before it), after Jason decided decision 1 (within-era only), and after the gust-drift findings and the reconciliation of `c9dc994` were recomputed from committed data (`c55e74d`, merged into the integration branch as `8c95de7`). Earlier the same day this repository (`jkrek17/hf-low`) was split from `jkrek17/awips-tools`. Commit hashes below are this repository's. Pull request numbers refer to `jkrek17/awips-tools` unless they say otherwise.
+Last updated: 2026-10-08 (hemispheric pattern channels added; extra predictors for P(HF) added; climatology atlas added; HF-share environment ingredients before it; hemispheric pattern search before it), after Jason decided decision 1 (within-era only), and after the gust-drift findings and the reconciliation of `c9dc994` were recomputed from committed data (`c55e74d`, merged into the integration branch as `8c95de7`). Earlier the same day this repository (`jkrek17/hf-low`) was split from `jkrek17/awips-tools`. Commit hashes below are this repository's. Pull request numbers refer to `jkrek17/awips-tools` unless they say otherwise.
 
 ## Threads
 
@@ -121,6 +121,13 @@ Working defaults that sessions follow until Jason confirms or changes them. Jaso
 - Hart phase space (B, -V_T lower, -V_T upper) plus nine environment predictors at every pipeline A low fix at 00/12 UTC, on a 1.5 degree grid. Logistic models give P(24 h intensity class: rapid decay, decay, steady, deepening, rapid deepening, in Bergerons) and P(pipeline A gust index reaches 71.7 kt within 24 h and 48 h). ERA5 proxy throughout.
 - Fitted and tested on 2004-05 to 2025-26 only (22 seasons, 159,430 fixes), leave-one-season-out against basin-month climatology. Full model: class RPSS 0.305 (storm state alone 0.242); rapid deepening HSS 0.47 (state 0.34, state plus Hart 0.45); HF within 24 h BSS 0.423, POD 0.60, FAR 0.40, CSI 0.43, HSS 0.59, bias 1.00; HF onset within 24 h BSS 0.291 (state 0.221); rapid decay weak, HSS 0.18. Trained 2004-14 and tested 2015-25: RPSS 0.309, BSS 0.426. All quoted values recomputed independently (hf-low PR 12 comment).
 - Committed: code, `results/skill.txt`, `coefficients.csv`, `model.json`, phase diagrams, and the 2004-2025 input tables that reproduce the numbers. Pre-registration and post-hoc changes are logged in its README ("Analysis history").
+
+### Hemispheric pattern channels: `research/era5/hem_channels/` (integration branch, hf-low PR 64, merged as `9f77b88`)
+
+- Question (agenda RA-1): does the PR 41 pattern work through more cyclones, a larger share reaching HF, or storms entering from upstream? ERA5 proxy, pipeline A, 22 seasons 2004-05 to 2025-26, per SD of the out-of-sample index. Plan committed first (`44deb16`); 24 primary tests, secondary S1-S7.
+- Result: the share channel carries most in both basins. HF lows x1.29 Atlantic / x1.17 Pacific; cyclones x1.016 (well-powered null, minimum detectable 1.03) / x1.033 (small, unstable across halves and 1979-2000); share x1.27 / x1.13; share part of the change 92% / 81%; entrants x0.98 in both (inconclusive), no more than local storms. 12 of 24 tests pass q < 0.05. S7 (1979-2000 depth counts, frozen pattern, within-era) replicates the share channel.
+- A fresh Sonnet verifier recomputed counts, rate ratios, f, the decomposition, positions, S7 and the half-record splits. Not independently checked: p and q values, intervals, power, S1-S6.
+- Looks at the 2015-25 held-out seasons: this is the sixth; S7 is the second look at pre-2001 seasons (`hemispheric/results/heldout_looks.log`).
 
 ### Extra predictors for the P(HF) model: `research/era5/intensity_extra/` (integration branch, hf-low PR 56)
 
