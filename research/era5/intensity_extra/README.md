@@ -68,6 +68,15 @@ Other targets (all in `results/`):
 - Tier 2 (stability, trough depth, warm-conveyor ascent) has not been run: it
   needs about 88 GB, above the 50 GB gate, and waits for Jason's go-ahead.
 
+## Checked
+
+A fresh Sonnet verifier rebuilt the baseline and the LOSO from the committed
+tables with its own code and reproduced the sample counts, the base BSS
+(0.4192), the gains for L, P, D, K and all eight (to 4 decimals, intervals to
+within 0.0001) and the onset-only figures. **Not independently checked:** the
+p and q values, the groups H, A, M, J (only through the all-eight total), the
+rapid-deepening and HSS tables, and the by-basin table.
+
 ## Not run, and limits
 
 - `sel1` and `sel1_nested` were not built, as PREREG says, because no group met
