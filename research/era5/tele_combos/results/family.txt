@@ -1,0 +1,13 @@
+Combined BH over 11 primary tests (this directory 8 + 3 sibling)
+                 test     p  q_combined
+                  T1L 0.517       0.813
+                  T1C 0.658       0.868
+                  T2L 0.350       0.813
+                  T2C 0.457       0.813
+                  T3L 0.889       0.895
+                  T3C 0.179       0.813
+                  T4L 0.362       0.813
+                  T4C 0.513       0.813
+ENSOxPNA P1 (sibling) 0.710       0.868
+ENSOxPNA P2 (sibling) 0.036       0.396
+Kuroshio P1 (sibling) 0.895       0.895
