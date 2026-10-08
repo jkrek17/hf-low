@@ -1,0 +1,9 @@
+POST HOC. Atlantic HF events (pipeline A, ERA5 proxy) with background pressure, 2004-05..2025-26: n = 1003 (HF events in the Oct-Apr window with event-table rows).
+Effect of +1 SD lagged Greenland high, NAO in the model, month and trend terms, season-block bootstrap (2,000). Conditional on HF, so selection applies.
+minp = track minimum pressure (hPa); bg = ring - clim (hPa, background anomaly at the deepest fix); depth_ring = minp - ring (hPa, negative = deeper than surroundings); anom_clim = minp - clim.
+
+minp_ev      GH|NAO +1.944 [+0.544, +3.126]   (NAO|GH +0.460)
+bg           GH|NAO +0.464 [-0.649, +1.377]   (NAO|GH +0.894)
+depth_ring   GH|NAO +0.708 [-0.100, +1.505]   (NAO|GH -0.140)
+anom_clim    GH|NAO +1.172 [-0.133, +2.315]   (NAO|GH +0.754)
+gust800_kt   GH|NAO -0.344 [-0.896, +0.181]   (NAO|GH -0.194)
