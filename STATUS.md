@@ -206,6 +206,7 @@ Pipeline A, ERA5 proxy, Pacific, Oct-Apr 2004-05..2025-26 (22 seasons, 10,040 cy
 | Calibration | 2021-22 to 2025-26 | 2004-05, 2021-25, and 2004 to 2025 |
 | Seasons committed | 47 | 47 |
 | Ocean mask | From the start | Since `c9dc994` |
+- **ENSO flavor and Kuroshio genesis** (pre-registered, ERA5 proxy; branch `claude/enso-flavor-kuroshio-fkndhj`, plan `e317203`, research/era5/enso_kuroshio/). A new MSLP-only tracker run (pipeline A's detector and linker, Dec-Mar 1979-2025, about 49.5 GB, plus 3 GB of SST) recovers 12,355 of 12,355 pipeline A Pacific tracks. Result: more westward warm anomaly (EMI per SD, Nino3.4 and trend held) gives 0.995x DJF genesis in the Kuroshio box (95% CI 0.917-1.079, 47 winters, p 0.89), a well-powered null by the registered rule; all 15 tests q >= 0.96. HF outcomes (22 winters) are inconclusive (detectable effect about +41% per SD). Key numbers recomputed by a fresh agent; S4-S11, S13-S14, q-values and mechanism not independently checked.
 
 ## What does not exist
 
@@ -280,7 +281,7 @@ Work nobody has started. A thread picking one up changes its status here in its 
 | 3 | Gale and storm-force targets for the near-storm framework. | Carried over: Jason deferred these ("later") | Committed inputs; needs a gust-index threshold for each class. No pull. | Not started |
 | 4 | Apply the fitted near-storm model to 1979-2003. | Carried over: Open work above | Pipeline A tracks and environment fields exist. Gust outcomes before 2001 carry the decision-1 caveat. No pull. | Not started |
 | 5 | Seasonal cycle, and whether HF lows share the Pacific midwinter suppression. | Carried over: climatology agenda question 4 | Archive and pipeline A tracks. No pull. | Not started |
-| 6 | Where HF lows form and intensify: ocean fronts and moisture. | Carried over: climatology agenda question 5 | Near-storm environment fields; a pull only if the non-HF population lacks them (size it then). | Not started |
+| 6 | Where HF lows form and intensify: ocean fronts and moisture. | Carried over: climatology agenda question 5 | Near-storm environment fields; a pull only if the non-HF population lacks them (size it then). | Started 2026-10-08, one slice only: ENSO flavor vs Kuroshio genesis (see What exists). Fronts and moisture not started |
 | 7 | Deep-storm record since 1979 and HF trend since 2001. | Carried over: climatology agenda question 6 | Pipeline A tracks. No pull. Depends on decision 1 for anything gust-based before 2001. | Not started |
 | 8 | Sea state under HF lows. | Carried over: climatology agenda question 7 | ERA5 wave fields, estimated under 10 GB for 2004-05 on (unverified; size with HEAD requests first). May use the buoy thread's data. | Not started |
 | 9 | Whether HF lows come in clusters. | Carried over: climatology agenda question 8 | Archive and pipeline A catalog. No pull. | Not started |
