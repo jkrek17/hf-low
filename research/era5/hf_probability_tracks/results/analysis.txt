@@ -1,0 +1,63 @@
+2004-05..2025-26 pipeline A tracks: 35456; proxy events 2000; archive-listed tracks 1679; with a P_pre: 35362
+  listed among proxy events 0.612; listed among sub-threshold tracks 0.0136 (456 tracks)
+
+== T1  Does P see archive-listed storms that the gust threshold misses?  (sub-threshold tracks, gust < 71.7 kt, with a P_pre)
+  n tracks 33383, archive-listed 456 in 22 seasons
+  N: AUC 0.911 [0.899, 0.922]; listed rate P_pre >= 0.5: 0.202 (n 392, 79 listed) vs below: 0.0114; ratio 17.6
+  S: AUC 0.898 [0.887, 0.911]; listed rate P_pre >= 0.5: 0.224 (n 370, 83 listed) vs below: 0.0113; ratio 19.9
+  F: AUC 0.923 [0.914, 0.933]; listed rate P_pre >= 0.5: 0.201 (n 349, 70 listed) vs below: 0.0117; ratio 17.2
+  sensitivity N P_pre >= 0.3: n 963, listed 167 (0.173)
+  sensitivity N P_pre >= 0.7: n 125, listed 31 (0.248)
+  T1 verdict (N, pre-registered rule): yes
+
+== T2  Unlisted high-P proxy events (N P_pre >= 0.5, gust >= 71.7 kt)
+  high-P proxy events 848 (atl 512, pac 336); archive-listed 632 (0.745); unlisted 216
+  unlisted, removed in order:
+    (a) tropical-cyclone-linked: 23
+    (b) Atlantic gust peak at or north of 60N: 38
+    (c) fewer than 3 in-domain fixes: 0
+  RESIDUAL unlisted: 155 tracks = 0.183 of the high-P proxy events (atl 91, pac 64); seasons with at least one 22 of 22
+  residual per season 2004..2025: 6 8 9 9 6 7 8 10 8 7 6 5 8 8 7 8 8 4 3 8 4 8
+  listed events after the same exclusions: 525
+  sensitivity P_pre >= 0.3: high-P events 1230, residual unlisted 253
+  sensitivity P_pre >= 0.7: high-P events 464, residual unlisted 67
+  sensitivity model S (P_pre >= 0.5): high-P events 536, residual unlisted 97
+
+  POST HOC sensitivity: listed if ANY archive HF fix lies within 400 km of any 00/12 fix of the track at the same time
+    proxy events listed: strict (peak-position match, PR 52) 0.612, loose 0.620; high-P proxy events listed: strict 0.745, loose 0.762
+    residual unlisted under the loose rule: 145 (0.171 of high-P events); gust margin median 3.10 kt vs 8.20 kt for listed
+    unlisted under BOTH rules: 106 (atl 58, pac 48); with margin >= 10 kt: 9; margin >= 10 kt and minp <= 950: 1
+
+== T3  Residual vs listed events (Mann-Whitney AUC, stratified-by-season permutation, 2,000 draws)
+  gust margin over 71.7 kt: residual median 3.30, listed median 8.20, P(residual > listed) 0.277, p 0.0005, q 0.0005
+  P_pre (N): residual median 0.67, listed median 0.73, P(residual > listed) 0.407, p 0.0005, q 0.0005
+  in-domain fixes: residual median 16.00, listed median 18.00, P(residual > listed) 0.400, p 0.0005, q 0.0005
+  minimum pressure: residual median 963.90, listed median 957.60, P(residual > listed) 0.656, p 0.0005, q 0.0005
+  T3 verdict (pre-registered rule): looks like a proxy artefact (weaker or shorter); 4 of 4 measures at q < 0.05, 4 in the weaker direction
+
+HEADLINE (pre-registered combination of T1-T3): yes
+
+== Archive-listed rate by S P_pre, all 2004+ tracks with a P_pre (calibration for reading pre-2004 candidates)
+  S P_pre 0.0-0.1: tracks  30272, listed   325 (0.011); proxy events 420
+  S P_pre 0.1-0.3: tracks   3154, listed   504 (0.160); proxy events 617
+  S P_pre 0.3-0.5: tracks   1030, listed   344 (0.334); proxy events 406
+  S P_pre 0.5-0.7: tracks    557, listed   280 (0.503); proxy events 291
+  S P_pre 0.7-0.9: tracks    316, listed   197 (0.623); proxy events 216
+  S P_pre 0.9-1.0: tracks     33, listed    22 (0.667); proxy events 29
+  among proxy events only: S P_pre >= 0.5 listed 0.776, below 0.554
+  catalog-type tracks after 2004 (same selection as the pre-2004 sample): null cases with S P_pre >= 0.5: 89, archive-listed 0.135; events with S P_pre >= 0.5: 536, listed 0.776
+
+== Pre-2004 catalog tracks (seasons 1979-80..2003-04): S P_pre >= 0.5
+  catalog tracks 4312; with a P_pre 4282; P_pre >= 0.5: 706 (proxy events 609, null cases 97); tc-linked 21
+  of the 2157 pre-2004 proxy events, 609 reach P_pre >= 0.5 and 29 have no P_pre (first in-domain fix already HF)
+  null cases with P_pre >= 0.5 (model false alarms by construction): 97
+  model N (environment, after the pull): P_pre >= 0.5 on 962 tracks (proxy events 864, null cases 98); tc-linked 40; events with no P_pre 29
+  2004+ catalog-type tracks, N P_pre >= 0.5: null cases 89, archive-listed 0.157; events 848, listed 0.745
+  expected archive-listed among the 98 pre-2004 null cases at N P_pre >= 0.5: 15; among events 644
+  correlation of track-level P_pre, N vs S, pre-2004: 0.818
+
+== Strongest storms, ERA5 PROXY pipeline A, seasons 1979-80..2025-26 (75,087 tracks)
+  atl: top 25 by minp include 1 track(s) that are not catalog events (no climatology-adjusted depth)
+  atl: top 25 by minp: 11 before 2001-02, 12 from 2004-05; tropical-cyclone-linked 0; top 25 by depth vs climatology: tc-linked 4
+  pac: top 25 by minp include 0 track(s) that are not catalog events (no climatology-adjusted depth)
+  pac: top 25 by minp: 12 before 2001-02, 11 from 2004-05; tropical-cyclone-linked 3; top 25 by depth vs climatology: tc-linked 7

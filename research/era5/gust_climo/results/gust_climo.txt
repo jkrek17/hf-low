@@ -1,0 +1,81 @@
+ERA5 PROXY (reanalysis instantaneous gust), NOT DIRECT OBSERVATION. 2004-05 to 2025-26, October-April, 12-hourly samples.
+
+Chunks 94, sampled times 9338, seasons 22, streamed 29.7 GB (global fields, northern hemisphere kept)
+atl: highest mean annual maximum gust 83.9 kt at 65.25N, -36.50E; ocean median of mean annual max 54.7 kt
+atl: highest share of sampled times with gust >= 64 kt 2.84% at 69.00N, -21.75E
+atl: highest share with gust >= 71.7 kt 0.92% at 65.75N, -35.50E
+atl: highest single sampled gust 112.9 kt at 64.75N, -36.25E
+atl: share of ocean cells (20-75N) whose mean annual maximum gust is >= 64 kt 20.1%, >= 71.7 kt 1.0%, >= 80 kt 0.1%
+pac: highest mean annual maximum gust 71.8 kt at 60.25N, 171.25E; ocean median of mean annual max 53.6 kt
+pac: highest share of sampled times with gust >= 64 kt 0.69% at 60.25N, 171.25E
+pac: highest share with gust >= 71.7 kt 0.18% at 60.25N, 171.25E
+pac: highest single sampled gust 116.7 kt at 20.00N, 124.50E
+pac: share of ocean cells (20-75N) whose mean annual maximum gust is >= 64 kt 10.8%, >= 71.7 kt 0.0%, >= 80 kt 0.0%
+
+== Open ocean (no land within about 200 km) ==
+atl: highest mean annual maximum gust (kt) 73.72 at 46.25N, -39.75E
+atl: highest share of times with gust >= 64 kt (%) 1.22 at 59.00N, -40.75E
+atl: highest share of times with gust >= 50 kt (%) 8.12 at 59.00N, -40.75E
+atl: open-ocean cells with mean annual maximum >= 64 kt: 26.7%; >= 70 kt: 3.3%
+pac: highest mean annual maximum gust (kt) 71.28 at 40.75N, 167.25E
+pac: highest share of times with gust >= 64 kt (%) 0.58 at 40.75N, 166.75E
+pac: highest share of times with gust >= 50 kt (%) 5.02 at 40.75N, 167.50E
+pac: open-ocean cells with mean annual maximum >= 64 kt: 14.0%; >= 70 kt: 0.1%
+
+== Location of the maximum gust at HF-strength fixes (hf_structure fixes.csv, 2004-05 on) ==
+atl: 3303 HF fixes; busiest box for the maximum-gust point 65-70N, -40 to -30E (70.9 h per season); median distance of the maximum from the centre 251 km; median maximum gust 76.8 kt; share of maxima within 100 km of a coast 0.177
+pac: 2680 HF fixes; busiest box for the maximum-gust point 40-45N, 160 to 170E (46.9 h per season); median distance of the maximum from the centre 222 km; median maximum gust 76.2 kt; share of maxima within 100 km of a coast 0.062
+
+== Top 25 storms by pipeline A gust index within E1 1979-2000 (ranks are within this era only) ==
+ 1. 19831107 pac gust index 119.6 kt  min MSLP 936 hPa  centre at peak (30.5N, 147.0E)  tc-linked=True
+ 2. 19811002 pac gust index 116.1 kt  min MSLP 924 hPa  centre at peak (39.0N, 152.2E)  tc-linked=True
+ 3. 19950909 atl gust index 115.5 kt  min MSLP 943 hPa  centre at peak (32.2N, -68.5E)  tc-linked=True
+ 4. 19891007 pac gust index 111.5 kt  min MSLP 951 hPa  centre at peak (33.5N, 145.0E)  tc-linked=True
+ 5. 19860522 pac gust index 111.3 kt  min MSLP 954 hPa  centre at peak (28.0N, 153.0E)  tc-linked=True
+ 6. 19861008 pac gust index 110.7 kt  min MSLP 951 hPa  centre at peak (35.5N, 144.2E)  tc-linked=True
+ 7. 19970903 pac gust index 110.3 kt  min MSLP 955 hPa  centre at peak (35.2N, 146.8E)  tc-linked=True
+ 8. 19900108 atl gust index 109.8 kt  min MSLP 934 hPa  centre at peak (59.8N, -29.8E)  tc-linked=False
+ 9. 19910927 pac gust index 108.8 kt  min MSLP 955 hPa  centre at peak (39.2N, 135.8E)  tc-linked=True
+10. 20000924 pac gust index 108.7 kt  min MSLP 946 hPa  centre at peak (38.2N, 177.0E)  tc-linked=True
+11. 19930110 atl gust index 107.9 kt  min MSLP 915 hPa  centre at peak (61.0N, -14.2E)  tc-linked=False
+12. 19860929 pac gust index 106.0 kt  min MSLP 950 hPa  centre at peak (34.2N, 146.5E)  tc-linked=True
+13. 19971022 pac gust index 105.5 kt  min MSLP 956 hPa  centre at peak (27.0N, 140.5E)  tc-linked=True
+14. 19930927 pac gust index 104.9 kt  min MSLP 958 hPa  centre at peak (30.8N, 150.0E)  tc-linked=True
+15. 20000205 pac gust index 104.6 kt  min MSLP 951 hPa  centre at peak (41.0N, 182.8E)  tc-linked=False
+16. 19891029 pac gust index 104.1 kt  min MSLP 924 hPa  centre at peak (43.0N, 160.2E)  tc-linked=True
+17. 19951221 pac gust index 104.0 kt  min MSLP 943 hPa  centre at peak (42.0N, 182.5E)  tc-linked=False
+18. 19970304 atl gust index 103.4 kt  min MSLP 935 hPa  centre at peak (63.5N, -39.8E)  tc-linked=False
+19. 19800804 pac gust index 103.3 kt  min MSLP 943 hPa  centre at peak (28.5N, 144.5E)  tc-linked=False
+20. 19950917 pac gust index 103.2 kt  min MSLP 955 hPa  centre at peak (33.0N, 139.2E)  tc-linked=True
+21. 19941107 pac gust index 103.0 kt  min MSLP 966 hPa  centre at peak (28.8N, 137.0E)  tc-linked=False
+22. 19821210 atl gust index 103.0 kt  min MSLP 961 hPa  centre at peak (51.2N, -45.8E)  tc-linked=False
+23. 20001226 pac gust index 103.0 kt  min MSLP 965 hPa  centre at peak (39.8N, 153.5E)  tc-linked=False
+24. 19941030 pac gust index 102.9 kt  min MSLP 951 hPa  centre at peak (28.2N, 150.0E)  tc-linked=True
+25. 19821008 pac gust index 102.6 kt  min MSLP 955 hPa  centre at peak (33.0N, 141.8E)  tc-linked=False
+
+== Top 25 storms by pipeline A gust index within E3 2004-2025 (ranks are within this era only) ==
+ 1. 20220923 atl gust index 122.9 kt  min MSLP 934 hPa  centre at peak (37.5N, -62.0E)  tc-linked=True
+ 2. 20040916 atl gust index 115.0 kt  min MSLP 951 hPa  centre at peak (30.0N, -88.0E)  tc-linked=True
+ 3. 20110211 atl gust index 114.4 kt  min MSLP 932 hPa  centre at peak (52.8N, -36.2E)  tc-linked=False
+ 4. 20220207 atl gust index 112.9 kt  min MSLP 930 hPa  centre at peak (63.0N, -33.5E)  tc-linked=False
+ 5. 20241214 pac gust index 112.3 kt  min MSLP 934 hPa  centre at peak (44.5N, 166.8E)  tc-linked=False
+ 6. 20141019 atl gust index 110.8 kt  min MSLP 963 hPa  centre at peak (41.0N, -58.8E)  tc-linked=True
+ 7. 20211029 pac gust index 110.8 kt  min MSLP 970 hPa  centre at peak (31.2N, 146.5E)  tc-linked=True
+ 8. 20100829 atl gust index 110.2 kt  min MSLP 955 hPa  centre at peak (34.5N, -56.2E)  tc-linked=True
+ 9. 20131215 atl gust index 109.6 kt  min MSLP 945 hPa  centre at peak (57.2N, -19.0E)  tc-linked=False
+10. 20130114 pac gust index 109.4 kt  min MSLP 936 hPa  centre at peak (36.2N, 148.5E)  tc-linked=False
+11. 20051112 pac gust index 108.0 kt  min MSLP 954 hPa  centre at peak (40.8N, 157.8E)  tc-linked=False
+12. 20050104 atl gust index 107.6 kt  min MSLP 948 hPa  centre at peak (66.5N, -22.0E)  tc-linked=False
+13. 20231013 pac gust index 107.4 kt  min MSLP 950 hPa  centre at peak (31.8N, 153.0E)  tc-linked=True
+14. 20071211 atl gust index 107.3 kt  min MSLP 950 hPa  centre at peak (63.8N, -37.5E)  tc-linked=False
+15. 20250821 atl gust index 107.3 kt  min MSLP 952 hPa  centre at peak (32.0N, -73.2E)  tc-linked=False
+16. 20161214 pac gust index 106.8 kt  min MSLP 948 hPa  centre at peak (39.2N, 148.8E)  tc-linked=False
+17. 20110909 atl gust index 106.2 kt  min MSLP 950 hPa  centre at peak (39.5N, -64.8E)  tc-linked=True
+18. 20181211 atl gust index 105.7 kt  min MSLP 943 hPa  centre at peak (47.2N, -34.0E)  tc-linked=False
+19. 20251031 atl gust index 105.4 kt  min MSLP 954 hPa  centre at peak (31.5N, -68.5E)  tc-linked=True
+20. 20050111 atl gust index 105.2 kt  min MSLP 943 hPa  centre at peak (55.5N, -13.5E)  tc-linked=False
+21. 20051025 atl gust index 104.6 kt  min MSLP 956 hPa  centre at peak (36.8N, -68.0E)  tc-linked=True
+22. 20210930 pac gust index 104.4 kt  min MSLP 948 hPa  centre at peak (29.0N, 138.0E)  tc-linked=True
+23. 20150908 pac gust index 104.4 kt  min MSLP 950 hPa  centre at peak (27.2N, 157.0E)  tc-linked=False
+24. 20150109 atl gust index 104.4 kt  min MSLP 964 hPa  centre at peak (59.2N, -8.5E)  tc-linked=False
+25. 20171016 atl gust index 104.0 kt  min MSLP 963 hPa  centre at peak (49.5N, -12.5E)  tc-linked=True

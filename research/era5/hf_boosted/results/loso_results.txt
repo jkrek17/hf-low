@@ -1,0 +1,59 @@
+RA-21: LOSO check of the boosted-tree gain on P(HF within 24 h). Pipeline A, ERA5 proxy, 159,430 fixes, 22 seasons 2004-05 to 2025-26.
+n fixes 159430, seasons 22, hf24 rate 0.0339
+Reproduction check: M0 logistic BSS +0.4228 (PR 12 reports 0.423; allowed band 0.421-0.425) -> OK
+
+BSS against basin-month climatology, LOSO (pooled over 22 seasons):
+  M0: +0.4228
+  M1: +0.4549
+  M2: +0.4334
+  M3: +0.4455
+
+P1  M1 (boosted) minus M0 (logistic): +0.0321  90% CI [+0.0261, +0.0375]  SE 0.0034  sign-flip p <1e-5  seasons M1 better: 21/22
+    Pre-registered verdict: REAL, as predicted (>= +0.020, lower bound > 0)
+    80% minimum detectable gain (2.8 x SE): 0.0095
+
+P1b  Where the gain sits, by current g800 (Brier-sum reduction M0 -> M1):
+  <55 kt      fixes  85.1%  hf24 rate 0.007  share of the gain  13.3% [5.4, 21.0]  gain per fix +0.00016  stratum BSS gain +0.0203
+  55-71.7 kt  fixes  13.1%  hf24 rate 0.122  share of the gain  39.9% [27.9, 52.2]  gain per fix +0.00310  stratum BSS gain +0.0282
+  >=71.7 kt   fixes   1.8%  hf24 rate 0.662  share of the gain  46.9% [35.5, 58.7]  gain per fix +0.02603  stratum BSS gain +0.0446
+    Stratum prediction (55-71.7 kt carries >= 60% of the gain and the largest per-fix gain): NOT MET
+
+S3 temporal split: M0 BSS +0.4264, M1 BSS +0.4523 (PR 12 reported M0 0.426)
+S4 HSS at the pooled count-matched cut: M0 0.588, M1 0.615 (difference +0.026)
+   contrast, training-quantile cut (PR 12 rule): forecast/observed count M0 1.00, M1 0.98; HSS M0 0.589, M1 0.614
+
+All 33 pre-registered tests (32 secondary). est = BSS-unit gain (HSS units for S4), 90% season-bootstrap CI, sign-flip p, BH q within the secondary family and across all.
+  P1                     +0.0321 [+0.0261, +0.0375]  p <1e-5  q_sec         q_all 0.000  seasons+ 21/22  BSS(M1) - BSS(M0), LOSO, all 22 seasons
+  S1                     +0.0257 [+0.0184, +0.0328]  p 0.0000  q_sec  0.000  q_all 0.000  seasons+ 19/22  onset only (not HF at t): M1 - M0
+  S2a                    +0.0356 [+0.0270, +0.0434]  p 0.0000  q_sec  0.000  q_all 0.000  seasons+ 20/22  Atlantic only: M1 - M0
+  S2b                    +0.0277 [+0.0219, +0.0338]  p <1e-5  q_sec  0.000  q_all 0.000  seasons+ 22/22  Pacific only: M1 - M0
+  S3                     +0.0259 [+0.0180, +0.0340]  p 0.0020  q_sec  0.005  q_all 0.005  seasons+ 10/11  temporal split, train 2004-14, test 2015-25: M1 - M0
+  S4                     +0.0265 [+0.0199, +0.0333]  p <1e-5  q_sec  0.000  q_all 0.000  seasons+ 20/22  HSS(M1) - HSS(M0) at the pooled count-matched cut (p: sign flip on season-level HSS differences)
+  S5                     +0.0106 [+0.0080, +0.0131]  p 0.0000  q_sec  0.000  q_all 0.000  seasons+ 18/22  additive trees M2 - M0 (single-ingredient nonlinearity)
+  S6                     +0.0215 [+0.0167, +0.0258]  p <1e-5  q_sec  0.000  q_all 0.000  seasons+ 21/22  M1 - M2 (interaction)
+  S7                     +0.0226 [+0.0202, +0.0253]  p <1e-5  q_sec  0.000  q_all 0.000  seasons+ 22/22  smooth additive splines M3 - M0
+  S8                     +0.0094 [+0.0049, +0.0136]  p 0.0027  q_sec  0.006  q_all 0.006  seasons+ 17/22  M1 - M3 (sharp thresholds and interactions beyond smooth curves)
+  S9_msl                 +0.0008 [-0.0000, +0.0017]  p 0.1285  q_sec  0.171  q_all 0.170  seasons+ 15/22  M0 + spline of msl minus M0
+  S9_dp12                -0.0003 [-0.0007, +0.0000]  p 0.2043  q_sec  0.234  q_all 0.233  seasons+ 8/22  M0 + spline of dp12 minus M0
+  S9_lat                 +0.0015 [+0.0002, +0.0028]  p 0.0735  q_sec  0.112  q_all 0.110  seasons+ 13/22  M0 + spline of lat minus M0
+  S9_speed               -0.0003 [-0.0006, +0.0000]  p 0.1518  q_sec  0.193  q_all 0.192  seasons+ 7/22  M0 + spline of speed minus M0
+  S9_g800                +0.0026 [+0.0017, +0.0035]  p 0.0003  q_sec  0.001  q_all 0.001  seasons+ 17/22  M0 + spline of g800 minus M0
+  S9_logage              +0.0005 [-0.0001, +0.0011]  p 0.1850  q_sec  0.219  q_all 0.218  seasons+ 14/22  M0 + spline of logage minus M0
+  S9_B                   +0.0059 [+0.0047, +0.0072]  p <1e-5  q_sec  0.000  q_all 0.000  seasons+ 21/22  M0 + spline of B minus M0
+  S9_VTL                 +0.0057 [+0.0040, +0.0075]  p 0.0000  q_sec  0.000  q_all 0.000  seasons+ 19/22  M0 + spline of VTL minus M0
+  S9_VTU                 +0.0054 [+0.0044, +0.0064]  p <1e-5  q_sec  0.000  q_all 0.000  seasons+ 22/22  M0 + spline of VTU minus M0
+  S9_jet250              +0.0007 [+0.0001, +0.0014]  p 0.0932  q_sec  0.130  q_all 0.128  seasons+ 14/22  M0 + spline of jet250 minus M0
+  S9_div300              -0.0003 [-0.0007, +0.0001]  p 0.2841  q_sec  0.313  q_all 0.312  seasons+ 8/22  M0 + spline of div300 minus M0
+  S9_vadv500             +0.0010 [+0.0001, +0.0018]  p 0.0794  q_sec  0.115  q_all 0.114  seasons+ 17/22  M0 + spline of vadv500 minus M0
+  S9_eady                +0.0011 [+0.0002, +0.0019]  p 0.0591  q_sec  0.100  q_all 0.098  seasons+ 14/22  M0 + spline of eady minus M0
+  S9_sst                 +0.0021 [+0.0007, +0.0033]  p 0.0232  q_sec  0.041  q_all 0.040  seasons+ 13/22  M0 + spline of sst minus M0
+  S9_sstgrad             +0.0006 [-0.0003, +0.0016]  p 0.3080  q_sec  0.328  q_all 0.328  seasons+ 13/22  M0 + spline of sstgrad minus M0
+  S9_sst_t500            -0.0003 [-0.0010, +0.0003]  p 0.3957  q_sec  0.409  q_all 0.408  seasons+ 10/22  M0 + spline of sst_t500 minus M0
+  S9_flux                +0.0011 [+0.0003, +0.0018]  p 0.0223  q_sec  0.041  q_all 0.040  seasons+ 17/22  M0 + spline of flux minus M0
+  S9_tcwv                -0.0002 [-0.0010, +0.0006]  p 0.7101  q_sec  0.710  q_all 0.710  seasons+ 10/22  M0 + spline of tcwv minus M0
+  S10_g800_x_dp12        +0.0016 [+0.0010, +0.0021]  p 0.0002  q_sec  0.001  q_all 0.001  seasons+ 19/22  M0 + product g800 x dp12 minus M0
+  S10_msl_x_dp12         +0.0007 [+0.0003, +0.0011]  p 0.0033  q_sec  0.007  q_all 0.007  seasons+ 18/22  M0 + product msl x dp12 minus M0
+  S10_jet250_x_eady      -0.0001 [-0.0003, +0.0000]  p 0.1568  q_sec  0.193  q_all 0.192  seasons+ 7/22  M0 + product jet250 x eady minus M0
+  S10_sstgrad_x_flux     +0.0006 [+0.0001, +0.0012]  p 0.0640  q_sec  0.102  q_all 0.101  seasons+ 13/22  M0 + product sstgrad x flux minus M0
+  S10_lat_x_g800         +0.0014 [+0.0007, +0.0021]  p 0.0052  q_sec  0.010  q_all 0.010  seasons+ 17/22  M0 + product lat x g800 minus M0
+Tests with q_all < 0.05: 19 of 33; secondary q < 0.05: 18 of 32
