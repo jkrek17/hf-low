@@ -111,4 +111,19 @@ fewer observations, so depths may be too shallow rather than too deep.
 
 ## Deviations (post hoc)
 
-(none yet)
+Logged after the results were seen. Each is labelled where it appears in the README.
+
+1. **The headline combination rule was badly specified.** It lets T1 alone return "yes". T1 shows that P carries archive
+   information for tracks whose ERA5 gust is just *below* the threshold; that is the reverse of a missed observation
+   (the archive has the storm, ERA5's gust field does not reach 71.7 kt). The rule as written returns "yes"; that
+   literal result is reported, and so is the reading from T2 and T3, which are the tests aimed at the question.
+2. **Looser notion of "listed"** (any archive HF fix within 400 km of any 00/12 fix at the same time), added because
+   the PR 52 rule matches on the gust-peak position only. Both versions are reported.
+3. **Tropical-cyclone flag coverage.** `lifecycle_events.csv` and `tc_candidates.csv` do not flag a Gulf of Mexico hurricane
+   (2005) in the unlisted list. Not corrected (it would be selection after the fact); named in the README.
+4. **Added to the strongest-storm table after the lists were seen:** the tropical-cyclone flag, and names for four storms
+   whose date and position match a well-known event (inferred by the analyst from memory, not from any data file).
+6. **Model N before 2004.** The plan named S as the pre-2004 model because the environment pull was not approved. Jason then approved the
+   111 GB pull, so N is also applied before 2004 (same fit, same rule); S results are kept alongside.
+5. **Like-for-like calibration** of the archive-listed rate on catalog-type tracks after 2004 (events and matched null
+   cases only), added to read the pre-2004 sample fairly.
