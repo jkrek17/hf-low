@@ -46,6 +46,14 @@ The effect per SD that each test could detect at 80% power (2.8 x clustered SE, 
 - **This is the ERA5 proxy.** It is not a count of warned hurricane-force lows. The archive's own cyclone population does not exist, so the share cannot be checked against the archive.
 - **Same storms as the catalog.** The HF cyclones here are the 1,003 and 825 events already used in the frequency test; the new information is the denominator.
 
+## Verification
+
+A fresh Sonnet agent that had not seen this code recomputed, from `all_tracks.csv.gz` and the CPC files with its own implementation, and matched: track and HF counts (9,636 / 1,003 Atlantic; 10,000 / 825 Pacific); RR(all), RR(HF), RR(share), f and the logistic odds ratio for both basins under the lagged index; the same-time RR(all) and RR(HF); the depth cuts (966.2 and 965.0 hPa); the Pacific depth RR(share) 1.115 and f 0.83; the Atlantic RR(share) permutation p (0.0005); the Pacific RR(share) permutation p (0.24); and the Atlantic leave-one-season-out range for RR(share) (1.110-1.143).
+
+Two clarifications from it: the permutation p-values are two-sided (the Pacific share p is about 0.08 one-sided), and the 210-day window is fixed length from 1 October, so it ends 27 April in leap-year seasons (the counts above depend on that).
+
+**Not independently checked:** bootstrap intervals, the S2 (Jun-May), S3 (chain), S5 (other indices) and S6 (joint) rows, S4 rows other than Pacific 1979-2025 and the Atlantic depth values it also computed (RR(share) 1.108, f 1.22), the power / detectable-effect figures, the FDR q-values, and the Pacific leave-one-season-out range (it did reproduce 1.029-1.057).
+
 ## Departures from the plan
 
 None changes a pre-registered estimate. Logged because they happened after the plan was committed.
