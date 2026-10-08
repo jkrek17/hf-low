@@ -1,0 +1,53 @@
+ENSO flavor vs Kuroshio genesis. ERA5 proxy; new MSLP tracker on pipeline A's detector; HF labels from pipeline A.
+permutations: 10000; BH over 15 tests (P1, S1-S14).
+
+P1   n=47 effect=0.995 (0.917-1.079) detect80=1.123 p_perm=0.8948 q_BH=0.962  DJF K genesis count ~ EMI + N34 + year (n=47)
+S1   n=47 effect=0.992 (0.908-1.085) detect80=1.136 p_perm=0.8501 q_BH=0.962  DJF share of basin genesis in K ~ EMI + N34 + year
+S2   n=22 effect=1.055 (0.829-1.343) detect80=1.411 p_perm=0.6558 q_BH=0.962  DJF K-genesis HF-reaching count ~ EMI + N34 (22 winters 2004-05..)
+S3   n=22 effect=1.047 (0.749-1.464) detect80=1.615 p_perm=0.7918 q_BH=0.962  HF share among K-genesis storms ~ EMI + N34 (22 winters; effect = odds ratio per SD)
+S4   n=47 effect=0.958 (0.884-1.038) detect80=1.121 p_perm=0.2354 q_BH=0.962  P1 with window JFM
+S5   n=47 effect=0.965 (0.899-1.036) detect80=1.107 p_perm=0.3207 q_BH=0.962  P1 with window Dec-Mar
+S6   n=47 effect=0.998 (0.939-1.062) detect80=1.092 p_perm=0.9618 q_BH=0.962  P1 with N4-N3 in place of EMI
+S7   n=47 effect=0.994 (0.919-1.074) detect80=1.117 p_perm=0.8635 q_BH=0.962  P1 with box K_N
+S8   n=47 effect=0.997 (0.905-1.098) detect80=1.148 p_perm=0.9494 q_BH=0.962  P1 with box K_E
+S9   n=47 effect=0.920 (0.788-1.075) detect80=1.249 p_perm=0.2980 q_BH=0.962  P1 with box K_ECS
+S10  n=47 effect=1.030 (0.936-1.133) detect80=1.146 p_perm=0.5186 q_BH=0.962  P1 with box K_KE
+S11  n=47 effect=0.985 (0.865-1.122) detect80=1.205 p_perm=0.8188 q_BH=0.962  HF-reaching K-genesis count 1979-2025 ~ EMI + N34 + era dummy (>=2001)
+S12  n=13 effect=0.978 (nan-nan) detect80=nan p_perm=0.8770 q_BH=0.962  El Nino winters (N34>=0.5): CP (n=4) minus EP (n=9) mean DJF K genesis per 88 days
+      CP [1987, 2002, 2014, 2018]; EP [1982, 1986, 1991, 1994, 1997, 2006, 2009, 2015, 2023]; CP mean 27.17 EP mean 27.78
+S13  n=47 effect=0.998 (0.920-1.081) detect80=1.122 p_perm=0.9507 q_BH=0.962  P1 without the year term
+S14  n=47 effect=0.983 (0.930-1.038) detect80=1.082 p_perm=0.5125 q_BH=0.962  P1 without the N34 term
+
+mechanism:
+{
+ "M1_b_emi_with_pna": -0.001312781947522544,
+ "M1_rr_with_pna": 0.998688079373748,
+ "M1_rr_without_pna": 0.9948316859296564,
+ "M1_ci_with_pna": [
+  0.9191282256434224,
+  1.0851346439557177
+ ],
+ "M2_pna_coef": 0.015051559945958309,
+ "M2_rr_pna": 1.0151654051397978,
+ "M2_ci": [
+  0.9508983856235071,
+  1.083775948485713
+ ],
+ "M2_p_perm": 0.6362363763623637,
+ "corr_emi_pna": 0.27504896058062234,
+ "corr_emi_n34": 0.7315221834561241,
+ "corr_n34_official_oni": 0.98914212328502,
+ "P1_crosscheck_p_predictor_residual_perm": 0.8971102889711029,
+ "vif_emi": 2.1511145257998012
+}
+
+descriptives:
+{
+ "mean_K_DJF": 28.106382978723403,
+ "sd_K_DJF": 5.0183751161766,
+ "var_to_mean": 0.8960273837343251,
+ "mean_basin_DJF": 164.7659574468085,
+ "mean_hf_K_DJF_all": 10.829787234042554,
+ "mean_hf_K_DJF_2004on": 11.454545454545455,
+ "mean_K_DJF_2004on": 28.136363636363637
+}
