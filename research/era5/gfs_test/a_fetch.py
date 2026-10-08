@@ -71,6 +71,22 @@ def idx_rows(text):
     return rows
 
 
+def message_walk(u, rows, var, level):
+    """Fallback for a stale .idx (seen late Nov 2022: offsets a few hundred bytes off): walk the GRIB section-0 length
+    fields from byte 0 to the message at the idx position of var:level and read that message exactly."""
+    import struct
+    i = next(k for k, (o, v, l) in enumerate(rows) if v == var and l == level)
+    off = 0
+    for k in range(i + 1):
+        h = get(u, f"bytes={off}-{off + 15}")
+        if h[:4] != b"GRIB":
+            raise RuntimeError("walk lost sync")
+        L = struct.unpack(">Q", h[8:16])[0]
+        if k == i:
+            return get(u, f"bytes={off}-{off + L - 1}")
+        off += L
+
+
 def message(u, rows, var, level):
     for i, (off, v, l) in enumerate(rows):
         if v == var and l == level:
@@ -150,8 +166,16 @@ def _cycle(args):
                 pb = message(u, rows, "PRMSL", "mean sea level")
                 gb = message(u, rows, "GUST", "surface")
                 try:
-                    msl = decode(pb, "prmsl") / 100.0
-                    gust = decode(gb, "gust")
+                    try:
+                        msl = decode(pb, "prmsl") / 100.0
+                    except Exception:
+                        pb = message_walk(u, rows, "PRMSL", "mean sea level")
+                        msl = decode(pb, "prmsl") / 100.0
+                    try:
+                        gust = decode(gb, "gust")
+                    except Exception:
+                        gb = message_walk(u, rows, "GUST", "surface")
+                        gust = decode(gb, "gust")
                     break
                 except Exception:
                     time.sleep(2 ** att)
