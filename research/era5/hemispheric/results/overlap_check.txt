@@ -1,0 +1,6 @@
+z500: rms diff 0.0009975  wb2 std 261.1  corr 1.00000  nan-mask mismatch 0 of 9216
+u250: rms diff 1.175e-05  wb2 std 20.3  corr 1.00000  nan-mask mismatch 0 of 9216
+mslp: rms diff 0.0001895  wb2 std 13.12  corr 1.00000  nan-mask mismatch 0 of 9216
+sst: rms diff 5.244e-05  wb2 std 10.18  corr 1.00000  nan-mask mismatch 0 of 9216
+block decode == full decode (z500): True; bytes 2.49 MB of 80 MB
+ARCO bytes for 12 days: 115.3 MB

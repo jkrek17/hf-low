@@ -1,0 +1,5 @@
+2026-10-08T09:20:25.699568Z scored split=primary test=2015..2025 window=lag1
+2026-10-08T09:21:05.283103Z scored split=swap test=2004..2014 window=lag1
+2026-10-08T09:21:09.241943Z scored split=lag2 test=2015..2025 window=lag2
+2026-10-08T09:21:12.749798Z scored split=conc test=2015..2025 window=conc
+2026-10-08T09:24:36.015725+00:00 POSTHOC PH0-PH4 scored on 2015..2025 (primary window)

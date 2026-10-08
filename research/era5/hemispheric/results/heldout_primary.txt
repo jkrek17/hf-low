@@ -1,0 +1,6 @@
+primary atl: SS(P|B1)=0.0555 p=0.0001  SS(N|B1)=-0.0253  SS(PN|N)=0.0470 p=0.0002  P3 delta=0.0808 ci=(0.049558838495497554, 0.11392893869081648)
+primary pac: SS(P|B1)=0.0232 p=0.0011  SS(N|B1)=-0.0132  SS(PN|N)=0.0108 p=0.0004  P3 delta=0.0365 ci=(-0.001086044618150508, 0.07196063319486068)
+S4 proxy atl: SS(P|B1)=0.0755 p=0.0001 events=523
+S4 proxy pac: SS(P|B1)=0.0157 p=0.0045 events=407
+S5 within-era atl: gamma=0.2189 RR/SD=1.245 p=0.0002 events=1011
+S5 within-era pac: gamma=0.1463 RR/SD=1.158 p=0.0002 events=877

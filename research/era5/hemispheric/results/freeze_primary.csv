@@ -1,0 +1,3 @@
+split,basin,n_train_weeks,dispersion,lambda_P,cvdev_P_best_vs_nopc,lambda_PN,cvdev_PN_best_vs_nopc,lambda_P0,cvdev_P0_best_vs_nopc
+primary,atl,330,1.0,1000.0,0.0592,1000.0,0.052,300.0,0.1092
+primary,pac,330,1.0,300.0,0.041,300.0,0.0513,300.0,0.0518
