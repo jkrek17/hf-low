@@ -4,7 +4,7 @@ Does ERA5's own surface wind, or its gust, strengthen relative to in-situ wind o
 
 ERA5 is a **proxy** record here as everywhere in this project. The buoys test it; nothing here validates the HF proxy itself before the archive.
 
-Results: [`results/buoy_drift-result.txt`](results/buoy_drift-result.txt). Station-season values behind every trend: [`results/station_seasons.csv`](results/station_seasons.csv).
+Results: [`results/buoy_drift-result.txt`](results/buoy_drift-result.txt). What was fixed before the results and what was decided after: [`results/analysis_history.md`](results/analysis_history.md). Station-season values behind every trend: [`results/station_seasons.csv`](results/station_seasons.csv).
 
 ## Findings (2026-10-08)
 
