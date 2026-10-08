@@ -44,6 +44,12 @@
    month and are drawn whole in the month they began). A month is addressed
    by ym = year * 100 + month (201501 = January 2015).
 
+   The third unit is the calendar month across all seasons: engine.stepMoy(m)
+   is every event whose first fix falls in month m (1-12), whatever the year,
+   and engine.monthsOfYear() lists the twelve in season order (Jun ... May).
+   It is the composite's climatology cut into twelve static frames, so the
+   seasonal shift of the track can be compared month against month.
+
    Modes 1 and 2 are "clocks": clock.at(t, tailHours) -> frame. Mode 3 is a
    static frame per season or month: engine.step(season), engine.stepMonth(ym). Usage:
 
@@ -202,6 +208,9 @@ window.HF = window.HF || {};
     var month = ((idx + 5) % 12) + 1;
     return (day - SEASON_MONTH_START[idx] + 1) + ' ' + HF.monthName(month);
   }
+
+  var MONTH_FULL = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+                    'August', 'September', 'October', 'November', 'December'];
 
   /** 201501 -> "Jan 2015". */
   function monthLabel(ym) {
@@ -488,6 +497,11 @@ window.HF = window.HF || {};
       var p0 = parse(recs[i].fx[0].date), ym0 = p0.year * 100 + p0.month;
       (byMonth[ym0] = byMonth[ym0] || []).push(recs[i]);
     }
+    var byMonthOfYear = {};
+    Object.keys(byMonth).forEach(function (ym) {
+      var m = ym % 100, y = Math.floor(ym / 100);
+      (byMonthOfYear[m] = byMonthOfYear[m] || {})[y] = byMonth[ym];
+    });
     // Month list: opts.months = {from: ym, to: ym} when the caller knows the
     // range (the page passes the selected seasons, so a month the filters
     // emptied is listed and says so, like an emptied season). Otherwise the
@@ -604,6 +618,22 @@ window.HF = window.HF || {};
           var n = (byMonth[ym] || []).length;
           return { ym: ym, label: monthLabel(ym), count: n, empty: n === 0 };
         });
+      },
+
+      /** Twelve entries, Jun ... May, over every season present. */
+      monthsOfYear: function () {
+        return HF.SEASON_MONTHS.map(function (m) {
+          var n = 0;
+          for (var y in byMonthOfYear[m] || {}) n += byMonthOfYear[m][y].length;
+          return { moy: m, label: MONTH_FULL[m - 1], count: n, empty: n === 0 };
+        });
+      },
+
+      /** Every event whose first fix is in calendar month m, all seasons. */
+      stepMoy: function (m) {
+        var rs = [], g = byMonthOfYear[m] || {};
+        Object.keys(g).sort().forEach(function (y) { rs = rs.concat(g[y]); });
+        return frameOf(rs, MONTH_FULL[m - 1] + ', all seasons', { moy: m });
       },
 
       /** Mode 3 frame for one calendar month; same shape as step(). */
