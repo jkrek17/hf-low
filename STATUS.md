@@ -34,6 +34,18 @@ The merges on 2026-10-08 (`2b9af76`, `0b479db`, `0800e90`) had no conflicts. Aft
 5. **QC mode and the live sheet.** `claude/hf-lows-qc-mode` adds a path that writes to the spreadsheet. Should a work session ever use it against the real sheet, or only against the mocks in `tests/qc/`?
 6. **Cutover** from `awips-tools` (section at the end).
 
+## Assumptions (Coordinator, pending Jason's review)
+
+Working defaults that sessions follow until Jason confirms or changes them. Jason has said the sessions lead the research and he steers (2026-10-08).
+
+- **Ledger-only pull requests into `main`** (changing nothing but `STATUS.md`) are routine. The thread that opens one merges it once the numbers are verified. Research code going into `main` (decision 3) and anything that deploys still wait for Jason.
+- **Working default for decision 1**, until it is settled:
+  - Trend and count claims use pipeline A's gust-based counts from 2001-02 on.
+  - Counts for 1979-2000 may be shown, but only labelled a proxy and with the +1 to +6 events per decade bias band.
+  - Pressure-depth counts are the cross-check before 2001.
+  - Fitting and testing stay at 2004-05 and later.
+  - A separate thread is testing ERA5 winds against buoy and ship records from before 2001, to try to settle decision 1 without the 370 GB re-run.
+
 ## What exists
 
 ### Archive and site (`main`)
