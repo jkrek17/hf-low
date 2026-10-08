@@ -2,7 +2,7 @@
 
 The ledger for this repository: what is in flight, what exists, what does not, and what may not be relied on yet. Read it at the start of a session and update it at the end, in the same pull request as the work. When this file and git disagree, git is right and this file gets fixed.
 
-Last updated: 2026-10-08, after the gust-drift findings and the reconciliation of `c9dc994` were recomputed from committed data (`c55e74d`, merged into the integration branch as `8c95de7`). Earlier the same day this repository (`jkrek17/hf-low`) was split from `jkrek17/awips-tools`. Commit hashes below are this repository's. Pull request numbers refer to `jkrek17/awips-tools` unless they say otherwise.
+Last updated: 2026-10-08, after Jason decided decision 1 (within-era only), and after the gust-drift findings and the reconciliation of `c9dc994` were recomputed from committed data (`c55e74d`, merged into the integration branch as `8c95de7`). Earlier the same day this repository (`jkrek17/hf-low`) was split from `jkrek17/awips-tools`. Commit hashes below are this repository's. Pull request numbers refer to `jkrek17/awips-tools` unless they say otherwise.
 
 ## Threads
 
@@ -21,7 +21,7 @@ The merges on 2026-10-08 (`2b9af76`, `0b479db`, `0800e90`) had no conflicts. Aft
 
 ## Decisions waiting on Jason
 
-1. **How far back a gust-based record holds.** The numbers are now in the repository: `research/era5/drift_check.py` and `drift_check-result.txt` on the integration branch (`c55e74d`). What they show:
+1. **How far back a gust-based record holds. DECIDED 2026-10-08: within-era only** (Jason, "Within-era only" card; relayed by the coordinator, so the tap itself is not in the repository). The rule is under "Decided answer" below. The numbers are now in the repository: `research/era5/drift_check.py` and `drift_check-result.txt` on the integration branch (`c55e74d`). What they show:
    - The index *value* drifts before 2001 in both pipelines. At fixed depth (955-975 hPa) over 1979-2000, B's 500 km gust rises +0.645 kt/decade (t = +2.40) and A's own 800 km gust rises +0.665 (t = +2.44). Both are flat from 2004.
    - Whether thresholded *counts* drift is **not settled either way**. The walk-back rested on pipeline A's per-basin trends over 1979-1996 (t = +0.82 and -0.02). Those tests had 12-15% power against the bias the drift implies, so they cannot show that counts are clean. Over all 22 pre-archive seasons, A's counts rise +5.1 per decade (t = +1.98). The drift predicts +5.7. Deep-storm counts rise by a similar amount (B tracks below 960 hPa: +5.8, t = +1.96).
    - With depth held fixed at track level, the drift estimates are +0.1 to +0.6 kt/decade, each with an se of 0.2 to 0.5. That bounds the count bias at about +1 to +6 events per decade over 1979-2000, the same size as the possible real rise.
@@ -32,9 +32,14 @@ The merges on 2026-10-08 (`2b9af76`, `0b479db`, `0800e90`) had no conflicts. Aft
    - **Post hoc result (labelled as such, not replicated).** The *level* differs. At the same ERA5 depth, 1979-2000 has 7.8% fewer gust-based events per season than the 2004-2025 rates give (Welch t = -2.77), and both basins show it. Over 1979-2025, pipeline A's observed events rise +2.39 per decade (t = +2.35), while the depth-expected count is flat (-0.19). The whole trend sits in that offset, in the direction `c9dc994`'s per-fix drift predicts. A real change in gust at fixed depth would look the same, and the buoy and ship comparison is the test that can tell them apart.
 
    - **Buoy test** (`research/era5/buoy_drift/`, hf-low PR 17, 21 moored buoys from NOAA ISD, October-March 1979-2004; ERA5 is a proxy). It does not clear or confirm the gust field. ERA5 gust against buoy wind at 15 m/s and above has no trend over 1979-2000: -1.80 %/decade (se 1.92, t = -0.94, leave-one-season-out -3.19 to -1.21), against an index drift of about +1.1 %/decade, and the test has under 10 % power against a drift that size. The level moves the wrong way for the post hoc offset: ERA5 gust relative to the buoys is 2.9 % lower in 2001-04 than over 1979-2000 (se 1.3, t = -2.31, but only 4 seasons after, and ISD has no moored buoys after 2004). Over 1985-2000 ERA5 falls against all 11 stations with enough seasons (wind -6.83 %/decade, t = -6.59; gust -8.10, t = -6.31), a window chosen after seeing the data. Whether that fall is ERA5 or buoy hardware needs NDBC's hull history, which the work containers cannot reach. A general upward drift in ERA5's surface wind does not explain the gust-index drift; its cause (the storms, or ERA5's storm cores away from the buoys) is still open.
-   - **Buoy thread's view: it agrees with the recommended answer below.** The buoys add a second, opposite-sign era dependence in 1985-2000, so levels and trends that cross 2001 stay out and within-era use stays in.
+   - **Buoy thread's view: it agrees with the decided answer below.** The buoys add a second, opposite-sign era dependence in 1985-2000, so levels and trends that cross 2001 stay out and within-era use stays in.
 
-   **Recommended answer (Claude, pending Jason):** use pipeline A's gust-based counts before 2001 for variation *within* that era: rankings, interannual correlations, and teleconnection tests with an era term. Do not use them for levels or trends that cross 2001. Report no 1979-2025 trend in hurricane-force-equivalent counts as a climate signal unless the buoy and ship comparison clears the gust field. The depth-only count is the cross-era statement, and it is flat. This is option (a) of the earlier choice, extended to allow within-era use.
+   **Decided answer (Jason, 2026-10-08, "Within-era only"):**
+   - Pipeline A's gust-based counts before 2001 are used only for variation *within* that era: rankings, interannual correlations, and tests with an era term.
+   - Levels and trends start in 2001-02. None crosses 2001.
+   - No 1979-2025 hurricane-force trend is claimed as a climate signal. The depth-only count is the cross-era statement, and it is flat.
+   - Fitting and testing stay at 2004-05 and later.
+   - Evidence: the count test (hf-low PR 18, ledger PR 21) and the buoy test (PR 17, ledger PR 23), both quoted above. The post hoc level offset is not replicated and the buoy test could not clear or confirm it, so the rule is the cautious reading of an unsettled question, not a finding that the counts are wrong. Revisit it only if a properly powered buoy or ship test (future task 16) says otherwise.
 2. **Two ERA5 pipelines.** A and B were built in parallel and differ in almost every definition (table below). Keep both with distinct names and purposes, or retire one?
 3. **Research into `main`.** None of it is there yet. The integration branch now holds all of it and could go in as one pull request. Before decision 1 is settled, or after?
 4. **Validation floor year.** Files say the proxy "cannot be validated before 2001" in some places and "before 2004" in others. The pipeline B session's position is that `RECORD_START = 2004` must gate every window, because the archive was still starting before then. Confirm 2004 as the statement of record?
@@ -46,12 +51,12 @@ The merges on 2026-10-08 (`2b9af76`, `0b479db`, `0800e90`) had no conflicts. Aft
 Working defaults that sessions follow until Jason confirms or changes them. Jason has said the sessions lead the research and he steers (2026-10-08).
 
 - **Ledger-only pull requests into `main`** (changing nothing but `STATUS.md`) are routine. The thread that opens one merges it once the numbers are verified. Research code going into `main` (decision 3) and anything that deploys still wait for Jason.
-- **Working default for decision 1**, until it is settled:
+- **Decision 1 is decided (2026-10-08, within-era only).** The rule, which sessions follow:
   - Trend and count claims use pipeline A's gust-based counts from 2001-02 on.
   - Counts for 1979-2000 may be shown and used within that era, labelled a proxy. Not for levels or trends across 2001: at fixed depth they run 7.8% below the post-2004 rate (post hoc, t = -2.77), and a ramp of up to +8.6 events per decade cannot be excluded.
   - Pressure-depth counts are the cross-check before 2001.
   - Fitting and testing stay at 2004-05 and later.
-  - The buoy test (`research/era5/buoy_drift/`, hf-low PR 17) did not settle decision 1. It found no upward drift of ERA5's surface wind against buoys before 2001, but it cannot resolve a drift as small as the gust-index drift. This default stands.
+  - The buoy test (`research/era5/buoy_drift/`, hf-low PR 17) did not settle decision 1. It found no upward drift of ERA5's surface wind against buoys before 2001, but it cannot resolve a drift as small as the gust-index drift. Decided regardless.
 - **Life-cycle definitions** (thread "HF low climatology gaps", 2026-10-08):
   - An HF fix is an in-domain fix at or above 71.7 kt, the rule that makes a track an event.
   - Genesis counts as observed only when the first fix is at 1000 hPa or above and north of 21N.
@@ -218,7 +223,7 @@ Fix these as the files are next touched, in the same commit.
 
 ## Open work
 
-- Decision 1: the fixed-depth count test ran (hf-low PR 18). The ramp is not detectable, and the post hoc level offset needs independent confirmation. The buoy comparison (PR 17) did not provide it: it has under 10 % power against a drift that size and found the level moving the other way over 2001-04 (4 seasons). A comparison with the power needed would need NDBC's hull history and its post-2004 records, which the work containers cannot reach; ship reports (ICOADS) were not tried because that host is unreachable too. A pre-registered replication of the level test would be a second one, for example on pipeline B tracks or with 2001-03 held out.
+- Decision 1 is decided: within-era only (Jason, 2026-10-08). Evidence and rule are under "Decisions waiting on Jason", item 1. What stays open is whether the post hoc level offset is real: the fixed-depth count test ran (hf-low PR 18). The ramp is not detectable, and the post hoc level offset needs independent confirmation. The buoy comparison (PR 17) did not provide it: it has under 10 % power against a drift that size and found the level moving the other way over 2001-04 (4 seasons). A comparison with the power needed would need NDBC's hull history and its post-2004 records, which the work containers cannot reach; ship reports (ICOADS) were not tried because that host is unreachable too. A pre-registered replication of the level test would be a second one, for example on pipeline B tracks or with 2001-03 held out.
 - Teleconnections and intensity: question 2 is answered (frequency split, entry above). Open from it: the Pacific share disagrees between the gust and the pressure-depth definitions of "strong"; the cyclone count could change with storms moving across the fixed domain edges (not checked). The Pacific PNA gust and HF-duration lead from question 1 needs an independent check.
 - Intensity framework: skill by basin is not broken out; untested on operational (GFS) analyses; gale and storm thresholds deferred by Jason; the fitted model has not been applied to 1979-2003.
 - Pipeline B: put the basin term in the committed series; look at the over-prediction at high latitude.
