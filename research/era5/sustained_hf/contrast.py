@@ -36,6 +36,7 @@ CLASSES = {
     "h2": lambda hf, n: hf & (n >= 2),
     "h3": lambda hf, n: hf & (n >= 3),
     "b": lambda hf, n: hf & (n == 1),      # brief: a single 6 h HF fix
+    "m": lambda hf, n: hf & (n == 2),      # middle class (S3): exactly 2 HF fixes
 }
 PAIRS = [("h2", "h1"), ("h3", "h1"), ("h3", "b")]     # (a, b) -> log RR(a) - log RR(b); h3 - b is the sustained-minus-brief contrast
 
@@ -185,14 +186,14 @@ def archive_weekly(basin):
     d = json.load(open(os.path.join(REPO, "docs/data/hf-lows.json")))
     f = {k: i for i, k in enumerate(d["lowFields"])}
     # h1 keeps every archive event of class 'low' (4 of 1,829 in 2004-2025 have no HF-category fix), so k = 1 reproduces PR 41 exactly
-    days = {k: {} for k in ("h1", "h2", "h3", "b")}
+    days = {k: {} for k in ("h1", "h2", "h3", "b", "m")}
     for r in d["lows"]:
         if r[f["cls"]] != "low" or r[f["basin"]] != basin:
             continue
         n = r[f["hfN"]]
         s = str(r[f["start"]])
         day = dt.date(int(s[:4]), int(s[4:6]), int(s[6:8]))
-        for k, ok in (("h1", True), ("h2", n >= 2), ("h3", n >= 3), ("b", n == 1)):
+        for k, ok in (("h1", True), ("h2", n >= 2), ("h3", n >= 3), ("b", n == 1), ("m", n == 2)):
             if ok:
                 days[k][day] = days[k].get(day, 0) + 1
     Y, LP = {}, {}
@@ -226,7 +227,7 @@ def main():
         Tfull = tracks_with_nhf(2003, 2025)
         for basin in C.BASINS:
             M, n = proxy_weekly(basin, Tfull) if design == "weekly" else archive_weekly(basin)
-            names = list(CLASSES) if design == "weekly" else ["h1", "h2", "h3", "b"]
+            names = list(CLASSES) if design == "weekly" else ["h1", "h2", "h3", "b", "m"]
             df = analyse(M, names, nperm, nboot, rng)
             df.insert(0, "basin", basin); df.insert(1, "design", design)
             rows.append(df)
