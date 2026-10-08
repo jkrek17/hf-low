@@ -1,0 +1,61 @@
+HIGH-LATITUDE ATLANTIC HF LOWS  (archive 2004-05..2025-26; ERA5 pipeline A proxy)
+==============================================================================
+
+1. Share of HF lows with an HF fix at or north of 60N (archive)
+   The archive has no Atlantic fix north of 66.6N: OPC's high-seas area ends at 67N.
+   atl: 377 of 1011 = 37.3%  95% CI [32.7, 42.3]
+   pac: 12 of 856 = 1.4%  95% CI [0.7, 2.2]
+   atl class low      :  969 events,  346 with an HF fix >= 60N
+   atl class tipjet   :   29 events,   18 with an HF fix >= 60N
+   atl class nocentre :   13 events,   13 with an HF fix >= 60N
+
+2. Archive central pressure at HF fixes by region (one median per event per region)
+   S<60N                  n= 782 events  median  966.5 hPa  IQR 958-976
+   Labrador/Davis         n=  48 events  median  965.2 hPa  IQR 957-972  minus south -1.2  95% CI [-7.0, 1.0]
+   CapeFarewell/Irminger  n= 167 events  median  963.0 hPa  IQR 954-972  minus south -3.5  95% CI [-7.0, 0.0]
+   DenmarkStr/Iceland     n= 121 events  median  960.0 hPa  IQR 952-968  minus south -6.5  95% CI [-9.5, -3.0]
+   Norwegian              n=  50 events  median  962.8 hPa  IQR 952-971  minus south -3.8  95% CI [-9.0, -0.5]
+   (Positive = weaker storms at HF there. Background: the Iceland Low makes high-latitude
+    pressures lower for the same storm, so a positive difference is conservative.)
+
+3. Pipeline A against the archive by region (2004-05 on; Atlantic; any archive low)
+   all:  archive lows 1012, POD 0.750;  ERA5 events 1104, FAR 0.321;  bias (ERA5/archive) 1.09
+   archive fix >= 60N / ERA5 peak >= 60N      POD 0.759 (n=402)  FAR 0.443 (n=375)  ERA5/archive 0.93
+   archive fix < 60N only / ERA5 peak < 60N   POD 0.744 (n=610)  FAR 0.258 (n=729)  ERA5/archive 1.20
+   ERA5 has an HF-strength fix >= 60N          FAR 0.383 (n=454)
+   ERA5 has none                               FAR 0.277 (n=650)
+   FAR(>=60N) - FAR(<60N) = +0.185  95% CI [0.122, 0.244]
+   POD(>=60N) - POD(<60N) = +0.014  95% CI [-0.040, 0.071]
+   Matching as the calibration: a fix within 400 km at the same time (800 km for pressure-less
+   archive events). Peak = pipeline A's peak_lat (time of the track's maximum index).
+   ERA5 share of events peaking >= 60N: 34.0% (2004-05 on); all seasons 37.5%
+
+4. Where the gust maximum sits (pipeline A, 3303 Atlantic HF-strength fixes, 3094 times)
+   reproduction: |g800 recomputed - catalog| max 0.00 kt, centre match max 0.0 km
+   fix >= 60N  n= 1003  median dist centre->max   366 km  max >400 km out  44.1%  max <=300 km of Greenland  62.8%  both  31.4%  <=100 km of Greenland  32.9%  <=50 km of any land  13.0%
+   fix < 60N   n= 2300  median dist centre->max   201 km  max >400 km out  19.4%  max <=300 km of Greenland   7.7%  both   4.7%  <=100 km of Greenland   4.0%  <=50 km of any land   3.2%
+   S<60N                  n= 2300  centre->max median   201 km  terrain   4.7%  near Greenland   7.7%  centre MSLP median  967.3
+   Labrador/Davis         n=   46  centre->max median   257 km  terrain  19.6%  near Greenland  50.0%  centre MSLP median  965.5
+   CapeFarewell/Irminger  n=  453  centre->max median   370 km  terrain  35.1%  near Greenland  80.6%  centre MSLP median  962.3
+   DenmarkStr/Iceland     n=  410  centre->max median   397 km  terrain  34.6%  near Greenland  57.8%  centre MSLP median  961.0
+   Norwegian              n=   94  centre->max median   280 km  terrain   5.3%  near Greenland   5.3%  centre MSLP median  959.2
+   terrain share (max >400 km from centre and <=300 km from Greenland), >=60N minus <60N: +0.268  95% CI [0.227, 0.301]
+   at >=60N fixes: gust max over sea ice > 0.15 in 24.9% (n=972)
+   terrain-type maxima at >=60N (n=315): wind from W (225-315) 19.7%, from N-NE (315-90) 78.7%, from E-S (90-225) 1.6%
+   of those, maximum within 59-61.5N 35-50W (Cape Farewell): 19.4%
+
+5. Track index with terrain, ice, or remote points removed (events 2004-05 on)
+   events 1104, with gustloc rows 1103
+   ocean within 100 km of Greenland removed                   lose HF: all   5.5% (61)  peak>=60N  12.3%  peak<60N   2.1%
+   ocean within 300 km of Greenland removed                   lose HF: all  20.4% (225)  peak>=60N  43.7%  peak<60N   8.4%
+   ocean within 50 km of any land removed                     lose HF: all   2.5% (28)  peak>=60N   4.5%  peak<60N   1.5%
+   points under sea ice > 0.15 removed (fixes >= 55N only)    lose HF: all   2.5% (28)  peak>=60N   5.9%  peak<60N   0.8%
+   only points within 400 km of the centre                    lose HF: all  13.2% (146)  peak>=60N  20.5%  peak<60N   9.5%
+   share lost under g800_gl100: 95% CI [4.2, 6.9] %
+   share lost under g800_ice: 95% CI [1.9, 3.2] %
+   peak>=60N share if Greenland 300 km band removed: 24.0% (now 34.0%)
+
+6. Terrain-dependent ERA5 events against the archive
+   index needs the Greenland 300 km band    n= 225  matched to an archive event  47.1%  FAR 0.529
+   does not                                 n= 878  matched to an archive event  73.3%  FAR 0.267
+   index needs the Greenland 100 km band       n=  61  matched  36.1%
