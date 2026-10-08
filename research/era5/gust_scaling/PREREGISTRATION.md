@@ -110,4 +110,20 @@ approximation is labelled where quoted.
 
 ## Deviations (post hoc)
 
-(none yet)
+Logged 2026-10-08, after the committed plan and before the full 2,000-draw run. Estimates from smoke runs (20-40 draws)
+had been seen when these were written, so none of these is blind to the signs and rough sizes of the primary slopes.
+
+1. **Optimiser, not estimator (no change to the plan).** The first implementation of the pre-registered truncated-normal
+   MLE (joint BFGS on uncentred covariates) stopped early on a flat ridge and gave start-dependent slopes. Fixed by
+   centring the covariates and profiling sigma (log-concave location problem solved by damped Newton at each sigma,
+   bounded 1-D search over sigma); a profile-likelihood table over sigma 0.07-0.5 and six Nelder-Mead starts agree on
+   one maximum per basin (Atlantic sigma 0.128, Pacific 0.124). The estimator is the one in the plan.
+2. **Added secondary S10 (post hoc): generalised Pareto regression of the exceedance g800 - 71.7 kt**, log scale linear
+   in the same covariates, common shape. Reason: the truncated-normal slopes depend on the normal tail being right
+   (the fitted slope scales with sigma along the profile), so a second tail model is a check. Its slopes are on the
+   log-scale of the exceedance; they are converted to the elasticity of the mean gust by x mean(exceedance)/mean(gust)
+   (about 0.09). Reported next to the primary, not instead of it.
+3. **Added diagnostic (post hoc): probability-integral-transform check** of the truncated-normal and GPD fits against the
+   observed gusts (KS distance), to say which tail describes the data.
+4. **Implementation notes.** Alternative depths use the same Dp >= 5 hPa rule. S9 drops fixes without a day-0 PNA value.
+   49 of 5,983 fixes have Dp < 5 hPa and are dropped from every model.
