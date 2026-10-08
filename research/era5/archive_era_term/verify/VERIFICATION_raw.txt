@@ -1,0 +1,45 @@
+== SET A
+atl corr(idx,era)=0.078
+atl h1 total 902 M1 RR 1.236 M2 RR 1.239 era coef -0.076
+atl h2 total 675 M1 RR 1.268 M2 RR 1.274 era coef -0.110
+atl h3 total 453 M1 RR 1.351 M2 RR 1.364 era coef -0.198
+atl b total 226 M1 RR 1.177 M2 RR 1.177 era coef +0.013
+atl m total 222 M1 RR 1.118 M2 RR 1.116 era coef +0.070
+pac corr(idx,era)=0.077
+pac h1 total 811 M1 RR 1.193 M2 RR 1.199 era coef -0.094
+pac h2 total 609 M1 RR 1.215 M2 RR 1.233 era coef -0.214
+pac h3 total 430 M1 RR 1.275 M2 RR 1.302 era coef -0.284
+pac b total 199 M1 RR 1.151 M2 RR 1.138 era coef +0.289
+pac m total 179 M1 RR 1.083 M2 RR 1.085 era coef -0.043
+== SET B
+exposure 5.48 16.52
+atl >=1 per season 46.0 before 44.9 after 46.3
+atl >=2 per season 33.8 before 34.1 after 33.7
+atl >=3 per season 22.4 before 24.3 after 21.8
+atl share >=2 before 0.760 after 0.728
+atl share >=3 before 0.541 after 0.471
+pac >=1 per season 38.9 before 38.5 after 39.0
+pac >=2 per season 29.1 before 30.5 after 28.7
+pac >=3 per season 20.5 before 22.3 after 19.9
+pac share >=2 before 0.791 after 0.735
+pac share >=3 before 0.578 after 0.510
+== SET C
+archive atl mean 19.59 -> 17.61 n 246 765 share6 0.240 -> 0.272
+archive pac mean 19.59 -> 17.62 n 211 645 share6 0.209 -> 0.265
+proxy atl mean 17.00 -> 18.22 n 239 865 share6 0.343 -> 0.341
+proxy pac mean 17.69 -> 18.02 n 214 682 share6 0.364 -> 0.328
+== SET D
+n tracks 2000
+atl before 0.577 (n 239) after 0.597 (n 865)
+pac before 0.575 (n 214) after 0.654 (n 682)
+overall 0.612
+== SET E
+rows 159430
+Atl malformed date rows dropped: 0
+Pac malformed date rows dropped: 1
+archive HF fixes 5649
+matched 5425 unmatched 224
+positives hf24 5399 arch24 5118
+n before 40133 arch24 pos before 1328 n after 119297 pos after 3790
+hf24 HSS overall 0.657 before 0.599 after 0.675
+fc HSS overall 0.543 before 0.519 after 0.551

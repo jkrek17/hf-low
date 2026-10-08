@@ -1,0 +1,7 @@
+risk sets (case times) 895, cases 927, controls 6369
+delta 0.05 SD: power 0.24 at alpha 0.05, 0.08 at alpha 0.05/6
+delta 0.10 SD: power 0.79 at alpha 0.05, 0.55 at alpha 0.05/6
+delta 0.15 SD: power 1.00 at alpha 0.05, 0.97 at alpha 0.05/6
+delta 0.20 SD: power 1.00 at alpha 0.05, 1.00 at alpha 0.05/6
+delta 0.25 SD: power 1.00 at alpha 0.05, 1.00 at alpha 0.05/6
+delta 0.30 SD: power 1.00 at alpha 0.05, 1.00 at alpha 0.05/6

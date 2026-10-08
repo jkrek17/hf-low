@@ -43,6 +43,8 @@ the gap**: the duration rule (about half) and the area (about 37%).
   40-30W) straddles 35W. The OPC edges are recalled, not read from a source here, and the 5 degree sensitivity moves the Atlantic area-only count from
   24.8 to 35.5. **This needs a source before it is quoted.**
 - **Duration.** 26.3% of Atlantic and 25.1% of Pacific archive events have a single HF fix (6 h). Whether a published "warned storm" excludes them is not known.
+  **Era note (RA-29):** events with at least 3 HF fixes run 24.3 (Atlantic) and 22.3 (Pacific) a year before 2009-11-23 and 21.8 and 19.9 after (the share with at least 3 fixes falls about 7 points in both basins); events with at least 1 fix are flat. The at-least-3 rule's count is therefore era-dependent by about 10%. See `archive_era_term/`.
+
 - **Era (check 6).** Archive counts show no step at the dates recording practice changed: Pacific 39.8 before 2013-14 and 38.3 after (Welch p = 0.659),
   Atlantic 45.1 before 2017-18 and 47.2 after (p = 0.606; Benjamini-Hochberg q = 0.659 and 1.0). The share of single-fix events and of events outside the
   assumed area are also flat across seasons (exploratory). Mean events per season were 44.7 (Atlantic) and 40.3 (Pacific) in 2004-05 to 2009-10, the

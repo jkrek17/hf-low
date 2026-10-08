@@ -1,0 +1,8 @@
+RA-11 addendum A: archive Atlantic events, first HF fix >=6 h after the lowest-pressure fix (late HF category)
+events 963, north of 60N 202, south 761; lag mean -14.9 h; same-fix or earlier 96.1%, >=6 h 3.9%, >=12 h 1.2%
+  late >= 6 h: share north 4.5% vs south 3.8%; OR 1.22 [0.43, 2.51]; log-OR z=0.43 two-sided p=0.6657
+  late >=12 h: share north 2.0% vs south 1.1%; OR 2.01 [0.87, 5.50]; log-OR z=1.46 two-sided p=0.1431
+  BH q (2 tests): >=6 h q=0.6657, >=12 h q=0.2863
+  power for planted OR 3.1 (base late share south 3.8%, north n=202, south n=761; SE from the season-block bootstrap): 0.90
+  for reference PR 86 (ERA5 proxy pipeline A, gust maximum >= 60N, different definition): OR 3.10, late 53% vs 27%
+  both thresholds count the same-fix tie as NOT late; archive minimum pressure is the analysed value over rows that may not span the whole life cycle

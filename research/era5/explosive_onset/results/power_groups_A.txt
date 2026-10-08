@@ -1,0 +1,5 @@
+Arm A: case-time risk sets 740, cases 766, controls 5244, fixes with features 6010
+  A_stab: features ['stab']; 80% MDE per feature, log-odds per SD (adjusted for the others in the group): stab 0.227 (alpha 0.05) / 0.270 (corrected)
+  A_trough: features ['trough']; 80% MDE per feature, log-odds per SD (adjusted for the others in the group): trough 0.165 (alpha 0.05) / 0.197 (corrected)
+  A_omega700: features ['omega700']; 80% MDE per feature, log-odds per SD (adjusted for the others in the group): omega700 0.166 (alpha 0.05) / 0.197 (corrected)
+  A_all: features ['stab', 'trough', 'omega700']; 80% MDE per feature, log-odds per SD (adjusted for the others in the group): stab 0.232 (alpha 0.05) / 0.277 (corrected), trough 0.170 (alpha 0.05) / 0.202 (corrected), omega700 0.166 (alpha 0.05) / 0.198 (corrected)
