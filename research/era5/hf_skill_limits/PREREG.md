@@ -38,4 +38,18 @@ H1-H3 are the confirmatory tests (Holm over 3). Stratum HSS contrasts (each stra
 Any change after the first outcome is logged below as a post-hoc deviation, and both versions reported. A well-powered null is a full answer.
 
 ## Deviations log
-(empty)
+All logged after the first outcome was seen, in the order they arose.
+1. **Peak gust window (before outcomes, a data limit).** The committed fix table holds 00 and 12 UTC only, so "24 h peak g800" is the larger of the t+12 and t+24 fixes. 28% of hf24 positives reach 71.7 kt only at a 06 or 18 UTC point and have a 12-hourly peak below the cut. H1 is therefore reported two ways (as is; those positives placed on the cut).
+2. **H1 reading.** The rule text was ambiguous (60% point estimate, lower bound 0.50). Both are reported; the verdict below uses the stricter: the point estimate must reach 0.60.
+3. **Oracle (b) adds ndr24 and its square, oracle (a) dmsl12 and its square**, and rows are restricted to fixes whose track survives 24 h with a class available (the base is refitted on the same rows: 0.436).
+4. **Q3 post hoc.** The homoscedastic Gaussian version failed its own consistency check at k = 1 (BSS +0.087 against the logistic onset BSS +0.291). Q3b repeats it with a residual SD by predicted-gust band; k = 1 still sits at +0.175. Read the Q3 curves as an illustration of sensitivity to gust-forecast error, not as a ceiling.
+5. **Q2c concurrent diagnosis** (HF now from the same fields without g800) and **diagnosis_extra.py** (boosted trees; tier-1 fields from PR 56) were not in the plan. Added after Q2 showed the oracle recovered only part of the gap. Exploratory. One run of default settings; no tuning; 11-fold season-grouped CV, not leave-one-season-out.
+6. **TC stratum dropped** (the tropical-cyclone flag exists only for the 4,157 catalog events, not for all tracks).
+7. **FDR.** The stratum contrasts are 24 overlapping strata (some are complements of others), BH q over all 24; descriptive.
+
+## Amendment 1 (10:25Z, before any moisture result was computed): latent heating and moisture flux (Jason's question)
+Proxies on hand (tier-1 table, PR 56, 18 seasons 2004-05..2021-22, 130,271 fixes): tcwv, surface flux, airsea, ivt500, ivtmax, precip6 (surface proxy for latent heating). Latent heating aloft (warm-conveyor ascent) is NOT available and is what Tier 2 would add.
+Moisture group = {tcwv, flux, airsea, ivt500, ivtmax, precip6}; base = PR 12 full predictors. All LOSO (18 folds), BSS gain with season-bootstrap 90% CI.
+- **H4 (route).** Moisture group improves prediction of the 24 h deepening rate (linear, R2 gain) by at least 0.01, but improves hf24 given the realised deepening (oracle rows) by less than 0.005 BSS: i.e. it matters through deepening, not through wind.
+- **H5 (misses).** Among fixes with realised 24 h deepening above 1 Bergeron (rapid), misses differ from hits in the moisture group: jointly by a logistic of miss vs hit on the six standardised proxies, LOSO AUC; supported if AUC lower 5% bound > 0.55.
+Both are reported even if null; two tests, Holm.
