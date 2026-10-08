@@ -172,4 +172,26 @@ the previous-week covariate; they do not enter the pattern search.
 
 ## Deviations (post hoc; filled in as they happen)
 
-(none yet)
+Recorded after the held-out look. None changes a pre-registered estimate or test.
+
+1. **Missing MJO values.** The source has no MJO value for two weeks (2021-22 week 13 and 2022-23 week 13). The
+   standardised MJO1 and MJO2 are set to 0 (neutral) in those weeks, in the named-index models only. Found when the
+   swap-split named model returned NaN, before any held-out look.
+2. **Climatology seasons.** "1991-2020" was implemented as the 29 seasons 1991-92 to 2019-20 (days 5 Sep to 10 May).
+3. **Counts of resamples not fixed in the plan:** 2,000 bootstrap draws for the attribution R-squared, 1,000 permutations
+   for the composite-map significance, 5,000 for S5, 2,000 for the power simulation. Seed 20261008 (+ offset per stage).
+4. **S4 and S5 outcomes** are pipeline A tracks counted by their `start` date, the same rule as the archive's weeks.
+5. **Plumbing test.** Before the held-out look the scoring function was run once on the *training* seasons (in-sample) to
+   check that it ran. Not a look at the held-out outcomes.
+6. **Re-freeze.** The models were frozen twice. The first freeze (before item 1 was fixed) had NaN named-index models in
+   the swap split; the models were re-frozen. The primary frozen models did not change between the two. No held-out outcome
+   had been read at either point (`frozen_*.json` is committed in `4947105`, before `heldout_looks.log`).
+7. **Looks at the held-out seasons.** Scored as pre-registered: primary (with S3, S4, S5), swap, lag 2 and the concurrent
+   contrast. Then one post hoc script (`posthoc.py`, PH0-PH4) that re-scores the same seasons with changed baselines and
+   one-field models, and `posthoc2.py` (PH5, on the out-of-sample index, not on outcomes). The attribution and maps use all
+   22 seasons and are descriptive. `results/heldout_looks.log` has the times.
+8. **POST HOC checks (not in the plan), all in `results/posthoc.json` and `posthoc_rf.json`:**
+   PH1 baseline with the previous week's all-cyclone count (storm-track imprint); PH2 baseline with annual harmonics;
+   PH3 one field at a time and leave-one-field-out; PH4 held-out effect size (rate ratio per SD and by quintile of the
+   pattern index, estimated on the held-out weeks after the test); PH5 random-forest R-squared of the pattern index on the
+   named indices.
