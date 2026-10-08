@@ -125,4 +125,15 @@ test, with the index computed leave-one-season-out), one look at the 2004-05 to 
 
 ## Deviations (post hoc)
 
-None yet.
+Logged when the results were written. None changes a test, a threshold or a sample chosen in advance.
+
+1. **Two MJO weeks are missing** in `weekly_table.csv.gz` (2021-22 week 13 and 2022-23 week 13, both MJO components). They are set
+   to 0 (the mean) after standardising. Affects S1 only (2 of 660 weeks).
+2. **Power level.** The plan said "power of at least 80%" without a significance level. Both are reported: one-sided p < 0.05
+   (the level a single pre-specified test would use) and p < 0.05/6 (Bonferroni over the six primary tests). Rule 3 is met at the
+   first and not at the second; see the README.
+3. **Power computation.** The 400 simulations and 1,000 shuffles are as planned. For the OLS tests the shuffled slopes are
+   computed by residualising on the controls (Frisch-Waugh), algebraically the same slope as a refit; Poisson tests refit.
+4. **S5 sample.** The lag profile uses weeks 3..26 of every season so that all lags -3..+3 share one sample.
+5. **Not in the plan, run after the primary results were in (post hoc):** the month-only lagged correlation of the two indices
+   (`posthoc.py`), shown beside S5, and the half-by-half S7 numbers were computed with the primary ones. Both are labelled.
