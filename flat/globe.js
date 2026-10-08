@@ -120,6 +120,9 @@ window.HF = window.HF || {};
   var era5 = null;                       // ERA5 proxy tracks (HF.era5.decode shape) drawn under the archive tracks, or null
   var currentBins = null;                // built lazily from window.HF_CURRENTS, see buildCurrentSegments()
   var curGrid = null;                    // cached computeDensityGrid() result, layer 'density' only
+  var atlasModel = null;                 // atlas layer: {kind: 'boxes'|'motion'|'historic', ...} from app.js
+  var atlasHits = [];                    // atlas arrows / markers drawn last frame: {x, y, tip}
+  var hoveredAtlas = null;               // index into atlasModel.cells (boxes) or atlasHits (the others)
   var hoveredCellKey = null;             // "latIdx:lonIdx", density layer only
   var densityRamp = null;                // --seq-1..7, resolved lazily and reset on theme change
 
@@ -1195,6 +1198,140 @@ window.HF = window.HF || {};
     if (hoveredCell) drawOneCell(hoveredCell, ramp, true);
   }
 
+  /* --------------------------------------------------------------- atlas
+     The climatology atlas layers (docs/data/atlas.js, built by
+     tools/build_atlas_layers.py). Three kinds, chosen by app.js:
+       boxes     HF-centre hours per season in 5 x 10 degree boxes, on the
+                 same square-root ramp as the fix-density layer
+       motion    mean motion of HF lows while HF, one arrow per box (arrow
+                 length = speed / 6 degrees, as in the atlas's fig8)
+       historic  the 1979-2003 ERA5 proxy candidates: their tracks, and a
+                 ring at the position of the peak gust
+     Nothing here is the archive's own track data, so there is no hit-testing
+     against lows; hover reads the model instead. */
+
+  function boxRing(c) {
+    var n = 4, pts = [], k;
+    for (k = 0; k <= n; k++) pts.push([c.lon0 + c.dlon * k / n, c.lat0]);
+    for (k = 1; k <= n; k++) pts.push([c.lon0 + c.dlon, c.lat0 + c.dlat * k / n]);
+    for (k = n - 1; k >= 0; k--) pts.push([c.lon0 + c.dlon * k / n, c.lat0 + c.dlat]);
+    for (k = n - 1; k >= 0; k--) pts.push([c.lon0, c.lat0 + c.dlat * k / n]);
+    return pts;
+  }
+
+  function atlasStep(frac, ramp) {
+    return Math.min(ramp.length - 1, Math.floor(Math.sqrt(frac) * ramp.length));
+  }
+
+  function drawAtlasBoxes() {
+    var ramp = densityRampColors(), R = baseR * view.zoom, cells = atlasModel.cells, max = atlasModel.max || 1;
+    for (var i = 0; i < cells.length; i++) {
+      var c = cells[i], segs = visibleSegments(boxRing(c));
+      if (!segs.length) continue;
+      var frac = c.h / max;
+      ctx.globalAlpha = Math.min(1, 0.22 + 0.66 * Math.sqrt(frac) + (i === hoveredAtlas ? 0.2 : 0));
+      ctx.fillStyle = ramp[atlasStep(frac, ramp)];
+      fillClippedRing(segs, R);
+      ctx.globalAlpha = 1;
+      strokePath(segs, i === hoveredAtlas ? 1.5 : 0.4, pal.oceanWash);
+    }
+  }
+
+  function drawAtlasMotion() {
+    var ramp = densityRampColors(), arrows = atlasModel.arrows;
+    for (var i = 0; i < arrows.length; i++) {
+      var a = arrows[i], kt = Math.hypot(a.u, a.v);
+      var tail = project(a.lon, a.lat);
+      var head = project(a.lon + (a.u / 6) / Math.max(0.2, Math.cos(a.lat * DEG)), a.lat + a.v / 6);
+      if (!tail.visible || !head.visible) continue;
+      var col = ramp[Math.min(ramp.length - 1, Math.max(0, Math.floor((kt - 10) / 35 * ramp.length)))];
+      var ang = Math.atan2(head.y - tail.y, head.x - tail.x), hl = 6;
+      ctx.strokeStyle = col;
+      ctx.lineWidth = i === hoveredAtlas ? 3.2 : 2.2;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(tail.x, tail.y); ctx.lineTo(head.x, head.y);
+      ctx.moveTo(head.x, head.y); ctx.lineTo(head.x - hl * Math.cos(ang - 0.45), head.y - hl * Math.sin(ang - 0.45));
+      ctx.moveTo(head.x, head.y); ctx.lineTo(head.x - hl * Math.cos(ang + 0.45), head.y - hl * Math.sin(ang + 0.45));
+      ctx.stroke();
+      atlasHits.push({ x: (tail.x + head.x) / 2, y: (tail.y + head.y) / 2, tip: a.tip });
+    }
+    ctx.lineCap = 'butt';
+  }
+
+  function drawAtlasHistoric() {
+    var col = HF.cssVar('--hist') || '#a1246b', tracks = atlasModel.tracks, i, j;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = col;
+    ctx.lineWidth = 2;
+    ctx.globalAlpha = 0.75;
+    var path = new Path2D();
+    for (i = 0; i < tracks.length; i++) {
+      var fx = tracks[i], px = 0, py = 0, pvis = false;
+      for (j = 0; j < fx.length; j++) {
+        var p = project(fx[j].lon, fx[j].lat);
+        if (j && pvis && p.visible) { path.moveTo(px, py); path.lineTo(p.x, p.y); }
+        px = p.x; py = p.y; pvis = p.visible;
+      }
+    }
+    ctx.stroke(path);
+    ctx.globalAlpha = 1;
+    ctx.lineCap = 'butt';
+    var marks = atlasModel.marks;
+    for (i = 0; i < marks.length; i++) {
+      var m = marks[i], q = project(m.lon, m.lat);
+      if (!q.visible) continue;
+      ctx.beginPath();
+      ctx.arc(q.x, q.y, i === hoveredAtlas ? 6.5 : 4.5, 0, Math.PI * 2);
+      ctx.fillStyle = HF.cssVar('--page') || '#fff';
+      ctx.fill();
+      ctx.lineWidth = m.tc ? 1.5 : 2.4;
+      ctx.setLineDash(m.tc ? [2, 2] : []);
+      ctx.strokeStyle = col;
+      ctx.stroke();
+      ctx.setLineDash([]);
+      atlasHits.push({ x: q.x, y: q.y, tip: m.tip });
+    }
+  }
+
+  function drawAtlas() {
+    hitPoints = [];
+    atlasHits = [];
+    if (!atlasModel) return;
+    if (atlasModel.kind === 'boxes') drawAtlasBoxes();
+    else if (atlasModel.kind === 'motion') drawAtlasMotion();
+    else if (atlasModel.kind === 'historic') drawAtlasHistoric();
+  }
+
+  function handleAtlasHover(px, py, evt) {
+    var idx = null, tip = null, i;
+    if (atlasModel && atlasModel.kind === 'boxes') {
+      var geo = unproject(px, py);
+      if (geo) {
+        for (i = 0; i < atlasModel.cells.length; i++) {
+          var c = atlasModel.cells[i];
+          var dl = (((geo[0] - c.lon0) % 360) + 360) % 360;
+          if (dl < c.dlon && geo[1] >= c.lat0 && geo[1] < c.lat0 + c.dlat) { idx = i; tip = c.tip; break; }
+        }
+      }
+    } else if (atlasModel) {
+      var best = 11 * 11;
+      for (i = 0; i < atlasHits.length; i++) {
+        var d = (atlasHits[i].x - px) * (atlasHits[i].x - px) + (atlasHits[i].y - py) * (atlasHits[i].y - py);
+        if (d < best) { best = d; idx = i; tip = atlasHits[i].tip; }
+      }
+    }
+    if (idx !== hoveredAtlas) {
+      hoveredAtlas = idx;
+      dirty = true;
+      scheduleFrame();
+      canvas.style.cursor = idx !== null ? 'pointer' : '';
+      if (tip) HF.showTip(tip, evt); else HF.hideTip();
+    } else if (tip) {
+      HF.moveTip(evt);
+    }
+  }
+
   /* ----------------------------------------------------------- composite
      "Did the storm track move, and can that be told from noise?" - the
      HF.composite.compare() result drawn as a diverging map. The statistics
@@ -1907,6 +2044,7 @@ window.HF = window.HF || {};
   /* ------------------------------------------------------------ dispatch */
 
   function drawFeatures() {
+    if (curLayer === 'atlas') return drawAtlas();
     if (curLayer === 'density') return drawDensity();
     if (curLayer === 'genesis') return drawPoints('genesis');
     if (curLayer === 'peak') return drawPoints('peak');
@@ -2231,6 +2369,7 @@ window.HF = window.HF || {};
 
     var px = evt.clientX - rect.left, py = evt.clientY - rect.top;
 
+    if (curLayer === 'atlas') { handleAtlasHover(px, py, evt); return; }
     if (curLayer === 'density') { handleDensityHover(px, py, evt); return; }
     if (curLayer === 'composite') { handleCompositeHover(px, py, evt); return; }
 
@@ -2340,6 +2479,7 @@ window.HF = window.HF || {};
       HF.hideTip();
       hoveredKey = undefined;
       hoveredCellKey = null;
+      hoveredAtlas = null;
       hoveredCompId = null;
     } else {
       handleHover(evt, rect);
@@ -2671,6 +2811,14 @@ window.HF = window.HF || {};
 
   /** Tracks layer only: ERA5 proxy tracks to draw under the archive's, or
       null/empty for none. app.js owns the filtering (HF.era5.filter). */
+  /** Atlas layer model (see drawAtlas), or null. */
+  globe.setAtlas = function (model) {
+    atlasModel = model || null;
+    hoveredAtlas = null;
+    dirty = true;
+    scheduleFrame();
+  };
+
   globe.setEra5 = function (list, nul, peaks, opts) {
     era5Prob = !!(opts && opts.prob);
     era5Focus = opts && opts.focus ? opts.focus : null;

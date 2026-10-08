@@ -17,7 +17,7 @@
     maxPressure: 1010,
     bombOnly: false,
     search: '',
-    layer: 'tracks',       // 'tracks' | 'density' | 'genesis' | 'peak' | 'playback'
+    layer: 'tracks',       // 'tracks' | 'density' | 'genesis' | 'peak' | 'atlas' | 'playback'
     currents: false,   // ocean currents background layer - independent of `layer`, off by default
     era5: false,       // ERA5 proxy tracks under the Tracks layer, off by default
     era5null: false,   // ... matched null-case tracks
@@ -25,6 +25,7 @@
     era5prob: false,   // ... coloured by P(HF within 24 h) instead of one flat colour
     era5focus: null,
     era5focusPan: false,   // rotate the globe to the focused track once it has loaded
+    atlas: { view: 'boxes', src: 'archive' },   // the Atlas layer
     strong: { list: 'minp', basin: 'all' },   // the Strongest storms tab   // key of the ERA5 track picked from the Strongest list, drawn whatever the filters say
     era5pre: false,    // ... and before 2001-02 (within-era comparison only), off by default
     sort: { key: 'start', dir: -1 },
@@ -1015,7 +1016,8 @@
     nul:   { varName: 'HF_ERA5_NULL',  loader: 'era5NullLoader',  decode: function (r) { return HF.era5.decode(r); } },
     peaks: { varName: 'HF_ERA5_PEAKS', loader: 'era5PeaksLoader', decode: function (r) { return HF.era5.decodePeaks(r); } },
     prob:  { varName: 'HF_ERA5_PROB',  loader: 'era5ProbLoader',  decode: function (r) { return r; } },
-    lists: { varName: 'HF_ERA5_LISTS', loader: 'era5ListsLoader', decode: function (r) { return r; } }
+    lists: { varName: 'HF_ERA5_LISTS', loader: 'era5ListsLoader', decode: function (r) { return r; } },
+    atlas: { varName: 'HF_ATLAS',      loader: 'atlasLoader',     decode: function (r) { return r; } }
   };
   var era5Attached = {};                       // ev / nul: P(HF) already attached to the decoded tracks
   var era5Data = {}, era5Status = {};          // per set: decoded data; 'loading' | 'ready' | 'failed'
@@ -1097,6 +1099,129 @@
     }
     var probOn = state.era5 && state.era5prob && attachEra5Prob() && era5Attached.ev;
     HF.globe.setEra5(ev, nul, peaks, { prob: !!probOn, focus: focus });
+    HF.globe.setAtlas(atlasModel());
+  }
+
+  /* ------------------------------------------------------------- atlas
+     The Atlas layer: HF-centre hours per season in boxes, mean motion while
+     HF, and the 1979-2003 ERA5 proxy candidates (docs/data/atlas.js, lazy
+     loaded; method in research/era5/climatology_atlas). Basin and month
+     filters apply; season and every archive-only filter do not, because the
+     two sources are fixed at 2004-05 to 2025-26. */
+
+  function fmtLat(v) { return Math.abs(v) + '°' + (v < 0 ? 'S' : 'N'); }
+  function fmtLon(v) { var x = v > 180 ? v - 360 : v; return Math.abs(x) + '°' + (x < 0 ? 'W' : 'E'); }
+  function atlasMonthsLabel() {
+    var on = Object.keys(state.months || {}).filter(function (k) { return state.months[k]; }).map(Number).sort(function (a, b) { return a - b; });
+    return on.length ? on.map(function (m) { return MONTHS_SHORT[m - 1]; }).join(', ') : 'all months';
+  }
+  function atlasSrcLabel() { return state.atlas.src === 'archive' ? 'OPC archive' : 'ERA5 proxy (pipeline A)'; }
+  function compass(u, v) {
+    var deg = (Math.atan2(u, v) * 180 / Math.PI + 360) % 360;
+    return ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'][Math.round(deg / 45) % 8];
+  }
+
+  function atlasModel() {
+    if (state.layer !== 'atlas' || !ensureEra5('atlas')) return null;
+    var A = window.HF_ATLAS, src = state.atlas.src, view = state.atlas.view;
+    var basins = state.basin === 'both' ? ['atl', 'pac'] : [state.basin];
+    var months = state.months || {}, any = false, k, m;
+    for (k in months) if (months[k]) { any = true; break; }
+    var out, hmax = 0;
+    if (view === 'boxes') {
+      out = { kind: 'boxes', cells: [], max: 0 };
+      basins.forEach(function (b) {
+        var g = A.box[src][b];
+        g.cells.forEach(function (c) {
+          var n = 0;
+          for (m = 1; m <= 12; m++) if (!any || months[m]) n += c[1 + m];
+          if (!n) return;
+          var h = n * 6 / A.meta.seasons, lat0 = g.lat0 + g.dlat * c[0], lon0 = g.lon0 + g.dlon * c[1];
+          hmax = Math.max(hmax, h);
+          out.cells.push({ lat0: lat0, lon0: lon0, dlat: g.dlat, dlon: g.dlon, h: h,
+            tip: '<b>' + fmtLat(lat0) + '–' + fmtLat(lat0 + g.dlat) + ', ' + fmtLon(lon0) + '–' + fmtLon(lon0 + g.dlon) + '</b><br>' +
+              h.toFixed(1) + ' HF-centre hours per season<br>' + atlasSrcLabel() + ', ' + atlasMonthsLabel() +
+              '<br>' + n + ' six-hourly fixes in ' + A.meta.seasons + ' seasons' });
+        });
+      });
+      out.max = hmax;
+      return out;
+    }
+    if (view === 'motion') {
+      out = { kind: 'motion', arrows: [] };
+      basins.forEach(function (b) {
+        A.motion[src][b].forEach(function (r) {
+          var u = r[2] / 10, v = r[3] / 10, kt = Math.hypot(u, v);
+          out.arrows.push({ lat: r[0] + 2.5, lon: r[1] + 5, u: u, v: v,
+            tip: '<b>' + fmtLat(r[0]) + '–' + fmtLat(r[0] + 5) + ', ' + fmtLon(r[1]) + '–' + fmtLon(r[1] + 10) + '</b><br>' +
+              'Mean motion while HF: ' + kt.toFixed(1) + ' kt toward ' + compass(u, v) + '<br>' + atlasSrcLabel() + ', ' + r[4] + ' six-hour steps' });
+        });
+      });
+      return out;
+    }
+    // historic: the pre-2004 candidates, drawn on their ERA5 tracks
+    if (!ensureEra5('ev')) return null;
+    var byKey = {};
+    era5Data.ev.forEach(function (e) { byKey[e.key] = e; });
+    out = { kind: 'historic', tracks: [], marks: [] };
+    var seen = {};
+    A.historic.forEach(function (r) {
+      if (basins.indexOf(r[0]) < 0) return;
+      var t = byKey['era5:' + r[2]];
+      if (t && !seen[r[2]]) { seen[r[2]] = 1; out.tracks.push(t.fixes); }
+      out.marks.push({ lat: r[7] / 4, lon: r[8] / 4, tc: !!r[9],
+        tip: '<b>' + ymdLabel(r[4]) + ', ' + (r[0] === 'atl' ? 'Atlantic' : 'Pacific') + '</b><br>ERA5 proxy candidate, not confirmed<br>' +
+          'Chosen as one of the 15 ' + (r[1] === 'depth' ? 'deepest' : 'highest-gust') + ' of its basin before 2004-05<br>' +
+          'Minimum pressure ' + (r[5] / 10).toFixed(1) + ' hPa, gust index ' + (r[6] / 10).toFixed(1) + ' kt (peak-gust position)' +
+          (r[9] ? '<br>Tropical-cyclone linked' : '') });
+    });
+    return out;
+  }
+
+  function atlasNote() {
+    var v = state.atlas.view, A = window.HF_ATLAS;
+    if (!A || era5Status.atlas !== 'ready') return era5Status.atlas === 'failed' ? ' The atlas data could not be loaded.' : ' Loading the atlas…';
+    var warn = ' Basin and month filters apply; seasons and the other filters do not (both sources are fixed at 2004-05 to 2025-26).';
+    if (v === 'boxes') {
+      return 'HF-centre hours per season in 5° × 10° boxes (' + atlasSrcLabel() + ', ' + atlasMonthsLabel() + '; 6 hours per HF fix, ' + A.meta.seasons + ' seasons). ' +
+        (state.atlas.src === 'proxy' ? 'ERA5 proxy, not direct observation.' : 'OPC archive HF-category fixes.') + warn;
+    }
+    if (v === 'motion') {
+      return 'Mean motion of HF lows while HF (' + atlasSrcLabel() + '), one arrow per 5° × 10° box with at least ' + A.meta.min_steps + ' six-hour steps; arrow length is speed / 6 degrees, direction is true. ' +
+        (state.atlas.src === 'proxy' ? 'ERA5 proxy, not direct observation.' : 'OPC archive.') + ' Month filters do not apply to this view.' + ' Basin filter applies.';
+    }
+    return 'The ' + A.meta.historic + ' deepest and highest-gust ERA5 proxy events before 2004-05 (15 per basin per measure, ranked within the pre-2004 sample only), drawn on their ERA5 tracks with a ring at the peak-gust position (dashed ring: tropical-cyclone linked). ' +
+      'ERA5 PROXY, NOT DIRECT OBSERVATION: nothing here is confirmed, ERA5 pressure in the 1980s rests on fewer observations, the archive is incomplete before 2004-05 so absence there is not evidence, and the gust index drifts upward before 2001. Basin filter applies.';
+  }
+
+  function appendAtlasLegend(box) {
+    var v = state.atlas.view, ramp = ['--seq-1', '--seq-2', '--seq-3', '--seq-4', '--seq-5', '--seq-6', '--seq-7'];
+    function scale(fewLabel, manyLabel) {
+      var sc = HF.el('div', { class: 'legend-scale' });
+      ramp.forEach(function (r) { var sg = HF.el('span'); sg.style.background = HF.cssVar(r); sc.appendChild(sg); });
+      box.appendChild(sc);
+      var ends = HF.el('div', { class: 'legend-ends' });
+      ends.appendChild(HF.el('span', {}, fewLabel));
+      ends.appendChild(HF.el('span', {}, manyLabel));
+      box.appendChild(ends);
+    }
+    if (v === 'boxes') {
+      box.appendChild(HF.el('h3', {}, 'HF-centre hours per season'));
+      scale('few', 'many');
+      box.appendChild(HF.el('p', { class: 'legend-note' }, 'Square-root scale, 5° × 10° boxes. ' + atlasSrcLabel() + '.'));
+    } else if (v === 'motion') {
+      box.appendChild(HF.el('h3', {}, 'Mean speed while HF'));
+      scale('10 kt', '45 kt');
+      box.appendChild(HF.el('p', { class: 'legend-note' }, 'Boxes with at least 25 six-hour steps. ' + atlasSrcLabel() + '.'));
+    } else {
+      box.appendChild(HF.el('h3', {}, 'ERA5 proxy candidates, 1979-2003'));
+      var r = HF.el('div', { class: 'legend-row' }), sw = HF.el('span', { class: 'legend-swatch' });
+      sw.style.background = HF.cssVar('--hist');
+      r.appendChild(sw);
+      r.appendChild(document.createTextNode('Track; ring = peak-gust position'));
+      box.appendChild(r);
+      box.appendChild(HF.el('p', { class: 'legend-note' }, 'Not direct observation and not confirmed.'));
+    }
   }
 
   function renderMap(lows) {
@@ -1115,6 +1240,8 @@
         HF.globe.CELL_LON + '° cell, over the filtered seasons.';
     } else if (layer === 'genesis') {
       note.textContent = 'First tracked fix of each event — where the archive picked the low up, not true cyclogenesis.';
+    } else if (layer === 'atlas') {
+      note.textContent = atlasNote();
     } else if (layer === 'peak') {
       note.textContent = 'Position of each event’s lowest analyzed pressure; marker size grows as pressure falls.';
     } else {
@@ -1137,6 +1264,8 @@
     } else if (era5Wanted()) {
       note.textContent += ' ERA5 proxy layers are drawn on the Tracks layer only.';
     }
+    document.getElementById('atlasTools').hidden = layer !== 'atlas';
+    document.getElementById('atlasSrc').disabled = state.atlas.view === 'historic';
     var fclear = document.getElementById('era5FocusClear');
     fclear.hidden = !(state.era5focus && layer === 'tracks');
     if (state.era5focus && layer === 'tracks') {
@@ -1192,6 +1321,11 @@
     lows = lows || [];
     var box = HF.clear(document.getElementById('mapLegend'));
     var layer = state.layer;
+
+    if (layer === 'atlas') {
+      appendAtlasLegend(box);
+      return;
+    }
 
     if (layer === 'density') {
       box.appendChild(HF.el('h3', {}, 'HF fixes per cell'));
@@ -2617,6 +2751,8 @@
       state.era5focusPan = false;
       render();
     });
+    document.getElementById('atlasView').addEventListener('change', function (e) { state.atlas.view = e.target.value; render(); });
+    document.getElementById('atlasSrc').addEventListener('change', function (e) { state.atlas.src = e.target.value; render(); });
     document.getElementById('strongList').addEventListener('change', function (e) { state.strong.list = e.target.value; renderStrong(); });
     document.getElementById('strongBasin').addEventListener('change', function (e) { state.strong.basin = e.target.value; renderStrong(); });
     document.getElementById('fEra5Pre').addEventListener('change', function (e) {

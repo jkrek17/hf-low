@@ -5,7 +5,7 @@ var fs = require('fs'), path = require('path'), vm = require('vm'), assert = req
 var ROOT = path.join(__dirname, '..', '..');
 var ctx = { window: {} };
 vm.createContext(ctx);
-['assets/js/era5.js', 'data/era5-tracks.js', 'data/era5-null.js', 'data/era5-peaks.js', 'data/era5-prob.js', 'data/era5-lists.js'].forEach(function (f) {
+['assets/js/era5.js', 'data/era5-tracks.js', 'data/era5-null.js', 'data/era5-peaks.js', 'data/era5-prob.js', 'data/era5-lists.js', 'data/atlas.js'].forEach(function (f) {
   vm.runInContext(fs.readFileSync(path.join(ROOT, 'docs', f), 'utf8'), ctx, { filename: f });
 });
 var HF = ctx.window.HF, RAW = ctx.window.HF_ERA5;
@@ -126,6 +126,36 @@ test('strongest-storm lists: 150 rows, every track on the map, gust ranks within
   });
   ['minp', 'depth'].forEach(function (k) {
     assert.strictEqual(L.rows.filter(function (r) { return r[0] === k; }).length, 50);
+  });
+});
+test('atlas boxes reproduce the atlas report: busiest 5 x 10 degree box per basin and source', function () {
+  var A = ctx.window.HF_ATLAS;
+  function busiest(src, b) {
+    var best = null;
+    A.box[src][b].cells.forEach(function (c) {
+      var n = 0; for (var m = 2; m < 14; m++) n += c[m];
+      if (!best || n > best.n) best = { n: n, i: c[0], j: c[1] };
+    });
+    var g = A.box[src][b];
+    return { h: Math.round(best.n * 6 / A.meta.seasons * 10) / 10, lat0: g.lat0 + 5 * best.i, lon0: g.lon0 + 10 * best.j };
+  }
+  assert.deepStrictEqual(busiest('archive', 'atl'), { h: 96.8, lat0: 60, lon0: -40 });
+  assert.deepStrictEqual(busiest('proxy', 'atl'), { h: 88.9, lat0: 60, lon0: -40 });
+  assert.deepStrictEqual(busiest('archive', 'pac'), { h: 43.1, lat0: 40, lon0: 160 });
+  assert.deepStrictEqual(busiest('proxy', 'pac'), { h: 47.7, lat0: 40, lon0: 160 });
+  assert.strictEqual(A.meta.seasons, 22);
+});
+test('atlas motion boxes have at least 25 steps; historic candidates are pre-2004-05 and on mapped tracks', function () {
+  var A = ctx.window.HF_ATLAS, ev = HF.era5.decode(ctx.window.HF_ERA5), ids = {};
+  ev.forEach(function (e) { ids[e.key.slice(5)] = e; });
+  ['archive', 'proxy'].forEach(function (src) { ['atl', 'pac'].forEach(function (b) {
+    assert.ok(A.motion[src][b].length > 10);
+    A.motion[src][b].forEach(function (r) { assert.ok(r[4] >= 25); });
+  }); });
+  assert.strictEqual(A.historic.length, 60);
+  A.historic.forEach(function (r) {
+    assert.ok(r[3] < 2004, 'season ' + r[3]);
+    assert.ok(ids[r[2]], 'track ' + r[2] + ' is not an event track');
   });
 });
 console.log('\n' + passed + ' passed, ' + failed + ' failed');
