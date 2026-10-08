@@ -1,0 +1,166 @@
+ERA5 PROXY, pipeline A (800 km ocean gust index; HF-equivalent >= 71.7 kt). Pacific basin.
+Daily genesis counts, Poisson, month FE + season trend (+ era term where stated); SEs clustered by season;
+p from season-block permutation; [lo, hi] season-block bootstrap 95%; LOSO = leave-one-season-out range.
+RR scale = exp(coefficient); gamma per SD x SD of the two standardised, lagged indices.
+permutations = bootstrap draws = 2000; BH family size 55.
+Pre-registered decisions (primary window): P1 gamma inconclusive; P2 indirect effect well-powered null.
+
+[P primary] octapr 2004-2025 index lag; outcome column hf
+  seasons 22, days 4620, cyclones 10040, HF-like 825, index days filled 14, corr(ONI,PNA) over days +0.14
+  P1 interaction gamma (ONI x PNA)
+    HF      RR 1.014 (log +0.0137, se 0.0327, z +0.42, p_perm 0.7111, q 0.954) boot [0.952, 1.089]
+    all     RR 1.013 (log +0.0134, se 0.0053, z +2.50, p_perm 0.0555, q 0.161) boot [1.001, 1.028]
+    share   RR 1.000 (log +0.0003, se 0.0304, z +0.01, p_perm 0.9910, q 0.991) boot [0.944, 1.069]
+    LOSO (HF) [0.993, 1.033]; detectable at 80% power: RR 1.096
+  P2 pathway (HF)
+    total T (ONI alone) RR 1.018 (se 0.0332) boot [0.915, 1.079]
+    direct D (PNA held) RR 1.007 (se 0.0307) boot [0.912, 1.066]
+    path a (SD PNA per SD ONI) +0.150 (se 0.049) boot [+0.001, +0.235]
+    PNA effect b (ONI held) RR 1.071 (se 0.0329)
+    indirect a x b RR 1.010 (log +0.0103) boot [0.999, 1.022] p_perm 0.0360 q 0.124; T - D = +0.0103
+    share mediated undefined (total effect CI includes 0); LOSO ind [1.008, 1.014]; detectable (80%) RR 1.017
+    all cyclones: T 1.003, indirect 1.004 (p_perm 0.041); share: indirect 1.006 boot [0.997, 1.016] p_perm 0.031
+
+[S1 same-time] octapr 2004-2025 index now; outcome column hf
+  seasons 22, days 4620, cyclones 10040, HF-like 825, index days filled 14, corr(ONI,PNA) over days +0.15
+  P1 interaction gamma (ONI x PNA)
+    HF      RR 1.017 (log +0.0173, se 0.0282, z +0.61, p_perm 0.5802, q 0.912) boot [0.956, 1.082]
+    all     RR 0.995 (log -0.0048, se 0.0080, z -0.60, p_perm 0.5992, q 0.915) boot [0.976, 1.011]
+    share   RR 1.022 (log +0.0221, se 0.0280, z +0.79, p_perm 0.4968, q 0.826) boot [0.961, 1.087]
+    LOSO (HF) [1.002, 1.033]; detectable at 80% power: RR 1.082
+  P2 pathway (HF)
+    total T (ONI alone) RR 1.020 (se 0.0315) boot [0.933, 1.079]
+    direct D (PNA held) RR 0.994 (se 0.0254) boot [0.924, 1.045]
+    path a (SD PNA per SD ONI) +0.160 (se 0.050) boot [+0.017, +0.248]
+    PNA effect b (ONI held) RR 1.188 (se 0.0316)
+    indirect a x b RR 1.028 (log +0.0276) boot [1.002, 1.050] p_perm 0.0180 q 0.099; T - D = +0.0266
+    share mediated undefined (total effect CI includes 0); LOSO ind [1.019, 1.032]; detectable (80%) RR 1.034
+    all cyclones: T 1.004, indirect 1.008 (p_perm 0.016); share: indirect 1.019 boot [1.001, 1.039] p_perm 0.016
+
+[S2 Jun-May] junmay 2004-2025 index lag; outcome column hf
+  seasons 22, days 8008, cyclones 18398, HF-like 896, index days filled 14, corr(ONI,PNA) over days +0.07
+  P1 interaction gamma (ONI x PNA)
+    HF      RR 1.007 (log +0.0066, se 0.0325, z +0.20, p_perm 0.8486, q 0.971) boot [0.954, 1.088]
+    all     RR 1.010 (log +0.0096, se 0.0052, z +1.86, p_perm 0.1839, q 0.349) boot [0.997, 1.021]
+    share   RR 0.997 (log -0.0030, se 0.0330, z -0.09, p_perm 0.9160, q 0.971) boot [0.946, 1.082]
+    LOSO (HF) [0.988, 1.026]; detectable at 80% power: RR 1.095
+  P2 pathway (HF)
+    total T (ONI alone) RR 1.023 (se 0.0291) boot [0.936, 1.077]
+    direct D (PNA held) RR 1.015 (se 0.0268) boot [0.933, 1.065]
+    path a (SD PNA per SD ONI) +0.083 (se 0.038) boot [-0.021, +0.155]
+    PNA effect b (ONI held) RR 1.071 (se 0.0337)
+    indirect a x b RR 1.006 (log +0.0057) boot [0.998, 1.014] p_perm 0.1224 q 0.292; T - D = +0.0079
+    share mediated undefined (total effect CI includes 0); LOSO ind [1.005, 1.009]; detectable (80%) RR 1.012
+    all cyclones: T 1.000, indirect 1.002 (p_perm 0.114); share: indirect 1.004 boot [0.997, 1.011] p_perm 0.126
+
+[S5 depth] octapr 1979-2025 index lag; outcome column dq
+  seasons 47, days 9870, cyclones 21474, HF-like 1849, index days filled 14, corr(ONI,PNA) over days +0.13
+  P1 interaction gamma (ONI x PNA)
+    HF      RR 1.006 (log +0.0059, se 0.0198, z +0.30, p_perm 0.7891, q 0.971) boot [0.963, 1.045]
+    all     RR 1.003 (log +0.0032, se 0.0067, z +0.48, p_perm 0.6497, q 0.940) boot [0.990, 1.016]
+    share   RR 1.003 (log +0.0027, se 0.0200, z +0.13, p_perm 0.9285, q 0.971) boot [0.961, 1.043]
+    LOSO (HF) [0.996, 1.014]; detectable at 80% power: RR 1.057
+  P2 pathway (HF)
+    total T (ONI alone) RR 1.066 (se 0.0229) boot [1.013, 1.119]
+    direct D (PNA held) RR 1.049 (se 0.0215) boot [1.004, 1.098]
+    path a (SD PNA per SD ONI) +0.129 (se 0.033) boot [+0.040, +0.191]
+    PNA effect b (ONI held) RR 1.131 (se 0.0248)
+    indirect a x b RR 1.016 (log +0.0159) boot [1.005, 1.026] p_perm 0.0100 q 0.099; T - D = +0.0161
+    share mediated 0.25; LOSO ind [1.013, 1.018]; detectable (80%) RR 1.015
+    all cyclones: T 1.005, indirect 1.003 (p_perm 0.010); share: indirect 1.013 boot [1.004, 1.022] p_perm 0.009
+
+[S5 depth] octapr 1979-2000 index lag; outcome column dq
+  seasons 22, days 4620, cyclones 10066, HF-like 877, index days filled 0, corr(ONI,PNA) over days +0.12
+  P1 interaction gamma (ONI x PNA)
+    HF      RR 0.997 (log -0.0025, se 0.0287, z -0.09, p_perm 0.9380, q 0.971) boot [0.940, 1.070]
+    all     RR 0.995 (log -0.0046, se 0.0118, z -0.39, p_perm 0.7026, q 0.954) boot [0.971, 1.018]
+    share   RR 1.002 (log +0.0021, se 0.0315, z +0.07, p_perm 0.9535, q 0.971) boot [0.941, 1.079]
+    LOSO (HF) [0.988, 1.017]; detectable at 80% power: RR 1.084
+  P2 pathway (HF)
+    total T (ONI alone) RR 1.031 (se 0.0283) boot [0.955, 1.099]
+    direct D (PNA held) RR 1.018 (se 0.0258) boot [0.955, 1.086]
+    path a (SD PNA per SD ONI) +0.107 (se 0.052) boot [-0.052, +0.204]
+    PNA effect b (ONI held) RR 1.137 (se 0.0374)
+    indirect a x b RR 1.014 (log +0.0138) boot [0.995, 1.032] p_perm 0.1794 q 0.349; T - D = +0.0126
+    share mediated undefined (total effect CI includes 0); LOSO ind [1.010, 1.017]; detectable (80%) RR 1.025
+    all cyclones: T 1.013, indirect 1.002 (p_perm 0.215); share: indirect 1.012 boot [0.996, 1.028] p_perm 0.176
+
+[S5 depth] octapr 2001-2025 index lag; outcome column dq
+  seasons 25, days 5250, cyclones 11408, HF-like 972, index days filled 14, corr(ONI,PNA) over days +0.15
+  P1 interaction gamma (ONI x PNA)
+    HF      RR 1.003 (log +0.0033, se 0.0293, z +0.11, p_perm 0.9140, q 0.971) boot [0.934, 1.064]
+    all     RR 1.011 (log +0.0113, se 0.0060, z +1.88, p_perm 0.1274, q 0.292) boot [0.996, 1.025]
+    share   RR 0.992 (log -0.0080, se 0.0280, z -0.29, p_perm 0.8146, q 0.971) boot [0.926, 1.049]
+    LOSO (HF) [0.984, 1.020]; detectable at 80% power: RR 1.085
+  P2 pathway (HF)
+    total T (ONI alone) RR 1.107 (se 0.0267) boot [1.033, 1.168]
+    direct D (PNA held) RR 1.087 (se 0.0260) boot [1.022, 1.152]
+    path a (SD PNA per SD ONI) +0.149 (se 0.043) boot [+0.021, +0.226]
+    PNA effect b (ONI held) RR 1.116 (se 0.0352)
+    indirect a x b RR 1.016 (log +0.0163) boot [1.001, 1.030] p_perm 0.0350 q 0.124; T - D = +0.0180
+    share mediated 0.16; LOSO ind [1.012, 1.020]; detectable (80%) RR 1.021
+    all cyclones: T 0.999, indirect 1.004 (p_perm 0.016); share: indirect 1.012 boot [1.000, 1.022] p_perm 0.042
+
+[S6 gust 2001-25] octapr 2001-2025 index lag; outcome column hf
+  seasons 25, days 5250, cyclones 11408, HF-like 938, index days filled 14, corr(ONI,PNA) over days +0.15
+  P1 interaction gamma (ONI x PNA)
+    HF      RR 1.006 (log +0.0061, se 0.0321, z +0.19, p_perm 0.8716, q 0.971) boot [0.943, 1.082]
+    all     RR 1.011 (log +0.0113, se 0.0060, z +1.88, p_perm 0.1249, q 0.292) boot [0.997, 1.026]
+    share   RR 0.995 (log -0.0052, se 0.0294, z -0.18, p_perm 0.8821, q 0.971) boot [0.940, 1.063]
+    LOSO (HF) [0.986, 1.025]; detectable at 80% power: RR 1.094
+  P2 pathway (HF)
+    total T (ONI alone) RR 1.023 (se 0.0325) boot [0.937, 1.089]
+    direct D (PNA held) RR 1.014 (se 0.0308) boot [0.935, 1.079]
+    path a (SD PNA per SD ONI) +0.149 (se 0.043) boot [+0.024, +0.227]
+    PNA effect b (ONI held) RR 1.055 (se 0.0299)
+    indirect a x b RR 1.008 (log +0.0079) boot [0.999, 1.018] p_perm 0.0230 q 0.105; T - D = +0.0084
+    share mediated undefined (total effect CI includes 0); LOSO ind [1.006, 1.010]; detectable (80%) RR 1.014
+    all cyclones: T 0.999, indirect 1.004 (p_perm 0.022); share: indirect 1.004 boot [0.996, 1.011] p_perm 0.026
+
+[S6 gust 1979-2025 era term] octapr 1979-2025 index lag; outcome column hf
+  seasons 47, days 9870, cyclones 21474, HF-like 1735, index days filled 14, corr(ONI,PNA) over days +0.13
+  P1 interaction gamma (ONI x PNA)
+    HF      RR 0.997 (log -0.0034, se 0.0238, z -0.14, p_perm 0.8821, q 0.971) boot [0.952, 1.046]
+    all     RR 1.003 (log +0.0032, se 0.0067, z +0.48, p_perm 0.6367, q 0.940) boot [0.989, 1.016]
+    share   RR 0.993 (log -0.0066, se 0.0248, z -0.27, p_perm 0.7811, q 0.971) boot [0.947, 1.045]
+    LOSO (HF) [0.984, 1.005]; detectable at 80% power: RR 1.069
+  P2 pathway (HF)
+    total T (ONI alone) RR 1.023 (se 0.0273) boot [0.967, 1.083]
+    direct D (PNA held) RR 1.011 (se 0.0258) boot [0.960, 1.068]
+    path a (SD PNA per SD ONI) +0.129 (se 0.033) boot [+0.046, +0.190]
+    PNA effect b (ONI held) RR 1.097 (se 0.0250)
+    indirect a x b RR 1.012 (log +0.0119) boot [1.003, 1.021] p_perm 0.0075 q 0.099; T - D = +0.0120
+    share mediated undefined (total effect CI includes 0); LOSO ind [1.010, 1.014]; detectable (80%) RR 1.013
+    all cyclones: T 1.005, indirect 1.003 (p_perm 0.012); share: indirect 1.009 boot [1.002, 1.017] p_perm 0.006
+
+[S6 gust 1979-2000 (within-era)] octapr 1979-2000 index lag; outcome column hf
+  seasons 22, days 4620, cyclones 10066, HF-like 797, index days filled 0, corr(ONI,PNA) over days +0.12
+  P1 interaction gamma (ONI x PNA)
+    HF      RR 0.972 (log -0.0286, se 0.0326, z -0.88, p_perm 0.4563, q 0.784) boot [0.899, 1.040]
+    all     RR 0.995 (log -0.0046, se 0.0118, z -0.39, p_perm 0.7086, q 0.954) boot [0.973, 1.018]
+    share   RR 0.976 (log -0.0240, se 0.0375, z -0.64, p_perm 0.5107, q 0.826) boot [0.900, 1.052]
+    LOSO (HF) [0.947, 0.987]; detectable at 80% power: RR 1.096
+  P2 pathway (HF)
+    total T (ONI alone) RR 1.035 (se 0.0416) boot [0.953, 1.149]
+    direct D (PNA held) RR 1.021 (se 0.0389) boot [0.952, 1.129]
+    path a (SD PNA per SD ONI) +0.107 (se 0.052) boot [-0.058, +0.208]
+    PNA effect b (ONI held) RR 1.139 (se 0.0370)
+    indirect a x b RR 1.014 (log +0.0140) boot [0.994, 1.031] p_perm 0.1764 q 0.349; T - D = +0.0135
+    share mediated undefined (total effect CI includes 0); LOSO ind [1.010, 1.018]; detectable (80%) RR 1.026
+    all cyclones: T 1.013, indirect 1.002 (p_perm 0.211); share: indirect 1.012 boot [0.995, 1.029] p_perm 0.170
+
+[S3 asymmetry] 2004-2025: PNA x El Nino-side (N+) RR 0.995 (se 0.0221), PNA x La Nina-side (N-) RR 0.995 (se 0.0408); joint Wald 0.21, p 0.899, p_perm 0.9260, q 0.971
+
+[S4 phase table, descriptive] HF genesis rate per 100 days; RR vs neutral/neutral; additive prediction = RR(ENSO, neutral PNA) x RR(neutral ENSO, PNA)
+  ENSO     PNA       days seas   HF   rate     RR additive  excess      z
+  La Nina  -PNA       601   10   98  16.31  0.957    0.989   0.968  -0.14
+  La Nina  neutral    579   11  119  20.55  1.092          
+  La Nina  +PNA       525   11  118  22.48  1.155    1.072   1.077  +0.44
+  neutral  -PNA       473   12   61  12.90  0.905          
+  neutral  neutral    519   15   73  14.07  1.000          
+  neutral  +PNA       430   14   64  14.88  0.982          
+  El Nino  -PNA       306    8   42  13.73  0.843    0.921   0.915  -0.31
+  El Nino  neutral    618    8  114  18.45  1.017          
+  El Nino  +PNA       569    8  136  23.90  1.250    0.999   1.251  +1.25
+
+Depth cut (Pacific): {"depth_cut_pac": 965.0, "n_hf_2004_2025_pac": 825, "n_depth_2004_2025_pac": 831}
