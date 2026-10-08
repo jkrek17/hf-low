@@ -34,4 +34,4 @@ What had been looked at: group sizes and the existing 00/12 UTC table's columns.
 
 ## Deviations (post hoc)
 
-None yet.
+1. (Before any result was seen.) The resample-level first persistent lag uses the rule |difference| / SE > 1.96 with the same sign as the point estimate, SE from the full 2,000-resample distribution, instead of the inner 200-resample BH rule written above (too slow, and an inner bootstrap per resample adds little). The point estimate still uses BH q < 0.05 on the main p values. Code: `stage_a.py`.
