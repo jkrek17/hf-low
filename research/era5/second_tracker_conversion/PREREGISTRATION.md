@@ -78,4 +78,11 @@ With b_X the `idx` coefficient: **A2 = b_HD - b_D**, the log rate ratio of P(HF 
 
 ## Deviations (post hoc)
 
-Logged after the plan was committed. None yet.
+Logged after the plan was committed (commit `5d38151`); none changes a primary result.
+
+1. **S5 (tracker-agnostic HF label) dropped.** As written it needs a mapping between M and V tracks that the plan does not define; no number is reported for it.
+2. **Planted-effect power simulation not run.** The plan promised it; the minimum detectable effect (2.8 x clustered SE, rate-ratio scale) is reported for every test instead, and the decision rule's "holds" does not need it.
+3. **Pattern index standardised over the first 18 seasons' weeks** (the plan said "weeks of the 18 seasons"), which is what `run.py` does; pipeline A is re-run on the same standardised index, so the comparison is like for like. The leave-one-season-out index itself is unchanged and was fitted on 22 seasons.
+4. **Tracks with no basin** (peak outside both domains) are excluded, 79 (M) and 66 (V) of the HF-labelled tracks; basin rule as `match.py`.
+5. **V pressure pull:** 1.10 GB (1,991 two-day MSLP chunks, 00/12 UTC fixes only), under the "under 2 GB" stated in the plan.
+6. Week 0's previous-week count for V uses only 26-30 September (V detections start 26 September); M and pipeline A have the full seven days. Effect not assessed.

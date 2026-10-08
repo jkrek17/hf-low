@@ -1,0 +1,9 @@
+tracker,item,a,b
+M,hf,1495,1423
+M,repro_PR116_same_tracks,1,1495
+M,hf_half,1478,1416
+M,hf_dbl,1580,1446
+V,hf,1481,1397
+V,repro_PR116_same_tracks,1,1481
+V,hf_half,1399,1342
+V,hf_dbl,1530,1413
