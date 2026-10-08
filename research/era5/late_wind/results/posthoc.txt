@@ -1,0 +1,32 @@
+RA-7 post hoc diagnostics (ERA5 PROXY, pipeline A). Not pre-registered.
+== (a) joint model, all events, season-clustered 95% intervals ==
+ term    OR    lo    hi     p
+const 0.815 0.571 1.163 0.245
+  pac 0.722 0.583 0.895 0.005
+   T1 0.815 0.637 1.042 0.098
+   T3 2.439 1.916 3.104 0.000
+   T4 0.575 0.447 0.741 0.000
+   T5 0.509 0.392 0.661 0.000
+   T6 0.541 0.488 0.601 0.000
+  DJF 0.658 0.474 0.915 0.015
+  MAM 0.943 0.680 1.307 0.711
+== (a) Atlantic only, T2 added ==
+ term    OR    lo    hi     p
+const 0.587 0.310 1.113 0.098
+   T1 0.830 0.603 1.142 0.238
+   T3 2.719 1.964 3.764 0.000
+   T4 0.564 0.376 0.845 0.008
+   T5 0.658 0.413 1.050 0.077
+   T6 0.585 0.494 0.693 0.000
+   T2 1.818 1.091 3.028 0.024
+  DJF 0.598 0.386 0.926 0.023
+  MAM 1.010 0.633 1.610 0.966
+
+== (b) pressure at onset minus minimum pressure, hPa ==
+early (onset before minimum): n=1334, median 8.2, quartiles 3.3/16.1, share within 2 hPa of the minimum 0.172
+late, onset at the minimum fix (h=0): n=347, median 0.0, quartiles 0.0/0.0, share within 2 hPa of the minimum 1.000
+late by >= 6 h: n=205, median 2.7, quartiles 1.2/5.4, share within 2 hPa of the minimum 0.420
+late by >= 12 h: n=89, median 5.3, quartiles 2.8/10.3, share within 2 hPa of the minimum 0.202
+all late storms: share whose pressure at onset is within 2 hPa of the minimum 0.784; within 5 hPa 0.897
+minimum depth (hPa) median: late 967.3, early 962.1
+late share by minimum-pressure tercile: (920.299, 958.1] 0.204, (958.1, 968.9] 0.280, (968.9, 1001.1] 0.395

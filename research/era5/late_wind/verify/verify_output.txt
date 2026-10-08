@@ -1,0 +1,54 @@
+n 1886 {'atl': 1039, 'pac': 847} missing fixes 0 time mismatch 0 no t_on 0
+
+== 2 LATE shares
+all 0.293 atl 0.340 pac 0.235
+>=6 0.109 >=12 0.047
+
+== 3 prevalences
+T1 n 438 atl 0.282 pac 0.171
+T2 n 283 share of atl 0.272
+T3 atl 0.440 pac 0.466
+T4 atl 0.668 pac 0.757
+T5 atl 0.659 pac 0.787
+maxdeep missing 38 ; T6 mean 27.4 sd 13.0 speed missing 0
+
+== 4 raw late share with/without
+T1 with 0.349 (n=438) without 0.276 (n=1448)
+T2 with 0.534 (n=283) without 0.267 (n=756)
+T3 with 0.413 (n=852) without 0.193 (n=1034)
+T4 with 0.238 (n=1335) without 0.425 (n=551)
+T5 with 0.218 (n=1324) without 0.456 (n=524)
+T7 with 0.235 (n=847) without 0.340 (n=1039)
+standardised (my own, basin x month cells pooled weights):
+T1 0.350 vs 0.277
+T2 0.525 vs 0.269
+T3 0.413 vs 0.197
+T4 0.241 vs 0.407
+T5 0.223 vs 0.442
+T7 0.235 vs 0.340
+
+== 5 odds ratios
+T1 n=1886 OR 1.41
+T2 n=1039 OR 3.10
+T3 n=1886 OR 2.96
+T4 n=1886 OR 0.45
+T5 n=1848 OR 0.35
+T6 n=1886 OR 0.49
+T7 n=1886 OR 0.59
+
+== 6 late storms
+n late 552
+single HF fix (lifecycle n_hf==1) 0.612; fixes.csv count==1 0.612
+onset==peak-gust fix (catalog peak_time==t_on) 0.804
+h_on_minp==0 share of late 0.629 ; h_pg_minp==h_on_minp (peak at onset, lifecycle) 0.804
+onset msl within 2 hPa of minp (fixes.csv msl) 0.784 ; tracks msl 0.784
+median onset msl-minp: early 8.2, late>=6h 2.7, late (all) 0.0, late h==0 0.0
+
+== 7 joint LOSO
+n 1848
+AUC joint 0.764 basin+month 0.568
+Brier joint 0.1703 basin-month LOSO base 0.1990 skill 0.144 ; vs logistic basin+month LOSO: 0.144 ; vs overall mean 0.166
+
+== T5 prevalence, denominator incl. 38 missing as 0:
+atl 0.643 defined-only 0.659 missing 25
+pac 0.774 defined-only 0.787 missing 13

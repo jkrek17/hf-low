@@ -1,0 +1,65 @@
+RA-7  Why HF onset comes at or after the minimum-pressure fix (ERA5 PROXY, pipeline A, non-TC events)
+Plan: PREREGISTRATION.md (33039f0). Seasons 2004-05..2025-26. Tests: logistic, basin + month-group terms, season-clustered CR1 Wald, t on 21 df.
+Events used 1886 (Atl 1039, Pac 847); dropped for onset-time mismatch or missing structure: 0
+Environment matched (00/12 UTC fix within 6 h before onset): 1799 of 1886
+LATE (onset at/after min pressure) share: all 0.293, Atl 0.340, Pac 0.235; LATE6 0.109; LATE12 0.047
+
+== Primary family T1-T7 (OR for LATE; share_in / share_out = basin-month standardised late share with / without the factor) ==
+T1 gust maximum > 400 km from centre (expected +) n=1886: OR 1.41 [1.16, 1.71] boot [1.18, 1.68] p=0.0015 q=0.0015 q_all16=0.0015  late share 0.347 vs 0.276  prevalence 0.232, share of late storms with factor 0.277
+      power at OR 1.5 / 2.0 = 0.90 / 1.00; minimum detectable OR at 80% = 1.5
+T2 Atlantic: gust maximum at or north of 60N (expected +) n=1039: OR 3.10 [2.24, 4.31] boot [2.31, 4.23] p=0.0000 q=0.0000 q_all16=0.0000  late share 0.527 vs 0.269  prevalence 0.272, share of late storms with factor 0.428
+      power at OR 1.5 / 2.0 = 0.75 / 1.00; minimum detectable OR at 80% = 1.6
+T3 marginal storm (peak gust < 76.7 kt) (expected +) n=1886: OR 2.96 [2.43, 3.62] boot [2.48, 3.56] p=0.0000 q=0.0000 q_all16=0.0000  late share 0.410 vs 0.195  prevalence 0.452, share of late storms with factor 0.638
+      power at OR 1.5 / 2.0 = 0.96 / 1.00; minimum detectable OR at 80% = 1.4
+T4 gust maximum in rear half (expected +) n=1886: OR 0.45 [0.36, 0.56] boot [0.36, 0.55] p=0.0000 q=0.0000 q_all16=0.0000  late share 0.242 vs 0.412  prevalence 0.708, share of late storms with factor 0.576
+      power at OR 1.5 / 2.0 = 0.92 / 1.00; minimum detectable OR at 80% = 1.5
+T5 explosive deepening (>= 1 Bergeron) (expected -) n=1848: OR 0.35 [0.28, 0.44] boot [0.29, 0.43] p=0.0000 q=0.0000 q_all16=0.0000  late share 0.222 vs 0.442  prevalence 0.716, share of late storms with factor 0.547
+      power at OR 1.5 / 2.0 = 0.90 / 1.00; minimum detectable OR at 80% = 1.5
+T6 translation speed, per SD (expected 2s) n=1886: OR 0.49 [0.44, 0.55] boot [0.44, 0.54] p=0.0000 q=0.0000 q_all16=0.0000
+      power at OR 1.5 / 2.0 = 1.00 / 1.00; minimum detectable OR at 80% = 1.2
+T7 Pacific (vs Atlantic) (expected -) n=1886: OR 0.59 [0.48, 0.72] boot [0.49, 0.70] p=0.0000 q=0.0000 q_all16=0.0000  late share 0.235 vs 0.340  prevalence 0.449, share of late storms with factor 0.361
+      power at OR 1.5 / 2.0 = 0.97 / 1.00; minimum detectable OR at 80% = 1.4
+Passing q<0.05 in family: 7 of 7
+
+== Exploratory family S1-S9 (environment at onset, per SD, two-sided) ==
+S1 B at onset, per SD: n=1799 OR 0.45 [0.39, 0.51] p=0.0000 q=0.0000 q_all16=0.0000
+S2 VTL at onset, per SD: n=1799 OR 2.28 [1.98, 2.61] p=0.0000 q=0.0000 q_all16=0.0000
+S3 VTU at onset, per SD: n=1799 OR 2.50 [2.20, 2.84] p=0.0000 q=0.0000 q_all16=0.0000
+S4 jet250 at onset, per SD: n=1799 OR 0.65 [0.58, 0.73] p=0.0000 q=0.0000 q_all16=0.0000
+S5 div300 at onset, per SD: n=1799 OR 0.48 [0.43, 0.54] p=0.0000 q=0.0000 q_all16=0.0000
+S6 vadv500 at onset, per SD: n=1799 OR 0.46 [0.41, 0.52] p=0.0000 q=0.0000 q_all16=0.0000
+S7 eady at onset, per SD: n=1799 OR 0.55 [0.49, 0.61] p=0.0000 q=0.0000 q_all16=0.0000
+S8 flux at onset, per SD: n=1799 OR 0.75 [0.66, 0.84] p=0.0001 q=0.0001 q_all16=0.0001
+S9 tcwv at onset, per SD: n=1799 OR 0.49 [0.40, 0.61] p=0.0000 q=0.0000 q_all16=0.0000
+Passing q<0.05 in family: 9 of 9; across all 16: 16 of 16
+
+== How much is explained: joint logistic of T1, T3, T4, T5, T6 + basin + month group, leave-one-season-out ==
+n=1848: AUC 0.764 (basin+month only: 0.568); Brier skill vs basin-month base rate 0.1439
+full-sample odds ratios: const 0.81, pac 0.72, T1 0.81, T3 2.44, T4 0.58, T5 0.51, T6 0.54, DJF 0.66, MAM 0.94
+Atlantic-only with T2 added (T1,T3,T4,T5,T6,T2): n=1014: AUC 0.768 (month only: 0.524); BSS 0.1648
+full-sample odds ratios: const 0.59, T1 0.83, T3 2.72, T4 0.56, T5 0.66, T6 0.58, T2 1.82, DJF 0.60, MAM 1.01
+
+== Descriptive: where the 29% comes from ==
+atl: onset minus min-pressure time, h, shares <=-18 0.306, -12 0.151, -6 0.203, 0 0.205, +6 0.079, +12 0.020, >=+18 0.036
+pac: onset minus min-pressure time, h, shares <=-18 0.412, -12 0.151, -6 0.202, 0 0.158, +6 0.040, +12 0.013, >=+18 0.024
+all: onset minus min-pressure time, h, shares <=-18 0.354, -12 0.151, -6 0.203, 0 0.184, +6 0.062, +12 0.017, >=+18 0.030
+late storms n=552: single HF fix 0.612 (early storms 0.243); onset == peak-gust fix 0.804; peak gust after min pressure by >=6 h 0.504; late but LATE6 false (onset at the minimum fix) 0.629
+peak-gust time minus min-pressure time, h (all events): 5% -42, 25% -12, 50% -6, 75% 0, 95% 16
+late share by number of HF fixes: 1: 0.511 (n=662), 2: 0.291 (n=416), 3-4: 0.154 (n=468), 5+: 0.062 (n=340)
+late share by month group: DJF 0.247 (n=1126), MAM 0.366 (n=336), SON 0.356 (n=424)
+
+== Heterogeneity (OR within subset; sign agreement only, not tests) ==
+T1: Atl 1.50 [1.15, 1.94]; Pac 1.23 [0.96, 1.56]; 2004-14 1.30 [1.00, 1.69]; 2015-25 1.51 [1.10, 2.07]
+T2: Atl 3.10 [2.24, 4.31]; 2004-14 2.61 [1.69, 4.05]; 2015-25 4.00 [2.50, 6.39]
+T3: Atl 3.02 [2.24, 4.09]; Pac 2.88 [1.91, 4.34]; 2004-14 2.63 [2.03, 3.40]; 2015-25 3.34 [2.39, 4.67]
+T4: Atl 0.39 [0.28, 0.56]; Pac 0.55 [0.40, 0.74]; 2004-14 0.40 [0.29, 0.57]; 2015-25 0.49 [0.35, 0.68]
+T5: Atl 0.35 [0.25, 0.49]; Pac 0.37 [0.26, 0.51]; 2004-14 0.45 [0.35, 0.58]; 2015-25 0.27 [0.20, 0.37]
+
+== Sensitivity (not counted in the families) ==
+outcome late6 (share 0.109): T1 OR 1.80 p=0.004; T2 OR 2.76 p=0.000; T3 OR 3.43 p=0.000; T4 OR 0.33 p=0.000; T5 OR 0.31 p=0.000; T6 OR 0.56 p=0.000; T7 OR 0.53 p=0.000
+outcome late12 (share 0.047): T1 OR 1.64 p=0.045; T2 OR 3.06 p=0.000; T3 OR 3.26 p=0.000; T4 OR 0.43 p=0.001; T5 OR 0.25 p=0.000; T6 OR 0.58 p=0.001; T7 OR 0.62 p=0.043
+events with >=2 HF fixes (n=1224, late share 0.175): T1 OR 1.30 p=0.150; T2 OR 3.23 p=0.000; T3 OR 1.93 p=0.000; T4 OR 0.43 p=0.000; T5 OR 0.38 p=0.000; T6 OR 0.41 p=0.000; T7 OR 0.60 p=0.000
+Atlantic gust max north of 60N removed (n=1603, late share 0.250): T1 OR 1.39 p=0.011; T3 OR 3.34 p=0.000; T4 OR 0.48 p=0.000; T5 OR 0.34 p=0.000; T6 OR 0.46 p=0.000; T7 OR 0.82 p=0.108
+Atlantic terrain-flagged removed (n=1714, late share 0.263): T1 OR 1.28 p=0.018; T2 OR 2.85 p=0.000; T3 OR 3.03 p=0.000; T4 OR 0.45 p=0.000; T5 OR 0.33 p=0.000; T6 OR 0.47 p=0.000; T7 OR 0.73 p=0.011
+
+Not pre-registered changes: Jun-Aug onsets (rare) are folded into the Sep-Nov month group; see PREREGISTRATION.md deviations.
