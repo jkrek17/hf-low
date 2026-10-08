@@ -1,0 +1,32 @@
+catalog duplicate tracks: 0 | fixes onset rows differing (row vs groupby.first) in gmax_r/gmax_lat/gmax_coast_km/terrain: 0
+events 1886; dropped (onset mismatch or no gmax_r): 0
+events 1886; dropped (onset mismatch or no gmax_r): 0
+Atlantic events: 1039 | gmax_coast_km NaN: 0 | gmax_lat NaN: 0 | h_on_minp NaN: 0
+gustloc duplicate track+time: 0
+
+(a) group n=283 LATE=151 nonlate=132 LATE6=66 terrain=145 (late&terrain=83)
+
+(b)
+P1 BARRIER                                 late 0.3841 (58/151)  non-late 0.3939 (52/132)  diff -0.0098
+(c)
+coast<=300                                 late 0.9801 (148/151)  non-late 0.8939 (118/132)  diff +0.0862
+gmax_r>400                                 late 0.3907 (59/151)  non-late 0.4167 (55/132)  diff -0.0259
+gmax_r<=400                                late 0.6093 (92/151)  non-late 0.5833 (77/132)  diff +0.0259
+(d)
+NORTHERLY (with direction)                 late 0.5400 (81/150)  non-late 0.5455 (72/132)  diff -0.0055
+   direction coverage: 282 of 283 | late 150 non-late 132
+(e)
+BARRIER, LATE6 vs rest                     late 0.4545 (30/66)  non-late 0.3687 (80/217)  diff +0.0859
+(f)
+BARRIER, terrain-flagged removed           late 0.3382 (23/68)  non-late 0.3571 (25/70)  diff -0.0189
+(g)
+BARRIER, Atlantic gmax_lat<60              late 0.1287 (26/202)  non-late 0.0650 (36/554)  diff +0.0637
+
+P1 season-block bootstrap: seasons=22 draws=2000 95% CI [-0.1189, +0.1198] (seed 7, numpy default_rng)
+   seed 1: [-0.1199, +0.1181]
+   seed 2: [-0.1232, +0.1262]
+   seed 123: [-0.1223, +0.1246]
+seasons in group: [np.int64(2004), np.int64(2005), np.int64(2006), np.int64(2007), np.int64(2008), np.int64(2009), np.int64(2010), np.int64(2011), np.int64(2012), np.int64(2013), np.int64(2014), np.int64(2015), np.int64(2016), np.int64(2017), np.int64(2018), np.int64(2019), np.int64(2020), np.int64(2021), np.int64(2022), np.int64(2023), np.int64(2024), np.int64(2025)]
+
+Variant check, RA-7 groupby.first onset table:
+ group n 283 late 151 P1: BARRIER                                    late 0.3841 (58/151)  non-late 0.3939 (52/132)  diff -0.0098
