@@ -1,0 +1,17 @@
+1. hours 2007 - 2025 mean 47.05 sd 26.02 min 6 max 114 meanstorms 5.05
+  hours by season {2007: 18, 2008: 54, 2009: 60, 2010: 42, 2011: 54, 2012: 78, 2013: 36, 2014: 24, 2015: 42, 2016: 36, 2017: 6, 2018: 114, 2019: 24, 2020: 72, 2021: 12, 2022: 66, 2023: 42, 2024: 66, 2025: 48}
+P1 FRONT SON vs H 07-25                  rho=+0.220 perm_p=0.368 scipy_p=0.365
+S1 22 seasons dummy<2007                 rho=+0.294 perm_p=0.182 scipy_p=nan
+S2 FRONT_KE                              rho=-0.237 perm_p=0.330 scipy_p=0.329
+S3 FRONT_OE                              rho=+0.204 perm_p=0.404 scipy_p=0.402
+S4 FRONT DJF                             rho=+0.098 perm_p=0.690 scipy_p=0.691
+S5 deepening                             rho=+0.210 perm_p=0.392 scipy_p=0.389
+S6 mature/decay                          rho=-0.079 perm_p=0.744 scipy_p=0.749
+S7 storm count                           rho=+0.218 perm_p=0.369 scipy_p=0.369
+S8 archive, dummy>=2013                  rho=+0.270 perm_p=0.258 scipy_p=nan
+S9 year removed                          rho=+0.217 perm_p=0.371 scipy_p=nan
+  archive box HF fixes by season {2007: 4, 2008: 7, 2009: 8, 2010: 4, 2011: 9, 2012: 10, 2013: 2, 2014: 2, 2015: 9, 2016: 6, 2017: 2, 2018: 16, 2019: 3, 2020: 10, 2021: 2, 2022: 12, 2023: 7, 2024: 8, 2025: 10}
+  (S8 no-dummy rho for reference: +0.202)
+3. MDE n=19: 0.605
+3. MDE n=22: 0.567
+4. lag1 FRONT_SON 0.495  hours -0.495  corr(SON,DJF) 0.838
