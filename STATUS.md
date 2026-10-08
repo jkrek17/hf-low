@@ -57,6 +57,10 @@ Working defaults that sessions follow until Jason confirms or changes them. Jaso
   - Pressure-depth counts are the cross-check before 2001.
   - Fitting and testing stay at 2004-05 and later.
   - The buoy test (`research/era5/buoy_drift/`, hf-low PR 17) did not settle decision 1. It found no upward drift of ERA5's surface wind against buoys before 2001, but it cannot resolve a drift as small as the gust-index drift. Decided regardless.
+- **Pipeline A at high latitude: no terrain mask** (thread "High-latitude Atlantic HF lows", 2026-10-08; `research/era5/highlat/FINDINGS.md`; Coordinator default, pending Jason's review):
+  - Pipeline A's definition is not changed. Atlantic events with a peak at or north of 60N are reported as a separate, lower-confidence group (false-alarm ratio against the archive 0.443, against 0.258 south).
+  - A 100 km Greenland mask is the standard sensitivity check: it removes 5.5% of Atlantic events. A 300 km mask is not used; it removes 20% of events, including real storm wind.
+  - Reason: the extra false alarms cannot be told apart from OPC not warning near Greenland, and recall does not differ.
 - **Life-cycle definitions** (thread "HF low climatology gaps", 2026-10-08):
   - An HF fix is an in-domain fix at or above 71.7 kt, the rule that makes a track an event.
   - Genesis counts as observed only when the first fix is at 1000 hPa or above and north of 21N.
