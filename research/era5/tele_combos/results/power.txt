@@ -1,0 +1,25 @@
+Design power (season-block permutation, 300 permutations). Pipeline A, ERA5 proxy. Seasons 2004-2026, Oct 1 + 210 d.
+Effective n per season = 210 / (1 + 2 tau), tau = integrated autocorrelation time (days) of the lagged predictor.
+
+T1  pac: ONI x MJOWP   events 825, seasons 22, outcome SD (lon, lat) = (23.5, 6.6) deg
+   predictor effective n / season: ONI 2.0, MJOWP 20.0  (-> 44, 439 over 22 seasons); corr(A,B) on analysis days = 0.03
+   L  null SE of gamma (lon, lat) = (0.83, 0.21) deg; detectable at 80% power = (2.31, 0.60); SESOI = (2.35, 0.66); well-powered null possible: lon yes, lat yes
+   C  null SE of gamma = 0.031 (log RR); detectable RR = 1.091; SESOI RR 1.05; well-powered null possible: no
+
+T2  pac: PNA x MJODL   events 825, seasons 22, outcome SD (lon, lat) = (23.5, 6.6) deg
+   predictor effective n / season: PNA 12.0, MJODL 19.4  (-> 265, 428 over 22 seasons); corr(A,B) on analysis days = -0.04
+   L  null SE of gamma (lon, lat) = (0.93, 0.27) deg; detectable at 80% power = (2.61, 0.75); SESOI = (2.35, 0.66); well-powered null possible: lon yes, lat yes
+   C  null SE of gamma = 0.038 (log RR); detectable RR = 1.113; SESOI RR 1.05; well-powered null possible: no
+
+T3  atl: NAO x PNA   events 1003, seasons 22, outcome SD (lon, lat) = (17.7, 9.1) deg
+   predictor effective n / season: NAO 7.0, PNA 12.0  (-> 155, 265 over 22 seasons); corr(A,B) on analysis days = 0.01
+   L  null SE of gamma (lon, lat) = (0.66, 0.35) deg; detectable at 80% power = (1.84, 0.99); SESOI = (1.77, 0.91); well-powered null possible: lon yes, lat yes
+   C  null SE of gamma = 0.033 (log RR); detectable RR = 1.096; SESOI RR 1.05; well-powered null possible: no
+
+T4  atl: NAO x ONI   events 1003, seasons 22, outcome SD (lon, lat) = (17.7, 9.1) deg
+   predictor effective n / season: NAO 7.0, ONI 2.0  (-> 155, 44 over 22 seasons); corr(A,B) on analysis days = 0.07
+   L  null SE of gamma (lon, lat) = (0.60, 0.34) deg; detectable at 80% power = (1.67, 0.95); SESOI = (1.77, 0.91); well-powered null possible: lon yes, lat yes
+   C  null SE of gamma = 0.028 (log RR); detectable RR = 1.080; SESOI RR 1.05; well-powered null possible: no
+
+T5 NAO x SPV atl: not run (series absent)
+
