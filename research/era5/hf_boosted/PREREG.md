@@ -54,4 +54,10 @@ M0 and M1 refit on all 22 seasons. For each of the 18 continuous predictors: par
 Seasons are the same ones PR 68 saw; no fresh data. Tree hyperparameters are PR 68's untuned defaults, so a tuned model could gain more and this is a floor for tree skill, not a ceiling. The target is pipeline A's own gust index, so a "threshold" is a property of the proxy's relation to the 1.5 degree fields, not of the atmosphere. Fixes within a storm are correlated; intervals resample seasons, which absorbs that.
 
 ## Deviations (post hoc)
-(empty at the time of writing)
+Written after the scores were seen. Nothing registered was changed; these are additions and clarifications.
+1. P-value display: the sign-flip test uses 100,000 flips, so a p of 0 is displayed as < 1e-5.
+2. P1b (the 55-71.7 kt prediction) came out NOT MET as registered (share 40%, rule 60%). Not redefined. Post hoc PH1 shows where the beyond-smooth part of the gain sits.
+3. S6 (M1 - M2) mixes interaction with under-fitted additive trees (S5 is less than half of S7); interpret S8 and PH3 instead. Reported as registered.
+4. The partial-dependence grid (2nd-98th percentile) ends at 71.1 kt for g800, before the already-HF fixes; PH2 extends it to the 99.9th percentile.
+5. Post hoc additions (`posthoc.py`, `results/posthoc.txt`): PH1 strata shares of M1 - M3 and M0 - M3; PH2 extended g800 partial dependence; PH3 M3b = M3 + the five pre-specified products, LOSO; PH4 spline blocks for B, VTL, VTU (with and without g800) and for seven other predictors picked from the S9 table. Both the registered and the post hoc numbers are reported; none changed a verdict.
+6. The run_loso.py `clim()` helper computes the basin-month climatology with the same +0.5 smoothing as `model.clim_probs`; the M0 reproduction of PR 12 (0.4228 against 0.423) passed the pre-set band before any tree score was read.

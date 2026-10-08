@@ -1,0 +1,6 @@
+pair,H2_M0,H2_M1
+g800 x dp12,0.0,0.003
+msl x dp12,0.0,0.0005
+jet250 x eady,0.0,0.0008
+sstgrad x flux,0.0,0.0025
+lat x g800,0.0,0.0013
