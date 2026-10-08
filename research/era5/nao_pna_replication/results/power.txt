@@ -1,0 +1,6 @@
+P1 atl winters 1979-2000: 4364 tracks, 22 winters; null SE of gamma (lon, lat) = (0.46, 0.23) deg; detectable at 80% power = (1.29, 0.64); well-powered null (1.96 SE <= 0.55): lon not possible
+   outcome SD (lon, lat) = (27.7, 9.8); corr(NAO, PNA) on analysis days = -0.05
+S5 atl winters 2001-2013: 2743 tracks, 13 winters; null SE of gamma (lon, lat) = (0.56, 0.36) deg; detectable at 80% power = (1.57, 1.01); well-powered null (1.96 SE <= 0.55): lon not possible
+   outcome SD (lon, lat) = (27.2, 9.8); corr(NAO, PNA) on analysis days = -0.05
+S6 pac winters 1979-2000: 5740 tracks, 22 winters; null SE of gamma (lon, lat) = (0.39, 0.17) deg; detectable at 80% power = (1.08, 0.48); well-powered null (1.96 SE <= 0.55): lon not possible
+   outcome SD (lon, lat) = (29.7, 8.5); corr(NAO, PNA) on analysis days = -0.05
