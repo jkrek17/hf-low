@@ -21,10 +21,10 @@ The merges on 2026-10-08 (`2b9af76`, `0b479db`, `0800e90`) had no conflicts. Aft
 
 ## Decisions waiting on Jason
 
-1. **Pipeline A before 2001.** Commit `c9dc994` finds that ERA5 gusts drift upward over 1979 to 2000 at fixed storm depth and concludes a gust-based criterion cannot be carried back before the archive. Pipeline A is a gust threshold applied from 1979, and its Atlantic trend (+1.7 per decade, p = 0.05) spans that period. The merge commit `5f05669` says the finding "is raised separately rather than acted on here". Nobody has tested pipeline A against it. Flag A's record before 2001, rebuild it on pressure depth, or run the same drift check on A's index?
+1. **How far back a gust-based record holds.** Commit `c9dc994` concluded that a gust-based criterion cannot be carried back before 2001. Its author has since walked that back: on 2026-10-08 the session reported that a later reconciliation shows the conclusion "was wrong at event level". The reconciliation is not in the repository. What the session says still stands is in the section "Reported by a session, not yet in the repository" below. In short: the gust index value is not comparable across eras, but thresholded event counts may be. Pipeline A is a thresholded count from 1979, so this is the question that decides whether its record before 2001 can be used. It needs settling with numbers in the repository, not from the commit subject and not from this paragraph.
 2. **Two ERA5 pipelines.** A and B were built in parallel and differ in almost every definition (table below). Keep both with distinct names and purposes, or retire one?
 3. **Research into `main`.** None of it is there yet. The integration branch now holds all of it and could go in as one pull request. Before decision 1 is settled, or after?
-4. **Validation floor year.** Files say the proxy "cannot be validated before 2001" in some places and "before 2004" in others. Which is the statement of record?
+4. **Validation floor year.** Files say the proxy "cannot be validated before 2001" in some places and "before 2004" in others. The pipeline B session's position is that `RECORD_START = 2004` must gate every window, because the archive was still starting before then. Confirm 2004 as the statement of record?
 5. **QC mode and the live sheet.** `claude/hf-lows-qc-mode` adds a path that writes to the spreadsheet. Should a work session ever use it against the real sheet, or only against the mocks in `tests/qc/`?
 6. **Cutover** from `awips-tools` (section at the end).
 
@@ -81,8 +81,8 @@ The merges on 2026-10-08 (`2b9af76`, `0b479db`, `0800e90`) had no conflicts. Aft
 ## What does not exist
 
 - Any research code or data on `main`.
-- A gust-based record that may be used before 2001 (see the first gate below).
-- Any test of pipeline A against the gust drift found in `c9dc994`.
+- The event-level reconciliation that walks back `c9dc994`. It exists only in a session's conversation.
+- Any test of pipeline A's own index against the gust drift measured in `c9dc994`.
 - The basin term in the committed pipeline B series.
 - Validation of either ERA5 pipeline before the archive begins. There is nothing to validate against.
 - Repair of the archive position errors the tracker found. They are listed, not fixed.
@@ -96,11 +96,21 @@ Do not build on these without closing the gate or stating the dependence.
 - **Recovered subset.** Not a random sample of storms; a rate from it describes it, not the archive.
 - **Low-confidence precursor tier.** Refused.
 - **ERA5 record is a proxy.** Label it so everywhere. No validation before the archive.
-- **Gust-based indices before 2001.** `c9dc994`: over 1979 to 2000 the mean sea gust at fixed storm depth rises 0.65 kt per decade (t = 2.40) and gust exceedances rise (t = 3.00), while the same quantities are flat over the archive period. Applied backwards, a gust criterion would flag too few early events and manufacture an increase. This reverses the earlier gate (`d34dd3d`) that put the start at 1979. It binds pipeline B's series and, until someone shows otherwise, pipeline A's catalog and trends before 2001. Counts based on pressure depth did not drift.
+- **Gust index values before 2001.** Measured in `c9dc994`: over 1979 to 2000 the mean sea gust at fixed storm depth rises 0.65 kt per decade (t = 2.40), while it is flat over the archive period. So the index value is not comparable across eras. **Whether thresholded event counts are affected is unsettled in the repository:** the commit says a gust criterion cannot be carried back before 2001, and its author later reported that this was wrong at event level. Until the reconciliation is committed, quote any gust-based count before 2001 with this caveat, and do not quote the commit's subject line as a finding. Counts based on pressure depth did not drift.
 - **Pipeline B series against the archive.** `series-result.txt` flags a trend in the series minus the archive over the 22 overlap seasons (+30.4 per decade, t = 2.63 against a critical 2.09). The commit notes that Mann-Kendall does not confirm it and that part of the divergence is the archive's own labelling. Do not read the series sum as a trend estimate.
 - **Pipeline B `p_full`.** In-sample for seasons from 2004.
 - **Pipeline B at high latitude.** Over-predicts by about 55% at 60 to 71N and in the most land-affected quartile (`c9dc994`).
-- **Pipeline A before 2006.** Bias 2.05 against the archive in 2001-05 because the archive was still starting, so those seasons do not test the threshold.
+- **Windows before 2004.** `RECORD_START = 2004`. The 2001-2006 transfer row in pipeline A's `skill.txt` (bias 2.05, HSS 0.44) reflects the archive starting up, not a failure of the threshold: the 2001-02 season holds 1 archive event against 85 ERA5 events in pipeline A's own table. Do not use seasons before 2004-05 to fit or to test.
+
+## Reported by a session, not yet in the repository
+
+The session that wrote `c9dc994` (https://claude.ai/code/session_01H34U5Bp9jBSLYgoGUR4VD8) reported these on 2026-10-08 when it was closed out. They are in its conversation and partly in commit messages, with no result file behind them here. Treat them as leads to confirm, and move each to "What exists" or "Gates in force" once its numbers are committed.
+
+- **The archive has a recording-practice drift of its own.** Hurricane-force fixes per event fall 0.181 per decade (t = -2.54) while event counts stay flat. Reported consequence: comparisons made per 6-hourly moment drift, and comparisons made per event do not. (`c9dc994` gives this as 0.20 per decade, t = -2.5.)
+- **`RECORD_START = 2004` must gate every window.** Now a gate above; the supporting count is in pipeline A's season table.
+- **ERA5 gust rises at fixed storm depth before 2001** (+0.65 kt per decade, t = +2.40), so the index value is not era-comparable even where thresholded counts are. The measurement is in `c9dc994`; the "even where thresholded counts are" part is the unrecorded reconciliation.
+
+The same session's handoff document (https://claude.ai/code/artifact/e6afbb4c-269b-4237-bdd2-cfe70937491d) was written before the reconciliation. By its author's account its gate section and redo list overstate the negative conclusion. Do not work from it until it has been corrected.
 
 ## Statements in the repository that are stale or conflict
 
@@ -108,7 +118,7 @@ Fix these as the files are next touched, in the same commit.
 
 - `research/era5/README.md` says there is no calibrated gust index, no extended record, and that pressure gradients run 11% stronger before 1979. Pipelines A and B exist, and `stationarity2` reversed the gradient result. Its script list omits both pipelines.
 - `research/era5/hf_history/README.md` presents the 1979 to 2025 record and its trend with no mention of the gust drift in `c9dc994`.
-- Commit `d34dd3d` and text that follows it give 1979 as a safe start year. `c9dc994` withdraws that for gust-based indices.
+- Commit `d34dd3d` gives 1979 as a safe start year. Commit `c9dc994` says in its subject and body that a gust-based criterion cannot be carried back before 2001. Its author has since said that conclusion was wrong at event level. Commit messages cannot be edited, so this entry is the correction: read `c9dc994` for its measurements, not for its headline.
 - `research/era5/hf_history/track.py` docstring names two output files; the code writes one.
 - Validation floor: 2001 in `criterion-result.txt`, `research/era5/README.md`, and `hf_history/README.md`; 2004 in `series.py` and `series-result.txt`.
 - Event totals: 1,928 in the tracker docstring and build message, 1,932 lows in the build count and later commits. These may count different things (hurricane-force events against all lows); nobody has written down which.
@@ -119,7 +129,7 @@ Fix these as the files are next touched, in the same commit.
 
 ## Open work
 
-- Pipeline A: test its gust index for the drift in `c9dc994`; until then treat its record before 2001 as gated.
+- Re-establish in the repository, with numbers recomputed from committed data, the three findings listed under "Reported by a session, not yet in the repository", and the event-level reconciliation of `c9dc994`. Then run the same check on pipeline A's index.
 - Pipeline B: put the basin term in the committed series; look at the over-prediction at high latitude.
 - Precursors: resolve the collision worklist (39 pairs: 31 sequential, 8 concurrent); recall on fast deepeners is not at parity and tuning was stopped deliberately; tropical and post-tropical systems are not parsed.
 - The unexplained +2.6 residual in the explosive share (commit `a9be84c`).
