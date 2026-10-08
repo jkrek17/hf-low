@@ -1,0 +1,99 @@
+RA-11: archive HF fixes per event, drift vs scatterometer steps (analyse.py)
+================================================================================
+Archive HF events (basin, ID), seasons 2004-05..2025-26 (June-May, 22 seasons). ERA5 is a PROXY and
+appears only in S7 (pipeline A = research/era5/hf_history). Plan: PREREGISTRATION.md.
+
+== PRIMARY (family P, primary dataset: raw IDs) ==
+raw IDs: 1861 events, 22 seasons, mean n_hf 3.036
+  P1 linear: -0.180 /decade (se 0.072) t=-2.51 p=0.0209 DW=2.21
+     season-bootstrap 95% interval for the P1 slope: [-0.315, -0.065]
+  P2 ASCAT-A launch 2006-10    step -0.182 [-0.424, +0.336] p=0.3117  (events 153 before / 1708 after; seasons with events 3 / 20; 1911 usable draws)
+  P3 QuikSCAT end 2009-11-23   step -0.348 [-0.481, -0.209] p=0.0010  (events 455 before / 1406 after; seasons with events 6 / 17; 1997 usable draws)
+  P4 ASCAT-B launch 2012-09    step -0.257 [-0.424, -0.084] p=0.0020  (events 657 before / 1204 after; seasons with events 9 / 14; 2000 usable draws)
+  P5 Metop-C launch 2018-11    step -0.119 [-0.304, +0.067] p=0.2239  (events 1165 before / 696 after; seasons with events 15 / 8; 2000 usable draws)
+  BH q within P: P1 q=0.0349, P2 q=0.3117, P3 q=0.0050, P4 q=0.0050, P5 q=0.2799
+
+== S1 unknown-date scan (season-mean step, split at season boundaries, >=3 seasons each side) ==
+  best split: seasons 2010.. vs <2010; step -0.336, t=-3.72; permutation p (max|t| over 16 splits)=0.0158
+
+== S2 form comparison (AIC on season means; step regressor = fraction of the season's events after the date) ==
+   rule: lower AIC by >=2 preferred, else tie
+  null AIC -61.89, linear AIC -65.90
+  P2 ASCAT-A launch 2006-10    step AIC -61.97  (step - linear = +3.93) -> linear
+  P3 QuikSCAT end 2009-11-23   step AIC -70.60  (step - linear = -4.70) -> step
+  P4 ASCAT-B launch 2012-09    step AIC -66.68  (step - linear = -0.78) -> tie
+  P5 Metop-C launch 2018-11    step AIC -61.59  (step - linear = +4.31) -> linear
+  S1 best step (2010.., chosen on this data, so optimistic) step AIC -71.45 (step - linear = -5.55) -> step
+
+== S3 basins ==
+  atl P1 linear -0.148 /decade (se 0.112) t=-1.32 p=0.2011  (n events 1005, mean 3.036, seasons 22)
+  atl P3 QuikSCAT step -0.348 [-0.584, -0.068] p=0.0190
+  pac P1 linear -0.244 /decade (se 0.125) t=-1.95 p=0.0657  (n events 856, mean 3.036, seasons 22)
+  pac P3 QuikSCAT step -0.348 [-0.613, -0.116] p=0.0090
+
+== S4 shape: season share of one-fix and >=3-fix events ==
+  one-fix share  mean 0.254, slope +0.0310 /decade (se 0.0132) t=+2.36 p=0.0288
+  >=3-fix share  mean 0.508, slope -0.0407 /decade (se 0.0149) t=-2.73 p=0.0128
+
+== S5 Atlantic first HF fix north vs south of 60N: QuikSCAT step ==
+  north of 60N: events 229 (before 61 / after 168), step -0.187 [-0.593, +0.567] p=0.5215
+  south of 60N: events 776 (before 183 / after 593), step -0.430 [-0.731, -0.140] p=0.0080
+  north minus south step +0.243 [-0.308, +1.171] p=0.3764
+
+== S6 covariates: slope of n_hf per decade with event minimum pressure, basin and first-fix month ==
+  event-level slope unadjusted: -0.213 /decade, season-bootstrap 95% [-0.340, -0.100], p=0.0040 (n=1819 events with pressure)
+  event-level slope adjusted  : -0.238 /decade, season-bootstrap 95% [-0.420, -0.090], p=0.0080 (n=1819 events with pressure)
+  event minimum pressure trend: -1.45 hPa/decade (se 0.98) t=-1.48 p=0.1542 (mean 963.6 hPa)
+
+== S7 ERA5 pipeline A proxy (HF-equivalent tracks, n_hf = in-domain 6-hourly fixes >=71.7 kt gust) ==
+  proxy fixes per event: mean 2.991 (2000 tracks), slope +0.222 /decade (se 0.090) t=+2.46 p=0.0233
+  archive slope minus proxy slope -0.403 /decade [-0.564, -0.274], p=0.0010
+  proxy QuikSCAT step (event unit = track season, no dates here): not computed (the table has no event date).
+
+== POST HOC (not pre-registered; not in the FDR family) ==
+  season means of n_hf (events): 2004:3.09(80)  2005:3.39(66)  2006:3.38(114)  2007:3.31(93)  2008:3.26(84)  2009:3.21(71)  2010:2.95(62)  2011:2.92(86)  2012:2.90(82)  2013:3.26(73)  2014:2.69(88)  2015:3.25(100)  2016:2.57(84)  2017:2.89(74)  2018:3.01(80)  2019:2.59(75)  2020:3.00(86)  2021:3.15(100)  2022:3.11(83)  2023:2.89(90)  2024:2.77(84)  2025:3.05(106)
+  within 2004-2009: slope +0.045 /decade (se 0.305) t=+0.15 p=0.890, mean 3.274
+  within 2010-2025: slope +0.002 /decade (se 0.117) t=+0.02 p=0.985, mean 2.938
+  linear + QuikSCAT step together: linear -0.017 /decade (t=-0.17, p=0.869), step -0.330 (t=-2.14, p=0.046), 19 df
+  step at QuikSCAT vs step at ASCAT-B launch together: see AIC lines in S2 (P3 -70.60 vs P4 -66.68)
+
+== SENSITIVITY: 21 possible duplicate archive IDs merged (not in FDR family) ==
+  events 1842 (raw 1861); merged 19 pairs
+merged IDs: 1842 events, 22 seasons, mean n_hf 3.052
+  P1 linear: -0.160 /decade (se 0.071) t=-2.24 p=0.0365 DW=2.35
+     season-bootstrap 95% interval for the P1 slope: [-0.283, -0.054]
+  P2 ASCAT-A launch 2006-10    step -0.166 [-0.378, +0.350] p=0.3002  (events 152 before / 1690 after; seasons with events 3 / 20; 1911 usable draws)
+  P3 QuikSCAT end 2009-11-23   step -0.318 [-0.445, -0.191] p=0.0010  (events 453 before / 1389 after; seasons with events 6 / 17; 1997 usable draws)
+  P4 ASCAT-B launch 2012-09    step -0.231 [-0.393, -0.065] p=0.0070  (events 654 before / 1188 after; seasons with events 9 / 14; 2000 usable draws)
+  P5 Metop-C launch 2018-11    step -0.084 [-0.263, +0.106] p=0.3758  (events 1159 before / 683 after; seasons with events 15 / 8; 2000 usable draws)
+
+== SENSITIVITY: identical timestamps within an ID counted once (not in FDR family) ==
+dedup timestamps: 1861 events, 22 seasons, mean n_hf 3.027
+  P1 linear: -0.174 /decade (se 0.070) t=-2.48 p=0.0222 DW=2.23
+     season-bootstrap 95% interval for the P1 slope: [-0.304, -0.063]
+  P2 ASCAT-A launch 2006-10    step -0.177 [-0.402, +0.326] p=0.2929  (events 153 before / 1708 after; seasons with events 3 / 20; 1911 usable draws)
+  P3 QuikSCAT end 2009-11-23   step -0.334 [-0.461, -0.202] p=0.0010  (events 455 before / 1406 after; seasons with events 6 / 17; 1997 usable draws)
+  P4 ASCAT-B launch 2012-09    step -0.248 [-0.410, -0.079] p=0.0020  (events 657 before / 1204 after; seasons with events 9 / 14; 2000 usable draws)
+  P5 Metop-C launch 2018-11    step -0.112 [-0.293, +0.072] p=0.2409  (events 1165 before / 696 after; seasons with events 15 / 8; 2000 usable draws)
+
+== MULTIPLICITY ==
+  P1 linear drift                    fam P  p=0.0209  q(within family)=0.0349  q(all 19)=0.0398
+  P2 ASCAT-A launch 2006-10          fam P  p=0.3117  q(within family)=0.3117  q(all 19)=0.3484
+  P3 QuikSCAT end 2009-11-23         fam P  p=0.0010  q(within family)=0.0050  q(all 19)=0.0095
+  P4 ASCAT-B launch 2012-09          fam P  p=0.0020  q(within family)=0.0050  q(all 19)=0.0127
+  P5 Metop-C launch 2018-11          fam P  p=0.2239  q(within family)=0.2799  q(all 19)=0.2659
+  S1 scan best step                  fam S  p=0.0158  q(within family)=0.0369  q(all 19)=0.0375
+  S3 atl linear                      fam S  p=0.2011  q(within family)=0.2347  q(all 19)=0.2548
+  S3 atl QuikSCAT step               fam S  p=0.0190  q(within family)=0.0380  q(all 19)=0.0398
+  S3 pac linear                      fam S  p=0.0657  q(within family)=0.0920  q(all 19)=0.0960
+  S3 pac QuikSCAT step               fam S  p=0.0090  q(within family)=0.0315  q(all 19)=0.0285
+  S4 one-fix share                   fam S  p=0.0288  q(within family)=0.0448  q(all 19)=0.0456
+  S4 >=3-fix share                   fam S  p=0.0128  q(within family)=0.0358  q(all 19)=0.0347
+  S5 Atl north step                  fam S  p=0.5215  q(within family)=0.5215  q(all 19)=0.5215
+  S5 Atl south step                  fam S  p=0.0080  q(within family)=0.0315  q(all 19)=0.0285
+  S5 north-south difference          fam S  p=0.3764  q(within family)=0.4053  q(all 19)=0.3973
+  S6 adjusted slope                  fam S  p=0.0080  q(within family)=0.0315  q(all 19)=0.0285
+  S6 minp trend                      fam S  p=0.1542  q(within family)=0.1963  q(all 19)=0.2093
+  S7 proxy slope                     fam S  p=0.0233  q(within family)=0.0407  q(all 19)=0.0402
+  S7 archive-proxy difference        fam S  p=0.0010  q(within family)=0.0140  q(all 19)=0.0095
+  passing q<0.05 across all: 12 of 19
