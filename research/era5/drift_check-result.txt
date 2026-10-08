@@ -1,0 +1,256 @@
+Gust drift before 2001: index value or thresholded counts? (drift_check.py)
+==============================================================================
+Both ERA5 records are PROXIES and cannot be validated before the archive. Every
+test before 2001 below is internal to the reanalysis. OLS on season, slopes per
+decade, t against the two-sided 95% critical value for n-2 df. n is seasons.
+Pipeline A = research/era5/hf_history (800 km track-max gust, 71.7 kt, Jun-May).
+Pipeline B = event_fields/criterion/series (500 km gust per moment, Sep-May).
+
+1. ARCHIVE RECORDING PRACTICE: HF fixes per event, seasons 2004-2025
+   Reported: -0.181 /decade, t = -2.54 (session, from docs/data/hf-lows.json);
+   c9dc994 / criterion-result.txt: -0.20 /decade, t = -2.53 (in-domain 'low' events).
+   -- docs/data/hf-lows.json, every event with an HF fix
+   events per season, 2004-2025                                 n=22    +4.433 /decade (se 4.301)  t=+1.03  p=0.315  mean 84.86
+   HF fixes per season, 2004-2025                               n=22    -1.824 /decade (se 16.589)  t=-0.11  p=0.914  mean 256.68
+   HF fixes PER EVENT, 2004-2025                                n=22    -0.181 /decade (se 0.071)  t=-2.54  p=0.019  mean 3.02  SIGNIFICANT
+   events per season, 2006-2025                                 n=20    +2.256 /decade (se 5.023)  t=+0.45  p=0.659  mean 86.00
+   HF fixes per season, 2006-2025                               n=20    -9.263 /decade (se 19.804)  t=-0.47  p=0.646  mean 258.80
+   HF fixes PER EVENT, 2006-2025                                n=20    -0.177 /decade (se 0.084)  t=-2.12  p=0.048  mean 3.00  SIGNIFICANT
+   -- docs/data/hf-lows.json, class 'low' only
+   events per season, 2004-2025                                 n=22    +3.190 /decade (se 4.247)  t=+0.75  p=0.461  mean 82.95
+   HF fixes per season, 2004-2025                               n=22    -8.639 /decade (se 16.245)  t=-0.53  p=0.601  mean 250.36
+   HF fixes PER EVENT, 2004-2025                                n=22    -0.217 /decade (se 0.073)  t=-2.96  p=0.008  mean 3.01  SIGNIFICANT
+   events per season, 2006-2025                                 n=20    +0.887 /decade (se 4.968)  t=+0.18  p=0.860  mean 84.00
+   HF fixes per season, 2006-2025                               n=20   -17.632 /decade (se 19.267)  t=-0.92  p=0.372  mean 252.25
+   HF fixes PER EVENT, 2006-2025                                n=20    -0.227 /decade (se 0.085)  t=-2.65  p=0.016  mean 2.99  SIGNIFICANT
+   -- data/hf_lows CSVs, raw archive IDs keyed by (basin, ID)
+   events per season, 2004-2025                                 n=22    +4.421 /decade (se 4.232)  t=+1.04  p=0.309  mean 84.59
+   HF fixes per season, 2004-2025                               n=22    -1.773 /decade (se 16.565)  t=-0.11  p=0.916  mean 256.82
+   HF fixes PER EVENT, 2004-2025                                n=22    -0.180 /decade (se 0.072)  t=-2.51  p=0.021  mean 3.03  SIGNIFICANT
+   events per season, 2006-2025                                 n=20    +2.158 /decade (se 4.940)  t=+0.44  p=0.667  mean 85.75
+   HF fixes per season, 2006-2025                               n=20    -9.241 /decade (se 19.771)  t=-0.47  p=0.646  mean 258.95
+   HF fixes PER EVENT, 2006-2025                                n=20    -0.173 /decade (se 0.085)  t=-2.03  p=0.057  mean 3.01
+   per season (json, all classes): season events HF-fixes per-event
+     2004    81    247  3.05
+     2005    66    224  3.39
+     2006   115    385  3.35
+     2007    93    307  3.30
+     2008    84    274  3.26
+     2009    71    228  3.21
+     2010    62    183  2.95
+     2011    86    251  2.92
+     2012    82    238  2.90
+     2013    73    238  3.26
+     2014    88    237  2.69
+     2015   101    325  3.22
+     2016    84    215  2.56
+     2017    74    214  2.89
+     2018    81    241  2.98
+     2019    75    194  2.59
+     2020    86    258  3.00
+     2021   101    316  3.13
+     2022    83    257  3.10
+     2023    90    260  2.89
+     2024    85    232  2.73
+     2025   106    323  3.05
+
+2. RECORD_START = 2004: pipeline A's season table in the archive's first seasons
+   Reported: 2001-02 holds 1 archive event against 85 ERA5 events.
+   season    ERA5 Atl  ERA5 Pac  ERA5 both | archive Atl  archive Pac  both   ERA5/archive
+   2001-02         46        39         85 |           0            1     1   85.00
+   2002-03         62        51        113 |           0           22    22   5.14
+   2003-04         32        38         70 |          11           27    38   1.84
+   2004-05         32        45         77 |          45           36    81   0.95
+   2005-06         39        37         76 |          33           33    66   1.15
+   2006-07         58        40         98 |          67           48   115   0.85
+   2001-2006 transfer row in skill.txt: n_obs 205, n_fc 421, bias 2.05 (seasons 2001-02..2005-06).
+   The archive totals above for those seasons sum to 208; the shortfall is in 2001-02 to 2003-04.
+
+3. PIPELINE B: ERA5 500 km sea gust at fixed storm depth, per cyclone moment
+   Reported: +0.65 kt/decade, t = +2.40 over 1979-2000 (session check, band on the smoothed
+   centre, all candidates); criterion-result.txt: +0.64, t = 2.45 (band on pmin, scored rows).
+   hf_probability.csv.gz holds the scored rows only (centre <= 990 hPa): 174700 rows.
+   mean gust500, smoothed centre (centre_hpa) 955-975, 1979-2000 n=22    +0.645 kt/decade (se 0.269)  t=+2.40  p=0.026  mean 58.40  SIGNIFICANT
+   mean gust500, smoothed centre (centre_hpa) 955-975, 2004-2025 n=22    +0.355 kt/decade (se 0.425)  t=+0.84  p=0.413  mean 58.97
+   mean gust500, smoothed centre (centre_hpa) 955-975, 1979-2025 n=47    +0.282 kt/decade (se 0.111)  t=+2.54  p=0.015  mean 58.65  SIGNIFICANT
+   mean gust500, pmin within 150 km (pmin150_hpa) 955-975, 1979-2000 n=22    +0.643 kt/decade (se 0.263)  t=+2.45  p=0.024  mean 58.19  SIGNIFICANT
+   mean gust500, pmin within 150 km (pmin150_hpa) 955-975, 2004-2025 n=22    +0.392 kt/decade (se 0.413)  t=+0.95  p=0.354  mean 58.70
+   mean gust500, pmin within 150 km (pmin150_hpa) 955-975, 1979-2025 n=47    +0.269 kt/decade (se 0.108)  t=+2.49  p=0.017  mean 58.42  SIGNIFICANT
+   moments with centre <= 960 hPa, 1979-2000                    n=22   +22.479 /decade (se 14.183)  t=+1.58  p=0.129  mean 205.86
+   moments with pmin <= 960 hPa, 1979-2000                      n=22   +25.025 /decade (se 15.165)  t=+1.65  p=0.115  mean 227.45
+   moments with gust500 >= 64 kt (scored rows), 1979-2000       n=22   +50.367 /decade (se 17.921)  t=+2.81  p=0.011  mean 568.73  SIGNIFICANT
+   moments with centre <= 960 hPa, 2004-2025                    n=22   +23.281 /decade (se 14.380)  t=+1.62  p=0.121  mean 186.14
+   moments with pmin <= 960 hPa, 2004-2025                      n=22   +23.252 /decade (se 14.558)  t=+1.60  p=0.126  mean 206.09
+   moments with gust500 >= 64 kt (scored rows), 2004-2025       n=22   +28.430 /decade (se 20.692)  t=+1.37  p=0.185  mean 574.23
+   (The session's +22.5 and +56.6 counted every candidate, including centre > 990 hPa, which
+    are not in the committed file; the counts here are over scored rows and differ for that reason.)
+
+4. THE RECONCILIATION AS THE SESSION RAN IT (pipeline A season counts)
+   pipeline A Atlantic events per season, 1979-1996             n=18    +2.405 /decade (se 2.949)  t=+0.82  p=0.427  mean 46.61
+   pipeline A Atlantic events per season, 1997-2025             n=29    +3.911 /decade (se 1.900)  t=+2.06  p=0.049  mean 48.79  SIGNIFICANT
+   pipeline A Atlantic events per season, 1979-2000             n=22    -0.418 /decade (se 2.170)  t=-0.19  p=0.849  mean 45.91
+   pipeline A Atlantic events per season, 1979-2025             n=47    +1.711 /decade (se 0.847)  t=+2.02  p=0.049  mean 47.96  SIGNIFICANT
+   pipeline A Pacific events per season, 1979-1996              n=18    -0.062 /decade (se 3.057)  t=-0.02  p=0.984  mean 37.56
+   pipeline A Pacific events per season, 1997-2025              n=29    -3.227 /decade (se 1.643)  t=-1.96  p=0.060  mean 42.31
+   pipeline A Pacific events per season, 1979-2000              n=22    +5.551 /decade (se 2.537)  t=+2.19  p=0.041  mean 39.95  SIGNIFICANT
+   pipeline A Pacific events per season, 1979-2025              n=47    +0.674 /decade (se 0.822)  t=+0.82  p=0.416  mean 40.49
+   pipeline A ERA5 minus archive, both basins, 2001-2025        n=25   -17.938 /decade (se 6.203)  t=-2.89  p=0.008  mean 13.44  SIGNIFICANT
+   pipeline A ERA5 minus archive, both basins, 2004-2025        n=22    -2.219 /decade (se 4.144)  t=-0.54  p=0.598  mean 5.86
+   pipeline A ERA5 minus archive, both basins, 2006-2025        n=20    -4.008 /decade (se 4.890)  t=-0.82  p=0.423  mean 6.15
+   What this tests: whether A's counts ramp before 1997 and whether A tracks the archive from
+   2004. What it does not test: whether gust drift at fixed depth moves A's counts. A flat
+   count series is also what a real decline in storms plus a gust drift would give. Section 7
+   asks whether this test could have seen the bias the drift implies.
+
+5. PIPELINE B AT EVENT LEVEL: tracks, not moments
+   33178 linked tracks with at least one scored moment. Track index = max gust500 over its
+   scored moments; track depth = its deepest smoothed centre.
+   5a. Track index at fixed track depth (track depth 955-975 hPa)
+   mean track-max gust500, track depth 955-975, 1979-2000       n=22    +0.769 kt/decade (se 0.341)  t=+2.26  p=0.035  mean 63.90  SIGNIFICANT
+   mean track-max gust500, track depth 955-975, 2004-2025       n=22    -0.014 kt/decade (se 0.402)  t=-0.03  p=0.973  mean 64.54
+   5b. Track index on season with depth held fixed by regression (tracks deeper than 990 hPa
+       excluded by construction; covariates: depth, depth^2, basin). se clustered on season.
+   track index | depth, 1979-2000                               G=22    +0.122 kt/decade (se 0.193)  t=+0.63
+   track index | depth, 2004-2025                               G=22    +0.043 kt/decade (se 0.224)  t=+0.19
+       The same regression within track-depth bands. The pooled slope is weighted toward the
+       many shallow tracks; events near the threshold are mostly 955-975 hPa deep.
+   track index | depth, depth 900-955 hPa, 1979-2000            G=22    +0.343 kt/decade (se 0.593)  t=+0.58  tracks 596
+   track index | depth, depth 900-955 hPa, 2004-2025            G=22    +0.017 kt/decade (se 0.647)  t=+0.03  tracks 545
+   track index | depth, depth 955-965 hPa, 1979-2000            G=22    +0.982 kt/decade (se 0.492)  t=+1.99  tracks 1411
+   track index | depth, depth 955-965 hPa, 2004-2025            G=22    +0.163 kt/decade (se 0.694)  t=+0.23  tracks 1272
+   track index | depth, depth 965-975 hPa, 1979-2000            G=22    +0.266 kt/decade (se 0.290)  t=+0.92  tracks 3077
+   track index | depth, depth 965-975 hPa, 2004-2025            G=22    -0.067 kt/decade (se 0.272)  t=-0.25  tracks 3013
+   track index | depth, depth 975-990 hPa, 1979-2000            G=22    -0.044 kt/decade (se 0.218)  t=-0.20  tracks 10713
+   track index | depth, depth 975-990 hPa, 2004-2025            G=22    +0.068 kt/decade (se 0.244)  t=+0.28  tracks 10423
+   5c. Thresholded event counts, depth-standardised. For a gust cut, each season's expected
+       count is the sum over its tracks of the exceedance rate for the track's depth bin (2 hPa
+       bins), rates taken from a reference period. Observed minus expected is the part of the
+       count that depth does not explain. If the gust drift reaches counts, it trends upward
+       before 2001. Depth-only counts (tracks deeper than 960 hPa) are shown alongside.
+   events, track index >= 64.0 kt, 1979-2000                    n=22    +7.188 /decade (se 4.853)  t=+1.48  p=0.154  mean 185.41
+     observed - expected | depth (ref 1979-2000), 1979-2000     n=22    +4.726 /decade (se 3.989)  t=+1.18  p=0.250  mean 0.00
+   events, track index >= 64.0 kt, 2004-2025                    n=22    -0.615 /decade (se 6.094)  t=-0.10  p=0.921  mean 180.32
+     observed - expected | depth (ref 1979-2000), 2004-2025     n=22    -4.446 /decade (se 5.436)  t=-0.82  p=0.423  mean 5.13
+     observed - expected | depth (ref 2004-2025), 1979-2000     n=22    +4.657 /decade (se 4.011)  t=+1.16  p=0.259  mean -5.62
+     observed - expected | depth (ref 2004-2025), 2004-2025     n=22    -4.321 /decade (se 5.521)  t=-0.78  p=0.443  mean 0.00
+   events, track index >= 69.5 kt, 1979-2000                    n=22    +6.798 /decade (se 4.457)  t=+1.53  p=0.143  mean 105.64
+     observed - expected | depth (ref 1979-2000), 1979-2000     n=22    +3.944 /decade (se 3.803)  t=+1.04  p=0.312  mean -0.03
+   events, track index >= 69.5 kt, 2004-2025                    n=22    +5.867 /decade (se 3.899)  t=+1.50  p=0.148  mean 103.95
+     observed - expected | depth (ref 1979-2000), 2004-2025     n=22    +2.657 /decade (se 3.374)  t=+0.79  p=0.440  mean 4.75
+     observed - expected | depth (ref 2004-2025), 1979-2000     n=22    +3.562 /decade (se 3.791)  t=+0.94  p=0.359  mean -5.45
+     observed - expected | depth (ref 2004-2025), 2004-2025     n=22    +2.643 /decade (se 3.398)  t=+0.78  p=0.446  mean -0.00
+   events, track index >= 72.3 kt, 1979-2000                    n=22    +8.521 /decade (se 3.346)  t=+2.55  p=0.019  mean 75.23  SIGNIFICANT
+     observed - expected | depth (ref 1979-2000), 1979-2000     n=22    +5.874 /decade (se 3.010)  t=+1.95  p=0.065  mean -0.01
+   events, track index >= 72.3 kt, 2004-2025                    n=22    +8.131 /decade (se 2.947)  t=+2.76  p=0.012  mean 78.45  SIGNIFICANT
+     observed - expected | depth (ref 1979-2000), 2004-2025     n=22    +5.337 /decade (se 2.982)  t=+1.79  p=0.089  mean 8.20
+     observed - expected | depth (ref 2004-2025), 1979-2000     n=22    +5.570 /decade (se 3.043)  t=+1.83  p=0.082  mean -8.87
+     observed - expected | depth (ref 2004-2025), 2004-2025     n=22    +5.338 /decade (se 3.052)  t=+1.75  p=0.096  mean -0.00
+   depth-only: tracks deeper than 960 hPa, 1979-2000            n=22    +5.799 /decade (se 2.958)  t=+1.96  p=0.064  mean 52.95
+   depth-only: tracks deeper than 960 hPa, 2004-2025            n=22    +4.867 /decade (se 2.981)  t=+1.63  p=0.118  mean 46.45
+
+6. PIPELINE A'S OWN INDEX AGAINST THE DRIFT
+   The committed catalog holds every track at or above 71.7 kt (events, complete) and one
+   matched sub-threshold track per event (null cases, a sample). Sub-threshold tracks that are
+   not null cases are not committed, so a fixed-depth test of A's index cannot use the whole
+   population; each test below says what selection it carries.
+   events 4157, null cases 4154. Null share by track depth (all seasons):
+     minp    0- 950 hPa: events  558  nulls   18
+     minp  950- 960 hPa: events 1070  nulls  165
+     minp  960- 970 hPa: events 1289  nulls  463
+     minp  970- 980 hPa: events  835  nulls  874
+     minp  980- 990 hPa: events  332  nulls 1252
+     minp  990-1010 hPa: events   73  nulls 1382
+   6a. Per fix: A's 800 km gust (g800) at fixed MSLP 955-975 hPa, in-domain fixes of
+       catalog tracks. Selection: tracks with index >= 71.7 are all present; shallower
+       sub-threshold tracks only as null cases.
+   mean g800 at 955-975 hPa, catalog tracks, 1979-2000          n=22    +0.665 kt/decade (se 0.273)  t=+2.44  p=0.024  mean 64.38  SIGNIFICANT
+   mean g800 at 955-975 hPa, catalog tracks, 2004-2025          n=22    +0.263 kt/decade (se 0.432)  t=+0.61  p=0.550  mean 64.31
+   mean g800 at 955-975 hPa, event tracks, 1979-2000            n=22    +0.760 kt/decade (se 0.305)  t=+2.49  p=0.022  mean 66.15  SIGNIFICANT
+   mean g800 at 955-975 hPa, event tracks, 2004-2025            n=22    +0.289 kt/decade (se 0.452)  t=+0.64  p=0.530  mean 66.08
+   6b. Per track: index on season with depth held fixed, tracks deeper than 960 hPa (where
+       null cases are about a tenth of catalog tracks, so the truncation at 71.7 kt bites
+       least). Covariates depth, depth^2, basin; se clustered on season.
+   index | depth, events + nulls, 1979-2000                     G=22    +0.208 kt/decade (se 0.418)  t=+0.50  tracks 843
+   index | depth, events + nulls, 2004-2025                     G=22    -0.565 kt/decade (se 0.664)  t=-0.85  tracks 862
+   index | depth, events only, 1979-2000                        G=22    +0.579 kt/decade (se 0.463)  t=+1.25  tracks 763
+   index | depth, events only, 2004-2025                        G=22    -0.351 kt/decade (se 0.587)  t=-0.60  tracks 776
+   6c. Which events carry the count? Deep events (minp <= 960) need little help from the gust
+       field; shallow events (minp > 975) exist only because their gust clears 71.7 kt. A
+       gust drift should show first in the shallow ones.
+   deep events, minp <= 960, 1979-2000                          n=22    +2.739 /decade (se 1.681)  t=+1.63  p=0.119  mean 34.68
+   deep events, minp <= 960, 2004-2025                          n=22    +2.405 /decade (se 1.827)  t=+1.32  p=0.203  mean 35.27
+   middle events, 960 < minp <= 975, 1979-2000                  n=22    +2.513 /decade (se 1.916)  t=+1.31  p=0.205  mean 36.77
+   middle events, 960 < minp <= 975, 2004-2025                  n=22    -0.615 /decade (se 2.038)  t=-0.30  p=0.766  mean 38.95
+   shallow events, minp > 975, 1979-2000                        n=22    -0.119 /decade (se 1.304)  t=-0.09  p=0.928  mean 14.41
+   shallow events, minp > 975, 2004-2025                        n=22    +0.875 /decade (se 1.794)  t=+0.49  p=0.631  mean 16.68
+   shallow share of events, 1979-2000                           n=22    -0.010 /decade (se 0.013)  t=-0.77  p=0.452  mean 0.17
+   shallow share of events, 2004-2025                           n=22    +0.008 /decade (se 0.017)  t=+0.50  p=0.624  mean 0.18
+
+7. HOW LARGE A COUNT BIAS DOES THE DRIFT IMPLY, AND COULD SECTION 4 HAVE SEEN IT?
+   A uniform shift of the index by d kt moves the count above a threshold by about f * d, f
+   the number of tracks per kt at the threshold. A's events are complete above 71.7 kt, so f
+   is measured directly from events with index in [71.7, 73.7).
+   Atlantic  pre-2001: 45.9 events per season; f = 4.59 events per kt per season (202 events in 2 kt)
+   Pacific   pre-2001: 40.0 events per season; f = 4.23 events per kt per season (186 events in 2 kt)
+   both      pre-2001: 85.9 events per season; f = 8.82 events per kt per season (388 events in 2 kt)
+
+   Implied count trend = f * (index drift per decade), both basins, 1979-2000:
+   B moment gust, 955-975 (c9dc994 measure)             drift +0.65 kt/dec ->  +5.7 events/decade, +14.0% of the mean over 1979-2000
+   B track index | depth, 1979-2000 (5b)                drift +0.12 kt/dec (se 0.19) ->  +1.1 events/decade,  +2.6% of the mean over 1979-2000
+   A index | depth, events + nulls, 1979-2000 (6b)      drift +0.21 kt/dec (se 0.42) ->  +1.8 events/decade,  +4.5% of the mean over 1979-2000
+   A index | depth, events only, 1979-2000 (6b)         drift +0.58 kt/dec (se 0.46) ->  +5.1 events/decade, +12.5% of the mean over 1979-2000
+   observed: pipeline A events, both basins, 1979-2000          n=22    +5.133 /decade (se 2.587)  t=+1.98  p=0.061  mean 85.86
+   Power of that observed test against a true slope equal to the c9dc994 drift's implied
+   slope (two-sided 5%, se from the data): 55%.
+   The minimum slope it detects with 80% power: 7.6 events/decade.
+   Atlantic 1979-1996 test as the session ran it: se 2.95/decade over 18 seasons; implied slope +3.0; power 15%
+   Pacific  1979-1996 test as the session ran it: se 3.06/decade over 18 seasons; implied slope +2.7; power 12%
+   Pipeline B at its 72.3 kt track cut: f = 8.91 tracks per kt per season over 1979-2000; c9dc994's +0.65 kt/decade implies +5.8 events/decade.
+
+8. READING
+   Written for the numbers above as committed; if a rerun changes them, rewrite this.
+
+   Finding 1 (archive fixes per event) REPRODUCES: -0.181 /decade, t = -2.54 from the
+   payload, -0.180, t = -2.51 from the raw CSVs, -0.217, t = -2.96 for class 'low' only.
+   Events and total HF fixes are flat. It weakens from 2006 (t = -2.12; -2.03 from the CSVs,
+   p = 0.057). A recording-practice drift on the archive side, as reported.
+
+   Finding 2 (RECORD_START = 2004) REPRODUCES: 2001-02 has 1 archive event against 85 in
+   pipeline A; 2002-03 has 22 against 113. The 2001-2006 transfer row is the archive starting
+   up. With 2001-03 dropped, A minus archive is flat (-2.2 /decade, t = -0.54).
+
+   Finding 3 (gust at fixed depth) REPRODUCES: +0.645 kt/decade, t = +2.40, 1979-2000, flat
+   2004-2025 (t = +0.84). It holds on pipeline A's own index too: A's 800 km gust at fixed
+   MSLP 955-975 hPa rises +0.665 kt/decade, t = +2.44, 1979-2000, and is flat after 2004
+   (t = +0.61). So the index VALUE is not era-comparable in either pipeline.
+
+   The reconciliation REPRODUCES as computed but DOES NOT SHOW what it was used to show.
+   Its evidence that counts do not drift was a per-basin trend over 1979-1996 with t = +0.82
+   and -0.02. Against the count bias the drift implies (about +3 per basin per decade), those
+   two tests had 15% and 12% power, so a null result there says almost nothing. Over the 22
+   pre-archive seasons the same counts rise: both basins +5.1 /decade (t = +1.98, p = 0.06),
+   Pacific +5.6 (t = +2.19). The c9dc994 drift, applied to A's measured density at its
+   threshold, predicts +5.7 /decade. The observed rise is the size the drift predicts.
+
+   That does not make the rise an artefact. Depth-only counts rise in the same years: B tracks
+   deeper than 960 hPa +5.8 /decade (t = +1.96), A deep events +2.7 (t = +1.63). Holding depth
+   fixed at event level, the drift estimates are small and uncertain: B track index | depth
+   +0.12 (se 0.19); A index | depth +0.21 (se 0.42) with nulls, +0.58 (se 0.46) events only;
+   B's depth-standardised excess at 72.3 kt +5.9 /decade (t = +1.95), but the same excess
+   runs +5.3 (t = +1.79) over 2004-2025, where the per-moment gust is flat. Shallow events,
+   which only the gust can make, show no rise (share t = -0.77). By band, the per-track drift
+   sits in 955-965 hPa tracks (+0.98, t = +1.99) and not in shallower ones.
+
+   Answer to decision 1, on these files: the index VALUE drifts before 2001 in both pipelines.
+   Whether thresholded COUNTS drift is NOT SETTLED, in either direction. The data bound it:
+   from about +1 to about +6 events per decade over 1979-2000 in pipeline A (roughly 2% to
+   14% of the mean across the 22 seasons), and they cannot separate that from a real rise in
+   deep storms of the same size. Neither c9dc994's "cannot be carried back" nor the walk-back's
+   "counts are fine" is supported. For a trend that crosses 2001: a ramp of that size through
+   2000 and flat after adds +0.5 to +2.5 /decade to a 1979-2025 OLS trend, against pipeline
+   A's own whole-record trend of about +2.4 (Atlantic +1.7, Pacific +0.7). The artefact can be
+   anything from a fifth of that trend to all of it.
+
+   What would settle it, not done here: the full sub-threshold track population for A (only
+   events and null cases are committed), and an independent wind record before 2001
+   (scatterometer from 1991, ship and buoy reports) to test the gust field directly.
