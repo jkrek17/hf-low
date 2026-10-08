@@ -144,6 +144,11 @@ correlate at r = 0.62 (Atlantic) and 0.70 (Pacific).
     results/era5_hf_counts_by_season.csv the table above, with null counts
     results/skill.txt                    calibration and transfer report
     results/threshold.json
+    results/all_tracks.csv.gz            every in-domain track 1979-2025 (75,087), one row each:
+                                         gust800_kt (track index), minp, peak, season, n_fix.
+                                         Re-extracted 2026-10-08; reproduces the catalog's 2,254 / 1,903
+                                         events. The full sub-threshold population, so counts can be
+                                         compared at fixed depth.
     results/probability.txt, probability.json  the P(HF) fits
 
 Catalog columns: `role` (event / null_case), `null_for` (the event track a
