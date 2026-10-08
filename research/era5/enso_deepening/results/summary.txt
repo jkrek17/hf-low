@@ -1,0 +1,41 @@
+ENSO flavor vs where Pacific storms deepen fastest. ERA5 proxy; PR 38 tracker output (pipeline A detector/linker); HF label from pipeline A.
+permutations 10000; bootstrap 5000; BH over 18 tests. Effects are degrees per SD of the index (S12: degrees).
+
+P1   n=47 b=-1.045 (-2.354,+0.430) detect80=1.99 p=0.1768 q=0.438  bomb deepening longitude ~ EMI + N34 + year (47 winters)
+P2   n=47 b=+0.028 (-0.529,+0.622) detect80=0.83 p=0.9124 q=0.966  bomb deepening latitude ~ EMI + N34 + year
+S1   n=47 b=-0.075 (-1.272,+0.843) detect80=1.46 p=0.9002 q=0.966  rapid (B>=12) deepening longitude
+S2   n=47 b=-0.031 (-0.450,+0.392) detect80=0.60 p=0.8820 q=0.966  rapid (B>=12) deepening latitude
+S3   n=47 b=-0.034 (-1.366,+1.323) detect80=1.87 p=0.9668 q=0.967  bomb longitude with SON EMI + SON N34 + year
+S4   n=47 b=+0.031 (-0.647,+0.491) detect80=0.80 p=0.8951 q=0.966  bomb latitude with SON EMI + SON N34 + year
+S5   n=47 b=-1.705 (-3.225,-0.029) detect80=2.26 p=0.0507 q=0.377  longitude of minimum-pressure fix of bomb tracks (min fix in box)
+S6   n=47 b=-1.052 (-2.140,+0.057) detect80=1.54 p=0.0628 q=0.377  bomb longitude with N4-N3 instead of EMI
+S7   n=47 b=-1.008 (-2.263,+0.477) detect80=1.92 p=0.1796 q=0.438  bomb longitude without year term
+S8   n=47 b=+0.400 (-0.560,+1.357) detect80=1.36 p=0.4725 q=0.654  bomb longitude without N34 term
+S9   n=47 b=-0.422 (-1.510,+0.401) detect80=1.34 p=0.4416 q=0.654  B-weighted centroid longitude of rapid storms
+S10  n=47 b=-0.715 (-2.097,+1.399) detect80=2.44 p=0.3818 q=0.654  bomb longitude, JFM window
+S11  n=22 b=-4.032 (-8.184,+0.908) detect80=6.42 p=0.1017 q=0.438  longitude of the deepening point of HF-reaching storms (pipeline A, 22 winters 2004-05..), no year term
+S12  n=13 b=-5.042 (-9.521,-0.562) detect80=6.40 p=0.0240 q=0.377  El Nino winters: CP (n=4) minus EP (n=9) mean bomb longitude (deg, not per SD)
+       CP [1987, 2002, 2014, 2018]; EP [1982, 1986, 1991, 1994, 1997, 2006, 2009, 2015, 2023]; CP mean 168.04 EP mean 173.08
+S13  n=47 b=-1.748 (-4.165,+1.559) detect80=3.99 p=0.1948 q=0.438  winter 75th percentile of bomb longitude
+S14  n=47 b=-0.894 (-2.341,+0.961) detect80=2.38 p=0.2564 q=0.513  winter 25th percentile of bomb longitude
+S15  n=25 b=-0.673 (-1.961,+1.664) detect80=2.56 p=0.4005 q=0.654  bomb longitude, 1979-80..2003-04 (25 winters)
+S16  n=22 b=-2.287 (-5.775,+1.208) detect80=4.81 p=0.1833 q=0.438  bomb longitude, 2004-05..2025-26 (22 winters)
+
+bombs per winter: mean 34.0, min 22, max 49; rapid per winter mean 73.2; HF-reaching per winter (2004-25) mean 22.0
+SD of winter-mean bomb longitude 3.63 deg; latitude 1.14 deg
+
+Mechanism: M1_emi_with_pna=-0.926, M1_lo=-2.246, M1_hi=0.723, M1_p=0.243, M2_pna_b=0.431, M2_lo=-0.399, M2_hi=1.380, M2_p=0.490, corr_emi_pna=0.275, corr_emi_n34=0.732, corr_emi_emison=0.879
+
+Planted-effect power (share of 300 plants with permutation p<0.05)
+test                    P1        P2        S3
+delta_deg_per_sd                              
+0.5               0.106667  0.503333  0.103333
+1.0               0.243333  0.980000  0.273333
+1.5               0.500000  1.000000  0.546667
+2.0               0.726667  1.000000  0.750000
+2.5               0.893333  1.000000  0.966667
+3.0               0.966667  1.000000  0.990000
+3.5               1.000000  1.000000  0.993333
+4.0               1.000000  1.000000  1.000000
+5.0               1.000000  1.000000  1.000000
+6.0               1.000000  1.000000  1.000000
