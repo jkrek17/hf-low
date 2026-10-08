@@ -4,8 +4,8 @@ The archive of hurricane-force extratropical lows (North Atlantic and North Paci
 
 ## Every session, first
 
-1. Read `STATUS.md`. It says which branches are in flight, what exists, what does not, and which results are gated.
-2. Run `git fetch --all` and compare the branch heads with the table in `STATUS.md`. If they disagree, git is right: update the ledger before doing anything else.
+1. Read the ledger as it stands on `main`: `git fetch --all`, then `git show origin/main:STATUS.md`. It says which branches are in flight, what exists, what does not, and which results are gated. The copy of `STATUS.md` on a research branch can be older; `main` holds the one that counts.
+2. Compare the branch heads with the table in the ledger. The Head column is each branch's head when the ledger was last updated, so a difference means something has landed since. Look at what it was, and bring the ledger up to date before doing anything else. Git is right when the two disagree.
 3. Run `git config core.hooksPath .githooks` if the session did not do it for you.
 4. For anything beyond a small fix, load the `hf-harness` skill (`.claude/skills/hf-harness/SKILL.md`) and follow it.
 
@@ -26,7 +26,7 @@ These two never run on a general instruction, a plan approval, or your own initi
 
 ## Every session, last
 
-- Update `STATUS.md` in the same pull request as the work: branch heads, what now exists, any gate you opened or closed, anything left unfinished.
+- Update `STATUS.md` on `main`: branch heads, what now exists, any gate you opened or closed, anything left unfinished. When your work is on a research branch, the ledger update is a small pull request of its own against `main`.
 - If your change makes a sentence in a README or docstring false ("there is no ...", "not yet ..."), fix that sentence in the same commit.
 - Put the numbers in the commit body. Work that is not ready is committed as `WIP:` with what holds it back, not left in scratch space.
 
