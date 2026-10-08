@@ -1,0 +1,13 @@
+basin,quantity,contrast,estimate,lo,hi,n_seasons,note
+atl,Q2_1979_2000,D_Jan,0.090086,-0.097374,0.27201,22,"within-era only (1979-80..1999-2000 gust-based); descriptive, not tested; not in FDR family"
+atl,Q2_1979_2000,M,0.5639,0.41868,0.72888,22,"within-era only (1979-80..1999-2000 gust-based); descriptive, not tested; not in FDR family"
+atl,Q3_1979_2000,D_Jan,0.022076,-0.041223,0.086535,22,"within-era only (1979-80..1999-2000 gust-based); descriptive, not tested; not in FDR family"
+atl,Q3_1979_2000,M,-0.040912,-0.085826,0.00654,22,"within-era only (1979-80..1999-2000 gust-based); descriptive, not tested; not in FDR family"
+atl,Q4_1979_2000,D_Jan,0.06801,-0.12887,0.25737,22,"within-era only (1979-80..1999-2000 gust-based); descriptive, not tested; not in FDR family"
+atl,Q4_1979_2000,M,0.60481,0.44867,0.7697,22,"within-era only (1979-80..1999-2000 gust-based); descriptive, not tested; not in FDR family"
+pac,Q2_1979_2000,D_Jan,-0.036158,-0.19729,0.12461,22,"within-era only (1979-80..1999-2000 gust-based); descriptive, not tested; not in FDR family"
+pac,Q2_1979_2000,M,0.34509,0.1861,0.51493,22,"within-era only (1979-80..1999-2000 gust-based); descriptive, not tested; not in FDR family"
+pac,Q3_1979_2000,D_Jan,0.051439,-0.016689,0.12351,22,"within-era only (1979-80..1999-2000 gust-based); descriptive, not tested; not in FDR family"
+pac,Q3_1979_2000,M,0.12204,0.071465,0.17236,22,"within-era only (1979-80..1999-2000 gust-based); descriptive, not tested; not in FDR family"
+pac,Q4_1979_2000,D_Jan,-0.087597,-0.28712,0.11402,22,"within-era only (1979-80..1999-2000 gust-based); descriptive, not tested; not in FDR family"
+pac,Q4_1979_2000,M,0.22305,0.083484,0.37596,22,"within-era only (1979-80..1999-2000 gust-based); descriptive, not tested; not in FDR family"

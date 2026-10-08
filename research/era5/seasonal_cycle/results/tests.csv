@@ -1,0 +1,57 @@
+test,quantity,basin,contrast,estimate,lo,hi,se,p,loo_min,loo_max,n_seasons,primary,log,descr,q_bh,p_bonf7,detectable_80
+Q1-D_Jan-atl,Q1,atl,D_Jan,0.036808,-0.083813,0.15988,0.062579,0.53673,0.0039107,0.059892,22,False,True,"archive HF count by first-HF-fix month, per day",0.60338,,0.17522
+Q1-M-atl,Q1,atl,M,0.55178,0.40969,0.6894,0.072361,0.0009995,0.52658,0.59003,22,False,True,"archive HF count by first-HF-fix month, per day",0.0032925,,0.20261
+Q2-D_Jan-atl,Q2,atl,D_Jan,0.012483,-0.18099,0.21047,0.10219,0.90855,-0.041594,0.049554,22,False,True,"pipeline A HF count by genesis month, per day",0.92506,,0.28612
+Q2-M-atl,Q2,atl,M,0.5523,0.4251,0.68353,0.06549,0.0009995,0.5236,0.57814,22,False,True,"pipeline A HF count by genesis month, per day",0.0032925,,0.18337
+Q3-D_Jan-atl,Q3,atl,D_Jan,0.01987,-0.030453,0.07061,0.025989,0.43978,0.0093533,0.030134,22,False,True,"pipeline A all-cyclone count by genesis month, per day",0.51308,,0.072768
+Q3-M-atl,Q3,atl,M,-0.029261,-0.072051,0.016194,0.022361,0.18591,-0.040873,-0.020244,22,False,True,"pipeline A all-cyclone count by genesis month, per day",0.28919,,0.062612
+Q4-D_Jan-atl,Q4,atl,D_Jan,-0.0073869,-0.19201,0.17038,0.093721,0.97151,-0.052561,0.025606,22,False,True,"pipeline A HF share (HF / all cyclones, genesis cohort)",0.97151,,0.26242
+Q4-M-atl,Q4,atl,M,0.58156,0.43397,0.72509,0.074309,0.0009995,0.55082,0.6116,22,False,True,"pipeline A HF share (HF / all cyclones, genesis cohort)",0.0032925,,0.20807
+Q5-D_Jan-atl,Q5,atl,D_Jan,-0.020866,-0.093977,0.050001,0.037047,0.6017,-0.042044,-0.0034427,22,False,True,"pipeline A real-cyclone count by genesis month, per day",0.64798,,0.10373
+Q5-M-atl,Q5,atl,M,0.030987,-0.027664,0.097732,0.032404,0.35282,0.013027,0.044143,22,False,True,"pipeline A real-cyclone count by genesis month, per day",0.45949,,0.090731
+Q6-D_Jan-atl,Q6,atl,D_Jan,-0.015556,-0.20324,0.16733,0.093191,0.89655,-0.064627,0.02012,22,False,True,"pipeline A HF count by HF onset month, per day",0.92506,,0.26093
+Q6-M-atl,Q6,atl,M,0.51698,0.38808,0.66199,0.069537,0.0009995,0.48367,0.53936,22,False,True,"pipeline A HF count by HF onset month, per day",0.0032925,,0.1947
+Q7-D_Jan-atl,Q7,atl,D_Jan,0.071344,-0.057865,0.20319,0.065,0.27286,0.048605,0.090414,47,False,True,"pipeline A depth-strong count by genesis month, per day",0.37269,,0.182
+Q7-M-atl,Q7,atl,M,0.54608,0.41336,0.68287,0.068902,0.0009995,0.52335,0.56704,47,False,True,"pipeline A depth-strong count by genesis month, per day",0.0032925,,0.19293
+Q8-D_Jan-atl,Q8,atl,D_Jan,0.053878,-0.066924,0.17197,0.060958,0.38681,0.030623,0.071117,47,False,True,pipeline A depth-strong share,0.48136,,0.17068
+Q8-M-atl,Q8,atl,M,0.58053,0.44139,0.72466,0.072528,0.0009995,0.55722,0.60252,47,False,True,pipeline A depth-strong share,0.0032925,,0.20308
+Q9-D_Jan-atl,Q9,atl,D_Jan,-0.041715,-0.18129,0.086183,0.06804,0.56072,-0.069408,-0.0086698,17,False,True,v250 2-6 day eddy activity in box (m2/s2),0.61569,,0.19051
+Q9-M-atl,Q9,atl,M,0.077498,-0.0070495,0.16959,0.045546,0.073963,0.049878,0.10493,17,False,True,v250 2-6 day eddy activity in box (m2/s2),0.1534,,0.12753
+Q10-D_Jan-atl,Q10,atl,D_Jan,0.034372,-0.041259,0.11351,0.038303,0.37181,0.021323,0.04766,42,False,True,MSLP 2-6 day eddy activity in box (Pa2; ERA5 pressure is in Pa),0.47322,,0.10725
+Q10-M-atl,Q10,atl,M,0.15138,0.10113,0.20786,0.026668,0.0009995,0.14205,0.16089,42,False,True,MSLP 2-6 day eddy activity in box (Pa2; ERA5 pressure is in Pa),0.0032925,,0.07467
+Q11-D_Jan-atl,Q11,atl,D_Jan,1.1487,-0.12298,2.5905,0.6977,0.089955,0.87936,1.4345,22,False,False,archive mean latitude of the first HF fix (deg N),0.17564,,1.9536
+Q11-M-atl,Q11,atl,M,-0.53041,-2.2401,1.0951,0.85661,0.53873,-0.86606,-0.15246,22,False,False,archive mean latitude of the first HF fix (deg N),0.60338,,2.3985
+Q12-D_Jan-atl,Q12,atl,D_Jan,0.83031,-0.67896,2.3478,0.7739,0.28886,0.54084,1.163,22,False,False,pipeline A mean HF onset latitude (deg N),0.38514,,2.1669
+Q12-M-atl,Q12,atl,M,-1.1821,-3.1812,0.83888,1.0122,0.22889,-1.6737,-0.7052,22,False,False,pipeline A mean HF onset latitude (deg N),0.32604,,2.8341
+Q13-D_Jan-atl,Q13,atl,D_Jan,0.60294,-0.2049,1.5212,0.43505,0.14893,0.41007,0.73727,22,False,False,pipeline A all-track mean peak latitude (deg N),0.25272,,1.2181
+Q13-M-atl,Q13,atl,M,1.4745,0.60154,2.3132,0.43391,0.001999,1.3322,1.6858,22,False,False,pipeline A all-track mean peak latitude (deg N),0.0062191,,1.2149
+Q14-D_Jan-atl,Q14,atl,D_Jan,0.032761,-0.29668,0.36135,0.16798,0.87056,-0.066796,0.099179,17,False,True,"paired D(pipeline A HF count by genesis month) - D(v250 eddy activity), 2004-05..2020-21",0.91984,,0.47035
+Q14-M-atl,Q14,atl,M,0.50674,0.36485,0.65091,0.074257,0.0009995,0.46295,0.53747,17,False,True,"paired D(pipeline A HF count by genesis month) - D(v250 eddy activity), 2004-05..2020-21",0.0032925,,0.20792
+Q1-D_Jan-pac,Q1,pac,D_Jan,0.1955,0.038027,0.34603,0.078548,0.013993,0.16522,0.24284,22,True,True,"archive HF count by first-HF-fix month, per day",0.035619,0.097951,0.21994
+Q1-M-pac,Q1,pac,M,0.49266,0.31422,0.70639,0.099218,0.0009995,0.44113,0.52579,22,False,True,"archive HF count by first-HF-fix month, per day",0.0032925,,0.27781
+Q2-D_Jan-pac,Q2,pac,D_Jan,0.091647,-0.040424,0.22664,0.066787,0.18391,0.055176,0.11934,22,True,True,"pipeline A HF count by genesis month, per day",0.28919,1,0.187
+Q2-M-pac,Q2,pac,M,0.54463,0.38498,0.72818,0.087847,0.0009995,0.5124,0.57757,22,False,True,"pipeline A HF count by genesis month, per day",0.0032925,,0.24597
+Q3-D_Jan-pac,Q3,pac,D_Jan,0.035682,-0.02197,0.088191,0.028227,0.22089,0.023699,0.052229,22,True,True,"pipeline A all-cyclone count by genesis month, per day",0.32552,1,0.079035
+Q3-M-pac,Q3,pac,M,0.08586,0.045339,0.12625,0.020243,0.0009995,0.078641,0.093401,22,False,True,"pipeline A all-cyclone count by genesis month, per day",0.0032925,,0.05668
+Q4-D_Jan-pac,Q4,pac,D_Jan,0.055965,-0.076242,0.19824,0.070695,0.42379,0.013697,0.082153,22,True,True,"pipeline A HF share (HF / all cyclones, genesis cohort)",0.50494,1,0.19795
+Q4-M-pac,Q4,pac,M,0.45877,0.30505,0.64537,0.087763,0.0009995,0.42328,0.49092,22,False,True,"pipeline A HF share (HF / all cyclones, genesis cohort)",0.0032925,,0.24574
+Q5-D_Jan-pac,Q5,pac,D_Jan,0.05768,-0.015849,0.13337,0.037998,0.13393,0.03809,0.075777,22,False,True,"pipeline A real-cyclone count by genesis month, per day",0.25001,,0.1064
+Q5-M-pac,Q5,pac,M,0.079313,0.031731,0.1312,0.025359,0.0029985,0.064402,0.091614,22,False,True,"pipeline A real-cyclone count by genesis month, per day",0.0088377,,0.071005
+Q6-D_Jan-pac,Q6,pac,D_Jan,0.10241,-0.039818,0.24284,0.070729,0.14893,0.06732,0.12991,22,False,True,"pipeline A HF count by HF onset month, per day",0.25272,,0.19804
+Q6-M-pac,Q6,pac,M,0.5746,0.40917,0.75914,0.090354,0.0009995,0.53593,0.61121,22,False,True,"pipeline A HF count by HF onset month, per day",0.0032925,,0.25299
+Q7-D_Jan-pac,Q7,pac,D_Jan,0.11834,-0.024202,0.25365,0.069874,0.090955,0.096478,0.14306,47,False,True,"pipeline A depth-strong count by genesis month, per day",0.17564,,0.19565
+Q7-M-pac,Q7,pac,M,0.49453,0.3789,0.62045,0.061607,0.0009995,0.47683,0.51438,47,False,True,"pipeline A depth-strong count by genesis month, per day",0.0032925,,0.1725
+Q8-D_Jan-pac,Q8,pac,D_Jan,0.083727,-0.049764,0.21493,0.067978,0.23288,0.053346,0.1042,47,False,True,pipeline A depth-strong share,0.32604,,0.19034
+Q8-M-pac,Q8,pac,M,0.39159,0.27624,0.51648,0.062148,0.0009995,0.37479,0.41203,47,False,True,pipeline A depth-strong share,0.0032925,,0.17402
+Q9-D_Jan-pac,Q9,pac,D_Jan,-0.13264,-0.24233,-0.020027,0.057671,0.022989,-0.15295,-0.10351,17,True,True,v250 2-6 day eddy activity in box (m2/s2),0.05364,0.16092,0.16148
+Q9-M-pac,Q9,pac,M,-0.17211,-0.29019,-0.049256,0.060261,0.0049975,-0.204,-0.14627,17,False,True,v250 2-6 day eddy activity in box (m2/s2),0.013993,,0.16873
+Q10-D_Jan-pac,Q10,pac,D_Jan,-0.074834,-0.14257,-0.0011558,0.036367,0.048976,-0.090445,-0.066203,42,False,True,MSLP 2-6 day eddy activity in box (Pa2; ERA5 pressure is in Pa),0.10549,,0.10183
+Q10-M-pac,Q10,pac,M,0.038208,-0.01185,0.094726,0.027391,0.14193,0.02745,0.050091,42,False,True,MSLP 2-6 day eddy activity in box (Pa2; ERA5 pressure is in Pa),0.25272,,0.076696
+Q11-D_Jan-pac,Q11,pac,D_Jan,-2.2771,-3.3422,-1.2768,0.52003,0.0009995,-2.5112,-2.0823,22,True,False,archive mean latitude of the first HF fix (deg N),0.0032925,0.0069965,1.4561
+Q11-M-pac,Q11,pac,M,-0.94,-2.2688,0.42824,0.68593,0.17891,-1.26,-0.45368,22,False,False,archive mean latitude of the first HF fix (deg N),0.28919,,1.9206
+Q12-D_Jan-pac,Q12,pac,D_Jan,-0.54155,-1.8391,0.62364,0.61884,0.4088,-0.77476,-0.1466,22,False,False,pipeline A mean HF onset latitude (deg N),0.49766,,1.7328
+Q12-M-pac,Q12,pac,M,-1.1345,-2.9255,0.56794,0.89702,0.2069,-1.4164,-0.57197,22,False,False,pipeline A mean HF onset latitude (deg N),0.31314,,2.5116
+Q13-D_Jan-pac,Q13,pac,D_Jan,-0.97986,-1.769,-0.25901,0.38406,0.007996,-1.0862,-0.8034,22,False,False,pipeline A all-track mean peak latitude (deg N),0.021323,,1.0754
+Q13-M-pac,Q13,pac,M,-1.0428,-1.894,-0.16759,0.43993,0.018991,-1.26,-0.82406,22,False,False,pipeline A all-track mean peak latitude (deg N),0.046238,,1.2318
+Q14-D_Jan-pac,Q14,pac,D_Jan,0.20391,0.018472,0.36179,0.088541,0.037981,0.16397,0.25238,17,True,True,"paired D(pipeline A HF count by genesis month) - D(v250 eddy activity), 2004-05..2020-21",0.085077,0.26587,0.24791
+Q14-M-pac,Q14,pac,M,0.70918,0.46739,0.95104,0.12342,0.0009995,0.64758,0.76701,17,False,True,"paired D(pipeline A HF count by genesis month) - D(v250 eddy activity), 2004-05..2020-21",0.0032925,,0.34557
