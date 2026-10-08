@@ -2106,7 +2106,11 @@ window.HF = window.HF || {};
     if (curLayer === 'density') return drawDensity();
     if (curLayer === 'genesis') return drawPoints('genesis');
     if (curLayer === 'peak') return drawPoints('peak');
-    if (curLayer === 'playback') return drawPlayback();
+    if (curLayer === 'playback') {
+      // By month passes an ERA5 proxy list (earlier seasons); it goes under the archive's storms.
+      if (era5 && era5.length) drawEra5();
+      return drawPlayback();
+    }
     if (curLayer === 'composite') return drawComposite();
     // ERA5 proxy layers sit under the archive tracks, never over them: the
     // all-cyclone points first, then the null-case tracks, then the

@@ -27,6 +27,7 @@
     era5focusPan: false,   // rotate the globe to the focused track once it has loaded
     atlas: { view: 'boxes', src: 'archive', field: 'annmax' },   // the Atlas layer
     strong: { list: 'minp', basin: 'all' },   // the Strongest storms tab   // key of the ERA5 track picked from the Strongest list, drawn whatever the filters say
+    monthEra5: true,   // By month: add the ERA5 proxy storms of earlier seasons (teal), on by default
     era5pre: false,    // ... and before 2001-02 (within-era comparison only), off by default
     sort: { key: 'start', dir: -1 },
     selectedKey: null
@@ -1081,6 +1082,8 @@
     return null;
   }
 
+  var monthEra5N = null;   // ERA5 tracks drawn under the By month layer, or null when off
+
   function setEra5OnGlobe() {
     var ev = null, nul = null, peaks = null, focus = null;
     if (state.layer === 'tracks' && state.era5focus) {
@@ -1097,6 +1100,19 @@
         peaks = { P: era5Data.peaks, idx: HF.era5.filterPeaks(era5Data.peaks, f) };
         era5Shown.peaks = peaks.idx.length;
       }
+    }
+    monthEra5N = null;
+    if (state.layer === 'bymonth' && state.monthEra5 && ensureEra5('ev')) {
+      // The month being shown, from the seasons before the archive range on
+      // screen (the archive draws the rest), so one storm is never in both.
+      var mm = play.moy, chips = state.months || {}, anyChip = false, ck;
+      for (ck in chips) if (chips[ck]) { anyChip = true; break; }
+      var only = {}; only[mm] = true;
+      var s1 = (state.season0 == null ? DATA.recordStart : state.season0) - 1;
+      ev = (anyChip && !chips[mm]) ? [] : HF.era5.filter(era5Data.ev, {
+        basin: state.basin === 'both' ? 'all' : state.basin, season0: 0, season1: s1, months: only
+      });
+      monthEra5N = ev.length; era5Shown.ev = ev.length;
     }
     var probOn = state.era5 && state.era5prob && attachEra5Prob() && era5Attached.ev;
     HF.globe.setEra5(ev, nul, peaks, { prob: !!probOn, focus: focus });
@@ -2045,6 +2061,7 @@
       var e = stepEntry();
       play.active = e ? e.count : 0;
       HF.globe.setPlaybackFrame(moyly() ? play.engine.stepMoy(play.moy) : monthly() ? play.engine.stepMonth(play.ym) : play.engine.step(play.season), { kind: 'step' });
+      if (state.layer === 'bymonth') setEra5OnGlobe();
       return;
     }
     var frame = currentClock().at(play.t, play.tail);
@@ -2075,6 +2092,7 @@
       var e = stepEntry();
       date = e ? e.label : '--';
       count = e ? (e.empty ? 'no events' : plural(e.count, 'event', 'events')) : '';
+      if (monthEra5N != null) count += ' · ' + monthEra5N + ' ERA5 proxy';
     } else {
       date = currentClock().label(play.t);
       count = play.active + ' active';
@@ -2300,6 +2318,8 @@
     pbEl('pbModeWrap').hidden = bym;
     pbEl('pbUnitWrap').hidden = play.mode !== 'step' || bym;
     pbEl('pbPrev').hidden = pbEl('pbNext').hidden = play.mode !== 'step';
+    pbEl('pbEra5Wrap').hidden = !bym;
+    pbEl('pbEra5').checked = state.monthEra5;
     syncStepButtons();
     pbEl('pbSeasonWrap').hidden = play.mode === 'composite' || monthly() || moyly();
     pbEl('pbMonthWrap').hidden = !monthly();   // moy: the scrubber's twelve ticks are the picker
@@ -2431,7 +2451,10 @@
       return 'One season on its own calendar. Circle size grows as pressure falls; tails fade with age.' + tail;
     }
     if (play.unit === 'moy') {
-      return 'Every event whose first fix falls in each calendar month, all seasons overlaid, so the track can be compared month against month. Circles mark each event’s lowest analyzed pressure.' + tail;
+      return 'Every event whose first fix falls in each calendar month, all seasons overlaid, so the track can be compared month against month. Circles mark each event’s lowest analyzed pressure.' +
+        (state.layer === 'bymonth' && state.monthEra5
+          ? ' Teal lines are ERA5 proxy storms (pipeline A) from the seasons before the archive range on screen, back to 1979-80: a reanalysis proxy, not direct observation, and its gust index drifts before 2001-02, so compare where the storms went, not how many.'
+          : '') + tail;
     }
     if (play.unit === 'month') {
       return 'Each calendar month’s events, drawn whole, in the month their first fix falls. Circles mark each event’s lowest analyzed pressure; months cross-fade.' + tail;
@@ -2448,6 +2471,14 @@
     row.appendChild(dot);
     row.appendChild(document.createTextNode(step ? 'Lowest pressure; larger = deeper' : 'Storm now; larger = deeper'));
     box.appendChild(row);
+    if (state.layer === 'bymonth' && state.monthEra5) {
+      var er = HF.el('div', { class: 'legend-row' });
+      var sw = HF.el('span', { class: 'legend-fade' });
+      sw.style.background = HF.cssVar('--era5') || '#17776f';
+      er.appendChild(sw);
+      er.appendChild(document.createTextNode('ERA5 proxy track, earlier seasons: not direct observation'));
+      box.appendChild(er);
+    }
 
     if (lows.some(function (l) { return l.cls !== 'low'; })) {
       var row2 = HF.el('div', { class: 'legend-row' });
@@ -2510,6 +2541,13 @@
     });
 
     pbEl('pbPlay').addEventListener('click', function () { setPlaying(!play.playing); });
+    pbEl('pbEra5').addEventListener('change', function (e) {
+      state.monthEra5 = e.target.checked;
+      pbEl('mapNote').textContent = playbackNote(play.lows);
+      renderLegend(play.lows);
+      onTimeChanged(true);
+      if (!state.monthEra5) setEra5OnGlobe();
+    });
     pbEl('pbPrev').addEventListener('click', function () { stepBy(-1); });
     pbEl('pbNext').addEventListener('click', function () { stepBy(1); });
 
