@@ -144,6 +144,13 @@ Working defaults that sessions follow until Jason confirms or changes them. Jaso
 - Looks: one at 2015-2025, counted conservatively (`research/era5/looks/second_analysis.log`); none pre-2001. Gates: none opened or closed.
 - A fresh Sonnet agent recomputed counts, cuts, tables, HSS, bootstrap interval, S2 to S8 and validation. Not independently checked: p and q values, season-block interval, power figure.
 
+### Smoother index for the conversion test: `research/era5/share_p99/` (integration branch, hf-low PR 107)
+
+- Question (agenda RA-28): does scoring HF on the 99th percentile of the owned gust cells instead of the maximum strengthen the pattern's effect on P(HF | deepening) (PR 85)? Sensitivity re-run, not a redefinition of HF. ERA5 proxy, pipeline A, 00/12 UTC fixes only (a 6-hourly pull would be 80-100 GB), seasons 2004-05 on. Plan committed first (`1a58bd2`); cuts count-matched to the archive before any outcome (max 69.8, p99 64.2 kt); 38.2 GB pulled.
+- Result: **no strengthening.** Rate ratio per SD, max to p99: Atlantic 1.203 to 1.180 (difference -0.024 [-0.064, +0.015], can't tell), Pacific 1.137 to 1.140 (+0.003 [-0.045, +0.055], keeps, well-powered within +-0.06). Predicted rise to 1.3 / 1.2 not met. p99 agrees with the archive no better than the max (HSS 0.73 both). Mediated fraction unchanged. The 00/12 sampling alone lowers the Atlantic ratio from the published 1.252 to 1.203. Smoother-index evidence in RA-27 was for sustained wind, not gust.
+- Looks: one at 2015-2025 (`research/era5/looks/share_p99.log`); none pre-2001. Gates: none opened or closed. Depends on PR 85 (open) only for the reference tables; this PR carries its own copy of the estimation code.
+- A fresh Sonnet agent recomputed counts, label disagreements and the 8 rate ratios (within 0.002 under the PR 85 lag convention). Not independently checked: bootstrap/permutation intervals, p and q values, mediation under the new labels, calibration cuts.
+
 ### P(HF) along ERA5 tracks back to 1979: `research/era5/hf_probability_tracks/` (integration branch, hf-low PR 74)
 
 - Question: plot tracks with their P(HF within 24 h) and look for storms the model rates likely-HF where the archive has nothing; list the strongest ERA5 storms. ERA5 proxy, pipeline A. Plan committed first (`PREREGISTRATION.md`, `6fcddf1`). Models: F (PR 12 full; refit reproduces BSS 0.4228, HSS 0.59), N (no gust predictor, BSS 0.3804), S (storm state only, 0.2624). Fit and test 2004-05 on; 1979-2003 fixes are scored by the 2004+ fit of N (no gust index before 2001).
