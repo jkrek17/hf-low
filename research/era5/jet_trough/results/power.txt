@@ -1,0 +1,36 @@
+Simulation power of the pre-registered rule, 200 simulations per row, 500 bootstrap resamples,
+p < 0.01 per test as the stand-in for FDR q < 0.05. Held-out outcomes are not used.
+
+basin outcome       var scenario  n_sim  ev_fit  ev_test   T1   T2   T3  threshold
+  atl    BOMB    jet250    hinge    200     730      791 1.00 0.55 0.06       0.03
+  atl    BOMB    jet250     null    200     730      791 0.02 0.00 0.03       0.00
+  atl    BOMB    jet250     ramp    200     730      791 1.00 0.01 0.07       0.00
+  atl    BOMB    jet250    x1.15    200     730      791 0.41 0.01 0.07       0.00
+  atl    BOMB trough_up    hinge    200     730      791 1.00 0.99 0.12       0.12
+  atl    BOMB trough_up     null    200     730      791 0.00 0.00 0.03       0.00
+  atl    BOMB trough_up     ramp    200     730      791 0.62 0.01 0.07       0.00
+  atl    BOMB trough_up    x1.15    200     730      791 0.31 0.01 0.05       0.00
+  atl    HFON    jet250    hinge    200     913     1018 1.00 0.90 0.10       0.09
+  atl    HFON    jet250     null    200     913     1018 0.01 0.01 0.04       0.00
+  atl    HFON    jet250     ramp    200     913     1018 0.81 0.00 0.04       0.00
+  atl    HFON    jet250    x1.15    200     913     1018 0.38 0.01 0.06       0.00
+  atl    HFON trough_up    hinge    200     913     1018 1.00 0.99 0.07       0.07
+  atl    HFON trough_up     null    200     913     1018 0.03 0.01 0.04       0.00
+  atl    HFON trough_up     ramp    200     913     1018 0.40 0.00 0.07       0.00
+  atl    HFON trough_up    x1.15    200     913     1018 0.38 0.00 0.06       0.00
+  pac    BOMB    jet250    hinge    200     949      964 1.00 0.47 0.04       0.03
+  pac    BOMB    jet250     null    200     949      964 0.01 0.01 0.07       0.00
+  pac    BOMB    jet250     ramp    200     949      964 1.00 0.02 0.07       0.00
+  pac    BOMB    jet250    x1.15    200     949      964 0.38 0.01 0.03       0.00
+  pac    BOMB trough_up    hinge    200     949      964 1.00 0.99 0.07       0.07
+  pac    BOMB trough_up     null    200     949      964 0.00 0.03 0.06       0.00
+  pac    BOMB trough_up     ramp    200     949      964 0.68 0.01 0.04       0.00
+  pac    BOMB trough_up    x1.15    200     949      964 0.40 0.01 0.04       0.00
+  pac    HFON    jet250    hinge    200     775      759 1.00 0.37 0.12       0.07
+  pac    HFON    jet250     null    200     775      759 0.01 0.00 0.05       0.00
+  pac    HFON    jet250     ramp    200     775      759 0.90 0.01 0.07       0.00
+  pac    HFON    jet250    x1.15    200     775      759 0.21 0.01 0.04       0.00
+  pac    HFON trough_up    hinge    200     775      759 1.00 0.99 0.12       0.12
+  pac    HFON trough_up     null    200     775      759 0.00 0.01 0.07       0.00
+  pac    HFON trough_up     ramp    200     775      759 0.26 0.01 0.04       0.00
+  pac    HFON trough_up    x1.15    200     775      759 0.26 0.01 0.03       0.00
