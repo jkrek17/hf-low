@@ -147,6 +147,14 @@ Working defaults that sessions follow until Jason confirms or changes them. Jaso
 - Gate still open: P for the other ~31,000 pre-2004 lows needs a re-extraction of about 200 GB (needs Jason).
 - Two fresh Sonnet verifiers recomputed the skill scores, T1 and T2 counts, listed-event medians, pre-2004 counts, strongest-storm values and three environment rows. Not independently checked: T3 permutation p values, the looser-matching counts, calibration bins, figures, storm names.
 
+### Boosted trees vs the logistic P(HF within 24 h): `research/era5/hf_boosted/` (integration branch, hf-low PR 76, merged as `6ddf318`)
+
+- Question (agenda RA-21): is PR 68's post hoc +0.03 BSS from boosted trees real? Pipeline A, ERA5 proxy, PR 12's 159,430 fixes, 22 seasons 2004-05 to 2025-26, leave-one-season-out. Plan (`PREREG.md`) committed before scoring; settings were PR 68's untuned defaults.
+- Result: **real, as predicted.** BSS 0.4549 against 0.4228 (PR 12 refit), gain +0.0321 [+0.0261, +0.0375], better in 21 of 22 seasons; both basins (+0.036 Atlantic, +0.028 Pacific); onset fixes +0.026; trained 2004-14 and tested 2015-25 +0.026; HSS 0.588 to 0.615. The prediction that the gain sits in the 55-71.7 kt stratum was **not met** (40% of the gain, rule 60%; fixes already at 71.7 kt or more hold 47%).
+- What it captures: about 70% is smooth single-ingredient curvature (splines in a logistic, +0.0226); the Hart B, VTL, VTU parameters alone +0.0112 (22 of 22 seasons), with g800 +0.0141. Shapes: a floor below about 35 kt current gust, tail effects in strongly cold-core and very asymmetric storms, saturation of heat flux and pressure. Five product terms +0.0041 (H-squared at most 0.003). Beyond both, +0.0053 (borderline). Surface moisture proxies carry no hidden threshold. No new ingredient is implied. Warm-conveyor ascent (Tier 2) is untouched.
+- Looks: two on the 22 seasons (LOSO and one temporal split), logged in `hemispheric/results/heldout_looks.log`. Not fresh data.
+- Verification: a fresh Sonnet agent recomputed the BSS of all four models, the gain, strata shares, temporal split, HSS, and the post hoc spline gains. Not independently checked: p and q values, S9/S10 single tests, partial dependence, H-squared, PH1, PH2.
+
 ### HF wind structure: `research/era5/hf_structure/` (integration branch, hf-low PR 27)
 
 - Question: where do the HF winds sit around the low, and how large is the HF area? Pipeline A, ERA5 proxy, 5,983 HF-strength fixes (g800 >= 71.7 kt, in-domain) on 2,000 storms, seasons 2004-05 to 2025-26. Gust and MSLP pulled at 5,311 times: 33.3 GB (the agenda's 22 GB used 3.7 MB per time; measured 6.3 MB). The plan and decision rules (`results/PLAN.md`) were committed before the full run; its deviations log is empty.
