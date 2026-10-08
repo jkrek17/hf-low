@@ -137,6 +137,13 @@ Working defaults that sessions follow until Jason confirms or changes them. Jaso
 - Side fix: `intensity/hart.py` had a header that made it unimportable; it is now a comment.
 - A fresh Sonnet verifier recomputed the sample, base, groups L, P, D, K, all-eight and onset-only figures. Not independently checked: p and q values, groups H, A, M, J individually, rapid-deepening, HSS and basin tables.
 
+### Second analysis system at the HF threshold: `research/era5/second_analysis/` (integration branch, hf-low PR 98)
+
+- Question (agenda RA-27): is the unexplained part of the conversion step mostly noise at the threshold? WeatherBench2's IFS HRES t0 analyses (2016 to 2023-01-08) have **no gust variable**, so the test uses sustained 10 m wind in ERA5 and HRES, not the pipeline A gust rule. ERA5 proxy, pipeline A tracks, 944 tracks (gust index >= 65 kt, 429 at >= 71.7), seasons 2016-17 to 2021-22, cuts count-matched. Plan committed first; floor 65 kt (not 55) logged before any field was read; 42.6 GB pulled.
+- Result: crossing agreement HSS 0.611 [0.549, 0.660]; 0 of 4 tests reject HSS <= 0.6 (q >= 0.74); pre-registered rule says mostly noise. Basins alike (0.599 / 0.597). 99th-percentile index gives 0.80. Noise residual SD 4.4 kt vs 3.3 kt spread near the cut. Caveats: sustained wind not gust; systems share observations (lower bound); range-restricted sample (near a median split).
+- Looks: one at 2015-2025, counted conservatively (`research/era5/looks/second_analysis.log`); none pre-2001. Gates: none opened or closed.
+- A fresh Sonnet agent recomputed counts, cuts, tables, HSS, bootstrap interval, S2 to S8 and validation. Not independently checked: p and q values, season-block interval, power figure.
+
 ### P(HF) along ERA5 tracks back to 1979: `research/era5/hf_probability_tracks/` (integration branch, hf-low PR 74)
 
 - Question: plot tracks with their P(HF within 24 h) and look for storms the model rates likely-HF where the archive has nothing; list the strongest ERA5 storms. ERA5 proxy, pipeline A. Plan committed first (`PREREGISTRATION.md`, `6fcddf1`). Models: F (PR 12 full; refit reproduces BSS 0.4228, HSS 0.59), N (no gust predictor, BSS 0.3804), S (storm state only, 0.2624). Fit and test 2004-05 on; 1979-2003 fixes are scored by the 2004+ fit of N (no gust index before 2001).
