@@ -1,0 +1,79 @@
+RA-23: do the share results move with the gust threshold? ERA5 proxy, pipeline A. Per +1 SD of the index; Oct-Apr 2004-05..2025-26.
+Family A: 21 headline tests at 68 and 75 kt, BH. Family C: 12 distinct paired differences, BH. 71.7 kt is the control (original).
+== PR14 RR(HF_T)
+  Atlantic   68.0: 1.050 [1.008, 1.089] p 0.0615 q_A 0.0679 detectable 1.055  collapse (well powered)
+  Atlantic   71.7: 1.096 [1.028, 1.155] p 0.0050  
+  Atlantic   75.0: 1.124 [1.033, 1.202] p 0.0075 q_A 0.0093 detectable 1.112  holds
+  Pacific    68.0: 1.034 [0.980, 1.091] p 0.2379 q_A 0.2498 detectable 1.084  can't tell
+  Pacific    71.7: 1.072 [1.009, 1.139] p 0.0475  
+  Pacific    75.0: 1.121 [1.031, 1.215] p 0.0075 q_A 0.0093 detectable 1.130  holds
+== PR14 RR(share_T)
+  Atlantic   68.0: 1.079 [1.020, 1.130] p 0.0065 q_A 0.0093 detectable 1.073  holds
+  Atlantic   71.7: 1.125 [1.045, 1.197] p 0.0005  
+  Atlantic   75.0: 1.155 [1.049, 1.241] p 0.0035 q_A 0.0057 detectable 1.126  holds
+  Pacific    68.0: 1.006 [0.956, 1.057] p 0.8376 q_A 0.8376 detectable 1.077  can't tell
+  Pacific    71.7: 1.043 [0.988, 1.101] p 0.2394  
+  Pacific    75.0: 1.091 [1.004, 1.179] p 0.0395 q_A 0.0461 detectable 1.124  holds
+== PR14 f
+  Atlantic   68.0: 1.541 [1.103, 2.956]  
+  Atlantic   71.7: 1.290 [1.069, 1.778]  
+  Atlantic   75.0: 1.227 [1.049, 1.639]  
+  Pacific    68.0: 0.187 [-8.285, 7.646]  
+  Pacific    71.7: 0.608 [-0.650, 0.795]  
+  Pacific    75.0: 0.761 [0.206, 0.880]  
+== PR64 RR(HF_T)
+  Atlantic   68.0: 1.217 [1.181, 1.264] p 0.0005 q_A 0.0012 detectable 1.048  holds
+  Atlantic   71.7: 1.291 [1.236, 1.369] p 0.0005  
+  Atlantic   75.0: 1.288 [1.219, 1.383] p 0.0005 q_A 0.0012 detectable 1.091  holds
+  Pacific    68.0: 1.119 [1.074, 1.177] p 0.0005 q_A 0.0012 detectable 1.067  holds
+  Pacific    71.7: 1.165 [1.093, 1.261] p 0.0005  
+  Pacific    75.0: 1.217 [1.136, 1.333] p 0.0005 q_A 0.0012 detectable 1.122  holds
+== PR64 RR(share_T)
+  Atlantic   68.0: 1.198 [1.161, 1.245] p 0.0005 q_A 0.0012 detectable 1.050  holds
+  Atlantic   71.7: 1.271 [1.210, 1.354] p 0.0005  
+  Atlantic   75.0: 1.268 [1.188, 1.368] p 0.0005 q_A 0.0012 detectable 1.102  holds
+  Pacific    68.0: 1.084 [1.048, 1.129] p 0.0020 q_A 0.0035 detectable 1.054  holds
+  Pacific    71.7: 1.129 [1.067, 1.210] p 0.0005  
+  Pacific    75.0: 1.179 [1.107, 1.278] p 0.0005 q_A 0.0012 detectable 1.109  holds
+== PR64 share channel part of change
+  Atlantic   68.0: 0.902 [0.785, 1.001]  
+  Atlantic   71.7: 0.921 [0.820, 1.000]  
+  Atlantic   75.0: 0.916 [0.808, 1.007]  
+  Pacific    68.0: 0.745 [0.636, 0.863]  
+  Pacific    71.7: 0.809 [0.717, 0.903]  
+  Pacific    75.0: 0.850 [0.782, 0.926]  
+== PR63 P1 share without terrain-type fixes
+  Atlantic   68.0: 1.085 [1.029, 1.135] p 0.0030 detectable 1.073  
+  Atlantic   71.7: 1.141 [1.064, 1.213] p 0.0005  
+  Atlantic   75.0: 1.157 [1.063, 1.241] p 0.0020 q_A 0.0035 detectable 1.117  holds
+== PR63 P3 mediation
+  Atlantic   68.0: 0.916 [0.880, 0.960] p 0.0020 q_A 0.0035 detectable 1.065  holds
+  Atlantic   71.7: 0.923 [0.870, 0.987] p 0.0200  
+  Atlantic   75.0: 0.891 [0.829, 0.965] p 0.0070 q_A 0.0093 detectable 1.116  holds
+== PR63 F4 Greenland high on share
+  Atlantic   68.0: 0.889 [0.854, 0.930] p 0.0005 q_A 0.0012 detectable 1.064  holds
+  Atlantic   71.7: 0.870 [0.823, 0.924] p 0.0005  
+  Atlantic   75.0: 0.832 [0.773, 0.901] p 0.0005 q_A 0.0012 detectable 1.117  holds
+== Tracks flagged HF (daily-design window)
+   Atlantic {68.0: 1425, 71.7: 1003, 75.0: 703}
+   Pacific {68.0: 1283, 71.7: 825, 75.0: 570}
+== Rank: Atlantic share RR above Pacific at each T
+  PR14 68.0: Atlantic 1.079 vs Pacific 1.006 -> kept
+  PR14 71.7: Atlantic 1.125 vs Pacific 1.043 -> kept
+  PR14 75.0: Atlantic 1.155 vs Pacific 1.091 -> kept
+  PR64 68.0: Atlantic 1.198 vs Pacific 1.084 -> kept
+  PR64 71.7: Atlantic 1.271 vs Pacific 1.129 -> kept
+  PR64 75.0: Atlantic 1.268 vs Pacific 1.179 -> kept
+== Paired differences RR(HF_a)/RR(HF_b) (= share differences), family C
+  PR14 daily   Atlantic  t75-t68: 1.070 [1.003, 1.133] p 0.0340 q_C 0.064 detectable 1.091 -> grows
+  PR14 daily   Atlantic  t75-t717: 1.026 [0.978, 1.074] p 0.2569 q_C 0.280 detectable 1.070 -> flat
+  PR14 daily   Atlantic  t717-t68: 1.043 [1.010, 1.076] p 0.0180 q_C 0.054 detectable 1.046 -> grows
+  PR14 daily   Pacific   t75-t68: 1.084 [1.019, 1.150] p 0.0145 q_C 0.054 detectable 1.092 -> grows
+  PR14 daily   Pacific   t75-t717: 1.045 [1.002, 1.085] p 0.0505 q_C 0.067 detectable 1.060 -> grows
+  PR14 daily   Pacific   t717-t68: 1.037 [0.994, 1.087] p 0.1004 q_C 0.121 detectable 1.066 -> flat
+  PR64 weekly  Atlantic  t75-t68: 1.058 [0.999, 1.123] p 0.0380 q_C 0.064 detectable 1.087 -> flat
+  PR64 weekly  Atlantic  t75-t717: 0.997 [0.954, 1.044] p 0.8856 q_C 0.886 detectable 1.066 -> flat
+  PR64 weekly  Atlantic  t717-t68: 1.061 [1.022, 1.106] p 0.0015 q_C 0.009 detectable 1.059 -> grows
+  PR64 weekly  Pacific   t75-t68: 1.087 [1.031, 1.162] p 0.0015 q_C 0.009 detectable 1.089 -> grows
+  PR64 weekly  Pacific   t75-t717: 1.044 [1.017, 1.079] p 0.0230 q_C 0.055 detectable 1.040 -> grows
+  PR64 weekly  Pacific   t717-t68: 1.041 [0.999, 1.094] p 0.0430 q_C 0.064 detectable 1.067 -> flat
