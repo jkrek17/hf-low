@@ -59,6 +59,8 @@ Three questions to put to every result before it goes out. Each has a failure in
 2. **Does an artefact correlate with position, era, or recording practice?** The teleconnection work measures where and when storms occur, so contamination that varies with location (land in a gust radius) or with era (archive lead fixes appearing in 2017, the warning category appearing in 2001) can manufacture or hide the signal. Check coverage and skill by era and by basin before pooling.
 3. **What is the real sample size?** For any question about a climate index it is the number of seasons, and for a strongly autocorrelated index like ONI it is about one value per season. State n, give an interval or a signal-to-noise figure, and do not report a trend from a handful of points as a finding.
 
+For any hypothesis test against a predictor, follow `hf-preregistered-test` (plan committed first, lagged indices, season-level n, FDR, power). For field composites, follow `hf-storm-composites` before pulling anything.
+
 Report each check as passed, failed, or not checked with the reason. "Not checked" is acceptable. Reporting an unchecked number as established is not.
 
 ### 5. Close
@@ -66,7 +68,8 @@ Report each check as passed, failed, or not checked with the reason. "Not checke
 - Update `STATUS.md` on `main` (its own small pull request when your work is on a research branch): heads, what exists, gates opened or closed, what is unfinished, what superseded what.
 - Search for sentences your change made false: `git grep -n -i -E "there is no|does not exist|not yet|still starts|no .* exists"` over READMEs and docstrings in the area you touched. Fix them in the same commit.
 - When a number replaces an earlier one, the commit body says which and why ("supersedes 16% in <hash>: the calibration sample was wrong").
-- Leave the pull request as a draft unless Jason asked for it to be ready.
+- A finished, verified research PR into the integration branch is merged by its own thread (Jason's standing instruction); anything into `main` beyond a `STATUS.md`-only ledger PR, and anything that deploys, stays a draft until Jason says. `hf-result-closeout` has the order of operations.
+- Forward a finished result to the Science Q&A document thread (through the coordinator).
 - Report to Jason briefly: what was produced, which checks passed and which were not run, assumptions made, and what is waiting on him.
 
 ## Checks by strand
