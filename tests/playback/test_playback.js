@@ -464,6 +464,60 @@ test('out-of-order fixes are sorted rather than mis-bracketed', function () {
   assert.ok(st.lat > 40 && st.lat < 41);
 });
 
+test('month step: an event belongs to the month of its first fix; counts add up; empty months are listed', function () {
+  var a = low('a', 2014, [fix(2015013018, 50, -40), fix(2015020100, 51, -38), fix(2015020106, 52, -36)]);
+  var b = low('b', 2014, [fix(2015020300, 45, -30), fix(2015020306, 46, -29)]);
+  var c = low('c', 2015, [fix(2015120100, 55, -20)]);
+  var pb = PB.create([a, b, c], { seasons: [2014, 2015], months: { from: 201501, to: 201602 } });
+  var ms = pb.months();
+  assert.strictEqual(ms.length, 14);                       // Jan 2015 .. Feb 2016, across the year end
+  assert.strictEqual(ms[0].ym, 201501);
+  assert.strictEqual(ms[12].ym, 201601);
+  assert.strictEqual(ms[0].label, 'Jan 2015');
+  var byYm = {}; ms.forEach(function (m) { byYm[m.ym] = m; });
+  assert.strictEqual(byYm[201501].count, 1);               // a starts in Jan, runs into Feb: drawn whole in Jan
+  assert.strictEqual(byYm[201502].count, 1);               // b
+  assert.strictEqual(byYm[201503].empty, true);
+  assert.strictEqual(byYm[201512].count, 1);
+  var total = 0; ms.forEach(function (m) { total += m.count; });
+  assert.strictEqual(total, 3);
+  var f = pb.stepMonth(201501);
+  assert.strictEqual(f.storms.length, 1);
+  assert.strictEqual(f.storms[0].tail.length, 3);          // the whole track, including the Feb fixes
+  assert.strictEqual(f.label, 'Jan 2015');
+  assert.strictEqual(pb.stepMonth(201504).empty, true);
+});
+
+test('month step: without a range the list spans what is present, contiguously', function () {
+  var a = low('a', 2014, [fix(2014111500, 50, -40), fix(2014111506, 50, -39)]);
+  var b = low('b', 2014, [fix(2015020300, 45, -30), fix(2015020306, 46, -29)]);
+  var ms = PB.create([a, b]).months();
+  assert.strictEqual(ms.map(function (m) { return m.ym; }).join(), '201411,201412,201501,201502');
+});
+
+test('month step: a range narrower than the data never drops an event', function () {
+  var a = low('a', 2014, [fix(2014111500, 50, -40), fix(2014111506, 50, -39)]);
+  var ms = PB.create([a], { months: { from: 201501, to: 201505 } }).months();
+  assert.ok(ms.some(function (m) { return m.ym === 201411 && m.count === 1; }));
+});
+
+test('month of year: every event lands in exactly one calendar month, all seasons together', function () {
+  var a = low('a', 2014, [fix(2015013018, 50, -40), fix(2015020100, 51, -38)]);
+  var b = low('b', 2015, [fix(2016011000, 45, -30), fix(2016011006, 46, -29)]);
+  var c = low('c', 2015, [fix(2015120100, 55, -20)]);
+  var pb = PB.create([a, b, c]);
+  var ms = pb.monthsOfYear();
+  assert.strictEqual(ms.length, 12);
+  assert.strictEqual(ms[0].label, 'June');                 // season order
+  assert.strictEqual(ms[7].label, 'January');
+  var byM = {}; ms.forEach(function (m) { byM[m.moy] = m; });
+  assert.strictEqual(byM[1].count, 2);                     // a (2015) and b (2016)
+  assert.strictEqual(byM[12].count, 1);
+  assert.strictEqual(byM[7].empty, true);
+  assert.strictEqual(pb.stepMoy(1).storms.length, 2);
+  assert.strictEqual(pb.stepMoy(1).label, 'January, all seasons');
+});
+
 console.log('real archive (smoke)');
 
 var realCache = null;
@@ -495,6 +549,12 @@ test('real archive: every low gets a finite head wherever it is active, in both 
   var total = 0;
   pb.seasons().forEach(function (s) { total += pb.step(s.season).count; });
   assert.strictEqual(total, D.lows.length);
+  var mt = 0;
+  pb.months().forEach(function (m) { mt += m.count; });
+  assert.strictEqual(mt, D.lows.length);                   // every event lands in exactly one month
+  var yt = 0;
+  pb.monthsOfYear().forEach(function (m) { yt += m.count; });
+  assert.strictEqual(yt, D.lows.length);
 });
 
 test('real archive: every low is visible at some composite frame (none hidden by the axis mapping)', function () {
