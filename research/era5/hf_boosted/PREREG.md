@@ -33,7 +33,7 @@ Agenda prediction (RA-21): at least +0.02, concentrated in fixes whose current g
 
 **Power and what it can show.** The interval comes from 22 seasons, so its width is the season-to-season SD of the difference, not the fix count. After the run the standard error of ΔBSS is reported and the 80% minimum detectable gain is stated as 2.8 x SE. A result under +0.010 is "not real" only if the interval's upper bound is also under +0.020; otherwise it is "inconclusive".
 
-## Secondary tests (one Benjamini-Hochberg family, all reported; q across all 32 tests, P1 included, also reported)
+## Secondary tests (one Benjamini-Hochberg family, all reported; q across all tests with P1 included also reported)
 
 All are LOSO differences in Brier sum as a share of the climatology Brier sum, season-bootstrap 90% interval, sign-flip p.
 - **S1** onset only (not HF at t): M1 - M0.
@@ -44,7 +44,7 @@ All are LOSO differences in Brier sum as a share of the climatology Brier sum, s
 - **S9** (18 tests) M0 with a spline for one continuous predictor at a time (same basis as M3, one feature) minus M0: the single ingredient whose nonlinearity is worth the most.
 - **S10** (5 tests) M0 plus one product term of two standardised predictors, minus M0. Pairs fixed now, chosen for mechanism not for results: g800 x dp12 (strong and already deepening), msl x dp12, jet250 x eady (jet and baroclinicity), sstgrad x flux (surface heating), lat x g800 (high latitude).
 
-32 tests: P1 + S1 + S2a/b + S3 + S4 + S5-S8 (4) + S9 (18) + S10 (5) = 33; the count reported will be the actual one.
+Count: P1 (1) + S1 (1) + S2a/b (2) + S3 (1) + S4 (1) + S5-S8 (4) + S9 (18) + S10 (5) = 33 tests, 32 of them secondary. (The first draft of this line said 32 in total; corrected before any model was scored.)
 
 ## Partial dependence and interactions (run only if P1 gives "real, as predicted" or "real, smaller"; descriptive, no p values)
 
