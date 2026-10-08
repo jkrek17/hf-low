@@ -70,3 +70,16 @@ at or north of 60N, against 1.4% in the Pacific. Pipeline A's ERA5 proxy gives
   Atlantic events (2004-05 on) depend on points within 100 km of Greenland or
   under sea ice, or if FAR north of 60N exceeds FAR south of 60N by more than
   0.10 with a season-bootstrap 95% interval that excludes zero.
+
+## Additions after this note was first committed, before any result was seen
+
+Committed with `analyse.py` before its first output was read:
+
+- Section 6 of `analyse.py`: the archive match rate of ERA5 events whose index
+  depends on the Greenland 300 km and 100 km bands (a direct form of H3).
+- Descriptive breakdowns of the terrain-type maxima north of 60N: 10 m wind
+  direction (from W 225-315, N-NE 315-90, E-S 90-225) and the share inside
+  59-61.5N 35-50W (Cape Farewell). Descriptive only; no threshold is attached.
+- Fix and event class counts in the archive (low, tipjet, nocentre).
+- The archive share in test 1 is recomputed here: 377 of 1,011 Atlantic HF lows
+  (37.3%) from the current payload; the agenda's 37.5% used 1,005 events.
