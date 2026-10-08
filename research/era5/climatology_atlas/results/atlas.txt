@@ -1,0 +1,154 @@
+Climatology atlas of hurricane-force lows. ARCHIVE = OPC archive (HF-window metrics); PROXY = ERA5 pipeline A, a proxy.
+Seasons 2004-05 to 2025-26 (22 seasons). Tropical-cyclone-linked events included. Brackets: 95% season-block bootstrap.
+Events: archive 1867 (atl 1011, pac 856); proxy 2000 (atl 1104, pac 896).
+Archive classes: low 1825, tipjet 29, nocentre 13. Pressure statistics use class 'low' only.
+Proxy events linked to a tropical cyclone (400 km, IBTrACS proximity; first look, not the tightened definition): atl 0.059, pac 0.055.
+
+== Monthly exposure: events and HF hours per season, by month of first HF fix ==
+-- Atlantic archive
+   month 10: events 3.86 [3.23, 4.50]   HF hours 64.1 [52.1, 76.9]
+   month 11: events 4.55 [3.73, 5.32]   HF hours 79.4 [62.7, 96.5]
+   month 12: events 8.50 [7.09, 9.82]   HF hours 158.7 [125.2, 191.7]
+   month  1: events 9.41 [8.14, 10.64]   HF hours 174.0 [141.5, 209.2]
+   month  2: events 8.77 [7.41, 10.41]   HF hours 178.9 [146.2, 216.5]
+   month  3: events 6.05 [5.05, 7.14]   HF hours 107.2 [85.4, 131.2]
+   month  4: events 1.77 [1.23, 2.32]   HF hours 25.9 [16.1, 36.3]
+-- Atlantic proxy
+   month 10: events 3.95 [3.32, 4.59]   HF hours 73.4 [58.6, 87.3]
+   month 11: events 4.50 [3.64, 5.32]   HF hours 67.9 [53.5, 82.4]
+   month 12: events 9.27 [7.86, 10.77]   HF hours 162.5 [133.1, 193.6]
+   month  1: events 9.59 [8.09, 11.14]   HF hours 169.9 [142.4, 197.5]
+   month  2: events 9.32 [8.04, 10.50]   HF hours 178.9 [146.7, 212.2]
+   month  3: events 7.18 [6.23, 8.18]   HF hours 112.6 [91.9, 135.5]
+   month  4: events 2.18 [1.54, 2.77]   HF hours 25.9 [16.1, 36.5]
+-- Pacific archive
+   month 10: events 3.95 [3.23, 4.77]   HF hours 75.0 [61.1, 90.0]
+   month 11: events 5.14 [4.41, 5.91]   HF hours 85.4 [70.9, 100.9]
+   month 12: events 8.00 [6.68, 9.27]   HF hours 147.0 [118.9, 174.6]
+   month  1: events 8.59 [7.45, 9.82]   HF hours 162.8 [136.1, 191.2]
+   month  2: events 5.68 [4.64, 6.77]   HF hours 106.6 [84.0, 131.7]
+   month  3: events 4.00 [2.95, 5.14]   HF hours 67.9 [48.3, 89.5]
+   month  4: events 1.50 [1.18, 1.86]   HF hours 26.7 [20.2, 34.6]
+-- Pacific proxy
+   month 10: events 4.41 [3.68, 5.23]   HF hours 84.8 [64.6, 105.8]
+   month 11: events 4.95 [4.14, 5.77]   HF hours 76.9 [61.9, 91.6]
+   month 12: events 8.36 [7.36, 9.36]   HF hours 151.9 [126.0, 176.7]
+   month  1: events 8.41 [7.27, 9.68]   HF hours 154.1 [126.8, 183.0]
+   month  2: events 6.27 [5.23, 7.41]   HF hours 112.1 [90.5, 137.7]
+   month  3: events 3.82 [2.95, 4.64]   HF hours 53.2 [39.5, 66.8]
+   month  4: events 1.50 [1.09, 1.91]   HF hours 22.4 [15.3, 30.0]
+Share of archive Atlantic events with first HF fix in Oct-Apr: 0.934
+Share of archive Pacific events with first HF fix in Oct-Apr: 0.947
+Share of proxy Atlantic events with first HF fix in Oct-Apr: 0.917
+Share of proxy Pacific events with first HF fix in Oct-Apr: 0.926
+
+== Season-to-season: events per season ==
+archive Atlantic: mean 46.0, sd 9.6, range 30-67, var/mean 2.00; most active 2006-07 (67), 2025-26 (66), 2014-15 (57), 2021-22 (57), 2015-16 (51); least 2009-10 (30), 2010-11 (32), 2005-06 (33)
+archive Pacific: mean 38.9, sd 7.5, range 27-51, var/mean 1.44; most active 2007-08 (51), 2015-16 (50), 2023-24 (50), 2006-07 (48), 2011-12 (46); least 2017-18 (27), 2013-14 (27), 2010-11 (30)
+proxy Atlantic: mean 50.2, sd 8.6, range 32-65, var/mean 1.47; most active 2017-18 (65), 2014-15 (62), 2025-26 (58), 2012-13 (58), 2006-07 (58); least 2004-05 (32), 2009-10 (32), 2005-06 (39)
+proxy Pacific: mean 40.7, sd 7.3, range 29-52, var/mean 1.32; most active 2011-12 (52), 2007-08 (50), 2012-13 (50), 2023-24 (50), 2015-16 (49); least 2008-09 (29), 2019-20 (30), 2014-15 (32)
+Archive-vs-proxy season counts, Atlantic: Spearman 0.62 [0.29, 0.83] (n=22 seasons; descriptive)
+Archive-vs-proxy season counts, Pacific: Spearman 0.72 [0.48, 0.85] (n=22 seasons; descriptive)
+Archive Atlantic vs Pacific season counts: Spearman -0.05 [-0.50, 0.39]
+
+== Distributions (median [interval]; quartiles; 90th percentile) ==
+archive Atlantic minp (n=969): median 963.00 [962.00, 964.00]  q25 954.00 q75 972.00 p90 981.00
+archive Atlantic hf_h (n=1011): median 12.00 [12.00, 18.00]  q25 6.00 q75 24.00 p90 36.00
+archive Atlantic hf_dist_km (n=1011): median 337.06 [300.02, 391.70]  q25 0.00 q75 886.18 p90 1533.46
+archive Atlantic hf_spd (n=744): median 23.50 [22.10, 24.70]  q25 15.30 q75 32.02 p90 39.94
+archive Atlantic deep24 (n=314): median 11.50 [10.70, 14.70]  q25 1.30 q75 21.30 p90 29.21
+archive Atlantic berg (n=314): median 0.55 [0.47, 0.68]  q25 0.06 q75 0.94 p90 1.37
+archive Atlantic lat_on (n=1011): median 55.00 [54.00, 56.00]  q25 46.90 q75 59.50 p90 62.40
+archive Atlantic lat_mp (n=969): median 56.30 [55.60, 57.00]  q25 49.90 q75 60.40 p90 62.72
+archive Atlantic lat_off (n=1011): median 57.40 [56.70, 58.20]  q25 51.10 q75 61.10 p90 63.10
+archive Pacific minp (n=856): median 964.00 [963.00, 964.00]  q25 956.00 q75 972.00 p90 980.00
+archive Pacific hf_h (n=856): median 18.00 [12.00, 18.00]  q25 6.00 q75 24.00 p90 36.00
+archive Pacific hf_dist_km (n=856): median 412.07 [361.14, 470.41]  q25 0.00 q75 915.81 p90 1701.99
+archive Pacific hf_spd (n=641): median 25.50 [24.60, 26.40]  q25 18.80 q75 32.90 p90 38.20
+archive Pacific deep24 (n=286): median 12.00 [10.70, 13.30]  q25 4.00 q75 18.70 p90 26.70
+archive Pacific berg (n=286): median 0.60 [0.52, 0.73]  q25 0.20 q75 1.01 p90 1.40
+archive Pacific lat_on (n=856): median 45.00 [44.00, 46.00]  q25 41.00 q75 50.00 p90 54.00
+archive Pacific lat_mp (n=856): median 47.55 [47.00, 48.30]  q25 43.00 q75 52.00 p90 55.00
+archive Pacific lat_off (n=856): median 48.20 [47.50, 49.00]  q25 44.00 q75 53.00 p90 55.90
+proxy Atlantic minp (n=1104): median 963.10 [961.90, 964.20]  q25 954.48 q75 971.50 p90 979.87
+proxy Atlantic gust (n=1104): median 77.90 [77.20, 78.40]  q25 74.40 q75 83.33 p90 90.77
+proxy Atlantic hf_h (n=1104): median 12.00 [12.00, 12.00]  q25 6.00 q75 24.00 p90 36.00
+proxy Atlantic hf_spd (n=680): median 24.55 [23.54, 25.76]  q25 16.55 q75 31.95 p90 40.09
+proxy Atlantic maxdeep (n=1079): median 1.20 [1.16, 1.26]  q25 0.79 q75 1.65 p90 1.99
+proxy Atlantic lat_on (n=1104): median 53.50 [52.25, 55.00]  q25 43.00 q75 61.00 p90 63.93
+proxy Atlantic lat_mp (n=1104): median 57.50 [56.50, 58.00]  q25 50.00 q75 62.25 p90 65.43
+proxy Atlantic lat_off (n=1104): median 57.50 [56.50, 58.50]  q25 48.25 q75 62.75 p90 65.00
+proxy Pacific minp (n=896): median 963.60 [962.50, 964.90]  q25 955.38 q75 972.30 p90 980.40
+proxy Pacific gust (n=896): median 77.50 [76.90, 78.00]  q25 74.20 q75 82.40 p90 89.20
+proxy Pacific hf_h (n=896): median 12.00 [12.00, 12.00]  q25 6.00 q75 24.00 p90 36.00
+proxy Pacific hf_spd (n=554): median 29.37 [28.35, 30.06]  q25 21.62 q75 35.81 p90 42.13
+proxy Pacific maxdeep (n=883): median 1.41 [1.37, 1.46]  q25 1.04 q75 1.80 p90 2.22
+proxy Pacific lat_on (n=896): median 42.25 [41.50, 42.50]  q25 38.00 q75 47.50 p90 52.38
+proxy Pacific lat_mp (n=896): median 47.50 [47.00, 48.00]  q25 42.50 q75 52.00 p90 55.50
+proxy Pacific lat_off (n=896): median 46.00 [45.50, 46.50]  q25 41.50 q75 50.50 p90 55.25
+
+== Strength thresholds: share of events (class 'low' for archive) ==
+archive Atlantic: minimum pressure < 960 hPa 0.378, < 950 0.150, < 940 0.035 (n=969)
+archive Pacific: minimum pressure < 960 hPa 0.342, < 950 0.117, < 940 0.025 (n=856)
+proxy Atlantic: minimum pressure < 960 hPa 0.412, < 950 0.147, < 940 0.030 (n=1104)
+proxy Pacific: minimum pressure < 960 hPa 0.377, < 950 0.131, < 940 0.022 (n=896)
+Archive Atlantic: HF-window deepening measurable for 314/1011 events; bomb (>=1 Bergeron) share among those 0.239 (selected subset, not all events)
+Proxy Atlantic: max 24 h deepening >= 1 Bergeron 0.648 (n=1079; needs a track surviving 24 h)
+Archive Pacific: HF-window deepening measurable for 286/856 events; bomb (>=1 Bergeron) share among those 0.255 (selected subset, not all events)
+Proxy Pacific: max 24 h deepening >= 1 Bergeron 0.772 (n=883; needs a track surviving 24 h)
+
+== Ten deepest archive lows by analysed minimum pressure (unverified against the sheet) ==
+   atl:2019202032  920 hPa  at 2020021518  (61.5N, -20.1E)
+   pac:2020202120  921 hPa  at 2020123112  (50.7N, 171.5E)
+   pac:2014201507  924 hPa  at 2014110806  (55.0N, 169.0E)
+   pac:2015201616  924 hPa  at 2015121306  (53.5N, 182.2E)
+   atl:2021202235  928 hPa  at 2022020706  (61.4N, -37.5E)
+   atl:2007200819  928 hPa  at 2007121412  (62.5N, -34.0E)
+   atl:2006200718  928 hPa  at 2006121012  (63.0N, -31.0E)
+   atl:2015201616  928 hPa  at 2015123006  (64.7N, -18.3E)
+   atl:2019202030  929 hPa  at 2020021406  (59.7N, -24.8E)
+   atl:2013201418  929 hPa  at 2013122406  (58.0N, -10.8E)
+
+== Proxy: share with max 24 h deepening >= 1 Bergeron, by month of first HF fix ==
+Atlantic: 10: 0.64 (n=86); 11: 0.67 (n=98); 12: 0.64 (n=197); 1: 0.66 (n=204); 2: 0.73 (n=202); 3: 0.60 (n=152); 4: 0.67 (n=48)
+Pacific: 10: 0.74 (n=96); 11: 0.75 (n=107); 12: 0.77 (n=182); 1: 0.81 (n=181); 2: 0.80 (n=135); 3: 0.86 (n=83); 4: 0.94 (n=33)
+
+== Median latitude of first HF fix, by month (archive | proxy) ==
+Atlantic month 10: archive 52.1 (n=85) | proxy 48.8 (n=87)
+Atlantic month 11: archive 57.1 (n=100) | proxy 56.8 (n=99)
+Atlantic month 12: archive 56.6 (n=187) | proxy 55.9 (n=204)
+Atlantic month  1: archive 55.9 (n=207) | proxy 55.5 (n=211)
+Atlantic month  2: archive 52.5 (n=193) | proxy 51.8 (n=205)
+Atlantic month  3: archive 55.0 (n=133) | proxy 56.5 (n=158)
+Atlantic month  4: archive 54.9 (n=39) | proxy 53.5 (n=48)
+Pacific month 10: archive 47.1 (n=87) | proxy 43.8 (n=97)
+Pacific month 11: archive 49.0 (n=113) | proxy 45.5 (n=109)
+Pacific month 12: archive 46.0 (n=176) | proxy 42.8 (n=184)
+Pacific month  1: archive 42.5 (n=189) | proxy 41.8 (n=185)
+Pacific month  2: archive 44.0 (n=125) | proxy 42.0 (n=138)
+Pacific month  3: archive 43.2 (n=88) | proxy 41.8 (n=84)
+Pacific month  4: archive 44.5 (n=33) | proxy 42.2 (n=33)
+archive Atlantic median position of first HF fix 55.0N; min-pressure fix 56.3N; last HF fix 57.4N; share with first HF fix at or north of 60N 0.227
+archive Pacific median position of first HF fix 45.0N; min-pressure fix 47.5N; last HF fix 48.2N; share with first HF fix at or north of 60N 0.004
+proxy Atlantic median position of first HF fix 53.5N; min-pressure fix 57.5N; last HF fix 57.5N; share with first HF fix at or north of 60N 0.284
+proxy Pacific median position of first HF fix 42.2N; min-pressure fix 47.5N; last HF fix 46.0N; share with first HF fix at or north of 60N 0.003
+archive Atlantic busiest 5x10 deg box: 60-65N, -40 to -30E: 96.8 HF-centre hours per season; total 831 h per season
+archive Pacific busiest 5x10 deg box: 40-45N, 160 to 170E: 43.1 HF-centre hours per season; total 704 h per season
+proxy Atlantic busiest 5x10 deg box: 60-65N, -40 to -30E: 88.9 HF-centre hours per season; total 901 h per season
+proxy Pacific busiest 5x10 deg box: 40-45N, 160 to 170E: 47.7 HF-centre hours per season; total 731 h per season
+
+== How many HF lows at once (6-hourly times, Oct-Apr, 22 seasons) ==
+archive Atlantic: >=1 low 0.145, >=2 0.009, >=3 0.0002, >=4 0.0000; max 3; mean given any 1.07
+archive Pacific: >=1 low 0.125, >=2 0.006, >=3 0.0002, >=4 0.0000; max 3; mean given any 1.05
+proxy Atlantic: >=1 low 0.145, >=2 0.011, >=3 0.0005, >=4 0.0000; max 3; mean given any 1.08
+proxy Pacific: >=1 low 0.123, >=2 0.006, >=3 0.0003, >=4 0.0000; max 3; mean given any 1.05
+
+== Motion of HF lows (consecutive 6-hourly HF fixes) ==
+archive Atlantic: n=1973 steps; median speed 22.9 kt (q25 13.4, q75 32.6); mean eastward 12.7 kt, northward 10.3 kt; share moving toward the north-east quadrant 0.61
+archive Pacific: n=1672 steps; median speed 26.4 kt (q25 18.4, q75 34.3); mean eastward 19.5 kt, northward 12.6 kt; share moving toward the north-east quadrant 0.77
+proxy Atlantic: n=1973 steps; median speed 23.8 kt (q25 15.0, q75 33.2); mean eastward 14.6 kt, northward 11.6 kt; share moving toward the north-east quadrant 0.66
+proxy Pacific: n=1604 steps; median speed 29.4 kt (q25 20.0, q75 37.2); mean eastward 21.1 kt, northward 13.9 kt; share moving toward the north-east quadrant 0.78
+
+== Proxy events linked to a tropical cyclone (400 km proximity), by month of first HF fix ==
+Atlantic: 8: 0.27 (4/15); 9: 0.65 (36/55); 10: 0.24 (21/87); 11: 0.03 (3/99); 12: 0.00 (0/204); 1: 0.00 (1/211); 2: 0.00 (0/205); 3: 0.00 (0/158); 4: 0.00 (0/48); 5: 0.00 (0/12)
+Pacific: 8: 0.00 (0/14); 9: 0.55 (22/40); 10: 0.24 (23/97); 11: 0.01 (1/109); 12: 0.00 (0/184); 1: 0.00 (0/185); 2: 0.00 (0/138); 3: 0.00 (0/84); 4: 0.06 (2/33); 5: 0.25 (1/4)
