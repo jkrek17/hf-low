@@ -275,6 +275,13 @@ Pre-registered (`PREREGISTRATION.md`, `efc74a5`, before any statistic). Archive 
 - Loose end: the 1979-2000 pipeline A depth-count analogue is positive (RR 1.076, p 0.012, q 0.18) and not replicated. Daily-resolution lag (literature's ~6 days) is untested and needs the daily-field pull (about 17 GB).
 - Looks: seventh at 2015-25, third at 1979-2000. A fresh Sonnet agent recomputed the estimates, P1/P3 p, correlations and 1979-2000 analogues; not independently checked: the power run, q values, S1/S2/S4 rows, S5 envelope.
 
+### What turns sub-55 kt storms into HF lows within a day: `research/era5/explosive_onset/` (hf-low PR 90, merged into the integration branch as `18ba9c7`)
+
+- Question (agenda RA-20, Arms A and B): among 135,663 pipeline A fixes below 55 kt and not yet HF (927 cases that reach HF within 24 h, 803 tracks, 22 seasons), do 0.25 degree surface structure (B, 11 features, 4 groups) or Tier 2 fields aloft (A: stability, trough, omega700) separate cases from same-time controls beyond the PR 76 tree model? ERA5 proxy. Plan committed first (`fe1f63d`), features and power before any test (`9f7aae3`).
+- Pulls (sized from object sizes, then streamed): Arm B 17.93 GB, Arm A 26.96 GB (WeatherBench2, times to 2023-01-09 only: 19 seasons, 766 of 927 cases); the 155 later case times would need about 72 GB and were not pulled. Superseded estimates: 9-22 GB and 18-42 GB.
+- Result: **no usable forecast gain.** DeltaBSS in the stratum over the tree baseline is -0.006 to +0.002 for every group; the +0.005 bar is excluded for omega700 (upper 95% +0.0018). Within-time tests: B1 gust concentration q 0.028 within arm, 0.050 over the nine primary tests; B4 shear/convergence 0.029 and 0.052; all else not significant. Effects about 1.1-1.2 per SD. Arm A omega700 has the predicted sign (1.14 per SD) but q 0.13. Against the logistic baseline 8 of 9 groups separate cases, which looks like curvature the trees already hold (not tested). 12 of 64 tests pass FDR over the whole set.
+- Looks: two at 2015-25 (#15, #16 by the agenda count). A fresh Sonnet agent recomputed the counts, LR statistics and p for all groups, the B1 coefficients and three DeltaBSS values; not independently checked: bootstrap p, q values, sign-flip and held-out tests, intervals, subsets, tree check, power and MDEs. Which q decides the call was fixed after seeing results (listed as a deviation).
+
 ### ERA5 pipeline B: `event_fields.py`, `criterion.py`, `series.py` (integration branch)
 
 - A per-moment probability from four features, fitted on early (2004-05), late (2021-25), and full (2004 to 2025) windows.
