@@ -36,7 +36,7 @@ the month of day -7, both standardised. Effects are per SD (interaction: per SD 
 With "strong" meaning deep (a count-matched 965.0 hPa cut, 1979-80..2025-26, era term added), ONI does have a total effect
 on Pacific deep lows: RR 1.066 (1.013-1.119) per SD, and 1.107 (1.033-1.168) for 2001-02..2025-26 alone. About a quarter
 (0.25; 0.16 for 2001+) of it runs through PNA; the direct effect with PNA held is 1.049 (1.004-1.098). Gust-based HF counts
-over 2001-02 on show no such total effect (1.023, 0.937-1.089). So gust and depth disagree again on a Pacific question,
+over 2001-02 onward show no such total effect (1.023, 0.937-1.089). So gust and depth disagree again on a Pacific question,
 as in the frequency-split work. **Total-effect (T) tests are not in the plan's BH family** and are one of many; treat this as
 a lead. Pressure-defined outcomes are also exposed to circularity with pressure-defined indices (lag is the guard).
 
@@ -87,3 +87,17 @@ None changes a pre-registered estimate. Logged because they happened after the p
    confirming it ran and wrote files.
 3. The plan's item S7 ("not run") is a stray line; there is no S7.
 4. S3 (asymmetry) and S4 (phase table) were run on the primary window only.
+
+## Verification
+
+A fresh Sonnet agent that had not seen this code recomputed with its own implementation, from `all_tracks.csv.gz`, the CPC
+files and the ONI json, and matched: the primary-window counts (10,040 cyclones, 825 HF, 4,620 days, 14 days with a
+missing PNA lag); the HF interaction RR 1.014 (se 0.0327); ONI-alone RR 1.018, direct ONI 1.007, PNA 1.071 (ses
+0.0332 / 0.0307 / 0.0329); the A-path +0.150 (se 0.049, season-clustered only); the indirect effect (log +0.0103); the
+all-cyclone interaction 1.013 (se 0.0053); the Pacific depth cut (965.0 hPa, 831 tracks; the count depends on the
+genesis-day window, six tracks tie at 965.0) and the 47-season depth ONI-only 1.066, direct 1.049, PNA 1.131,
+interaction 1.006; and the El Nino/+PNA, El Nino/neutral and neutral/neutral cell sizes (569/136, 618/114, 519/73).
+
+**Not independently checked:** bootstrap intervals, all permutation p-values and BH q-values, leave-one-season-out
+ranges, detectable-effect figures, the share (stacked) terms, S1, S2, S3, the 1979-2000, 2001-2025 and gust-era-term
+cells, the 'excess over additive' columns of the phase table, and the 'share mediated' values (0.25, 0.16).
