@@ -5,7 +5,7 @@ per basin per season (Von Ahn, Sienkiewicz and Chang 2006, 2001-04), about 49 pe
 (Jelenak et al. 2013, conference slides, 2000-2010). Do the two agree once definitions are matched?
 
 **Answer.** Mostly yes. Two definitional differences, event duration and the area counted, take the archive from 46.0 and 38.9 to 23.7 and 21.8; with the
-season window and tropical-cyclone removal it ends at 21.9 Atlantic and 20.8 Pacific, against 20.0 and 19.7 in Von Ahn and about 25 in Jelenak. What remains
+season window and tropical-cyclone removal it ends at about 22 Atlantic (21.9 by the script, 22.1 by the verifier) and 20.8 Pacific, against 20.0 and 19.7 in Von Ahn and about 25 in Jelenak. What remains
 is 10% (Atlantic) and 6% (Pacific) above Von Ahn and 12% and 17% below Jelenak. The same rules applied to ERA5 pipeline A (a proxy) in the three Von Ahn
 seasons give 52 Atlantic and 47 Pacific events against 60 and 59 published (ratios 0.87 and 0.80, p = 0.51 and 0.29), which is not a detectable difference.
 
@@ -100,7 +100,11 @@ p-values; and the proxy per-season counts under the matched rules (Atlantic 19, 
 - The Atlantic single-fix share is 26.3% (README corrected from 26.4%), and the at-least-2-fixes Atlantic mean is 33.86 against 33.8 printed by the script (a fraction of one event across 22 seasons; the script
   drops duplicate timestamps within a low before counting fixes, which may account for it; not run down).
 - The chain claim was given to the verifier without the ID-linking step. Without linking it gets 33.9, 24.0, 22.7 (Atlantic) and 29.1, 22.0, 21.2 (Pacific), each about 0.2-0.3 above the chain
-  with linking (33.4, 23.7, 22.4; 28.9, 21.8, 21.0). That is the size of the linking step, so the difference is the brief, not a disagreement, but the **linked chain itself was not independently recomputed**.
+  with linking (33.4, 23.7, 22.4; 28.9, 21.8, 21.0). That is the size of the linking step, so the difference is the brief.
+- A second round recomputed the linking and tropical-cyclone steps. The link counts (11 sequential, 10 concurrent), the matched share (74.8%, 73.9%), the TC shares (5.3%, 4.9%), the tropical-cyclone-removed means (44.1, 37.5) and the whole Pacific chain
+  (28.9, 21.8, 21.0, final 20.8) reproduce. **The Atlantic linked numbers do not quite: 45.6 after linking (script 45.4), chain 33.7, 24.0, 22.6 (script 33.4, 23.7, 22.4), final 22.1 (script 21.9).**
+  The difference is 0.2-0.3 events per season, probably the group-season or pair-order rule in the linking, and was not run down. It does not change the conclusion
+  (Atlantic final 21.9 to 22.1, 1.10 to 1.11 times Von Ahn) but quote the Atlantic final as "about 22".
 
-**Not independently checked:** the linking step and the linked chain, all bootstrap intervals, the tropical-cyclone share (5.3% / 4.9%) and the TC step, the Chelton and Jelenak comparison rows,
+**Not independently checked:** all bootstrap intervals, the Chelton and Jelenak comparison rows,
 the Von Ahn binomial p-values, the 5 degree area sensitivity, the single-fix and outside-area shares by season (exploratory), and the 8b rows for 2004-2025.
