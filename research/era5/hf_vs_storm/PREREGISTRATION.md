@@ -74,4 +74,5 @@ MSLP map and no scalar built from a field. Positions were used to fix the region
 
 ## Deviations (post hoc)
 
-None yet.
+1. After the first run, every SST box mean was NaN because the box contains land cells. The box mean is now taken over non-missing (ocean) cells with the area weights renormalised. A code fix, not an outcome-based choice; no other test changed (the other four fields have no missing cells). The first run's SST tests are discarded.
+2. Storms whose anchor lies before 30 August or after 31 May, or whose lags fall outside the 20 August to 31 May window, are dropped from the large-scale composites (HF 1,080 of 1,104 Atlantic, 875 of 896 Pacific for C1). Stated here because the plan did not give the exact exclusion rule.

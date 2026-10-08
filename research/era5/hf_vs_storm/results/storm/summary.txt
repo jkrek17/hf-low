@@ -1,0 +1,38 @@
+anchors 2400 ({'SF_peak': 800, 'HF_onset': 800, 'HF_peak': 800}); re-detection match <= 25 km: 1.0000; g800 within 0.5 kt of catalog: 1.0000 of 2400; within 1 kt 1.0000
+primary scalar family: 23 of 28 pass BH q<0.05
+S1: 18 of 24 pass q<0.05
+S2: 23 of 28 pass q<0.05
+S3: 12 of 14 pass q<0.05
+share of storms whose max gust is within 100 km of Greenland/Iceland: {'HF_onset': 0.08, 'HF_peak': 0.091, 'SF_peak': 0.088}
+atl C1 gust m: 10241 of 14641 pixels pass BH q<0.05
+atl C1 ws m: 10312 of 14641 pixels pass BH q<0.05
+atl C1 msl m: 8220 of 14641 pixels pass BH q<0.05
+atl C1 d2m m: 8044 of 14641 pixels pass BH q<0.05
+atl C1 gust n: 0 of 14641 pixels pass BH q<0.05
+atl C1 ws n: 0 of 14641 pixels pass BH q<0.05
+atl C1 msl n: 0 of 14641 pixels pass BH q<0.05
+atl C1 d2m n: 0 of 14641 pixels pass BH q<0.05
+atl C2 gust m: 11120 of 14641 pixels pass BH q<0.05
+atl C2 ws m: 10843 of 14641 pixels pass BH q<0.05
+atl C2 msl m: 9055 of 14641 pixels pass BH q<0.05
+atl C2 d2m m: 4820 of 14641 pixels pass BH q<0.05
+atl C2 gust n: 0 of 14641 pixels pass BH q<0.05
+atl C2 ws n: 0 of 14641 pixels pass BH q<0.05
+atl C2 msl n: 0 of 14641 pixels pass BH q<0.05
+atl C2 d2m n: 0 of 14641 pixels pass BH q<0.05
+pac C1 gust m: 9520 of 14641 pixels pass BH q<0.05
+pac C1 ws m: 10376 of 14641 pixels pass BH q<0.05
+pac C1 msl m: 5286 of 14641 pixels pass BH q<0.05
+pac C1 d2m m: 10919 of 14641 pixels pass BH q<0.05
+pac C1 gust n: 0 of 14641 pixels pass BH q<0.05
+pac C1 ws n: 0 of 14641 pixels pass BH q<0.05
+pac C1 msl n: 0 of 14641 pixels pass BH q<0.05
+pac C1 d2m n: 0 of 14641 pixels pass BH q<0.05
+pac C2 gust m: 9715 of 14641 pixels pass BH q<0.05
+pac C2 ws m: 10302 of 14641 pixels pass BH q<0.05
+pac C2 msl m: 8330 of 14641 pixels pass BH q<0.05
+pac C2 d2m m: 11014 of 14641 pixels pass BH q<0.05
+pac C2 gust n: 0 of 14641 pixels pass BH q<0.05
+pac C2 ws n: 0 of 14641 pixels pass BH q<0.05
+pac C2 msl n: 0 of 14641 pixels pass BH q<0.05
+pac C2 d2m n: 0 of 14641 pixels pass BH q<0.05
