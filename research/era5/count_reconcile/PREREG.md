@@ -59,4 +59,10 @@ seasons 2004-05 to 2025-26 for levels, and the raw rows for 2001-04. Count per s
 
 ## Post hoc deviations
 
-(none yet)
+1. **Which unit variant enters the sequential chain** was not named in the plan. The script (written before any output was seen) uses ">= 2 HF fixes" (1b)
+   as step 1. ">= 3 HF fixes" (1c) is reported alone and was not chained. This is a choice, not a result; it is the biggest single lever (see README).
+2. **Check 8b is an addition.** Applying the same chain (>= 2 HF fixes, OPC area, Oct-Apr, drop TC-linked) to pipeline A events in the Von Ahn seasons was
+   added after the archive checks had run, because the archive is incomplete in those seasons. Run once, rules fixed from the archive chain, none re-picked.
+3. **Exploratory, not in the plan:** single-fix share and outside-area share by season (to see whether the definition changed at 2004). Reported as
+   descriptive in the README; no test.
+4. Check 7's Jelenak comparison divides 289 and 269 by 10.5 seasons because the slides say 2000-2010 without saying 10 or 11 seasons.
