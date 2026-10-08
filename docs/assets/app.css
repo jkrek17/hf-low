@@ -642,6 +642,9 @@ fieldset.filter { display: flex; flex-direction: column; }
   outline: 2px solid var(--accent); outline-offset: -2px;
 }
 
+.pb-step { min-width: 0; white-space: nowrap; }
+.pb-step[hidden] { display: none; }
+.pb-bymonth .transport-hint { display: none; }
 .pb-play { min-width: 92px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
 /* Play = triangle, Pause = two bars: the shape changes, not just a colour. */
 .pb-glyph {
@@ -716,6 +719,8 @@ input.pb-scrub::-moz-range-thumb {
   .transport-row select { width: 100%; }
   .pb-scrub-wrap { flex-basis: 100%; order: 3; }
   .pb-readout { margin-left: auto; }
+  /* By month: the dwell choice is secondary; keep the globe on the first screen. */
+  .pb-bymonth .transport > .transport-row:first-child { display: none; }
 }
 
 /* ---------------------------------------------------------------- charts */

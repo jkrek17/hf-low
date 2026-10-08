@@ -17,7 +17,7 @@
     maxPressure: 1010,
     bombOnly: false,
     search: '',
-    layer: 'tracks',       // 'tracks' | 'density' | 'genesis' | 'peak' | 'atlas' | 'playback'
+    layer: 'tracks',       // 'tracks' | 'density' | 'genesis' | 'peak' | 'atlas' | 'bymonth' | 'playback'
     currents: false,   // ocean currents background layer - independent of `layer`, off by default
     era5: false,       // ERA5 proxy tracks under the Tracks layer, off by default
     era5null: false,   // ... matched null-case tracks
@@ -1280,14 +1280,18 @@
     }
   }
 
+  /** The globe's own layer name. "By month" is the Playback machinery in its
+      calendar-month step, so the globe, note and legend treat it as playback. */
+  function mapLayer() { return state.layer === 'bymonth' ? 'playback' : state.layer; }
+
   function renderMap(lows) {
-    HF.globe.render(lows, state.selectedKey, state.layer);
+    HF.globe.render(lows, state.selectedKey, mapLayer());
     HF.globe.setCurrentsVisible(state.currents);
     setEra5OnGlobe();
     renderPlayback(lows);
     renderLegend(lows);
 
-    var layer = state.layer;
+    var layer = mapLayer();
     var note = document.getElementById('mapNote');
     if (layer === 'playback') {
       note.textContent = playbackNote(lows);
@@ -1378,7 +1382,7 @@
   function renderLegend(lows) {
     lows = lows || [];
     var box = HF.clear(document.getElementById('mapLegend'));
-    var layer = state.layer;
+    var layer = mapLayer();
 
     if (layer === 'atlas') {
       appendAtlasLegend(box);
@@ -1923,7 +1927,7 @@
   };
 
   function pbEl(id) { return document.getElementById(id); }
-  function isPlayback() { return state.layer === 'playback'; }
+  function isPlayback() { return mapLayer() === 'playback'; }
   function plural(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
 
   function sameLows(a, b) {
@@ -2065,6 +2069,7 @@
   function setText(el, text) { if (el.textContent !== text) el.textContent = text; }
 
   function updateReadout() {
+    if (play.engine && play.mode === 'step') syncStepButtons();
     var date, count;
     if (play.mode === 'step') {
       var e = stepEntry();
@@ -2238,6 +2243,27 @@
     if (play.tickKey !== key) { buildTicks(entries); play.tickKey = key; }
   }
 
+  function syncStepButtons() {
+    var i = stepIndex(), n = stepList().length, noun = stepNoun().replace('calendar ', '');
+    var prev = pbEl('pbPrev'), next = pbEl('pbNext');
+    prev.disabled = i <= 0;
+    next.disabled = i >= n - 1;
+    setText(pbEl('pbPrevText'), 'Prev ' + noun);
+    setText(pbEl('pbNextText'), 'Next ' + noun);
+  }
+
+  /** Previous / next entry in the step list (a month, calendar month or
+      season). Pauses a running Play, as the scrubber does. */
+  function stepBy(d) {
+    if (play.mode !== 'step') return;
+    if (play.playing) setPlaying(false, true);
+    var ni = Math.max(0, Math.min(stepList().length - 1, stepIndex() + d));
+    setStepIndex(ni);
+    if (monthly()) syncMonthPicker(); else syncSeasonPicker();
+    onTimeChanged(true);
+    syncStepButtons();
+  }
+
   function syncPlayButton() {
     var btn = pbEl('pbPlay');
     // The accessible name IS the visible text, so it can never disagree
@@ -2270,7 +2296,11 @@
     var radios = document.querySelectorAll('input[name="pbMode"]');
     Array.prototype.forEach.call(radios, function (r) { r.checked = r.value === play.mode; });
     Array.prototype.forEach.call(document.querySelectorAll('input[name="pbUnit"]'), function (r) { r.checked = r.value === play.unit; });
-    pbEl('pbUnitWrap').hidden = play.mode !== 'step';
+    var bym = state.layer === 'bymonth';
+    pbEl('pbModeWrap').hidden = bym;
+    pbEl('pbUnitWrap').hidden = play.mode !== 'step' || bym;
+    pbEl('pbPrev').hidden = pbEl('pbNext').hidden = play.mode !== 'step';
+    syncStepButtons();
     pbEl('pbSeasonWrap').hidden = play.mode === 'composite' || monthly() || moyly();
     pbEl('pbMonthWrap').hidden = !monthly();   // moy: the scrubber's twelve ticks are the picker
     pbEl('pbTailWrap').hidden = play.mode === 'step';
@@ -2373,6 +2403,7 @@
     var changed = bar.hidden === on;
     bar.hidden = !on;
     document.body.classList.toggle('pb-active', on);
+    document.body.classList.toggle('pb-bymonth', on && state.layer === 'bymonth');
     if (changed) resizeActiveView();
     if (!on) {
       if (play.playing) setPlaying(false, true);
@@ -2479,6 +2510,8 @@
     });
 
     pbEl('pbPlay').addEventListener('click', function () { setPlaying(!play.playing); });
+    pbEl('pbPrev').addEventListener('click', function () { stepBy(-1); });
+    pbEl('pbNext').addEventListener('click', function () { stepBy(1); });
 
     // The scrubber is a native <input type=range>: focusable, with the
     // platform's own slider semantics for assistive technology and Home/End
@@ -2769,6 +2802,15 @@
       seg.addEventListener('click', function () {
         var prev = state.layer;
         state.layer = seg.dataset.layer;
+        if (state.layer === 'bymonth' && prev !== 'bymonth') {
+          // All events of one calendar month, all seasons pooled; paused, so
+          // the first view is a still picture to step from.
+          play.mode = 'step'; play.unit = 'moy'; play.moy = 1; play.clock = null; play.tickKey = '';
+          play.byMonthUsed = true;
+        } else if (state.layer === 'playback' && prev !== 'playback' && play.byMonthUsed) {
+          play.mode = 'composite'; play.t = 0; play.clock = null; play.tickKey = '';
+          play.byMonthUsed = false;
+        }
         Array.prototype.forEach.call(document.querySelectorAll('.seg'), function (s) {
           s.classList.toggle('is-active', s === seg);
           // The active layer used to be shown by colour alone; aria-pressed
@@ -2777,6 +2819,12 @@
         });
         render();
         if (state.layer === 'playback' && prev !== 'playback') startPlaybackOnEntry();
+        if (state.layer === 'bymonth' && prev !== 'bymonth') {
+          // The controls sit above the globe and the globe starts below the
+          // first screen on most displays; bring both into view.
+          var bar = pbEl('pbBar');
+          if (bar && bar.scrollIntoView) bar.scrollIntoView({ block: 'start', behavior: 'auto' });
+        }
       });
     });
     buildPlaybackControls();
