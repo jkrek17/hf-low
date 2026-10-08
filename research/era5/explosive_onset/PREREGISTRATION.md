@@ -146,6 +146,23 @@ from the committed result files; none used a field or an outcome other than the 
   Fixes within a storm are not independent; the season-block sign-flip and bootstrap respect that, the conditional likelihood
   itself does not.
 
+## Clarifications written after the pull and before any test was run
+
+Only the extraction (feature tables, no outcome joined) and the reproduction check had been seen. None changes a decision rule.
+
+1. **Bootstrap p.** The season-cluster p in test 1 is a Wald test, b' V^-1 b, with V the covariance of the coefficients over 2,000
+   season resamples (500 for the secondary M0 baseline and subsets, 300 for subsets), because the LR statistic of a resampled
+   data set is not a null distribution. The decision p is the larger of this and the model-based LR p, as stated.
+2. **Table g800 of 0.** Pipeline A's table holds g800 = 0 for fixes outside its index domain; the reproduction check is run on fixes
+   with a table value above 0. Result: 9,266 such fixes, 100.0% within 0.5 kt of the re-extracted value (`analysis_B.txt`).
+   Fixes with no owned ocean cell have missing features, which are set to the training mean (0 after standardising).
+3. **Arm A ocean mask.** Land-sea mask below 0.5 only; the original Tier 2 code also required a finite SST, which is not read here.
+4. **Power by group** (`results/power_groups_*.txt`, computed from the real feature matrix and the case counts per risk set, no
+   outcome joined to a feature): per-feature 80% minimum detectable effects, adjusted for the other features in the group. The
+   "no (well-powered)" rule needs an MDE of 0.15 SD or less per feature; near-collinear features (`SHARP` with `CURV`, `WS99` with
+   the area terms) have MDEs of 0.4 to 0.7, so a null for those groups will be reported as "can't tell" unless the group MDE is
+   lower in the joint test.
+
 ## Deviations (post hoc)
 
 None yet.
