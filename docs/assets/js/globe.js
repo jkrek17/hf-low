@@ -114,6 +114,7 @@ window.HF = window.HF || {};
   // (globe.setCurrentsVisible is only ever called with true by an explicit
   // user toggle in app.js).
   var showCurrents = false;
+  var era5 = null;                       // ERA5 proxy tracks (HF.era5.decode shape) drawn under the archive tracks, or null
   var currentBins = null;                // built lazily from window.HF_CURRENTS, see buildCurrentSegments()
   var curGrid = null;                    // cached computeDensityGrid() result, layer 'density' only
   var hoveredCellKey = null;             // "latIdx:lonIdx", density layer only
@@ -542,6 +543,54 @@ window.HF = window.HF || {};
     // one combined-emphasis pass is enough.
     if (selected && selected !== hovered) drawOneTrack(selected, style, true, false);
     if (hovered) drawOneTrack(hovered, style, hovered === selected, true);
+    ctx.lineCap = 'butt';
+  }
+
+  /** ERA5 proxy tracks: one flat colour (--era5) so they never read as the
+      pressure ramp, thin and faint, with the stretches whose 800 km gust
+      index is at or above the threshold drawn heavier. Not interactive: no
+      hit points, so hover and click still go to the archive's own tracks. */
+  function drawEra5() {
+    var style = styleForCount(era5.length);
+    ctx.lineCap = 'round';
+    ctx.setLineDash([]);
+    // One pass: each fix is projected once (the previous end is the next
+    // start) and its edge goes into the light or the heavy path. Two strokes
+    // in all, however many tracks.
+    var light = new Path2D(), heavy = new Path2D();
+    // While the view is moving (drag, coast, tween, wheel) only each track's
+    // hurricane-force-equivalent stretch is drawn - about a fifth of the
+    // fixes - and the full track returns when it settles. Cuts the per-frame
+    // cost of ~80,000 fixes to what a phone can keep up with.
+    var moving = dragging || !!inertia || !!transition || performance.now() - lastWheelT < 150;
+    // project() inlined with the per-fix trig (sin/cos of latitude, longitude
+    // in radians) precomputed by HF.era5.decode: ~80,000 fixes a frame make
+    // the generic call the dominant cost. Same maths as project().
+    var R = baseR * view.zoom, vcp = Math.cos(view.phi), vsp = Math.sin(view.phi), lam0 = view.lambda;
+    for (var i = 0; i < era5.length; i++) {
+      var ev = era5[i], fx = ev.fixes, px = 0, py = 0, pvis = false;
+      var lo = moving ? ev.hf0 : 0, hi = moving ? ev.hf1 : fx.length - 1;
+      for (var j = lo; j <= hi; j++) {
+        var f = fx[j], dl = f.lam - lam0, cosDl = Math.cos(dl);
+        var vis = vsp * f.sp + vcp * f.cp * cosDl >= 0;
+        var x = cx + f.cp * Math.sin(dl) * R, y = cy - (vcp * f.sp - vsp * f.cp * cosDl) * R;
+        if (j > lo && pvis && vis) {                      // an edge over the horizon is simply not drawn
+          var path = fx[j - 1].hf && f.hf ? heavy : light;
+          if (moving && path === light) { px = x; py = y; pvis = vis; continue; }
+          path.moveTo(px, py);
+          path.lineTo(x, y);
+        }
+        px = x; py = y; pvis = vis;
+      }
+    }
+    ctx.strokeStyle = HF.cssVar('--era5') || '#17776f';
+    ctx.lineWidth = Math.max(0.5, style.weight - 0.2);
+    ctx.globalAlpha = style.opacity * 0.7;
+    ctx.stroke(light);
+    ctx.lineWidth = style.weight + 0.5;
+    ctx.globalAlpha = Math.min(1, style.opacity + 0.25);
+    ctx.stroke(heavy);
+    ctx.globalAlpha = 1;
     ctx.lineCap = 'butt';
   }
 
@@ -1732,6 +1781,7 @@ window.HF = window.HF || {};
     if (curLayer === 'peak') return drawPoints('peak');
     if (curLayer === 'playback') return drawPlayback();
     if (curLayer === 'composite') return drawComposite();
+    if (era5 && era5.length) drawEra5();       // under the archive tracks, never over them
     return drawTracks();
   }
 
@@ -2181,8 +2231,14 @@ window.HF = window.HF || {};
     scheduleFrame();
   }
 
+  var lastWheelT = -1e9, wheelTimer = null;
   function onWheel(evt) {
     evt.preventDefault();
+    // Zooming counts as interacting for the ERA5 overlay (see drawEra5): it
+    // goes back to full detail once the wheel has been still for a moment.
+    lastWheelT = performance.now();
+    clearTimeout(wheelTimer);
+    wheelTimer = setTimeout(function () { dirty = true; scheduleFrame(); }, 180);
 
     // A scroll mid-transition would otherwise fight startTransition()'s
     // tween every animation frame, each pulling the view a different way -
@@ -2475,6 +2531,14 @@ window.HF = window.HF || {};
 
   // app.js needs the same answer for "do not autoplay"; one definition here.
   globe.prefersReducedMotion = reducedMotion;
+
+  /** Tracks layer only: ERA5 proxy tracks to draw under the archive's, or
+      null/empty for none. app.js owns the filtering (HF.era5.filter). */
+  globe.setEra5 = function (list) {
+    era5 = list && list.length ? list : null;
+    dirty = true;
+    scheduleFrame();
+  };
 
   /** Toggle the ocean currents background layer - independent of
       globe.render's layer argument, so it can be shown under Tracks, Fix
