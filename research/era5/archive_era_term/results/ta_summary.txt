@@ -1,0 +1,80 @@
+RA-29 T-A: archive weekly design of PR 41 / PR 79 (leave-one-season-out hemispheric pattern index), 22 seasons 2004-05..2025-26.
+Control: with the era column dropped the original contrast_archive_withm.csv is reproduced exactly (log_est, interval, p).
+
+== PRIMARY: step at 2009-11-23 ==
+ atl  corr(index, era) +0.078
+   h1     orig 1.236 [1.162,1.333] q0.000 | adj 1.239 [1.163,1.335] q0.000 | shift +0.003 (+0.08 se), se x1.02, MDE 1.104->1.106  unchanged  era coef -0.076
+   h2     orig 1.268 [1.181,1.378] q0.000 | adj 1.274 [1.184,1.389] q0.000 | shift +0.005 (+0.13 se), se x1.04, MDE 1.105->1.110  unchanged  era coef -0.110
+   h3     orig 1.351 [1.263,1.461] q0.000 | adj 1.364 [1.268,1.488] q0.000 | shift +0.010 (+0.27 se), se x1.10, MDE 1.107->1.118  unchanged  era coef -0.198
+   b      orig 1.177 [1.026,1.368] q0.061 | adj 1.177 [1.022,1.367] q0.044 | shift -0.000 (-0.00 se), se x1.02, MDE 1.231->1.235  unchanged  era coef +0.013
+   m      orig 1.118 [0.960,1.356] q0.184 | adj 1.116 [0.959,1.360] q0.160 | shift -0.002 (-0.02 se), se x1.00, MDE 1.275->1.276  unchanged  era coef +0.070
+   h2-h1  orig 1.026 [0.976,1.064] q0.221 | adj 1.028 [0.976,1.069] q0.160 | shift +0.002 (+0.09 se), se x1.05, MDE 1.058->1.061  unchanged
+   h3-h1  orig 1.093 [1.026,1.162] q0.044 | adj 1.101 [1.031,1.175] q0.020 | shift +0.007 (+0.23 se), se x1.08, MDE 1.090->1.097  unchanged
+   h3-b   orig 1.148 [0.979,1.328] q0.151 | adj 1.159 [0.984,1.355] q0.086 | shift +0.010 (+0.13 se), se x1.04, MDE 1.245->1.257  unchanged
+ pac  corr(index, era) +0.077
+   h1     orig 1.193 [1.103,1.309] q0.000 | adj 1.199 [1.106,1.317] q0.000 | shift +0.006 (+0.13 se), se x1.02, MDE 1.128->1.131  unchanged  era coef -0.094
+   h2     orig 1.215 [1.108,1.373] q0.000 | adj 1.233 [1.124,1.388] q0.000 | shift +0.015 (+0.29 se), se x1.01, MDE 1.159->1.161  unchanged  era coef -0.214
+   h3     orig 1.275 [1.146,1.461] q0.000 | adj 1.302 [1.167,1.491] q0.000 | shift +0.021 (+0.35 se), se x1.01, MDE 1.187->1.188  unchanged  era coef -0.284
+   b      orig 1.151 [1.018,1.289] q0.086 | adj 1.138 [1.009,1.272] q0.115 | shift -0.011 (-0.19 se), se x1.00, MDE 1.172->1.173  unchanged  era coef +0.289
+   m      orig 1.083 [0.963,1.219] q0.287 | adj 1.085 [0.965,1.218] q0.246 | shift +0.002 (+0.04 se), se x1.00, MDE 1.177->1.176  unchanged  era coef -0.043
+   h2-h1  orig 1.019 [0.987,1.060] q0.326 | adj 1.028 [0.997,1.069] q0.160 | shift +0.010 (+0.53 se), se x0.96, MDE 1.052->1.050  unchanged
+   h3-h1  orig 1.069 [1.013,1.143] q0.061 | adj 1.086 [1.032,1.162] q0.020 | shift +0.016 (+0.52 se), se x0.98, MDE 1.089->1.087  unchanged
+   h3-b   orig 1.108 [0.968,1.330] q0.203 | adj 1.144 [1.003,1.370] q0.086 | shift +0.032 (+0.40 se), se x0.97, MDE 1.255->1.246  unchanged
+  verdicts: {'unchanged': 16}; F1 pass FDR (q<0.05) original 6/6, adjusted 6/6; F2 0/2 -> 0/2; across all 16 tests 9 -> 9 pass
+  largest |shift| 0.032 (log), largest SE ratio 1.10
+
+== S1: step at 2012-09-01 (ASCAT-B) ==
+ atl  corr(index, era) +0.227
+   h1     orig 1.236 [1.162,1.333] q0.000 | adj 1.236 [1.156,1.337] q0.000 | shift +0.000 (+0.01 se), se x1.08, MDE 1.104->1.112  unchanged  era coef -0.003
+   h2     orig 1.268 [1.181,1.378] q0.000 | adj 1.281 [1.188,1.402] q0.000 | shift +0.010 (+0.28 se), se x1.10, MDE 1.105->1.117  unchanged  era coef -0.091
+   h3     orig 1.351 [1.263,1.461] q0.000 | adj 1.372 [1.283,1.495] q0.000 | shift +0.016 (+0.43 se), se x1.07, MDE 1.107->1.114  unchanged  era coef -0.139
+   b      orig 1.177 [1.026,1.368] q0.061 | adj 1.149 [0.985,1.344] q0.082 | shift -0.024 (-0.32 se), se x1.08, MDE 1.231->1.251  unchanged  era coef +0.274
+   m      orig 1.118 [0.960,1.356] q0.184 | adj 1.118 [0.952,1.366] q0.157 | shift -0.000 (-0.00 se), se x1.02, MDE 1.275->1.281  unchanged  era coef +0.003
+   h2-h1  orig 1.026 [0.976,1.064] q0.221 | adj 1.036 [0.983,1.078] q0.093 | shift +0.010 (+0.47 se), se x1.07, MDE 1.058->1.062  unchanged
+   h3-h1  orig 1.093 [1.026,1.162] q0.044 | adj 1.110 [1.044,1.181] q0.012 | shift +0.015 (+0.50 se), se x0.98, MDE 1.090->1.088  unchanged
+   h3-b   orig 1.148 [0.979,1.328] q0.151 | adj 1.194 [1.016,1.397] q0.055 | shift +0.040 (+0.51 se), se x1.05, MDE 1.245->1.260  unchanged
+ pac  corr(index, era) -0.098
+   h1     orig 1.193 [1.103,1.309] q0.000 | adj 1.193 [1.103,1.312] q0.000 | shift +0.000 (+0.00 se), se x1.01, MDE 1.128->1.129  unchanged  era coef +0.000
+   h2     orig 1.215 [1.108,1.373] q0.000 | adj 1.213 [1.105,1.374] q0.000 | shift -0.002 (-0.03 se), se x1.01, MDE 1.159->1.162  unchanged  era coef -0.060
+   h3     orig 1.275 [1.146,1.461] q0.000 | adj 1.271 [1.141,1.472] q0.000 | shift -0.003 (-0.04 se), se x1.04, MDE 1.187->1.195  unchanged  era coef -0.109
+   b      orig 1.151 [1.018,1.289] q0.086 | adj 1.157 [1.025,1.287] q0.082 | shift +0.005 (+0.09 se), se x0.97, MDE 1.172->1.167  unchanged  era coef +0.180
+   m      orig 1.083 [0.963,1.219] q0.287 | adj 1.085 [0.964,1.229] q0.275 | shift +0.002 (+0.04 se), se x1.02, MDE 1.177->1.180  unchanged  era coef +0.063
+   h2-h1  orig 1.019 [0.987,1.060] q0.326 | adj 1.017 [0.985,1.062] q0.378 | shift -0.002 (-0.10 se), se x1.02, MDE 1.052->1.053  unchanged
+   h3-h1  orig 1.069 [1.013,1.143] q0.061 | adj 1.066 [1.007,1.149] q0.082 | shift -0.003 (-0.09 se), se x1.08, MDE 1.089->1.097  unchanged
+   h3-b   orig 1.108 [0.968,1.330] q0.203 | adj 1.099 [0.959,1.330] q0.238 | shift -0.008 (-0.10 se), se x1.02, MDE 1.255->1.260  unchanged
+  verdicts: {'unchanged': 16}; F1 pass FDR (q<0.05) original 6/6, adjusted 6/6; F2 0/2 -> 0/2; across all 16 tests 9 -> 9 pass
+  largest |shift| 0.040 (log), largest SE ratio 1.10
+
+== S2: season-linear trend ==
+ atl  corr(index, era) +0.146
+   h1     orig 1.236 [1.162,1.333] q0.000 | adj 1.237 [1.158,1.338] q0.000 | shift +0.001 (+0.04 se), se x1.08, MDE 1.104->1.112  unchanged  era coef -0.017
+   h2     orig 1.268 [1.181,1.378] q0.000 | adj 1.275 [1.183,1.391] q0.000 | shift +0.005 (+0.15 se), se x1.06, MDE 1.105->1.112  unchanged  era coef -0.061
+   h3     orig 1.351 [1.263,1.461] q0.000 | adj 1.360 [1.273,1.475] q0.000 | shift +0.007 (+0.19 se), se x1.01, MDE 1.107->1.108  unchanged  era coef -0.076
+   b      orig 1.177 [1.026,1.368] q0.061 | adj 1.168 [1.013,1.358] q0.055 | shift -0.007 (-0.10 se), se x1.04, MDE 1.231->1.240  unchanged  era coef +0.105
+   m      orig 1.118 [0.960,1.356] q0.184 | adj 1.121 [0.959,1.366] q0.146 | shift +0.003 (+0.03 se), se x1.01, MDE 1.275->1.277  unchanged  era coef -0.036
+   h2-h1  orig 1.026 [0.976,1.064] q0.221 | adj 1.030 [0.980,1.067] q0.146 | shift +0.004 (+0.20 se), se x0.99, MDE 1.058->1.057  unchanged
+   h3-h1  orig 1.093 [1.026,1.162] q0.044 | adj 1.099 [1.035,1.167] q0.028 | shift +0.006 (+0.18 se), se x0.94, MDE 1.090->1.084  unchanged
+   h3-b   orig 1.148 [0.979,1.328] q0.151 | adj 1.164 [0.998,1.346] q0.117 | shift +0.014 (+0.18 se), se x0.98, MDE 1.245->1.239  unchanged
+ pac  corr(index, era) +0.055
+   h1     orig 1.193 [1.103,1.309] q0.000 | adj 1.192 [1.105,1.309] q0.000 | shift -0.001 (-0.01 se), se x1.00, MDE 1.128->1.127  unchanged  era coef +0.009
+   h2     orig 1.215 [1.108,1.373] q0.000 | adj 1.218 [1.112,1.382] q0.000 | shift +0.003 (+0.05 se), se x1.01, MDE 1.159->1.162  unchanged  era coef -0.040
+   h3     orig 1.275 [1.146,1.461] q0.000 | adj 1.284 [1.151,1.487] q0.000 | shift +0.007 (+0.12 se), se x1.05, MDE 1.187->1.197  unchanged  era coef -0.102
+   b      orig 1.151 [1.018,1.289] q0.086 | adj 1.142 [1.009,1.278] q0.113 | shift -0.007 (-0.13 se), se x1.03, MDE 1.172->1.177  unchanged  era coef +0.129
+   m      orig 1.083 [0.963,1.219] q0.287 | adj 1.076 [0.961,1.212] q0.293 | shift -0.006 (-0.10 se), se x0.97, MDE 1.177->1.170  unchanged  era coef +0.109
+   h2-h1  orig 1.019 [0.987,1.060] q0.326 | adj 1.022 [0.989,1.066] q0.291 | shift +0.003 (+0.17 se), se x1.03, MDE 1.052->1.054  unchanged
+   h3-h1  orig 1.069 [1.013,1.143] q0.061 | adj 1.077 [1.018,1.164] q0.050 | shift +0.008 (+0.26 se), se x1.12, MDE 1.089->1.100  unchanged
+   h3-b   orig 1.108 [0.968,1.330] q0.203 | adj 1.124 [0.974,1.373] q0.150 | shift +0.015 (+0.18 se), se x1.08, MDE 1.255->1.278  unchanged
+  verdicts: {'unchanged': 16}; F1 pass FDR (q<0.05) original 6/6, adjusted 6/6; F2 0/2 -> 0/2; across all 16 tests 9 -> 9 pass
+  largest |shift| 0.015 (log), largest SE ratio 1.12
+
+== Era coefficient (primary step), per class: log rate change after 2009-11-23 at the same pattern index; 2000 season-block bootstraps ==
+  atl h1 era coef -0.076 [-0.241,+0.106]  = -7% [-21%,+11%] in weekly rate
+  atl h2 era coef -0.110 [-0.255,+0.033]  = -10% [-23%,+3%] in weekly rate
+  atl h3 era coef -0.198 [-0.447,+0.044]  = -18% [-36%,+4%] in weekly rate
+  atl b  era coef +0.013 [-0.366,+0.484]  = +1% [-31%,+62%] in weekly rate
+  atl m  era coef +0.070 [-0.223,+0.426]  = +7% [-20%,+53%] in weekly rate
+  pac h1 era coef -0.094 [-0.255,+0.104]  = -9% [-23%,+11%] in weekly rate
+  pac h2 era coef -0.214 [-0.389,-0.049]  = -19% [-32%,-5%] in weekly rate
+  pac h3 era coef -0.284 [-0.479,-0.107]  = -25% [-38%,-10%] in weekly rate
+  pac b  era coef +0.289 [-0.062,+0.813]  = +33% [-6%,+125%] in weekly rate
+  pac m  era coef -0.043 [-0.272,+0.173]  = -4% [-24%,+19%] in weekly rate

@@ -67,6 +67,7 @@ state is HF-like by the 2004+ standard", not as a count and not comparable acros
 - The share of proxy events that are archive-listed over 2004-2025 is 61% (peak-position rule) or 62% (loose); the
   calibration season window gave POD 0.77, so a share of the unlisted events is the proxy's known surplus (ERA5 counts 6-19%
   more events than the archive).
+  Era note (RA-29): the Pacific share is 0.575 before 2009-11-23 and 0.654 after (+0.079 [+0.030, +0.126]); the Atlantic 0.577 and 0.597. See `archive_era_term/`.
 
 ## Strongest storms (descriptive; `results/strongest_storms.csv`, per basin top 25 by minimum ERA5 central pressure and by depth against the monthly climatology)
 

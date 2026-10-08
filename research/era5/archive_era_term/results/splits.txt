@@ -1,0 +1,64 @@
+== T-B  Archive events by HF fixes per event, by era (count_reconcile definitions: hf-lows.json, duplicate timestamps dropped, Category HF, seasons 2004-05..2025-26) ==
+ Atlantic control, events per season over 22 seasons: >=1 46.0, >=2 33.8, >=3 22.4  (count_reconcile.txt: Atl 46.0 / 33.8 / 22.4, Pac 38.9 / 29.1 / 20.5)
+ Atlantic: events per year, before (5.48 yr) -> after (16.52 yr)
+   >= 1 fixes: 44.9 -> 46.3  ratio 1.031 [0.828, 1.382]
+   >= 2 fixes: 34.1 -> 33.7  ratio 0.988 [0.807, 1.300]
+   >= 3 fixes: 24.3 -> 21.8  ratio 0.898 [0.690, 1.198]
+   share with >= 2 fixes: 0.760 -> 0.728
+   (share >=2 after minus before -0.0321 [-0.0796,+0.0088], descriptive)
+   share with >= 3 fixes: 0.541 -> 0.471
+  TB Atlantic share >=3 fixes, after minus before: -0.0701 [-0.1376, -0.0072]  p 0.0300 
+ Pacific control, events per season over 22 seasons: >=1 38.9, >=2 29.1, >=3 20.5  (count_reconcile.txt: Atl 46.0 / 33.8 / 22.4, Pac 38.9 / 29.1 / 20.5)
+ Pacific: events per year, before (5.48 yr) -> after (16.52 yr)
+   >= 1 fixes: 38.5 -> 39.0  ratio 1.014 [0.839, 1.268]
+   >= 2 fixes: 30.5 -> 28.7  ratio 0.941 [0.771, 1.167]
+   >= 3 fixes: 22.3 -> 19.9  ratio 0.894 [0.713, 1.146]
+   share with >= 2 fixes: 0.791 -> 0.735
+   (share >=2 after minus before -0.0566 [-0.1088,-0.0062], descriptive)
+   share with >= 3 fixes: 0.578 -> 0.510
+  TB Pacific share >=3 fixes, after minus before: -0.0681 [-0.1179, -0.0192]  p 0.0100 
+
+== T-C  Atlas: hours at HF per event (6 h x number of HF fixes), archive vs ERA5 pipeline A proxy, by era (event first HF fix before / after 2009-11-23) ==
+ Atlantic control (2004-05..2025-26, all events in the atlas tables): archive median 12 h mean 18.09; proxy median 12 h mean 17.96  (atlas README: archive medians 12 Atl, 18 Pac; proxy 12)
+   before: archive n 246 mean 19.59 median 18 | proxy n 239 mean 17.00 median 12
+   after: archive n 765 mean 17.61 median 12 | proxy n 865 mean 18.22 median 12
+  TC Atlantic archive mean hours, after minus before: -1.9775 [-3.3565, -0.5471]  p 0.0060 
+  Atlantic proxy mean hours, after minus before: +1.226 [-0.643,+3.630] (descriptive)
+  TC Atlantic archive minus proxy gap, after minus before: -3.2037 [-5.3812, -1.3506]  p 0.0020 
+   share of events with a single HF fix (6 h): archive before 0.240 after 0.272; proxy before 0.343 after 0.341
+ Pacific control (2004-05..2025-26, all events in the atlas tables): archive median 18 h mean 18.11; proxy median 12 h mean 17.94  (atlas README: archive medians 12 Atl, 18 Pac; proxy 12)
+   before: archive n 211 mean 19.59 median 18 | proxy n 214 mean 17.69 median 12
+   after: archive n 645 mean 17.62 median 18 | proxy n 682 mean 18.02 median 12
+  TC Pacific archive mean hours, after minus before: -1.9738 [-3.4285, -0.5716]  p 0.0060 
+  Pacific proxy mean hours, after minus before: +0.326 [-1.521,+2.029] (descriptive)
+  TC Pacific archive minus proxy gap, after minus before: -2.2998 [-3.8072, -0.8953]  p 0.0020 
+   share of events with a single HF fix (6 h): archive before 0.209 after 0.265; proxy before 0.364 after 0.328
+
+== T-E  P(HF) tracks: share of pipeline A proxy events (gust >= 71.7 kt, 2004-05..2025-26) matched to an archive HF event (gust_depth/matches.csv), by era of the track's gust peak ==
+ control: proxy events 2000, listed 0.612  (README: 61% peak-position rule over 2004-2025)
+  Atlantic: before 0.577 (n 239), after 0.597 (n 865)
+  TE Atlantic listed share, after minus before: +0.0191 [-0.0386, +0.0731]  p 0.5237 
+  Pacific: before 0.575 (n 214), after 0.654 (n 682)
+  TE Pacific listed share, after minus before: +0.0792 [+0.0299, +0.1255]  p 0.0030 
+
+== T-D  HF skill limits: ERA5 hf24 label scored against the archive label 'any archive HF fix in the next 24 h' (matching as hf_skill_limits/analysis.py Q5), by era ==
+ control: fixes 159430, ERA5 label positives 5399, archive-label positives 5118; HSS ceiling (ERA5 label vs archive label) 0.657, PR 12 model vs archive label 0.543  (README: 0.657 and 0.543)
+   ceiling before: fixes 40133, archive-label positives 1328 (0.0331), HSS 0.599
+   ceiling after: fixes 119297, archive-label positives 3790 (0.0318), HSS 0.675
+   PR 12 model before: fixes 40133, archive-label positives 1328 (0.0331), HSS 0.519
+   PR 12 model after: fixes 119297, archive-label positives 3790 (0.0318), HSS 0.551
+  TD ceiling HSS vs archive label, after minus before: +0.0760 [+0.0414, +0.1072]  p 0.0020 
+  PR 12 model vs archive label, after minus before (descriptive):
+    +0.0321 [-0.0017, +0.0621]
+
+== Registered contrasts (T-B share >=3, T-C archive hours and gap, T-D ceiling, T-E listed share), BH over all ==
+  TB Atlantic share >=3 fixes, after minus before: -0.0701 [-0.1376,-0.0072] p 0.0300 q 0.0337
+  TB Pacific share >=3 fixes, after minus before: -0.0681 [-0.1179,-0.0192] p 0.0100 q 0.0129
+  TC Atlantic archive mean hours, after minus before: -1.9775 [-3.3565,-0.5471] p 0.0060 q 0.0090
+  TC Atlantic archive minus proxy gap, after minus before: -3.2037 [-5.3812,-1.3506] p 0.0020 q 0.0060
+  TC Pacific archive mean hours, after minus before: -1.9738 [-3.4285,-0.5716] p 0.0060 q 0.0090
+  TC Pacific archive minus proxy gap, after minus before: -2.2998 [-3.8072,-0.8953] p 0.0020 q 0.0060
+  TE Atlantic listed share, after minus before: +0.0191 [-0.0386,+0.0731] p 0.5237 q 0.5237
+  TE Pacific listed share, after minus before: +0.0792 [+0.0299,+0.1255] p 0.0030 q 0.0067
+  TD ceiling HSS vs archive label, after minus before: +0.0760 [+0.0414,+0.1072] p 0.0020 q 0.0060
+  8 of 9 pass q < 0.05
