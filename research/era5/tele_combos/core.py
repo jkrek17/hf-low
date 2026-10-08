@@ -58,6 +58,10 @@ def mjo_daily():
     days = pd.date_range(P.index[0], P.index[-1], freq="D")
     nearest = P.index.get_indexer(days, method="nearest")
     D = pd.DataFrame(P.values[nearest], index=days, columns=cols)
+    # a pentad row covers its centre +/-2 days (+/-3 across a leap day); a day farther than 3 days from every
+    # valid centre is MISSING, not filled from a neighbour (departure D1 in README.md: v1 bridged missing pentads)
+    gap = np.abs((days.values - P.index.values[nearest]) / np.timedelta64(1, "D"))
+    D[gap > 3] = np.nan
     return D
 
 
