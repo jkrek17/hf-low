@@ -37,7 +37,7 @@ factors", not an unexplained class. In the Atlantic, adding the 60N factor gives
 **Two kinds, with the evidence only partly separating them.** (1) A threshold effect: weak or short-lived storms whose gust only just
 reaches 71.7 kt do so near their pressure minimum, with a tie or one step either way. (2) A high-latitude Atlantic effect, where wind persists
 or arrives at a low's mature stage near Greenland and Iceland. I did not test its physics (barrier flow, a Greenland high, orography) here; PR 29 and PR 58 are
-the places for that.
+the places for that. Barrier flow behind the low was tested afterwards in `../late_highlat/` (RA-26): no more common in late than non-late storms (38% vs 39%, well-powered null).
 
 ## All tests
 
