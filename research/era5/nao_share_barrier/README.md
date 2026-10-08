@@ -114,5 +114,4 @@ None changes a pre-registered rule.
 ## Verification
 
 GH series: matches PR 58's stage-1 GH at all 2,277 shared 12 UTC times (correlation 0.99999996, largest difference
-0.005 hPa), `gh_check.py`. PR 14 numbers reproduced exactly. Independent recomputation of the numbers above: see
-the section appended below by the verifier hand-off.
+0.005 hPa), `gh_check.py`. PR 14 numbers reproduced exactly. A fresh Sonnet agent recomputed the counts, all point estimates and three bootstrap figures, and all matched (VERIFICATION.md, `verify/`). Not independently checked: permutation p-values, q-values, leave-one-season-out ranges, the interval for r, minimum detectable effects. The 9,636 / 1,003 are tracks on days with a NAO value (the window holds 9,656 / 1,007).
