@@ -299,6 +299,13 @@ ERA5 proxy predictors (Z500, 250 hPa wind, SST; 5.6 degrees; 7-day mean of days 
 - Named indices and their products explain adjusted R-squared 0.13 (Atlantic) and 0.30 (Pacific) of the pattern index. Power: 80% at a rate ratio of 1.15 per SD.
 - Not a cause, 11 held-out seasons, ERA5 is a proxy. Post hoc checks and deviations are logged in the plan. Two fresh agents recomputed the held-out skill, p-values, quintile rates, attribution R-squared, proxy transfer and six days of fields; the fits, power, maps, swap, lag-2, SOM and post hoc rows were not independently checked (list in the folder README).
 
+### Upstream or local skill of the hemispheric pattern: `research/era5/pattern_regions/` (hf-low PR 67, merged into the integration branch)
+
+- Question (agenda RA-2): does the PR 41 lagged pattern's skill come from upstream fields or local ones? ERA5 fields are a proxy; outcome is the archive, 22 seasons 2004-05 on; plan committed first (`06ff6af`). Three 120-degree sectors per basin, keep-only and drop-one refits under nested leave-one-season-out. The full pattern reproduces PR 41's +5.74% (Atlantic) and +3.40% (Pacific) exactly.
+- Atlantic: not separable. Upstream (140E-100W) keeps 73% (90% interval 45-105%) of the full skill, local (100W-20E) 94% (48-145%), downstream Eurasia 2%; Shapley 41 / 57 / 2%. Dropping either costs under one point (not significant). The agenda's "remote rather than local" is not supported. Trough counted as upstream: upstream keeps 84%, the basin east of 70W alone 26%. Replication on pipeline A depth counts 1979-2000 (proxy, within-era): upstream 30%, local 75%.
+- Pacific: local. Local keeps 114% (73-214%), Eurasia none, downstream 26%; replication local 122%. The Pacific full-pattern interval includes 0, so sizes are loose.
+- No fresh archive split exists (all 22 seasons were in PR 41 looks); this thread scored them once more, logged in `pattern_regions/results/looks.log`. 49 of 74 tests pass BH q < 0.05. A fresh agent recomputed skills, shares, Shapley, windows and sector geometry; the 1979-2000 replication, secondary variants and p/q values were not independently checked.
+
 ### Clustering of HF lows: `research/era5/clustering/` (hf-low PR 37, merged into the integration branch as `327f1cb`)
 
 Pre-registered (`PREREGISTRATION.md`, `efc74a5`, before any statistic). Archive primary (2004-05 to 2025-26, Oct-Apr, event time = first HF fix; Atlantic 902 events, Pacific 810); pipeline A (ERA5 proxy) as replication, 2004-05 on and 1979-80 to 2003-04 within-era; deep cyclones (pressure based) as a third tier. Assumptions recorded: event time and window as above; calendar months on a fixed non-leap calendar.
