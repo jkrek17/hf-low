@@ -19,6 +19,10 @@
     search: '',
     layer: 'tracks',       // 'tracks' | 'density' | 'genesis' | 'peak' | 'playback'
     currents: false,   // ocean currents background layer - independent of `layer`, off by default
+    era5: false,       // ERA5 proxy tracks under the Tracks layer, off by default
+    era5null: false,   // ... matched null-case tracks
+    era5peaks: false,  // ... peak position of every ERA5 cyclone (75,087)
+    era5pre: false,    // ... and before 2001-02 (within-era comparison only), off by default
     sort: { key: 'start', dir: -1 },
     selectedKey: null
   };
@@ -919,9 +923,72 @@
     return c.period.start + ' to ' + c.period.end;
   }
 
+  /* ERA5 proxy tracks (pipeline A, hurricane-force-equivalent). The 1.4 MB
+     payload is fetched only when the box is first ticked: the script tag in
+     index.html is type="text/plain", so the browser never loads it by itself
+     and this code makes a real one from its src. */
+  var ERA5_SETS = {
+    ev:    { varName: 'HF_ERA5',       loader: 'era5Loader',      decode: function (r) { return HF.era5.decode(r); } },
+    nul:   { varName: 'HF_ERA5_NULL',  loader: 'era5NullLoader',  decode: function (r) { return HF.era5.decode(r); } },
+    peaks: { varName: 'HF_ERA5_PEAKS', loader: 'era5PeaksLoader', decode: function (r) { return HF.era5.decodePeaks(r); } }
+  };
+  var era5Data = {}, era5Status = {};          // per set: decoded data; 'loading' | 'ready' | 'failed'
+  var era5Shown = { ev: 0, nul: 0, peaks: 0 };
+
+  function ensureEra5(key) {
+    var set = ERA5_SETS[key];
+    if (era5Status[key]) return era5Status[key] === 'ready';
+    if (window[set.varName]) { era5Data[key] = set.decode(window[set.varName]); era5Status[key] = 'ready'; return true; }
+    era5Status[key] = 'loading';
+    var el = document.createElement('script');
+    el.src = document.getElementById(set.loader).getAttribute('src');
+    el.onload = function () {
+      era5Data[key] = set.decode(window[set.varName]);
+      era5Status[key] = 'ready';
+      render();
+    };
+    el.onerror = function () {
+      era5Status[key] = 'failed';
+      if (key === 'ev') state.era5 = false; else if (key === 'nul') state.era5null = false; else state.era5peaks = false;
+      syncControls();
+      render();
+    };
+    document.head.appendChild(el);
+    return false;
+  }
+
+  function era5Wanted() { return state.era5 || state.era5null || state.era5peaks; }
+  function era5Active() { return era5Wanted() && state.layer === 'tracks'; }
+
+  /** Filters the ERA5 sets share: the page's basin, season range and months;
+      seasons before 2001-02 only with the explicit second tick. */
+  function era5Filter() {
+    return {
+      basin: state.basin === 'both' ? 'all' : state.basin,
+      season0: state.era5pre || state.season0 == null ? 0 : state.season0,
+      season1: state.season1 == null ? 9999 : state.season1,
+      months: state.months
+    };
+  }
+
+  function setEra5OnGlobe() {
+    var ev = null, nul = null, peaks = null;
+    if (state.layer === 'tracks') {
+      var f = era5Filter();
+      if (state.era5 && ensureEra5('ev')) { ev = HF.era5.filter(era5Data.ev, f); era5Shown.ev = ev.length; }
+      if (state.era5null && ensureEra5('nul')) { nul = HF.era5.filter(era5Data.nul, f); era5Shown.nul = nul.length; }
+      if (state.era5peaks && ensureEra5('peaks')) {
+        peaks = { P: era5Data.peaks, idx: HF.era5.filterPeaks(era5Data.peaks, f) };
+        era5Shown.peaks = peaks.idx.length;
+      }
+    }
+    HF.globe.setEra5(ev, nul, peaks);
+  }
+
   function renderMap(lows) {
     HF.globe.render(lows, state.selectedKey, state.layer);
     HF.globe.setCurrentsVisible(state.currents);
+    setEra5OnGlobe();
     renderPlayback(lows);
     renderLegend(lows);
 
@@ -943,6 +1010,18 @@
         : lows.length.toLocaleString() + ' track' + (lows.length === 1 ? '' : 's') +
           ' shown. Click one for its fixes.';
       note.textContent += ' Drag to rotate, scroll to zoom, double-click to reset.';
+    }
+    if (era5Wanted() && layer === 'tracks') {
+      var parts = [], thr = window.HF_ERA5 ? window.HF_ERA5.meta.threshold_kt : 71.7;
+      if (state.era5 && era5Status.ev === 'ready') parts.push(era5Shown.ev.toLocaleString() + ' hurricane-force-equivalent tracks (teal lines, heavier where the gust index is at or above ' + thr + ' kt)');
+      if (state.era5null && era5Status.nul === 'ready') parts.push(era5Shown.nul.toLocaleString() + ' matched null-case tracks (grey, at rest)');
+      if (state.era5peaks && era5Status.peaks === 'ready') parts.push(era5Shown.peaks.toLocaleString() + ' cyclones as peak-position dots (their tracks were not stored)');
+      if (parts.length) note.textContent += ' ERA5 proxy, drawn under the archive’s: ' + parts.join('; ') + '.';
+      if ((state.era5 && era5Status.ev === 'loading') || (state.era5null && era5Status.nul === 'loading') || (state.era5peaks && era5Status.peaks === 'loading')) {
+        note.textContent += ' Loading ERA5 proxy data…';
+      }
+    } else if (era5Wanted()) {
+      note.textContent += ' ERA5 proxy layers are drawn on the Tracks layer only.';
     }
     if (state.currents) {
       var period = currentsPeriodLabel();
@@ -1065,7 +1144,28 @@
       box.appendChild(HF.el('p', { class: 'legend-note' },
         'Markers on the selected track are coloured by category at that fix.'));
     }
+    appendEra5Legend(box);
     appendCurrentsLegend(box);
+  }
+
+  function appendEra5Legend(box) {
+    if (!era5Active()) return;
+    var h = HF.el('h3', {}, 'ERA5 proxy');
+    h.style.marginTop = '10px';
+    box.appendChild(h);
+    function row(color, text, dot) {
+      var r = HF.el('div', { class: 'legend-row' });
+      var sw = HF.el('span', { class: 'legend-swatch' });
+      sw.style.background = color;
+      r.appendChild(sw);
+      r.appendChild(document.createTextNode(text));
+      box.appendChild(r);
+    }
+    if (state.era5) row(HF.cssVar('--era5'), 'Hurricane-force-equivalent track');
+    if (state.era5null) row(HF.cssVar('--ink-muted'), 'Matched null case (below threshold)');
+    if (state.era5peaks) row(HF.cssVar('--era5'), 'Cyclone peak position (stronger dot: at or above threshold)');
+    box.appendChild(HF.el('p', { class: 'legend-note' },
+      'Pipeline A (gust index from ERA5 reanalysis), a proxy, not the archive. Before 2001-02 the gust index drifts, so use those seasons only to compare within that era, never for levels or trends. Basin, season and month filters apply; event type, pressure and search do not.'));
   }
 
   /* --------------------------------------------------------- static panels */
@@ -2187,6 +2287,11 @@
       state.maxPressure >= 1010 ? 'any' : state.maxPressure;
     document.getElementById('fBomb').checked = state.bombOnly;
     document.getElementById('fCurrents').checked = state.currents;
+    document.getElementById('fEra5').checked = state.era5;
+    document.getElementById('fEra5Pre').checked = state.era5pre;
+    document.getElementById('fEra5Null').checked = state.era5null;
+    document.getElementById('fEra5Peaks').checked = state.era5peaks;
+    document.getElementById('fEra5Pre').disabled = !era5Wanted();
     document.getElementById('fSearch').value = state.search;
     Array.prototype.forEach.call(document.querySelectorAll('#fMonths .chip'), function (chip) {
       var on = !!state.months[chip.dataset.month];
@@ -2359,6 +2464,17 @@
     // own bit of state and re-renders rather than touching state.layer.
     document.getElementById('fCurrents').addEventListener('change', function (e) {
       state.currents = e.target.checked;
+      render();
+    });
+    [['fEra5', 'era5'], ['fEra5Null', 'era5null'], ['fEra5Peaks', 'era5peaks']].forEach(function (c) {
+      document.getElementById(c[0]).addEventListener('change', function (e) {
+        state[c[1]] = e.target.checked;
+        document.getElementById('fEra5Pre').disabled = !era5Wanted();
+        render();
+      });
+    });
+    document.getElementById('fEra5Pre').addEventListener('change', function (e) {
+      state.era5pre = e.target.checked;
       render();
     });
     document.getElementById('exportCsv').addEventListener('click', exportCsv);

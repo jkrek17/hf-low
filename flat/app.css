@@ -37,6 +37,7 @@
   --chrome-navy-ink:      #ffffff;
   --chrome-navy-ink-soft: #cfe0f3;
   --accent:        #0a3f73;
+  --era5:          #17776f;
   --accent-soft:   #e4edf8;
 
   --critical:      #d03b3b;
@@ -149,6 +150,7 @@
        raised off pure navy so it doesn't muddy into --page/--surface. */
     --chrome-navy:      #123a63;
     --accent:        #93b8e6;
+    --era5:          #5fc7bd;
     --accent-soft:   #16263a;
     --seq-1: #0d366b; --seq-2: #184f95; --seq-3: #256abf;
     --seq-4: #3987e5; --seq-5: #6da7ec; --seq-6: #9ec5f4; --seq-7: #cde2fb;
@@ -198,6 +200,7 @@
 
   --chrome-navy:      #123a63;
   --accent:        #93b8e6;
+  --era5:          #5fc7bd;
   --accent-soft:   #16263a;
   --seq-1: #0d366b; --seq-2: #184f95; --seq-3: #256abf;
   --seq-4: #3987e5; --seq-5: #6da7ec; --seq-6: #9ec5f4; --seq-7: #cde2fb;
