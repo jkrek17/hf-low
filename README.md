@@ -1,0 +1,217 @@
+# Hurricane-force extratropical low archive
+
+The archive of hurricane-force (64 kt or more) extratropical lows in the North
+Atlantic and North Pacific, the site that presents it, and the research built
+on it: recovery of each storm's life before it reached hurricane force, and an
+ERA5-based proxy record reaching back to 1979.
+
+This repository was split out of `jkrek17/awips-tools` in October 2026 with the
+history of its files intact. Pull request numbers in older commit messages are
+written `jkrek17/awips-tools#NN` and refer to that repository.
+
+**Start with `STATUS.md`.** It lists the branches in flight, what exists and
+what does not, and the gates on how results may be used. `CLAUDE.md` holds the
+standing rules for work sessions.
+
+## Contents
+
+| Path | What it is |
+|---|---|
+| `data/hf_lows/` | CSV exports of the archive workbook, committed on purpose (see below), plus derived tables from the precursor recovery. |
+| `tools/build_hf_lows.py` | Normalizes those CSVs into the site data under `docs/data/`. |
+| `tools/publish.py` | Production path: fetches, builds, reports the delta, and (on request) deploys to the NOAA web root. |
+| `tools/build_coastlines.py`, `build_currents.py`, `build_teleconnections.py` | Build the globe outlines, the surface-current underlay, and the climate index series baked into the site data. |
+| `docs/` | The archive site. GitHub Pages serves it as a development preview; production is a separate copy on a NOAA web server. |
+| `flat/` | Generated. The same site collapsed into one directory for upload UIs that cannot take folders. Never edit by hand. |
+| `web/HFArchiveExport/` | Google Apps Script web app that exports the restricted sheet as CSV for `tools/publish.py`. |
+| `tests/` | Node and Python checks for the site code and the build. |
+| `tools/fetch_hsf.py`, `parse_hsf.py`, `track_hsf.py`, `review_collisions.py` | Precursor recovery from High Seas Forecast text. On the research branches until merged; see `STATUS.md`. |
+| `research/era5/` | ERA5 proxy record. On the research branches until merged; see `STATUS.md`. |
+
+## HF extratropical low archive site
+
+A static page for browsing and summarizing hurricane force extratropical lows in
+the North Atlantic and North Pacific - tracks, climatology charts, a searchable
+event table, and a data quality report. See `docs/README.md`.
+
+There are **two environments**, deliberately kept apart. Both build the same
+`docs/` from the same code; they differ only in where the data comes from and
+where the result is served. See "Which environment am I looking at?" below
+for how to tell them apart on the page itself.
+
+### Development: this repo + GitHub Pages
+
+This repo is public, and the two decades of hand-entered archive CSVs under
+`data/hf_lows/` are committed to it - that's intentional, confirmed by the
+archive's owner, not an oversight. Edit, commit and push here; a GitHub
+Actions workflow (`.github/workflows/pages.yml`) rebuilds `docs/` from those
+committed CSVs and publishes it to GitHub Pages on every push to `main`. That
+workflow also runs `html-validate` over `docs/` before publishing - the same
+check (and defaults) the forecaster's downstream `ocean-weather-gov` CI runs
+- so an invalid page fails here instead of blocking their merge request.
+
+```bash
+# 1. export each basin tab of the workbook over the CSVs in data/hf_lows/
+# 2. rebuild the site data
+python3 tools/build_hf_lows.py
+# 3. commit both the CSVs and docs/data, then push - Actions does the rest
+```
+
+Preview locally with `python3 -m http.server 8000 --directory docs`.
+
+Stage files by name rather than with `git add -A`: several regenerable
+intermediates (the 67 MB parsed High Seas lows, the ERA5 caches) sit next to
+committed data. `.githooks/pre-commit` refuses staged files over 10 MB and pip
+wheels or archives; enable it once per clone with
+`git config core.hooksPath .githooks` (Claude Code sessions do this on start
+via `.claude/settings.json`).
+
+This published Pages site is a **preview of the code and of whatever data
+happens to be committed** - it is not the operational page, and it can lag or
+lead the real archive depending on when someone last exported and committed.
+
+### Production: `tools/publish.py` + the NOAA web server
+
+The operational page lives on a NOAA web server the forecaster controls, and
+the code reaches it by hand - copied out of this GitHub repo, not deployed
+from it. **GitHub is not in the production path at all**: nothing there
+pulls from GitHub, calls its API, or depends on Pages, Actions, or the
+service being reachable. A GitHub outage, a policy change, or the repo going
+private or disappearing cannot take the operational page down.
+
+Data reaches production through `tools/publish.py`, which wraps the whole
+workflow - fetch, build, review, deploy - into one deliberate command. It
+never runs `git` and never needs a Google account, OAuth token or service
+account: the sheet stays restricted to "anyone in NOAA", and it fetches
+through a companion Apps Script web app (`web/HFArchiveExport/`, run by
+someone who already has the sheet open) rather than reading the sheet
+directly. Every publish is a decision a human makes after reading a
+plain-English delta report - see "Publishing" below.
+
+### Which environment am I looking at?
+
+The page cannot know for certain which copy it is, but it makes a good-faith
+guess and says so:
+
+- A small **"Preview build"** or **"Local build"** marker appears next to the
+  "Experimental" badge in the masthead when the page is served from a
+  `*.github.io` host or from `localhost`/`127.0.0.1`. No marker at all means
+  the page believes it's production (any other hostname) - it is never shown
+  on the real NOAA server.
+- The **Method** tab's footnote (below "Rebuilding") always states when the
+  page was built, from which git commit (or "commit unknown" - expected on
+  the production server, which is a plain code copy with no `.git`
+  directory), and whether the data was fetched via Apps Script or built from
+  CSVs already on disk.
+
+If two people are looking at different numbers, check these two things
+before anything else.
+
+## Publishing
+
+### One-time setup - pick one of two input modes
+
+- **Fetch from the sheet automatically.** The sheet can't be link-shared, so
+  the anonymous CSV export URL won't work; instead have the sheet owner deploy
+  a small Apps Script web app that exports each tab as CSV over HTTPS
+  (`?token=...&tab=atl|pac`), deployed "Execute as: Me" / "Who has access:
+  Anyone" so the sheet itself never has to leave "anyone in NOAA". Then set:
+
+  ```bash
+  export HF_EXPORT_URL="https://script.google.com/macros/s/AKfycb.../exec"
+  export HF_EXPORT_TOKEN="<the shared secret the Apps Script checks>"
+  ```
+
+  or put the same two values in `tools/publish.local.json` (already
+  gitignored - the token is a secret and must never land in a commit):
+
+  ```json
+  {"url": "https://script.google.com/macros/s/AKfycb.../exec",
+   "token": "<the shared secret the Apps Script checks>"}
+  ```
+
+- **Export by hand.** Download each basin tab as CSV (File > Download > Comma
+  Separated Values) into `data/hf_lows/` yourself, and always run with
+  `--no-fetch`. No setup needed, and it works today even before the Apps
+  Script exists.
+
+Both modes feed the same build, review and deploy steps below.
+
+### Normal workflow
+
+```bash
+python3 tools/publish.py                        # fetch, build, print what changed
+python3 tools/publish.py --no-fetch              # same, but build from CSVs already on disk
+python3 tools/publish.py --deploy /var/www/hf    # also publish, after you type y to confirm
+python3 tools/publish.py --deploy /var/www/hf --yes   # publish with no prompt, e.g. from cron
+```
+
+Run it without `--deploy` first and read the report before deciding anything:
+events added, removed or modified (with dates and basins for the additions),
+any season whose event count moved, data-quality notes that appeared or
+disappeared, and the total event/fix counts before and after. "No changes"
+means the sheet hasn't moved since the last publish - that's the common case
+and it says so in one line.
+
+Only pass `--deploy PATH` once that report looks right. It copies `docs/`
+into an existing web root as one atomic directory swap, so the live site is
+never caught half-updated mid-copy, prints exactly what it wrote, and leaves
+anything already in that directory that the site doesn't own untouched.
+Without `--yes` it shows the delta report and waits for you to type `y`.
+
+### Flat deploys (`--flat`)
+
+Some web servers are only reachable through an upload UI that takes
+individual files, not a directory tree - it cannot recreate `docs/`'s
+`assets/` and `data/` subdirectories. `--flat` handles that: it writes every
+file directly into the target with no subdirectories, and rewrites the
+deployed copy of `index.html` so its `src=`/`href=` references point at the
+bare filenames instead. `docs/index.html` itself is never modified - only the
+copy written to the target.
+
+```bash
+python3 tools/publish.py --no-fetch --deploy /var/www/flat --flat --yes
+```
+
+Before writing anything, `--flat` re-checks the assumption that makes
+flattening safe - no two files share a basename, and no CSS/JS outside
+`index.html` hardcodes an `assets/...` or `data/...` path - and refuses to
+deploy, naming exactly what it found, if either check fails.
+
+A copy of that flattened build is committed to this repo as `flat/`, so the
+files can be browsed and downloaded one at a time from GitHub without running
+the tool. It is generated output: edit `docs/`, never `flat/`. Regenerate it
+with
+
+```bash
+python3 tools/publish.py --no-fetch --deploy flat --flat --yes
+rm -f flat/.awips-publish-manifest.json
+cp docs/data/hf-lows.js docs/data/hf-lows.json docs/data/qc-report.txt flat/
+```
+
+The last line matters: a rebuild stamps a fresh `generated` timestamp into the
+three generated data files, so copying `docs/`'s versions across keeps the two
+trees byte-identical and the CI drift check quiet. That check compares `flat/`
+against `docs/` on every push and fails if they diverge, since a stale `flat/`
+would quietly hand someone the wrong files to upload.
+
+Don't point a flat deploy and a normal deploy at the same directory. Each
+mode leaves the other layout's files in place unless this tool's own manifest
+in that directory already tracks them (i.e. this tool made the previous
+deploy there in the *other* mode); mixing them can leave stale files sitting
+next to the current site, and `--flat`/normal will warn if it finds files
+that look like the other layout in the target. Use a dedicated directory
+per layout.
+
+### Moving to cron
+
+Once you trust the report, drop the confirmation and let it run unattended:
+
+```cron
+0 6 * * * cd /path/to/this/repo && python3 tools/publish.py --deploy /var/www/hf --yes >> /var/log/hf-publish.log 2>&1
+```
+
+It exits non-zero on any failure (a bad fetch, a bad deploy target) and 0
+otherwise, whether or not anything changed - point cron's mail, or whatever
+alerts on a non-zero exit, at it, and watch the log for a while before fully
+trusting an unattended run.

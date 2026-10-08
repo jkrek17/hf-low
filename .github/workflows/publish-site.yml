@@ -1,0 +1,114 @@
+# Publishes the archive site into the hf-lows/ folder of the public site
+# repository (the repository variable PUBLIC_SITE_REPO, for example
+# jkrek17/web, served by GitHub Pages at /hf-lows/).
+#
+# This follows the pattern jkrek17/lsrMap uses for lsr/: it replaces only its
+# own folder, never force-pushes, and starts over from a fresh clone if the
+# site repository moved underneath it.
+#
+# DO NOT ENABLE THIS BEFORE THE CUTOVER. Until jkrek17/awips-tools stops
+# building hf-lows/ itself, its site_publish.yml lists hf-lows in OWN_FOLDERS
+# and rebuilds that folder from its own copy of docs/ on every run, so two
+# repositories would be writing the same folder and the older copy would win
+# every time the cyclone live data refreshes. The order is in STATUS.md under
+# "Cutover": remove hf-lows from awips-tools first, then set WEB_TOKEN here.
+#
+# Needs the secret WEB_TOKEN (a fine-grained personal access token scoped to
+# the public repository with Contents: read and write, the same kind
+# awips-tools uses) and the variable PUBLIC_SITE_REPO. Skips quietly when
+# either is not set, which is the state this repository starts in.
+
+name: Publish to the public site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - 'data/hf_lows/**'
+      - 'tools/build_hf_lows.py'
+      - '.github/workflows/publish-site.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-site
+  cancel-in-progress: false
+
+env:
+  SITE_FOLDER: hf-lows
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check configuration
+        id: cfg
+        env:
+          REPO: ${{ vars.PUBLIC_SITE_REPO }}
+          TOKEN: ${{ secrets.WEB_TOKEN }}
+        run: |
+          if [ -z "$REPO" ] || [ -z "$TOKEN" ]; then
+            echo "::notice::PUBLIC_SITE_REPO or WEB_TOKEN not set; nothing to publish."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.cfg.outputs.ready == 'true'
+
+      - uses: actions/setup-python@v5
+        if: steps.cfg.outputs.ready == 'true'
+        with:
+          python-version: '3.11'
+
+      # Rebuilt from the CSVs first, as the Pages deploy does, so the public
+      # copy never lags data/hf_lows/. README.md and the quality report are
+      # left out, as awips-tools left out the README and publish.py leaves out
+      # the report (its NOT_DEPLOYED set).
+      - name: Assemble the folder
+        if: steps.cfg.outputs.ready == 'true'
+        run: |
+          python3 tools/build_hf_lows.py
+          site="$RUNNER_TEMP/site"
+          rm -rf "$site"
+          mkdir -p "$site"
+          cp -r docs/. "$site/"
+          rm -f "$site/README.md" "$site/data/qc-report.txt"
+          du -sh "$site"
+
+      - name: Push to the site repository
+        if: steps.cfg.outputs.ready == 'true'
+        env:
+          REPO: ${{ vars.PUBLIC_SITE_REPO }}
+          TOKEN: ${{ secrets.WEB_TOKEN }}
+        run: |
+          url="https://x-access-token:${TOKEN}@github.com/${REPO}.git"
+          for attempt in 1 2 3; do
+            work="$RUNNER_TEMP/web"
+            rm -rf "$work"
+            # Sparse and blobless, so only this folder is downloaded.
+            git clone -q --depth 1 --filter=blob:none --sparse "$url" "$work"
+            git -C "$work" sparse-checkout set --no-cone "/$SITE_FOLDER/"
+            rm -rf "$work/$SITE_FOLDER"
+            cp -r "$RUNNER_TEMP/site" "$work/$SITE_FOLDER"
+            git -C "$work" add -A "$SITE_FOLDER"
+            if git -C "$work" diff --cached --quiet; then
+              echo "No changes to publish."
+              exit 0
+            fi
+            git -C "$work" -c user.name="hf-lows-publish" -c user.email="hf-lows-publish@users.noreply.github.com" \
+              commit -q -m "Publish $SITE_FOLDER/ from ${GITHUB_REPOSITORY}@${GITHUB_SHA::8}"
+            if git -C "$work" push -q origin HEAD:main; then
+              echo "Published $SITE_FOLDER/."
+              exit 0
+            fi
+            echo "Push rejected (site moved); retrying from a fresh clone."
+            sleep $((attempt * 10))
+          done
+          echo "::error::Could not push after 3 attempts."
+          exit 1
