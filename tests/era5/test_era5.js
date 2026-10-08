@@ -5,7 +5,7 @@ var fs = require('fs'), path = require('path'), vm = require('vm'), assert = req
 var ROOT = path.join(__dirname, '..', '..');
 var ctx = { window: {} };
 vm.createContext(ctx);
-['assets/js/era5.js', 'data/era5-tracks.js', 'data/era5-null.js', 'data/era5-peaks.js', 'data/era5-prob.js', 'data/era5-lists.js', 'data/atlas.js'].forEach(function (f) {
+['assets/js/era5.js', 'data/era5-tracks.js', 'data/era5-null.js', 'data/era5-peaks.js', 'data/era5-prob.js', 'data/era5-lists.js', 'data/atlas.js', 'data/gust-climo.js'].forEach(function (f) {
   vm.runInContext(fs.readFileSync(path.join(ROOT, 'docs', f), 'utf8'), ctx, { filename: f });
 });
 var HF = ctx.window.HF, RAW = ctx.window.HF_ERA5;
@@ -156,6 +156,23 @@ test('atlas motion boxes have at least 25 steps; historic candidates are pre-200
   A.historic.forEach(function (r) {
     assert.ok(r[3] < 2004, 'season ' + r[3]);
     assert.ok(ids[r[2]], 'track ' + r[2] + ' is not an event track');
+  });
+});
+test('gust climatology: 1 degree windows, ocean-only blocks, values in range and within the README maximum', function () {
+  var G = ctx.window.HF_GUST_CLIMO;
+  assert.ok(G && G.win && G.meta);
+  [['atl', 5180], ['pac', 5897]].forEach(function (b) {
+    var w = G.win[b[0]], n = w.nlat * w.nlon;
+    assert.strictEqual(w.dlat, 1); assert.strictEqual(w.dlon, 1);
+    ['annmax', 'f50', 'f64', 'f717'].forEach(function (k) { assert.strictEqual(w.f[k].length, n, k); });
+    var ocean = 0, mx = -1;
+    w.f.annmax.forEach(function (v) { if (v >= 0) { ocean++; if (v > mx) mx = v; } });
+    assert.strictEqual(ocean, b[1]);
+    assert.ok(mx / 2 <= 83.94, 'max ' + mx / 2);
+    ['f50', 'f64', 'f717'].forEach(function (k) {
+      w.f[k].forEach(function (v, i) { assert.strictEqual(v >= 0, w.f.annmax[i] >= 0); assert.ok(v <= 10000); });
+    });
+    for (var i = 0; i < n; i++) if (w.f.annmax[i] >= 0) assert.ok(w.f.f717[i] <= w.f.f64[i] && w.f.f64[i] <= w.f.f50[i]);
   });
 });
 console.log('\n' + passed + ' passed, ' + failed + ' failed');

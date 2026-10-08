@@ -25,7 +25,7 @@
     era5prob: false,   // ... coloured by P(HF within 24 h) instead of one flat colour
     era5focus: null,
     era5focusPan: false,   // rotate the globe to the focused track once it has loaded
-    atlas: { view: 'boxes', src: 'archive' },   // the Atlas layer
+    atlas: { view: 'boxes', src: 'archive', field: 'annmax' },   // the Atlas layer
     strong: { list: 'minp', basin: 'all' },   // the Strongest storms tab   // key of the ERA5 track picked from the Strongest list, drawn whatever the filters say
     era5pre: false,    // ... and before 2001-02 (within-era comparison only), off by default
     sort: { key: 'start', dir: -1 },
@@ -1017,7 +1017,8 @@
     peaks: { varName: 'HF_ERA5_PEAKS', loader: 'era5PeaksLoader', decode: function (r) { return HF.era5.decodePeaks(r); } },
     prob:  { varName: 'HF_ERA5_PROB',  loader: 'era5ProbLoader',  decode: function (r) { return r; } },
     lists: { varName: 'HF_ERA5_LISTS', loader: 'era5ListsLoader', decode: function (r) { return r; } },
-    atlas: { varName: 'HF_ATLAS',      loader: 'atlasLoader',     decode: function (r) { return r; } }
+    atlas: { varName: 'HF_ATLAS',      loader: 'atlasLoader',     decode: function (r) { return r; } },
+    gust:  { varName: 'HF_GUST_CLIMO', loader: 'gustLoader',      decode: function (r) { return r; } }
   };
   var era5Attached = {};                       // ev / nul: P(HF) already attached to the decoded tracks
   var era5Data = {}, era5Status = {};          // per set: decoded data; 'loading' | 'ready' | 'failed'
@@ -1121,6 +1122,13 @@
     return ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'][Math.round(deg / 45) % 8];
   }
 
+  var GUST_FIELDS = {
+    annmax: { short: 'mean annual maximum gust', unit: ' kt', title: 'Mean annual maximum gust (kt)', bounds: [40, 50, 55, 60, 65, 70, 75], lab: function (b) { return '≥ ' + b + ' kt'; } },
+    f50:    { short: 'share of times at or above 50 kt', unit: ' %', title: 'Share of times at or above 50 kt', bounds: [0.5, 1, 2, 4, 6, 9, 12], lab: function (b) { return '≥ ' + b + ' %'; } },
+    f64:    { short: 'share of times at or above 64 kt', unit: ' %', title: 'Share of times at or above 64 kt', bounds: [0.05, 0.1, 0.2, 0.4, 0.8, 1.2, 2], lab: function (b) { return '≥ ' + b + ' %'; } },
+    f717:   { short: 'share of times at or above 71.7 kt', unit: ' %', title: 'Share of times at or above 71.7 kt', bounds: [0.01, 0.03, 0.06, 0.1, 0.2, 0.4, 0.8], lab: function (b) { return '≥ ' + b + ' %'; } }
+  };
+
   function atlasModel() {
     if (state.layer !== 'atlas' || !ensureEra5('atlas')) return null;
     var A = window.HF_ATLAS, src = state.atlas.src, view = state.atlas.view;
@@ -1159,6 +1167,37 @@
       });
       return out;
     }
+    if (view === 'gust') {
+      if (!ensureEra5('gust')) return null;
+      var G = window.HF_GUST_CLIMO, fld = state.atlas.field, F = GUST_FIELDS[fld];
+      out = { kind: 'grid', wins: [], lookup: null };
+      var wins = basins.map(function (b) {
+        var w = G.win[b], vals = w.f[fld], cls = new Uint8Array(vals.length), q, i;
+        for (i = 0; i < vals.length; i++) {
+          if (vals[i] < 0) continue;
+          var x = fld === 'annmax' ? vals[i] / 2 : vals[i] / 100;
+          q = 0;
+          while (q < F.bounds.length && x >= F.bounds[q]) q++;
+          cls[i] = q;
+        }
+        return { lat0: w.lat0, lon0: w.lon0, dlat: w.dlat, dlon: w.dlon, nlat: w.nlat, nlon: w.nlon, cls: cls, vals: vals };
+      });
+      out.wins = wins;
+      out.lookup = function (lon, lat) {
+        for (var a = 0; a < wins.length; a++) {
+          var w = wins[a], dl = (((lon - w.lon0) % 360) + 360) % 360;
+          if (dl >= w.nlon || lat < w.lat0 || lat >= w.lat0 + w.nlat) continue;
+          var ii = Math.floor((lat - w.lat0) / w.dlat), jj = Math.floor(dl / w.dlon), v = w.vals[ii * w.nlon + jj];
+          if (v < 0) return null;
+          var val = fld === 'annmax' ? v / 2 : v / 100, la0 = w.lat0 + ii * w.dlat, lo0 = w.lon0 + jj * w.dlon;
+          return '<b>' + fmtLat(la0) + '–' + fmtLat(la0 + w.dlat) + ', ' + fmtLon(lo0) + '–' + fmtLon(lo0 + w.dlon) + '</b><br>' +
+            F.short + ': ' + val.toFixed(fld === 'annmax' ? 1 : 2) + F.unit + '<br>ERA5 proxy, 1° block of ocean cells, 00 and 12 UTC, Oct–Apr 2004-05 to 2025-26' +
+            '<br>ERA5 reads low in extreme storms; a lower bound on true gusts';
+        }
+        return null;
+      };
+      return out;
+    }
     // historic: the pre-2004 candidates, drawn on their ERA5 tracks
     if (!ensureEra5('ev')) return null;
     var byKey = {};
@@ -1190,6 +1229,12 @@
       return 'Mean motion of HF lows while HF (' + atlasSrcLabel() + '), one arrow per 5° × 10° box with at least ' + A.meta.min_steps + ' six-hour steps; arrow length is speed / 6 degrees, direction is true. ' +
         (state.atlas.src === 'proxy' ? 'ERA5 proxy, not direct observation.' : 'OPC archive.') + ' Month filters do not apply to this view.' + ' Basin filter applies.';
     }
+    if (v === 'gust') {
+      var Gm = window.HF_GUST_CLIMO;
+      return 'ERA5 gust climatology (' + GUST_FIELDS[state.atlas.field].title.toLowerCase() + '), ERA5 PROXY, not direct observation. Instantaneous 10 m gust sampled at 00 and 12 UTC, 1 October to 30 April, 2004-05 to 2025-26' +
+        (Gm ? ' (' + Gm.meta.n_times.toLocaleString() + ' times)' : '') + ', ocean only, 1° blocks. ERA5 reads low in extreme storms and the samples are 12-hourly, so every value is a lower bound on the true gust; the late-summer tropical-cyclone season is not sampled. ' +
+        'Coastal and sea-ice cells (the Greenland coast, Chukotka) are the least reliable and there is no terrain mask. Blocks below the lowest class are not drawn. Basin filter applies; season and month filters do not.';
+    }
     return 'The ' + A.meta.historic + ' deepest and highest-gust ERA5 proxy events before 2004-05 (15 per basin per measure, ranked within the pre-2004 sample only), drawn on their ERA5 tracks with a ring at the peak-gust position (dashed ring: tropical-cyclone linked). ' +
       'ERA5 PROXY, NOT DIRECT OBSERVATION: nothing here is confirmed, ERA5 pressure in the 1980s rests on fewer observations, the archive is incomplete before 2004-05 so absence there is not evidence, and the gust index drifts upward before 2001. Basin filter applies.';
   }
@@ -1213,6 +1258,17 @@
       box.appendChild(HF.el('h3', {}, 'Mean speed while HF'));
       scale('10 kt', '45 kt');
       box.appendChild(HF.el('p', { class: 'legend-note' }, 'Boxes with at least 25 six-hour steps. ' + atlasSrcLabel() + '.'));
+    } else if (v === 'gust') {
+      var F2 = GUST_FIELDS[state.atlas.field];
+      box.appendChild(HF.el('h3', {}, F2.title));
+      F2.bounds.forEach(function (bd, qi) {
+        var rr = HF.el('div', { class: 'legend-row' }), sw2 = HF.el('span', { class: 'legend-swatch' });
+        sw2.style.background = HF.cssVar(ramp[qi]);
+        rr.appendChild(sw2);
+        rr.appendChild(document.createTextNode(F2.lab(bd)));
+        box.appendChild(rr);
+      });
+      box.appendChild(HF.el('p', { class: 'legend-note' }, 'ERA5 proxy: reads low in extreme storms; a lower bound on true gusts. Instantaneous, 12-hourly, October to April.'));
     } else {
       box.appendChild(HF.el('h3', {}, 'ERA5 proxy candidates, 1979-2003'));
       var r = HF.el('div', { class: 'legend-row' }), sw = HF.el('span', { class: 'legend-swatch' });
@@ -1265,7 +1321,9 @@
       note.textContent += ' ERA5 proxy layers are drawn on the Tracks layer only.';
     }
     document.getElementById('atlasTools').hidden = layer !== 'atlas';
-    document.getElementById('atlasSrc').disabled = state.atlas.view === 'historic';
+    document.getElementById('atlasSrc').disabled = state.atlas.view === 'historic' || state.atlas.view === 'gust';
+    document.getElementById('atlasField').hidden = state.atlas.view !== 'gust';
+    document.getElementById('atlasFieldLabel').hidden = state.atlas.view !== 'gust';
     var fclear = document.getElementById('era5FocusClear');
     fclear.hidden = !(state.era5focus && layer === 'tracks');
     if (state.era5focus && layer === 'tracks') {
@@ -2752,6 +2810,7 @@
       render();
     });
     document.getElementById('atlasView').addEventListener('change', function (e) { state.atlas.view = e.target.value; render(); });
+    document.getElementById('atlasField').addEventListener('change', function (e) { state.atlas.field = e.target.value; render(); });
     document.getElementById('atlasSrc').addEventListener('change', function (e) { state.atlas.src = e.target.value; render(); });
     document.getElementById('strongList').addEventListener('change', function (e) { state.strong.list = e.target.value; renderStrong(); });
     document.getElementById('strongBasin').addEventListener('change', function (e) { state.strong.basin = e.target.value; renderStrong(); });

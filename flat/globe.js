@@ -1294,6 +1294,50 @@ window.HF = window.HF || {};
     }
   }
 
+  /** Gridded field (the ERA5 gust climatology): 1 degree blocks, one Path2D
+      per colour class, so a frame is a handful of fills however many blocks.
+      Each vertex is projected once, the same inlined maths as drawEra5. A
+      block with any vertex over the horizon is left out (a thin gap at the
+      limb, gone as soon as the view turns). model.wins[i] = {lat0, lon0,
+      dlat, dlon, nlat, nlon, cls: Uint8Array (0 = not drawn, 1..n)}. */
+  function drawAtlasGrid() {
+    var ramp = densityRampColors(), n = ramp.length, R = baseR * view.zoom;
+    var vcp = Math.cos(view.phi), vsp = Math.sin(view.phi), lam0 = view.lambda;
+    var paths = [], c, w, i, j;
+    for (c = 0; c <= n; c++) paths.push(new Path2D());
+    for (var wi = 0; wi < atlasModel.wins.length; wi++) {
+      w = atlasModel.wins[wi];
+      if (!w.sp) {                                    // trig per row and column, once per window
+        w.sp = new Float64Array(w.nlat + 1); w.cp = new Float64Array(w.nlat + 1); w.lam = new Float64Array(w.nlon + 1);
+        for (i = 0; i <= w.nlat; i++) { var ph = (w.lat0 + i * w.dlat) * DEG; w.sp[i] = Math.sin(ph); w.cp[i] = Math.cos(ph); }
+        for (j = 0; j <= w.nlon; j++) w.lam[j] = (w.lon0 + j * w.dlon) * DEG;
+      }
+      var nv = w.nlon + 1, X = new Float32Array((w.nlat + 1) * nv), Y = new Float32Array((w.nlat + 1) * nv), V = new Uint8Array((w.nlat + 1) * nv);
+      for (j = 0; j < nv; j++) {
+        var dl = w.lam[j] - lam0, cosDl = Math.cos(dl), sinDl = Math.sin(dl);
+        for (i = 0; i <= w.nlat; i++) {
+          var k = i * nv + j;
+          X[k] = cx + w.cp[i] * sinDl * R;
+          Y[k] = cy - (vcp * w.sp[i] - vsp * w.cp[i] * cosDl) * R;
+          V[k] = vsp * w.sp[i] + vcp * w.cp[i] * cosDl >= 0 ? 1 : 0;
+        }
+      }
+      for (i = 0; i < w.nlat; i++) {
+        for (j = 0; j < w.nlon; j++) {
+          c = w.cls[i * w.nlon + j];
+          if (!c) continue;
+          var a = i * nv + j, b = a + 1, d = a + nv, e = d + 1;
+          if (!(V[a] && V[b] && V[d] && V[e])) continue;
+          var pth = paths[c];
+          pth.moveTo(X[a], Y[a]); pth.lineTo(X[b], Y[b]); pth.lineTo(X[e], Y[e]); pth.lineTo(X[d], Y[d]); pth.closePath();
+        }
+      }
+    }
+    ctx.globalAlpha = 0.86;
+    for (c = 1; c <= n; c++) { ctx.fillStyle = ramp[c - 1]; ctx.fill(paths[c]); }
+    ctx.globalAlpha = 1;
+  }
+
   function drawAtlas() {
     hitPoints = [];
     atlasHits = [];
@@ -1301,10 +1345,24 @@ window.HF = window.HF || {};
     if (atlasModel.kind === 'boxes') drawAtlasBoxes();
     else if (atlasModel.kind === 'motion') drawAtlasMotion();
     else if (atlasModel.kind === 'historic') drawAtlasHistoric();
+    else if (atlasModel.kind === 'grid') drawAtlasGrid();
   }
 
   function handleAtlasHover(px, py, evt) {
     var idx = null, tip = null, i;
+    if (atlasModel && atlasModel.kind === 'grid') {
+      var g2 = unproject(px, py);
+      tip = g2 ? atlasModel.lookup(g2[0], g2[1]) : null;
+      idx = tip ? tip : null;                    // the tip text is its own identity: redraw is not needed
+      if (idx !== hoveredAtlas) {
+        hoveredAtlas = idx;
+        canvas.style.cursor = idx ? 'pointer' : '';
+        if (tip) HF.showTip(tip, evt); else HF.hideTip();
+      } else if (tip) {
+        HF.moveTip(evt);
+      }
+      return;
+    }
     if (atlasModel && atlasModel.kind === 'boxes') {
       var geo = unproject(px, py);
       if (geo) {
