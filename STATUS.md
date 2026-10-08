@@ -130,7 +130,7 @@ The `c9dc994` session (https://claude.ai/code/session_01H34U5Bp9jBSLYgoGUR4VD8) 
 - **ERA5 gust rises at fixed storm depth before 2001.** +0.645 kt per decade (t = +2.40). **Confirmed**, and it holds for pipeline A's index too.
 - **The claim that thresholded counts are nevertheless era-comparable is not confirmed.** The reconciliation's own test reproduces (Atlantic t = +0.82, Pacific t = -0.02 over 1979-1996), but it had 12-15% power. See decision 1.
 
-The same session's handoff document (https://claude.ai/code/artifact/e6afbb4c-269b-4237-bdd2-cfe70937491d) was written before the reconciliation, and its gate section overstates the negative conclusion. The walk-back overstates the positive one. Do not work from either until the document is corrected to match decision 1.
+The same session's handoff document (https://claude.ai/code/artifact/e6afbb4c-269b-4237-bdd2-cfe70937491d) was corrected on 2026-10-08. A new section near its top, "Correction, 8 October 2026", gives the three findings, the reconciliation with its numbers, and the drift check, each with steps to reproduce. Its 1979 start-year gate and its overlap-flag item are marked superseded. The rest of the document predates `c9dc994` and the move to this repository; where it disagrees with this ledger, the ledger wins.
 
 ## Statements in the repository that are stale or conflict
 
