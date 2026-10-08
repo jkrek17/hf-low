@@ -1,0 +1,128 @@
+{
+ "meta": {
+  "depth_cut_pac": 965.0,
+  "n_hf_2004_2025_pac": 825,
+  "n_depth_2004_2025_pac": 831,
+  "nperm": 2000,
+  "nboot": 2000,
+  "seed": 20261008,
+  "n_tracks_file": 75087,
+  "fdr_family_size": 55,
+  "decision_P1_gamma": "inconclusive",
+  "decision_P2_ind": "well-powered null"
+ },
+ "S3": {
+  "analysis": "S3 asymmetry",
+  "seasons": "2004-2025",
+  "g_plus": -0.0052948260225056,
+  "se_plus": 0.022149129809478214,
+  "g_minus": -0.005413842808153384,
+  "se_minus": 0.0407585836504152,
+  "wald": 0.21281077297093917,
+  "p_asym": 0.8990601073738251,
+  "pperm_asym": 0.9260369815092454,
+  "q_asym": 0.9711810761286024
+ },
+ "S4": [
+  {
+   "enso": "La Nina",
+   "pna": "-PNA",
+   "days": 601,
+   "seasons": 10,
+   "hf": 98,
+   "rate_per_100d": 16.306156405990016,
+   "rr": 0.956786345752797,
+   "log_se": 0.14741941208365508,
+   "additive_pred_rr": 0.9886341552556865,
+   "excess_ratio": 0.9677860517628455,
+   "excess_log_se": 0.23863413322384483
+  },
+  {
+   "enso": "La Nina",
+   "pna": "neutral",
+   "days": 579,
+   "seasons": 11,
+   "hf": 119,
+   "rate_per_100d": 20.552677029360968,
+   "rr": 1.0919940127450023,
+   "log_se": 0.11930725750063921
+  },
+  {
+   "enso": "La Nina",
+   "pna": "+PNA",
+   "days": 525,
+   "seasons": 11,
+   "hf": 118,
+   "rate_per_100d": 22.476190476190474,
+   "rr": 1.1551010423760006,
+   "log_se": 0.12914989060761806,
+   "additive_pred_rr": 1.072204451186491,
+   "excess_ratio": 1.077314164381408,
+   "excess_log_se": 0.16870975891402407
+  },
+  {
+   "enso": "neutral",
+   "pna": "-PNA",
+   "days": 473,
+   "seasons": 12,
+   "hf": 61,
+   "rate_per_100d": 12.896405919661733,
+   "rr": 0.9053475968888377,
+   "log_se": 0.20522058354305006
+  },
+  {
+   "enso": "neutral",
+   "pna": "neutral",
+   "days": 519,
+   "seasons": 15,
+   "hf": 73,
+   "rate_per_100d": 14.065510597302504
+  },
+  {
+   "enso": "neutral",
+   "pna": "+PNA",
+   "days": 430,
+   "seasons": 14,
+   "hf": 64,
+   "rate_per_100d": 14.883720930232558,
+   "rr": 0.9818775915183223,
+   "log_se": 0.12464796995253674
+  },
+  {
+   "enso": "El Nino",
+   "pna": "-PNA",
+   "days": 306,
+   "seasons": 8,
+   "hf": 42,
+   "rate_per_100d": 13.72549019607843,
+   "rr": 0.8430148036437468,
+   "log_se": 0.154573059594392,
+   "additive_pred_rr": 0.9209410358873534,
+   "excess_ratio": 0.9153841242740123,
+   "excess_log_se": 0.28191618492376064
+  },
+  {
+   "enso": "El Nino",
+   "pna": "neutral",
+   "days": 618,
+   "seasons": 8,
+   "hf": 114,
+   "rate_per_100d": 18.446601941747574,
+   "rr": 1.0172237039697256,
+   "log_se": 0.16258027217482168
+  },
+  {
+   "enso": "El Nino",
+   "pna": "+PNA",
+   "days": 569,
+   "seasons": 8,
+   "hf": 136,
+   "rate_per_100d": 23.90158172231986,
+   "rr": 1.2498310218473934,
+   "log_se": 0.13501297608481183,
+   "additive_pred_rr": 0.9987891604891411,
+   "excess_ratio": 1.251346201269654,
+   "excess_log_se": 0.17973665129641522
+  }
+ ]
+}

@@ -61,3 +61,4 @@ research/era5/event_fields_[0-9]*.csv
 # research/era5/buoy_drift/work/ holds the ISD buoy downloads and the ERA5
 # point extractions (tens of MB, regenerable by the two fetch scripts there).
 research/era5/buoy_drift/work/
+research/era5/enso_kuroshio/work/
