@@ -53,7 +53,7 @@ All numbers are **pipeline A** (800 km ocean gust index, 71.7 kt) and a **proxy*
 
 ## What this does not show
 
-- **Matching is at track level** from summary rows (`all_tracks` has the gust peak, not every fix): 92% of archive `low` events match at 800 km, and it recovers 88% of the 1,410 pairs already in the catalog. It was checked only against gust-matched pairs, so it could favour gust. At 500 and 1200 km, and with HF-peak archive events only, every H1 and H2 result is unchanged (Pacific dAUC +0.021 to +0.024; depth-only archive match 0.16-0.18; `results/sens_*`).
+- **Matching is at track level** from summary rows (`all_tracks` has the gust peak, not every fix): 93% of archive `low` events match at 800 km (0.921 including tip-jet and centreless events), and it recovers 88% of the 1,410 pairs already in the catalog. It was checked only against gust-matched pairs, so it could favour gust. At 500 and 1200 km, and with HF-peak archive events only, every H1 and H2 result is unchanged (Pacific dAUC +0.021 to +0.024; depth-only archive match 0.16-0.18; `results/sens_*`).
 - Post hoc, not pre-registered: the latitude-band breakdown of archive-match share (depth-only is below gust-only in every band, 0.06-0.23 against 0.35-0.61 and 0.74-0.82 for both) and the group decomposition of the ONI response.
 - Linear, one-index models, 22 seasons. A Pacific difference below about 1.09 per SD cannot be detected. The ONI contrast has q 0.076, below the 0.10 convention but not below 0.05.
 - D' is built from this record's own track minima (all years), so it removes the average location effect, not a year-specific one. Peak position is where the gust index peaks, not the pressure minimum.
@@ -72,4 +72,8 @@ None changes a pre-registered estimate. Logged because they happened after the p
 
 ## Verification
 
-See the end of this file once the independent check has run.
+A fresh Sonnet agent that had not seen this code recomputed, from `all_tracks.csv.gz`, the archive JSON and the CPC files with its own implementation, and matched: the archive match share (Pacific 0.935, overall low 0.926); fit counts (220 Pacific events, D* 966.4 hPa, G* 71.1 kt); Pacific test-season AUC (gust 0.9745, depth 0.9534; real cyclones 0.9617, 0.9228), HSS (0.605, 0.481), POD and FAR; group counts (482 / 414 / 404), mean latitudes (51.0, 42.2) and archive-matched shares (0.171, 0.483, 0.766); the latitude coefficient (-1.0053, n 8076); the PNA and ONI rate ratios for all cyclones, G, D and D' (1.028, 1.072, 1.142, 1.074; shares 1.043, 1.111, 1.045; ONI 1.018, 1.100, 1.109); and the D' cutoff count (825).
+
+Three things it had to interpret, which this file now states: the time rule is "track overlaps the archive span within 12 h" (not start and end each within 12 h); G* at 71.1 kt is the value whose count (223) reproduces the quoted POD, 71.2 gives 219 tracks; and the PNA lag rule drops a day if any of its seven lag days is missing (the looser rule moves D to 1.144).
+
+**Not independently checked:** bootstrap intervals, permutation and bootstrap p-values, BH q-values, the Atlantic rows, the archive's own response (1.093, 1.022), the contrasts (ratios of RR), the 47-season era-term rerun, the sensitivity runs at 500 / 1200 km and HF-only, the latitude-band breakdown, group ONI/PNA responses, leave-one-season-out ranges, and the H4 read-through table.
