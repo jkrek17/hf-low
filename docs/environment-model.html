@@ -93,27 +93,46 @@
   </ul>
 </div>
 
-<section id="inputs">
-  <div class="tag">What goes in</div>
-  <h2>The predictors</h2>
-  <p>Each low is a track point from ERA5 at 00 or 12 UTC. Every low below 1010 hPa is included, not only the ones that became hurricane force, so the base rates are those of all lows. Fields are taken on a 1.5&deg; grid, the resolution class of the cyclone phase space method (Hart, 2003).</p>
-  <div class="grid2">
-  <dl class="preds">
-    <dt>Storm state</dt>
-    <dd>Central pressure, its change over the last 12 hours, how long the track has existed, translation speed, the current gust index, latitude, basin and time of year. Called &ldquo;state&rdquo; below.</dd>
-    <dt>Cyclone phase space (Hart)</dt>
-    <dd>B: how lopsided the 900&ndash;600 hPa layer is across the storm&rsquo;s motion (frontal waves are lopsided). Two thermal-wind terms for the lower and upper atmosphere: negative means a cold core, positive a warm core. All within 500 km of the centre.</dd>
-    <dt>Upper-level flow</dt>
-    <dd>Strongest 250 hPa wind within 1000 km, 300 hPa divergence and 500 hPa vorticity advection (500 km average).</dd>
-  </dl>
-  <dl class="preds">
-    <dt>Baroclinicity</dt>
-    <dd>The 850&ndash;500 hPa Eady growth rate: how fast the temperature contrast can grow storms.</dd>
-    <dt>Surface and moisture</dt>
-    <dd>Sea-surface temperature and its gradient, the sea surface minus 500 hPa temperature, upward sensible plus latent heat flux, and total column water vapour (within 500 km).</dd>
-  </dl>
-  </div>
-  <p class="limit">Hart&rsquo;s own levels are at 50 hPa spacing; here the thermal wind uses coarser levels, so the magnitudes are not those of the FSU diagrams. The direction of motion comes from the previous 6 hours only, so no future position enters.</p>
+<section id="how">
+  <div class="tag">How it works</div>
+  <h2>From a storm&rsquo;s fix to a probability</h2>
+  <p><strong>1. Measure.</strong> ERA5 tracks give every low below 1010 hPa a position every 6 hours. At each 00 and 12 UTC fix the model measures 23 numbers (the exact list used in the code is below). Fields are on a 1.5&deg; grid, the resolution class of the cyclone phase space method (Hart, 2003); circles are centred on the low.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th scope="col">Group</th><th scope="col">Predictor (code name)</th><th scope="col">What it is</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="10">Storm state</td><td>Central pressure (<code>msl</code>)</td><td>Depth of the low, hPa</td></tr>
+      <tr><td>12 h pressure change (<code>dp12</code>, <code>young</code>)</td><td>How fast it is deepening or filling now; <code>young</code> flags tracks under 12 h old (no change available, set to 0)</td></tr>
+      <tr><td>Track age (<code>logage</code>)</td><td>Log of hours since the track began</td></tr>
+      <tr><td>Speed (<code>speed</code>)</td><td>Translation speed over the previous 6 h</td></tr>
+      <tr><td>Current gust index (<code>g800</code>)</td><td>Strongest ERA5 ocean gust within 800 km, kt</td></tr>
+      <tr><td>Latitude (<code>lat</code>), basin (<code>pac</code>)</td><td>Where the low is</td></tr>
+      <tr><td>Time of year (<code>doy_c</code>, <code>doy_s</code>)</td><td>Cosine and sine of day of year</td></tr>
+      <tr><td rowspan="3">Cyclone phase space (500 km)</td><td><code>B</code></td><td>Lopsidedness of the 900&ndash;600 hPa layer across the direction of motion: large for frontal waves</td></tr>
+      <tr><td><code>VTL</code>, <code>VTU</code></td><td>Thermal-wind terms, 900&ndash;600 and 600&ndash;300 hPa: negative is a cold core, positive a warm core</td></tr>
+      <tr><td colspan="2" class="muted">Hart&rsquo;s own levels are at 50 hPa spacing; here the layers use 900/850/700/600 and 600/500/400/300 hPa, so magnitudes are not FSU&rsquo;s. Motion uses the previous 6 h only, so no future position enters.</td></tr>
+      <tr><td rowspan="9">Environment</td><td>Jet (<code>jet250</code>)</td><td>Strongest 250 hPa wind within 1000 km</td></tr>
+      <tr><td><code>div300</code>, <code>vadv500</code></td><td>300 hPa divergence and 500 hPa absolute vorticity advection, mean within 500 km (lift ahead of a trough)</td></tr>
+      <tr><td>Baroclinicity (<code>eady</code>)</td><td>850&ndash;500 hPa Eady growth rate, 500 km mean</td></tr>
+      <tr><td><code>sst</code>, <code>sstgrad</code>, <code>nosst</code></td><td>Sea-surface temperature, its strongest gradient, and a flag for no ocean in the circle</td></tr>
+      <tr><td>Instability (<code>sst_t500</code>)</td><td>Sea-surface minus 500 hPa temperature</td></tr>
+      <tr><td>Heat flux (<code>flux</code>)</td><td>Upward sensible plus latent heat flux from the sea, 500 km mean</td></tr>
+      <tr><td>Moisture (<code>tcwv</code>)</td><td>Total column water vapour, 500 km mean</td></tr>
+    </tbody>
+  </table></div>
+  <p><strong>2. Combine.</strong> Within each training run the predictors are filled in where missing (median), clipped at the 0.5th and 99.5th percentile and standardised. A logistic regression then gives each predictor a weight, adds the weighted values and turns the total into a probability between 0 and 1. The classes use the multinomial version (five probabilities that sum to 1). There is one fit per forecast: HF within 24 h, HF within 48 h, and the five classes. The penalty on the weights is fixed at 1 and never tuned; no trees and no interactions.</p>
+  <p><strong>3. Validate.</strong> Fit on 21 seasons, score the 22nd, repeat for all 22 seasons from 2004-05 to 2025-26. Compare against the climatology of that basin and month (skill score 0 means no better). Yes/no scores use a probability cut chosen on the training seasons so that the number of forecasts equals the number observed, then applied unchanged to the held-out season. Uncertainty comes from resampling whole seasons.</p>
+  <p><strong>4. Where the skill comes from.</strong> For hurricane force within 24 hours (Brier skill score against climatology, leave-one-season-out):</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th scope="col">Predictors</th><th scope="col" class="num">Skill score</th><th scope="col">Adds</th></tr></thead>
+    <tbody>
+      <tr><td>Storm state without the current gust index (depth, 12 h change, age, speed, place, season)</td><td class="num">0.262</td><td>about 60% of the full model</td></tr>
+      <tr><td>Storm state with the current gust index</td><td class="num">0.370</td><td>+0.108 from the gust index</td></tr>
+      <tr><td>+ cyclone phase space (B, VTL, VTU)</td><td class="num">0.385</td><td>+0.015</td></tr>
+      <tr><td>+ environment (full model)</td><td class="num">0.423</td><td>+0.038</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted">The 0.262 row comes from the HF probability analysis (storm-state model without gust), the other three from the intensity model&rsquo;s own results. The version without the gust index but with all other terms scores 0.380 (the map layer). Because the gust index measures how close a storm already is to the threshold, it is the single largest weight for hurricane force: it is partly the answer, carried forward 24 hours. For onset only (lows not yet hurricane force) the ladder is 0.221, 0.246, 0.291.</p>
+  <p>In the HF fit the largest standardised weights are the current gust index, then column water vapour, Eady growth rate and central pressure (deeper raises the chance), with sea-surface temperature, latitude and basin next; the jet term is small (about a twentieth of the gust index&rsquo;s weight). These are partial effects among correlated predictors (water vapour and sea temperature enter with opposite signs), so read them as which groups matter, not as physical signs. For the rapid-deepening classes the opposite holds: the state terms and the three phase-space terms do nearly all the work, and the rest of the environment adds 0.015 (class skill score).</p>
 </section>
 
 <section id="outputs">
@@ -131,7 +150,7 @@
   <h2>On ERA5: tested one season at a time</h2>
   <p>Every season from 2004-05 to 2025-26 was held out once while the model was fitted on the other 21 (22 seasons). Skill is measured against the climatology for that basin and month. Seasons, not fixes, are the independent sample: the intervals below are 90% intervals from resampling whole seasons, and they only describe season-to-season sampling of the skill.</p>
   <div class="tablewrap"><table>
-    <thead><tr><th>Forecast</th><th>Predictors</th><th class="num">Skill score</th><th class="num">AUC</th><th class="num">POD</th><th class="num">FAR</th><th class="num">HSS</th><th class="num">HSS by season</th></tr></thead>
+    <thead><tr><th scope="col">Forecast</th><th scope="col">Predictors</th><th scope="col" class="num">Skill score</th><th scope="col" class="num">AUC</th><th scope="col" class="num">POD</th><th scope="col" class="num">FAR</th><th scope="col" class="num">HSS</th><th scope="col" class="num">HSS by season</th></tr></thead>
     <tbody>
       <tr><td>HF within 24 h</td><td>state</td><td class="num">0.370</td><td class="num">0.963</td><td class="num">0.56</td><td class="num">0.44</td><td class="num">0.55</td><td class="num">0.49&ndash;0.61</td></tr>
       <tr><td>HF within 24 h</td><td>full</td><td class="num">0.423</td><td class="num">0.972</td><td class="num">0.60</td><td class="num">0.40</td><td class="num">0.59</td><td class="num">0.53&ndash;0.65</td></tr>
@@ -174,7 +193,7 @@
   <h2>GFS test: only the reduced model</h2>
   <p>The same family was run on GFS forecast tracks, five seasons 2021-22 to 2025-26, before any score was seen (frozen model, registered tests). What was tested is the <strong>storm-state-only</strong> model, trained on ERA5 2004&ndash;2020 and never refitted, not the full model on this page.</p>
   <div class="tablewrap"><table>
-    <thead><tr><th>Test (+24 h)</th><th class="num">Atlantic</th><th class="num">Pacific</th></tr></thead>
+    <thead><tr><th scope="col">Test (+24 h)</th><th scope="col" class="num">Atlantic</th><th scope="col" class="num">Pacific</th></tr></thead>
     <tbody>
       <tr><td>Skill score of HF probability on GFS tracks, vs climatology</td><td class="num">+0.327 [0.266, 0.376]</td><td class="num">+0.316 [0.264, 0.359]</td></tr>
       <tr><td>GFS-fed minus ERA5-fed skill score</td><td class="num">&minus;0.041 [&minus;0.066, &minus;0.024]</td><td class="num">&minus;0.061 [&minus;0.077, &minus;0.036]</td></tr>
