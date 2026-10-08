@@ -9,7 +9,7 @@ repeat_of: 2026-10-08-hardcoded-home-paths
 workflow_change: hf-result-closeout step 1 says how a verification script must find its inputs; the no-session-paths check is run by the Checks workflow added in the same pull request as this entry
 ---
 
-**What happened.** Fourteen verification scripts written on 2026-10-08 under `research/era5/*/verify/` open files by an absolute path into the sandbox that ran them (`/home/claude/hf-low/...`). One also reads intermediates from an ignored `work/` folder, and one reads from `/tmp/`. The verifications were real when they ran, but the scripts cannot be run again as committed, which is most of the reason for keeping them.
+**What happened.** Fourteen verification scripts written on 2026-10-08 under `research/era5/*/verify/` open files by an absolute path into the sandbox that ran them (`/home/claude/hf-low/...`). One also reads intermediates from an ignored `work/` folder, and one reads from `/tmp/`. The verifications were real when they ran, but the scripts cannot be run again as committed, which is most of the reason for keeping them. Three more were committed the same afternoon (`02c6454`), after this entry was written and before it or its check had been merged, so no session had been told otherwise. They are counted here, not as a further repeat.
 
 **How it was caught.** By running the new path check by hand against the research branch while it was being written. The same mechanism had been logged once already for six pilot scripts.
 
