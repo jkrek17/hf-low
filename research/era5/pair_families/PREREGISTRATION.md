@@ -53,4 +53,4 @@ None. There is no fitted model and nothing scored on 2015-25; no entry is writte
 
 ## Deviations (post hoc)
 
-(none yet)
+- Heading convention (which two fixes) was not specified; the run used the fix at the daughter's time and the previous one. Alternatives reported in the README as post hoc sensitivity.
