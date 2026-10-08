@@ -55,6 +55,8 @@ in both. Distance covered while HF, archive median 337 km (Atlantic) and 412 km 
 While HF the mean motion is toward the north-east (north in a few Labrador Sea and Irminger Sea boxes) in every box with enough steps; 61% (Atlantic) and 77% (Pacific) of archive steps head
 into the north-east quadrant. Genesis-to-HF timing is PR 16 and is not repeated.
 
+*Era note (RA-29): the archive's mean hours at HF per event fall about 2 h after 2009-11-23 (19.6 to 17.6 h in both basins) while the proxy's do not (17.0 to 18.2 Atlantic, 17.7 to 18.0 Pacific), so the archive-proxy mean gap is a pre-2009 feature; see `archive_era_term/`.*
+
 **How many at once (fig9, `simultaneous.csv`).** At least one HF low is active in the Atlantic at 14.5% of 6-hourly times from
 October to April (archive; proxy 14.5%) and in the Pacific at 12.5% (proxy 12.3%); two or more at 0.9% and 0.6% (Atlantic and Pacific archive); three at the same time
 happens, four never; the maximum is 3 in both basins and both sources.

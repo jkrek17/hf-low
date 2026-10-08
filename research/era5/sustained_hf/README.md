@@ -59,6 +59,7 @@ PR 64. Oct-Apr 2004-05 to 2025-26, 22 seasons. 95% season-block bootstrap interv
 - **PR 64 (channels).** The share channel carries the effect in both basins at every k, and the Pacific share channel rises from 81% to 88%. The cyclone-count terms do not depend on k.
 - **PR 41 (archive).** The hemispheric pattern's effect on archive HF counts is not a single-fix artefact: RR per SD 1.236 to 1.351 (Atlantic) and 1.193 to 1.275 (Pacific).
   The index was fitted to the k = 1 archive counts and not refitted (the fields are not here), so this is a transfer; the rise with k is therefore, if anything, conservative.
+  **Era note (RA-29, `archive_era_term/`):** with a before/after-2009-11-23 term (archive fixes per event stepped down at the end of QuikSCAT, RA-11) these archive cells are unchanged: all 16 keep their sign and stay inside their original intervals, largest shift 0.032 in log.
 - **PR 63.** Barrier-type fixes still carry none of the NAO share effect (P2, with-terrain-removed over original: 1.014, 1.015, 1.005; unresolved below about 4%, descriptive), and the
   Greenland-high mediation gets, if anything, stronger (P3 0.923, 0.881, 0.890; NAO share given the high 1.039, 1.004, 1.039). The Greenland high lowers the storm HF share at every k
   (0.870, 0.832, 0.824 per SD).

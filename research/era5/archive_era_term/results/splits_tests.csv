@@ -1,0 +1,10 @@
+test,est,lo,hi,p,q_bh
+"TB Atlantic share >=3 fixes, after minus before",-0.070062,-0.13762,-0.0072251,0.029985,0.033733
+"TB Pacific share >=3 fixes, after minus before",-0.068122,-0.11789,-0.019249,0.009995,0.012851
+"TC Atlantic archive mean hours, after minus before",-1.9775,-3.3565,-0.54714,0.005997,0.0089955
+"TC Atlantic archive minus proxy gap, after minus before",-3.2037,-5.3812,-1.3506,0.001999,0.005997
+"TC Pacific archive mean hours, after minus before",-1.9738,-3.4285,-0.57156,0.005997,0.0089955
+"TC Pacific archive minus proxy gap, after minus before",-2.2998,-3.8072,-0.8953,0.001999,0.005997
+"TE Atlantic listed share, after minus before",0.019126,-0.038564,0.073115,0.52374,0.52374
+"TE Pacific listed share, after minus before",0.079193,0.02994,0.12545,0.0029985,0.0067466
+"TD ceiling HSS vs archive label, after minus before",0.075952,0.041393,0.10718,0.001998,0.005997
