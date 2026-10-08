@@ -220,7 +220,7 @@ def main():
     R.to_csv(os.path.join(out, "results.csv"), index=False, float_format="%.4g")
     keep = ["track", "basin", "season", "start", "tmin", "lat_min", "lon_min", "month", "minp", "clim", "ring",
             "anom_clim", "depth_ring", "bg", "ndr_max", "g800max", "hf_hours", "NAO", "PNA", "NAO_now", "PNA_now", "src"]
-    E[keep].to_csv(os.path.join(out, "event_table.csv"), index=False, float_format="%.4g")
+    E[keep].to_csv(os.path.join(out, "event_table.csv"), index=False, float_format="%.6g")
 
     # position shift of the deepest fix (the track-shift part), lagged index
     pos = []

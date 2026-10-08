@@ -14,7 +14,7 @@ Per SD of the index taken over days -10 to -4 before the track's first fix (so t
 |---|---|---|
 | Central pressure (hPa) | **-0.92** (p 0.003, q 0.017) | **-0.90** (p 0.001, q 0.009) |
 | against climatology at that place and month | -0.07 (p 0.82) | **-0.91** (p 0.002, q 0.014) |
-| against the 900-1100 km ring at that time | **-0.72** (p 0.001, q 0.009) | +0.12 (p 0.59) |
+| against the 900-1100 km ring at that time | **-0.72** (p ≤ 0.002, q 0.009) | +0.12 (p 0.59) |
 | background: ring minus climatology | +0.65 (p 0.011, q 0.051) | **-1.03** (p 0.001, q 0.009) |
 | Fastest 24 h deepening (Bergerons) | -0.012 (p 0.43) | +0.010 (p 0.48) |
 | Peak gust index, 2004-05 on (kt) | -0.01 (p 0.98) | +0.52 (p 0.037, q 0.13) |
@@ -68,3 +68,7 @@ Reproduce:
 python3 background.py ../hf_history/results/era5_hf_catalog.csv ../hf_history/results/era5_hf_catalog_tracks.csv work/event_background.csv 32
 python3 analyse.py ../hf_history/results/era5_hf_catalog.csv ../hf_history/results/era5_hf_catalog_tracks.csv work/event_background.csv CPC_DIR results 1000
 ```
+
+## Verification and order of work
+
+A fresh agent recomputed every number quoted above from `results/event_table.csv`, the catalog and the CPC files, with its own code. All of them agree. Its one caveat was that the permutation p for Atlantic ring depth came out at 2/1001 in its run, so it is quoted as ≤ 0.002. `results/HYPOTHESIS_AND_ORDER.md` records the hypothesis, the planned test, and the order of the exploratory look, the plan, and the run. It was written after the run.
