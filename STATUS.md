@@ -9,7 +9,7 @@ Last updated: 2026-10-08, after the gust-drift findings and the reconciliation o
 | Branch | Head | Was | What it holds |
 |---|---|---|---|
 | `main` | | | The archive CSVs, the site, the build and publish tools, the site tests, and the session rules. No research code. |
-| `claude/exciting-fermat-8vcvgq` | `57b389f` | integration branch | **All of the research:** precursor recovery, ERA5 pipelines A and B, per-cyclone P(HF), the gust-drift finding (`c9dc994`) and its recomputation (`drift_check.py`, `c55e74d`, hf-low PR 8), the near-storm intensity framework (`research/era5/intensity/`, hf-low PRs 7 and 12), pipeline A's full track population, collision review. Has `main` merged in, so sessions here load the rules. |
+| `claude/exciting-fermat-8vcvgq` | `9cfc1bc` | integration branch | **All of the research:** precursor recovery, ERA5 pipelines A and B, per-cyclone P(HF), the gust-drift finding (`c9dc994`) and its recomputation (`drift_check.py`, `c55e74d`, hf-low PR 8), the near-storm intensity framework (`research/era5/intensity/`, hf-low PRs 7 and 12), pipeline A's full track population, teleconnections and HF-low intensity (`research/era5/tele_intensity/`, hf-low PR 11, merged as `d23546b`), collision review. hf-low PR 16 (HF life cycle, `9cfc1bc`) landed after this row was written; its thread owns that entry. hf-low PR 13 proposes merging this branch into `main` (decision 3). Has `main` merged in, so sessions here load the rules. |
 | `claude/hf-lows-qc-mode` | `0800e90` | new during the split | Everything on the integration branch, plus a QC mode for the page that writes corrections to the spreadsheet. |
 | `claude/era5-hf-history` | `b964cd1` | PR 80, with PR 82 merged in | Superseded: fully contained in the integration branch. |
 | `claude/era5-hf-probability` | `71013e5` | PR 82 | Superseded: fully contained in the integration branch. |
@@ -51,6 +51,12 @@ Working defaults that sessions follow until Jason confirms or changes them. Jaso
   - A class needs the track to survive 24 h, so rapid decay is under-counted. |NDR| > 3 is dropped as a tracker relink.
   - Transitioning tropical cyclones are left in.
   - L2 logistic with C = 1, never tuned. Outcomes are ERA5's own (perfect prognosis).
+- **Teleconnection-intensity working choices** (thread "Teleconnection and intensity questions"; details in `research/era5/tele_intensity/README.md`):
+  - Pipeline A catalog events only, so the results describe intensity given HF. The all-cyclone version is question 2, queued for the full track population.
+  - Index averaged over days -10..-4 before the track's first fix. The same-time index is reported only as a contrast.
+  - Background pressure has two forms: the calendar-month MSLP climatology, from every 4th WeatherBench2 chunk over 1979-2022 at 1.5°, and the 900-1100 km ring mean at the deepest fix.
+  - Pressure outcomes use 1979+. Gust outcomes use 2004-05 on.
+  - Transitioning tropical cyclones are included.
 
 ## What exists
 
@@ -83,6 +89,21 @@ Working defaults that sessions follow until Jason confirms or changes them. Jaso
 - Hart phase space (B, -V_T lower, -V_T upper) plus nine environment predictors at every pipeline A low fix at 00/12 UTC, on a 1.5 degree grid. Logistic models give P(24 h intensity class: rapid decay, decay, steady, deepening, rapid deepening, in Bergerons) and P(pipeline A gust index reaches 71.7 kt within 24 h and 48 h). ERA5 proxy throughout.
 - Fitted and tested on 2004-05 to 2025-26 only (22 seasons, 159,430 fixes), leave-one-season-out against basin-month climatology. Full model: class RPSS 0.305 (storm state alone 0.242); rapid deepening HSS 0.47 (state 0.34, state plus Hart 0.45); HF within 24 h BSS 0.423, POD 0.60, FAR 0.40, CSI 0.43, HSS 0.59, bias 1.00; HF onset within 24 h BSS 0.291 (state 0.221); rapid decay weak, HSS 0.18. Trained 2004-14 and tested 2015-25: RPSS 0.309, BSS 0.426. All quoted values recomputed independently (hf-low PR 12 comment).
 - Committed: code, `results/skill.txt`, `coefficients.csv`, `model.json`, phase diagrams, and the 2004-2025 input tables that reproduce the numbers. Pre-registration and post-hoc changes are logged in its README ("Analysis history").
+
+### Teleconnections and HF-low intensity: `research/era5/tele_intensity/` (integration branch)
+
+- Question: do NAO and PNA change how intense pipeline A events get, once the index's own pressure signature and the storm-position shift are taken out? ERA5 proxy; intensity given the HF-equivalent threshold. The question list it comes from is `/mnt/project-files/science-questions/teleconnection-intensity-questions.md` (question 1).
+- Per SD of the index over days -10..-4 before genesis, with NAO and PNA fitted together. Month fixed effects and a season trend are included. p comes from 1,000 season-block permutations, and q is Benjamini-Hochberg over 28 primary tests.
+  - Atlantic, NAO:
+    - Central pressure is -0.92 hPa (q 0.017), but only -0.07 against the month climatology at the deepest fix. NAO+ moves storms +1.46° lat and +1.90° lon.
+    - Against the 900-1100 km ring, storms are -0.72 hPa deeper (p ≤ 0.002, q 0.009).
+    - Deepening rate, gust index and HF hours (2004+) show nothing.
+  - Pacific, PNA:
+    - Central pressure is -0.90 hPa. All of it is background (-1.03 hPa, q 0.009); against the ring the storm is +0.12 hPa.
+    - Gust is +0.52 kt (q 0.13) and HF hours +0.87 h (q 0.29), both 2004+. This is a lead, not a finding.
+  - Neither basin shows a change in deepening rate.
+- Nulls exclude effects above about 0.7 hPa (depth), 0.04 Bergeron and 0.65 kt per SD. Season ICC of every outcome is -0.01 to 0.05.
+- All quoted numbers were recomputed by a fresh agent from the committed files. `results/HYPOTHESIS_AND_ORDER.md` records the order of the exploratory look, the plan and the run; it was written after the run and says so.
 
 ### ERA5 pipeline B: `event_fields.py`, `criterion.py`, `series.py` (integration branch)
 
@@ -160,6 +181,7 @@ Fix these as the files are next touched, in the same commit.
 ## Open work
 
 - Settling whether gust-based counts drift before 2001 (decision 1). Pipeline A's full sub-threshold track population is now committed (`hf_history/results/all_tracks.csv.gz`: 75,087 tracks 1979-2025, one row each with gust index and minimum pressure; thresholded at 71.7 kt it reproduces the catalog's 2,254 / 1,903 events), so the fixed-depth count test can run without a new pull.
+- Teleconnections and intensity: question 2 (more cyclones or more of them reaching HF, from the full track population) is queued. The Pacific PNA gust and HF-duration lead needs an independent check.
 - Intensity framework: skill by basin is not broken out; untested on operational (GFS) analyses; gale and storm thresholds deferred by Jason; the fitted model has not been applied to 1979-2003.
 - Pipeline B: put the basin term in the committed series; look at the over-prediction at high latitude.
 - Precursors: resolve the collision worklist (39 pairs: 31 sequential, 8 concurrent); recall on fast deepeners is not at parity and tuning was stopped deliberately; tropical and post-tropical systems are not parsed.
