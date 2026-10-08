@@ -147,5 +147,8 @@ clearly a weaker storm rather than higher background pressure, which is why the 
 ## Verification
 
 PR 63's GH, NAO and NAO-given-GH share ratios (0.870, 1.125, 1.039) and the 9,636 / 1,003 counts are reproduced
-exactly. A fresh agent's recomputation of the quoted numbers is in [VERIFICATION.md](VERIFICATION.md) (written at the
-end of this study).
+exactly. A fresh Sonnet agent recomputed the counts, correlations, share and count ratios, tercile table, three storm-level
+regressions, the logistic mediation coefficients and a 500-draw bootstrap: all matched. The box-logistic claim (B10) was
+checked only by a second method of mine (the agent's script used the indicator as a covariate). Not independently
+checked: 2,000-draw intervals, p and q values, minimum detectable effects, leave-one-season-out ranges, retained-fraction
+intervals, the post hoc table. See [VERIFICATION.md](VERIFICATION.md).
