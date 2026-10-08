@@ -1000,12 +1000,16 @@
     { dps: 32, dwell: 0.8 }
   ];
   var PB_DAY_H = 24, PB_FINE_H = 6, PB_WEEK_H = 168;   // keyboard step sizes, hours
+  var PB_HINT_CLOCK = 'Arrow keys move the position by one day; Shift+arrow by six hours; Page Up and Page Down by a week; Home and End jump to the ends.';
   var PB_LIVE_GAP_MS = 1500;     // least gap between spoken updates while playing
   var PB_LIVE_DEBOUNCE_MS = 350; // settle time before speaking a user-driven change
 
   var play = {
     mode: 'composite',           // 'composite' | 'season' | 'step'
-    season: null,                // season start year; replay + step
+    unit: 'month',               // step only: 'month' | 'season'
+    season: null,                // season start year; replay + season step
+    ym: null,                    // month step position, year * 100 + month
+    months: [],
     t: 0,                        // hours on the current clock's axis
     playing: false,
     speed: 1,                    // index into PB_SPEEDS
@@ -1034,6 +1038,31 @@
     return play.seasons.length ? play.seasons[0].season : null;
   }
 
+  function firstFilledMonth() {
+    for (var i = 0; i < play.months.length; i++) if (!play.months[i].empty) return play.months[i].ym;
+    return play.months.length ? play.months[0].ym : null;
+  }
+
+  /** Months the step view walks: the selected seasons, trimmed to the span
+      the archive actually covers (no empty run before its first fix or
+      after its last). Empty months inside that span are kept and say so. */
+  var archiveSpan = null;
+  function monthRange() {
+    if (!archiveSpan) {
+      var lo = Infinity, hi = -Infinity;
+      DATA.lows.forEach(function (l) {
+        var f = l.fixes;
+        if (!f.length) return;
+        lo = Math.min(lo, Math.floor(f[0].date / 10000));
+        hi = Math.max(hi, Math.floor(f[f.length - 1].date / 10000));
+      });
+      archiveSpan = { lo: lo, hi: hi };
+    }
+    var from = Math.max(state.season0 * 100 + 6, archiveSpan.lo);
+    var to = Math.min((state.season1 + 1) * 100 + 5, archiveSpan.hi);
+    return { from: from, to: Math.max(from, to) };
+  }
+
   /** Index the filtered set for playback - and ONLY when it changed. render()
       runs on every selection, theme flip and tab change as well as every
       filter change, and building the index is the one expensive step (a
@@ -1041,9 +1070,11 @@
       events as last time. The array itself is always a fresh one. */
   function ensureEngine(lows) {
     if (play.engine && sameLows(play.lows, lows)) return;
-    play.engine = HF.playback.create(lows, { seasons: DATA.seasons });
+    play.engine = HF.playback.create(lows, { seasons: DATA.seasons, months: monthRange() });
     play.lows = lows;
     play.seasons = play.engine.seasons();
+    play.months = play.engine.months();
+    if (!play.months.some(function (m) { return m.ym === play.ym; })) play.ym = firstFilledMonth();
     play.clock = null;
     var known = play.seasons.some(function (s) { return s.season === play.season; });
     if (!known) play.season = firstFilledSeason();
@@ -1069,22 +1100,45 @@
     return 0;
   }
 
+  /* Season step and month step share one position model: a list of entries
+     (seasons or months), one of them current. These four helpers are the only
+     places that know which list is in use. */
+  function monthly() { return play.mode === 'step' && play.unit === 'month'; }
+  function stepList() { return monthly() ? play.months : play.seasons; }
+  function stepKey(e) { return monthly() ? e.ym : e.season; }
+  function stepEntry() {
+    var cur = monthly() ? play.ym : play.season, list = stepList();
+    for (var i = 0; i < list.length; i++) if (stepKey(list[i]) === cur) return list[i];
+    return null;
+  }
+  function stepIndex() {
+    var cur = monthly() ? play.ym : play.season, list = stepList();
+    for (var i = 0; i < list.length; i++) if (stepKey(list[i]) === cur) return i;
+    return 0;
+  }
+  function setStepIndex(i) {
+    var e = stepList()[i];
+    if (!e) return;
+    if (monthly()) play.ym = e.ym; else play.season = e.season;
+  }
+  function stepNoun() { return monthly() ? 'month' : 'season'; }
+
   /** Is there anything for Play to do? Composite needs any event; replay
       needs the chosen season to have one; step needs any non-empty season. */
   function canPlay() {
     if (!play.engine) return false;
     if (play.mode === 'composite') return !play.engine.empty;
     if (play.mode === 'season') { var e = seasonEntry(); return !!e && !e.empty; }
-    return play.seasons.some(function (s) { return !s.empty; });
+    return stepList().some(function (s) { return !s.empty; });
   }
 
   /* ---- frames ---- */
 
   function pushFrame() {
     if (play.mode === 'step') {
-      var e = seasonEntry();
+      var e = stepEntry();
       play.active = e ? e.count : 0;
-      HF.globe.setPlaybackFrame(play.engine.step(play.season), { kind: 'step' });
+      HF.globe.setPlaybackFrame(monthly() ? play.engine.stepMonth(play.ym) : play.engine.step(play.season), { kind: 'step' });
       return;
     }
     var frame = currentClock().at(play.t, play.tail);
@@ -1096,9 +1150,9 @@
       aria-valuetext and for the live region, so both say the same thing. */
   function stateText() {
     if (play.mode === 'step') {
-      var e = seasonEntry();
-      if (!e) return 'No season';
-      return 'Season ' + e.label + ', ' +
+      var e = stepEntry();
+      if (!e) return 'No ' + stepNoun();
+      return (monthly() ? '' : 'Season ') + e.label + ', ' +
         (e.empty ? 'no events match the current filters' : plural(e.count, 'event', 'events'));
     }
     var n = play.active;
@@ -1111,7 +1165,7 @@
   function updateReadout() {
     var date, count;
     if (play.mode === 'step') {
-      var e = seasonEntry();
+      var e = stepEntry();
       date = e ? e.label : '--';
       count = e ? (e.empty ? 'no events' : plural(e.count, 'event', 'events')) : '';
     } else {
@@ -1125,8 +1179,8 @@
   function updateScrub() {
     var scrub = pbEl('pbScrub'), pct;
     if (play.mode === 'step') {
-      scrub.value = String(seasonIndex());
-      pct = play.seasons.length > 1 ? seasonIndex() / (play.seasons.length - 1) : 0;
+      scrub.value = String(stepIndex());
+      pct = stepList().length > 1 ? stepIndex() / (stepList().length - 1) : 0;
     } else {
       var d = currentClock().domain;
       scrub.value = String(play.t);
@@ -1206,6 +1260,22 @@
     if (play.season != null) sel.value = String(play.season);
   }
 
+  function syncMonthPicker() {
+    var sel = pbEl('pbMonth');
+    var same = sel.options.length === play.months.length;
+    for (var i = 0; same && i < play.months.length; i++) {
+      if (sel.options[i].value !== String(play.months[i].ym)) same = false;
+    }
+    if (!same) {
+      HF.clear(sel);
+      play.months.forEach(function (m) { sel.appendChild(HF.el('option', { value: m.ym }, '')); });
+    }
+    play.months.forEach(function (m, idx) {
+      sel.options[idx].textContent = m.label + (m.empty ? ' (no events)' : ' (' + plural(m.count, 'event', 'events') + ')');
+    });
+    if (play.ym != null) sel.value = String(play.ym);
+  }
+
   function syncSpeedOptions() {
     var sel = pbEl('pbSpeed'), step = play.mode === 'step';
     if (sel.options.length !== PB_SPEEDS.length) {
@@ -1213,7 +1283,7 @@
       PB_SPEEDS.forEach(function (s, i) { sel.appendChild(HF.el('option', { value: i }, '')); });
     }
     PB_SPEEDS.forEach(function (s, i) {
-      sel.options[i].textContent = step ? s.dwell + ' s per season' : s.dps + ' days per second';
+      sel.options[i].textContent = step ? s.dwell + ' s per ' + stepNoun() : s.dps + ' days per second';
     });
     sel.value = String(play.speed);
   }
@@ -1233,13 +1303,20 @@
   function configScrub() {
     var scrub = pbEl('pbScrub'), key, entries = [];
     if (play.mode === 'step') {
-      var n = play.seasons.length;
-      key = 'step|' + n;
+      var list = stepList(), n = list.length;
+      // Month ticks are one per year; thin the labels so they do not touch
+      // (about 6 on a phone, 12 on a wide screen).
+      var years = n / 12, maxLabels = window.innerWidth < 600 ? 6 : 12;
+      var yearEvery = Math.max(1, Math.ceil(years / maxLabels));
+      key = 'step|' + play.unit + '|' + n + '|' + (n ? stepKey(list[0]) : 0) + '|' + yearEvery;
       scrub.min = '0'; scrub.max = String(Math.max(0, n - 1)); scrub.step = '1';
-      scrub.setAttribute('aria-label', 'Season');
+      scrub.setAttribute('aria-label', monthly() ? 'Month' : 'Season');
       if (play.tickKey !== key) {
-        play.seasons.forEach(function (s, i) {
-          if (i % 4 === 0) entries.push({ pct: n > 1 ? i / (n - 1) : 0, label: String(s.season) });
+        // One tick per season start: June for months, every 4th season for seasons.
+        list.forEach(function (s, i) {
+          if (monthly() ? s.ym % 100 === 6 && Math.floor(s.ym / 100) % yearEvery === 0 : i % 4 === 0) {
+            entries.push({ pct: n > 1 ? i / (n - 1) : 0, label: monthly() ? String(Math.floor(s.ym / 100)) : String(s.season) });
+          }
         });
       }
       play.ticks = [];
@@ -1275,10 +1352,10 @@
     if (play.mode === 'composite') {
       if (play.engine.empty) msg = 'No events match the current filters, so there is nothing to play.';
     } else {
-      var e = seasonEntry();
+      var e = play.mode === 'step' ? stepEntry() : seasonEntry();
       if (e && e.empty && play.mode === 'season') msg = 'No events in ' + e.label + ' match the current filters.';
-      else if (e && e.empty) msg = 'No events in ' + e.label + ' match the current filters - the season is empty, not missing.';
-      else if (!e) msg = 'No seasons to show.';
+      else if (e && e.empty) msg = 'No events in ' + e.label + ' match the current filters - the ' + stepNoun() + ' is empty, not missing.';
+      else if (!e) msg = 'No ' + (play.mode === 'step' ? stepNoun() : 'season') + 's to show.';
     }
     if (!play.playing && !play.hasPlayed && HF.globe.prefersReducedMotion()) {
       msg += (msg ? ' ' : '') + 'Autoplay is off because your system asks for reduced motion. Press Play to start.';
@@ -1289,9 +1366,16 @@
   function syncTransport() {
     var radios = document.querySelectorAll('input[name="pbMode"]');
     Array.prototype.forEach.call(radios, function (r) { r.checked = r.value === play.mode; });
-    pbEl('pbSeasonWrap').hidden = play.mode === 'composite';
+    Array.prototype.forEach.call(document.querySelectorAll('input[name="pbUnit"]'), function (r) { r.checked = r.value === play.unit; });
+    pbEl('pbUnitWrap').hidden = play.mode !== 'step';
+    pbEl('pbSeasonWrap').hidden = play.mode === 'composite' || monthly();
+    pbEl('pbMonthWrap').hidden = !monthly();
     pbEl('pbTailWrap').hidden = play.mode === 'step';
-    pbEl('pbSpeedLabel').textContent = play.mode === 'step' ? 'Season dwell' : 'Speed';
+    pbEl('pbSpeedLabel').textContent = play.mode === 'step' ? (monthly() ? 'Month dwell' : 'Season dwell') : 'Speed';
+    pbEl('pbHint').textContent = play.mode === 'step'
+      ? 'Arrow keys move one ' + stepNoun() + '; Page Up and Page Down by ' + (monthly() ? 'a season' : 'four seasons') + '; Home and End jump to the ends.'
+      : PB_HINT_CLOCK;
+    syncMonthPicker();
     syncSpeedOptions();
     configScrub();
     syncPlayButton();
@@ -1312,7 +1396,7 @@
         var d = currentClock().domain;
         if (play.t >= d.end - 1) play.t = d.start;
       } else if (play.mode === 'step') {
-        if (seasonIndex() >= play.seasons.length - 1) play.season = firstFilledSeason();
+        if (stepIndex() >= stepList().length - 1) { play.season = firstFilledSeason(); play.ym = firstFilledMonth(); }
       }
       play.lastNow = 0;
       play.stepDwell = 0;
@@ -1342,10 +1426,11 @@
       play.stepDwell += dt / 1000;
       if (play.stepDwell < sp.dwell) return true;
       play.stepDwell = 0;
-      var i = seasonIndex();
-      if (i >= play.seasons.length - 1) { setPlaying(false); return false; }
-      play.season = play.seasons[i + 1].season;
+      var i = stepIndex();
+      if (i >= stepList().length - 1) { setPlaying(false); return false; }
+      setStepIndex(i + 1);
       syncSeasonPicker();
+      syncMonthPicker();
       onTimeChanged(false);
       return true;
     }
@@ -1411,6 +1496,9 @@
     if (play.mode === 'season') {
       return 'One season on its own calendar. Circle size grows as pressure falls; tails fade with age.' + tail;
     }
+    if (play.unit === 'month') {
+      return 'Each calendar month’s events, drawn whole, in the month their first fix falls. Circles mark each event’s lowest analyzed pressure; months cross-fade.' + tail;
+    }
     return 'Each season’s complete tracks. Circles mark each event’s lowest analyzed pressure; seasons cross-fade.' + tail;
   }
 
@@ -1456,6 +1544,16 @@
       r.addEventListener('change', function () { if (r.checked) setPlayMode(r.value); });
     });
 
+    Array.prototype.forEach.call(document.querySelectorAll('input[name="pbUnit"]'), function (r) {
+      r.addEventListener('change', function () { if (r.checked) setStepUnit(r.value); });
+    });
+
+    pbEl('pbMonth').addEventListener('change', function (e) {
+      play.ym = Number(e.target.value);
+      syncTransport();
+      onTimeChanged(true);
+    });
+
     pbEl('pbSeason').addEventListener('change', function (e) {
       play.season = Number(e.target.value);
       play.clock = null;
@@ -1484,8 +1582,8 @@
     scrub.addEventListener('input', function () {
       if (play.playing && !play.scrubbing) setPlaying(false, true);
       if (play.mode === 'step') {
-        var s = play.seasons[Number(scrub.value)];
-        if (s) play.season = s.season;
+        setStepIndex(Number(scrub.value));
+        if (monthly()) syncMonthPicker(); else syncSeasonPicker();
       } else {
         play.t = currentClock().clamp(Number(scrub.value));
       }
@@ -1493,7 +1591,17 @@
     });
 
     scrub.addEventListener('keydown', function (e) {
-      if (play.mode === 'step') return;            // native: one season per key press
+      if (play.mode === 'step') {                  // native arrows: one entry per key press
+        var jump = e.key === 'PageUp' ? (monthly() ? 12 : 4) : e.key === 'PageDown' ? -(monthly() ? 12 : 4) : 0;
+        if (!jump) return;
+        e.preventDefault();
+        if (play.playing) setPlaying(false, true);
+        var ni = Math.max(0, Math.min(stepList().length - 1, stepIndex() + jump));
+        setStepIndex(ni);
+        if (monthly()) syncMonthPicker(); else syncSeasonPicker();
+        onTimeChanged(true);
+        return;
+      }
       var dh = 0;
       if (e.key === 'ArrowRight' || e.key === 'ArrowUp') dh = e.shiftKey ? PB_FINE_H : PB_DAY_H;
       else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') dh = -(e.shiftKey ? PB_FINE_H : PB_DAY_H);
@@ -1546,8 +1654,33 @@
     pbEl('mapNote').textContent = playbackNote(play.lows);
     renderLegend(play.lows);
     onTimeChanged(true);
-    var names = { composite: 'Composite', season: 'Season replay', step: 'Season step' };
+    var names = { composite: 'Composite', season: 'Season replay', step: monthly() ? 'Month step' : 'Season step' };
     announcePlayback(names[mode] + '. ' + stateText(), PB_LIVE_DEBOUNCE_MS, 0);
+    if (was) setPlaying(true, true);
+  }
+
+  /** Switch the step view between months and seasons, keeping the place: the
+      month containing the season's first events, or the season of the month. */
+  function setStepUnit(unit) {
+    if (unit === play.unit) return;
+    var was = play.playing;
+    if (was) setPlaying(false, true);
+    if (play.mode === 'step') {
+      if (unit === 'season' && play.ym != null) {
+        var y = Math.floor(play.ym / 100), m = play.ym % 100;
+        play.season = m >= 6 ? y : y - 1;
+      } else if (unit === 'month' && play.season != null) {
+        var hit = play.months.filter(function (e) { return e.ym >= play.season * 100 + 6 && e.ym <= (play.season + 1) * 100 + 5; });
+        if (hit.length) play.ym = hit[0].ym;
+      }
+    }
+    play.unit = unit;
+    play.tickKey = '';
+    syncTransport();
+    pbEl('mapNote').textContent = playbackNote(play.lows);
+    renderLegend(play.lows);
+    onTimeChanged(true);
+    announcePlayback((monthly() ? 'Month step. ' : 'Season step. ') + stateText(), PB_LIVE_DEBOUNCE_MS, 0);
     if (was) setPlaying(true, true);
   }
 

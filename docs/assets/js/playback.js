@@ -37,8 +37,15 @@
    globe.js already owns), and the engine's contribution is stable `key`s on
    every storm so the renderer can dissolve by matching storms across frames.
 
+   Mode 3 also comes in a finer unit: engine.stepMonth(ym) is the same static
+   frame for one calendar month, and engine.months() the list to step through.
+   An event belongs to the month of its FIRST fix (so the monthly counts add
+   up to the seasonal ones; 48 of the 1,932 events run on into the next
+   month and are drawn whole in the month they began). A month is addressed
+   by ym = year * 100 + month (201501 = January 2015).
+
    Modes 1 and 2 are "clocks": clock.at(t, tailHours) -> frame. Mode 3 is a
-   static frame per season: engine.step(season). Usage:
+   static frame per season or month: engine.step(season), engine.stepMonth(ym). Usage:
 
      var pb = HF.playback.create(filteredLows, { seasons: DATA.seasons });
      var c  = pb.composite();                // or pb.season(2015)
@@ -194,6 +201,11 @@ window.HF = window.HF || {};
     while (idx > 0 && SEASON_MONTH_START[idx] > day) idx--;
     var month = ((idx + 5) % 12) + 1;
     return (day - SEASON_MONTH_START[idx] + 1) + ' ' + HF.monthName(month);
+  }
+
+  /** 201501 -> "Jan 2015". */
+  function monthLabel(ym) {
+    return HF.monthName(ym % 100) + ' ' + Math.floor(ym / 100);
   }
 
   /* --------------------------------------------------------- geometry */
@@ -469,6 +481,51 @@ window.HF = window.HF || {};
       list = filled;
     }
 
+    // Calendar-month index. One pass over the lows, by the month of the
+    // first fix (fixes are time-ordered; prepare() enforced it).
+    var byMonth = {};
+    for (i = 0; i < recs.length; i++) {
+      var p0 = parse(recs[i].fx[0].date), ym0 = p0.year * 100 + p0.month;
+      (byMonth[ym0] = byMonth[ym0] || []).push(recs[i]);
+    }
+    // Month list: opts.months = {from: ym, to: ym} when the caller knows the
+    // range (the page passes the selected seasons, so a month the filters
+    // emptied is listed and says so, like an emptied season). Otherwise the
+    // contiguous range of what is present.
+    var monthList = [];
+    (function () {
+      var lo = null, hi = null, m = opts.months;
+      if (m && m.from && m.to) { lo = m.from; hi = m.to; }
+      var present = Object.keys(byMonth).map(Number);
+      if (present.length) {
+        var pl = Math.min.apply(null, present), ph = Math.max.apply(null, present);
+        if (lo == null || pl < lo) lo = pl;
+        if (hi == null || ph > hi) hi = ph;
+      }
+      if (lo == null) return;
+      for (var ym = lo; ym <= hi; ym = (ym % 100 === 12) ? ym + 89 : ym + 1) monthList.push(ym);
+    })();
+
+    function frameOf(rs, label, extra) {
+      var storms = [];
+      for (var j = 0; j < rs.length; j++) {
+        var rec = rs[j], h = rec.abs, last = h[rec.n - 1], tail = [];
+        for (var m = 0; m < rec.n; m++) {
+          var f = rec.fx[m];
+          tail.push({ lat: f.lat, lon: f.lon, pres: f.pres, age: last - h[m] });
+        }
+        var low = rec.low;
+        storms.push({
+          key: low.key, basin: low.basin, cls: low.cls, season: low.season, low: low,
+          lat: null, lon: null, pres: low.minP == null ? null : low.minP,
+          tail: tail
+        });
+      }
+      var fr = { label: label, count: storms.length, empty: storms.length === 0, storms: storms };
+      for (var k in extra) fr[k] = extra[k];
+      return fr;
+    }
+
     function seasonDomain(s) {
       var rs = bySeason[s] || [];
       if (!rs.length) {
@@ -537,23 +594,21 @@ window.HF = window.HF || {};
           filters emptied. Stable `key`s let the renderer crossfade
           between two steps by matching storms rather than by position. */
       step: function (s) {
-        var rs = bySeason[s] || [];
-        var storms = [];
-        for (var j = 0; j < rs.length; j++) {
-          var rec = rs[j], h = rec.abs, last = h[rec.n - 1], tail = [];
-          for (var m = 0; m < rec.n; m++) {
-            var f = rec.fx[m];
-            tail.push({ lat: f.lat, lon: f.lon, pres: f.pres, age: last - h[m] });
-          }
-          var low = rec.low;
-          storms.push({
-            key: low.key, basin: low.basin, cls: low.cls, season: low.season, low: low,
-            lat: null, lon: null, pres: low.minP == null ? null : low.minP,
-            tail: tail
-          });
-        }
-        return { season: s, label: HF.seasonLabel(s), count: storms.length,
-                 empty: storms.length === 0, storms: storms };
+        return frameOf(bySeason[s] || [], HF.seasonLabel(s), { season: s });
+      },
+
+      /** Mode 3 by calendar month: ascending, one entry per month in the
+          range, including empty ones. */
+      months: function () {
+        return monthList.map(function (ym) {
+          var n = (byMonth[ym] || []).length;
+          return { ym: ym, label: monthLabel(ym), count: n, empty: n === 0 };
+        });
+      },
+
+      /** Mode 3 frame for one calendar month; same shape as step(). */
+      stepMonth: function (ym) {
+        return frameOf(byMonth[ym] || [], monthLabel(ym), { ym: ym });
       }
     };
     return engine;
@@ -565,6 +620,7 @@ window.HF = window.HF || {};
     toHours: toHours,
     fromHours: fromHours,
     seasonOfDate: seasonOfDate,
+    monthLabel: monthLabel,
     compositeHour: compositeHour,
     compositeLabel: compositeLabel,
     COMPOSITE_PERIOD_H: COMPOSITE_PERIOD_H
