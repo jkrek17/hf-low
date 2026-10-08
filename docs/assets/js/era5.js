@@ -90,5 +90,35 @@ window.HF = window.HF || {};
     return out;
   }
 
-  HF.era5 = { decode: decode, filter: filter, decodePeaks: decodePeaks, filterPeaks: filterPeaks };
+  /** P(HF within 24 h) classes for colouring: 0 = not scored, 1..5 by the
+      upper edges below (probabilities, not percentages). */
+  var P_EDGES = [0.05, 0.2, 0.5, 0.8];
+  function pClass(p) {
+    if (p < 0) return 0;
+    var c = 1;
+    while (c <= P_EDGES.length && p >= P_EDGES[c - 1]) c++;
+    return c;
+  }
+
+  /** Attach data/era5-prob.js (raw = window.HF_ERA5_PROB) to decoded tracks:
+      track.pfix (P per fix, -1 not scored) and track.ec, the class of each
+      edge j-1 -> j at index j (0 for j = 0). Scoring is at 00/12 UTC, so
+      every edge has a scored end; the edge takes the larger of its two ends'
+      P, since P looks 24 h ahead. Tracks without scores keep ec = null.
+      Returns how many tracks got scores. */
+  function attachProb(tracks, raw) {
+    var n = 0;
+    tracks.forEach(function (t) {
+      var row = raw.p[t.key.slice(5)];
+      if (!row) { t.pfix = null; t.ec = null; return; }
+      t.pfix = row.map(function (v) { return v < 0 ? -1 : v / 1000; });
+      t.ec = new Uint8Array(row.length);
+      for (var j = 1; j < row.length; j++) t.ec[j] = pClass(Math.max(t.pfix[j - 1], t.pfix[j]));
+      n++;
+    });
+    return n;
+  }
+
+  HF.era5 = { decode: decode, filter: filter, decodePeaks: decodePeaks, filterPeaks: filterPeaks,
+              pClass: pClass, attachProb: attachProb, P_EDGES: P_EDGES };
 })(window.HF);

@@ -115,6 +115,8 @@ window.HF = window.HF || {};
   // user toggle in app.js).
   var showCurrents = false;
   var era5Nul = null, era5Peaks = null;  // matched null-case tracks; {P, idx} peak positions of every cyclone (both under the HF tracks)
+  var era5Prob = false;                  // colour the ERA5 proxy tracks by P(HF within 24 h) (needs track.ec, HF.era5.attachProb)
+  var era5Focus = null;                  // one ERA5 track picked from the strongest-storms list, drawn whatever the filters say
   var era5 = null;                       // ERA5 proxy tracks (HF.era5.decode shape) drawn under the archive tracks, or null
   var currentBins = null;                // built lazily from window.HF_CURRENTS, see buildCurrentSegments()
   var curGrid = null;                    // cached computeDensityGrid() result, layer 'density' only
@@ -613,6 +615,10 @@ window.HF = window.HF || {};
     // start) and its edge goes into the light or the heavy path. Two strokes
     // in all, however many tracks.
     var light = new Path2D(), heavy = new Path2D();
+    // P(HF) mode: the same single pass, but each edge also goes into the path
+    // of its P class (six strokes in all); the heavy path then becomes a dark
+    // underlay marking the stretches that are at or above the threshold.
+    var cls = era5Prob ? [null, new Path2D(), new Path2D(), new Path2D(), new Path2D(), new Path2D()] : null;
     // While the view is moving (drag, coast, tween, wheel) only each track's
     // hurricane-force-equivalent stretch is drawn - about a fifth of the
     // fixes - and the full track returns when it settles. Cuts the per-frame
@@ -625,12 +631,19 @@ window.HF = window.HF || {};
     for (var i = 0; i < era5.length; i++) {
       var ev = era5[i], fx = ev.fixes, px = 0, py = 0, pvis = false;
       var lo = moving ? ev.hf0 : 0, hi = moving ? ev.hf1 : fx.length - 1;
+      var ec = cls ? ev.ec : null;
       for (var j = lo; j <= hi; j++) {
         var f = fx[j], dl = f.lam - lam0, cosDl = Math.cos(dl);
         var vis = vsp * f.sp + vcp * f.cp * cosDl >= 0;
         var x = cx + f.cp * Math.sin(dl) * R, y = cy - (vcp * f.sp - vsp * f.cp * cosDl) * R;
         if (j > lo && pvis && vis) {                      // an edge over the horizon is simply not drawn
-          var path = fx[j - 1].hf && f.hf ? heavy : light;
+          var isHf = fx[j - 1].hf && f.hf, path;
+          if (ec) {
+            path = ec[j] ? cls[ec[j]] : light;
+            if (isHf) { heavy.moveTo(px, py); heavy.lineTo(x, y); }
+          } else {
+            path = isHf ? heavy : light;
+          }
           if (moving && path === light) { px = x; py = y; pvis = vis; continue; }
           path.moveTo(px, py);
           path.lineTo(x, y);
@@ -638,14 +651,77 @@ window.HF = window.HF || {};
         px = x; py = y; pvis = vis;
       }
     }
-    ctx.strokeStyle = HF.cssVar('--era5') || '#17776f';
-    ctx.lineWidth = Math.max(0.5, style.weight - 0.2);
-    ctx.globalAlpha = style.opacity * 0.7;
-    ctx.stroke(light);
-    ctx.lineWidth = style.weight + 0.5;
-    ctx.globalAlpha = Math.min(1, style.opacity + 0.25);
-    ctx.stroke(heavy);
+    if (cls) {
+      ctx.strokeStyle = HF.cssVar('--ink') || '#222';
+      ctx.lineWidth = style.weight + 2.6;
+      ctx.globalAlpha = 0.28;
+      ctx.stroke(heavy);
+      ctx.strokeStyle = HF.cssVar('--era5') || '#17776f';
+      ctx.lineWidth = Math.max(0.5, style.weight - 0.2);
+      ctx.globalAlpha = style.opacity * 0.5;
+      ctx.stroke(light);                                   // edges with no score (none, in practice)
+      for (var c = 1; c <= 5; c++) {
+        ctx.strokeStyle = HF.cssVar('--p' + c) || '#6a3fa8';
+        ctx.lineWidth = style.weight + 0.2 + (c - 1) * 0.3;
+        ctx.globalAlpha = Math.min(1, style.opacity + 0.35);
+        ctx.stroke(cls[c]);
+      }
+    } else {
+      ctx.strokeStyle = HF.cssVar('--era5') || '#17776f';
+      ctx.lineWidth = Math.max(0.5, style.weight - 0.2);
+      ctx.globalAlpha = style.opacity * 0.7;
+      ctx.stroke(light);
+      ctx.lineWidth = style.weight + 0.5;
+      ctx.globalAlpha = Math.min(1, style.opacity + 0.25);
+      ctx.stroke(heavy);
+    }
     ctx.globalAlpha = 1;
+    ctx.lineCap = 'butt';
+  }
+
+  /** The one track picked from the strongest-storms list: a wide halo, then
+      each edge in its P colour (or --era5 where there are no scores), with
+      a ring on the first fix. Drawn on top of the other proxy layers and
+      independent of the page's filters. */
+  function drawEra5Focus() {
+    var t = era5Focus, fx = t.fixes, R = baseR * view.zoom;
+    var halo = new Path2D(), px = 0, py = 0, pvis = false, j, first = null;
+    var edges = [];
+    for (j = 0; j < fx.length; j++) {
+      var p = project(fx[j].lon, fx[j].lat);
+      if (j && pvis && p.visible) { halo.moveTo(px, py); halo.lineTo(p.x, p.y); edges.push([px, py, p.x, p.y, j]); }
+      if (j === 0 && p.visible) first = p;
+      px = p.x; py = p.y; pvis = p.visible;
+    }
+    ctx.lineCap = 'round';
+    ctx.setLineDash([]);
+    ctx.strokeStyle = HF.cssVar('--page') || '#fff';
+    ctx.lineWidth = 7;
+    ctx.globalAlpha = 0.85;
+    ctx.stroke(halo);
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = HF.cssVar('--ink') || '#222';
+    ctx.globalAlpha = 0.5;
+    ctx.stroke(halo);
+    ctx.lineWidth = 3;
+    ctx.globalAlpha = 1;
+    for (var e = 0; e < edges.length; e++) {
+      var c = era5Prob && t.ec ? t.ec[edges[e][4]] : 0;
+      ctx.strokeStyle = c ? HF.cssVar('--p' + c) : (HF.cssVar('--era5') || '#17776f');
+      ctx.beginPath();
+      ctx.moveTo(edges[e][0], edges[e][1]);
+      ctx.lineTo(edges[e][2], edges[e][3]);
+      ctx.stroke();
+    }
+    if (first) {
+      ctx.beginPath();
+      ctx.arc(first.x, first.y, 4, 0, Math.PI * 2);
+      ctx.fillStyle = HF.cssVar('--page') || '#fff';
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = HF.cssVar('--ink') || '#222';
+      ctx.stroke();
+    }
     ctx.lineCap = 'butt';
   }
 
@@ -1842,6 +1918,7 @@ window.HF = window.HF || {};
     if (era5Peaks) drawEra5Peaks();
     if (era5Nul) drawEra5Null();
     if (era5 && era5.length) drawEra5();
+    if (era5Focus) drawEra5Focus();
     return drawTracks();
   }
 
@@ -2594,7 +2671,9 @@ window.HF = window.HF || {};
 
   /** Tracks layer only: ERA5 proxy tracks to draw under the archive's, or
       null/empty for none. app.js owns the filtering (HF.era5.filter). */
-  globe.setEra5 = function (list, nul, peaks) {
+  globe.setEra5 = function (list, nul, peaks, opts) {
+    era5Prob = !!(opts && opts.prob);
+    era5Focus = opts && opts.focus ? opts.focus : null;
     era5Nul = nul && nul.length ? nul : null;
     era5Peaks = peaks && peaks.idx.length ? peaks : null;
     era5 = list && list.length ? list : null;

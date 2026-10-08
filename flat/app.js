@@ -22,6 +22,10 @@
     era5: false,       // ERA5 proxy tracks under the Tracks layer, off by default
     era5null: false,   // ... matched null-case tracks
     era5peaks: false,  // ... peak position of every ERA5 cyclone (75,087)
+    era5prob: false,   // ... coloured by P(HF within 24 h) instead of one flat colour
+    era5focus: null,
+    era5focusPan: false,   // rotate the globe to the focused track once it has loaded
+    strong: { list: 'minp', basin: 'all' },   // the Strongest storms tab   // key of the ERA5 track picked from the Strongest list, drawn whatever the filters say
     era5pre: false,    // ... and before 2001-02 (within-era comparison only), off by default
     sort: { key: 'start', dir: -1 },
     selectedKey: null
@@ -661,6 +665,85 @@
       title: 'Track length over every fix logged. Not comparable across years.' }
   ];
 
+  /* ------------------------------------------------- Strongest storms tab
+     Fixed top-25 lists from the ERA5 proxy (see the comment in index.html).
+     The filters bar does not apply. Ranks are within a basin (pressure and
+     depth lists) or within an era (gust list): the gust index drifts upward
+     before 2001, so it is never ranked across eras. */
+
+  var MONTHS_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function ymdLabel(n) {
+    var y = Math.floor(n / 10000), m = Math.floor(n / 100) % 100, d = n % 100;
+    return d + ' ' + MONTHS_SHORT[m - 1] + ' ' + y;
+  }
+
+  function showOnMap(trackId) {
+    state.era5focus = 'era5:' + trackId;
+    state.era5focusPan = true;
+    if (state.layer !== 'tracks') document.querySelector('.seg[data-layer="tracks"]').click();
+    document.querySelector('.tab[data-panel="map"]').click();
+  }
+
+  function renderStrong() {
+    var table = document.getElementById('strongTable');
+    var thead = HF.clear(table.tHead || table.createTHead());
+    var tbody = HF.clear(table.tBodies[0]);
+    var note = document.getElementById('strongNote'), basis = document.getElementById('strongBasis');
+    var listKey = STRONG_KEYS[state.strong.list] ? state.strong.list : 'minp';
+    if (!ensureEra5('lists')) {
+      note.textContent = era5Status.lists === 'failed' ? 'The strongest-storms data could not be loaded.' : 'Loading…';
+      return;
+    }
+    var rows = window.HF_ERA5_LISTS.rows.filter(function (r) {
+      return r[0] === listKey && (state.strong.basin === 'all' || (state.strong.basin === 'atl' ? 0 : 1) === r[1]);
+    });
+    rows.sort(function (a, b) {
+      if (listKey === 'gust') return a[10] < b[10] ? -1 : a[10] > b[10] ? 1 : a[2] - b[2];
+      return a[1] - b[1] || a[2] - b[2];
+    });
+    var gust = listKey === 'gust';
+    var cols = [[gust ? 'Rank in era' : 'Rank in basin', 1], ['Date', 0], ['Basin', 0], ['Min pressure (hPa)', 1]];
+    if (listKey === 'depth') cols.push(['Depth vs monthly norm (hPa)', 1]);
+    cols.push(['Gust index (kt)', 1]);
+    if (gust) cols.push(['Era', 0]);
+    cols.push(['Note', 0]);
+    var hr = HF.el('tr');
+    cols.forEach(function (c) {
+      var th = HF.el('th', { class: c[1] ? 'num' : '' }, c[0]);
+      th.setAttribute('scope', 'col');
+      hr.appendChild(th);
+    });
+    thead.appendChild(hr);
+    rows.forEach(function (r) {
+      var tr = HF.el('tr');
+      function td(text, num) { tr.appendChild(HF.el('td', { class: num ? 'num' : '' }, text)); }
+      var notes = [];
+      if (r[11]) notes.push('inferred: ' + r[11]);
+      if (r[9]) notes.push('tropical-cyclone linked');
+      if (r[12]) notes.push('gust before 2001 is within-era only');
+      td(String(r[2]), 1);
+      var dc = HF.el('td');
+      var btn = HF.el('button', { type: 'button', class: 'link-btn' }, ymdLabel(r[5]));
+      btn.setAttribute('aria-label', 'Show the ' + ymdLabel(r[5]) + ' storm on the map');
+      btn.addEventListener('click', function () { showOnMap(r[3]); });
+      dc.appendChild(btn);
+      tr.appendChild(dc);
+      td(r[1] === 0 ? 'Atlantic' : 'Pacific', 0);
+      td((r[6] / 10).toFixed(1), 1);
+      if (listKey === 'depth') td(r[7] == null ? '--' : (r[7] / 10).toFixed(1), 1);
+      td((r[8] / 10).toFixed(1), 1);
+      if (gust) td(r[10], 0);
+      td(notes.join('; '), 0);
+      tbody.appendChild(tr);
+    });
+    note.textContent = rows.length + ' storms, ERA5 proxy, not direct observation. Select a date to show the storm on the map.';
+    basis.textContent = gust
+      ? 'Pipeline A 800 km gust index (ERA5 proxy). Ranked within 1979-2000 and within 2004-2025 only, never across: the gust index at a fixed depth drifts upward before 2001, so a pre-2001 rank and a later rank are not comparable. Tropical-cyclone-linked storms are included and flagged, so this is not a list of the strongest extratropical storms. Names are inferred from date and position.'
+      : 'ERA5 proxy (pipeline A cyclone tracks), top 25 per basin over 1979-2025 by ' +
+        (listKey === 'minp' ? 'lowest central pressure.' : 'depth against the monthly climatology.') +
+        ' ERA5 reads low in the most intense storms and is not direct observation. The gust column is the pipeline A gust index and, before 2001-02, is for comparison within that era only. Names are inferred from date and position, not recorded in the data.';
+  }
+
   function renderTable(lows) {
     var table = document.getElementById('eventsTable');
     var thead = HF.clear(table.tHead || table.createTHead());
@@ -930,10 +1013,14 @@
   var ERA5_SETS = {
     ev:    { varName: 'HF_ERA5',       loader: 'era5Loader',      decode: function (r) { return HF.era5.decode(r); } },
     nul:   { varName: 'HF_ERA5_NULL',  loader: 'era5NullLoader',  decode: function (r) { return HF.era5.decode(r); } },
-    peaks: { varName: 'HF_ERA5_PEAKS', loader: 'era5PeaksLoader', decode: function (r) { return HF.era5.decodePeaks(r); } }
+    peaks: { varName: 'HF_ERA5_PEAKS', loader: 'era5PeaksLoader', decode: function (r) { return HF.era5.decodePeaks(r); } },
+    prob:  { varName: 'HF_ERA5_PROB',  loader: 'era5ProbLoader',  decode: function (r) { return r; } },
+    lists: { varName: 'HF_ERA5_LISTS', loader: 'era5ListsLoader', decode: function (r) { return r; } }
   };
+  var era5Attached = {};                       // ev / nul: P(HF) already attached to the decoded tracks
   var era5Data = {}, era5Status = {};          // per set: decoded data; 'loading' | 'ready' | 'failed'
   var era5Shown = { ev: 0, nul: 0, peaks: 0 };
+  var STRONG_KEYS = { minp: 1, depth: 1, gust: 1 };
 
   function ensureEra5(key) {
     var set = ERA5_SETS[key];
@@ -949,7 +1036,8 @@
     };
     el.onerror = function () {
       era5Status[key] = 'failed';
-      if (key === 'ev') state.era5 = false; else if (key === 'nul') state.era5null = false; else state.era5peaks = false;
+      if (key === 'ev') state.era5 = false; else if (key === 'nul') state.era5null = false;
+      else if (key === 'prob') state.era5prob = false; else if (key === 'peaks') state.era5peaks = false;
       syncControls();
       render();
     };
@@ -958,7 +1046,7 @@
   }
 
   function era5Wanted() { return state.era5 || state.era5null || state.era5peaks; }
-  function era5Active() { return era5Wanted() && state.layer === 'tracks'; }
+  function era5Active() { return (era5Wanted() || !!state.era5focus) && state.layer === 'tracks'; }
 
   /** Filters the ERA5 sets share: the page's basin, season range and months;
       seasons before 2001-02 only with the explicit second tick. */
@@ -971,8 +1059,33 @@
     };
   }
 
+  /** Join the P(HF) sidecar to whichever of the two track sets is loaded. */
+  function attachEra5Prob() {
+    if (!(state.era5prob || state.era5focus) || !ensureEra5('prob')) return false;
+    ['ev', 'nul'].forEach(function (k) {
+      if (era5Status[k] === 'ready' && !era5Attached[k]) { HF.era5.attachProb(era5Data[k], era5Data.prob); era5Attached[k] = true; }
+    });
+    return true;
+  }
+
+  function era5FocusTrack() {
+    if (!state.era5focus) return null;
+    var keys = ['ev', 'nul'];
+    for (var a = 0; a < keys.length; a++) {
+      var list = era5Data[keys[a]] || [];
+      for (var i = 0; i < list.length; i++) if (list[i].key === state.era5focus) return list[i];
+    }
+    return null;
+  }
+
   function setEra5OnGlobe() {
-    var ev = null, nul = null, peaks = null;
+    var ev = null, nul = null, peaks = null, focus = null;
+    if (state.layer === 'tracks' && state.era5focus) {
+      ensureEra5('ev'); ensureEra5('nul');
+      attachEra5Prob();
+      focus = era5FocusTrack();
+      if (focus && state.era5focusPan) { state.era5focusPan = false; HF.globe.focus(focus); }
+    }
     if (state.layer === 'tracks') {
       var f = era5Filter();
       if (state.era5 && ensureEra5('ev')) { ev = HF.era5.filter(era5Data.ev, f); era5Shown.ev = ev.length; }
@@ -982,7 +1095,8 @@
         era5Shown.peaks = peaks.idx.length;
       }
     }
-    HF.globe.setEra5(ev, nul, peaks);
+    var probOn = state.era5 && state.era5prob && attachEra5Prob() && era5Attached.ev;
+    HF.globe.setEra5(ev, nul, peaks, { prob: !!probOn, focus: focus });
   }
 
   function renderMap(lows) {
@@ -1022,6 +1136,17 @@
       }
     } else if (era5Wanted()) {
       note.textContent += ' ERA5 proxy layers are drawn on the Tracks layer only.';
+    }
+    var fclear = document.getElementById('era5FocusClear');
+    fclear.hidden = !(state.era5focus && layer === 'tracks');
+    if (state.era5focus && layer === 'tracks') {
+      var ft = era5FocusTrack();
+      note.textContent += ft
+        ? ' Highlighted from the Strongest storms list: ERA5 proxy track starting ' + ymdLabel(Math.floor(ft.start / 100)) + ' ' + ft.start % 100 + ' UTC, peak gust index ' + ft.peakGust.toFixed(1) +
+          ' kt, minimum pressure ' + ft.minP.toFixed(1) + ' hPa' +
+          (ft.season < 2001 ? '; before 2001-02, so the gust index is for comparison within that era only' : '') +
+          (ft.pfix ? '; coloured by P(HF within 24 h), a proxy' : '') + '.'
+        : ' Loading the highlighted storm…';
     }
     if (state.currents) {
       var period = currentsPeriodLabel();
@@ -1161,7 +1286,12 @@
       r.appendChild(document.createTextNode(text));
       box.appendChild(r);
     }
-    if (state.era5) row(HF.cssVar('--era5'), 'Hurricane-force-equivalent track');
+    if (state.era5 && state.era5prob && era5Attached.ev) {
+      var pl = ['under 5%', '5 to 20%', '20 to 50%', '50 to 80%', '80% or more'];
+      for (var c = 1; c <= 5; c++) row(HF.cssVar('--p' + c), 'P(HF within 24 h) ' + pl[c - 1]);
+      box.appendChild(HF.el('p', { class: 'legend-note' },
+        'Track colour is the model’s probability of a hurricane-force-equivalent gust within 24 h of that fix (scored at 00 and 12 UTC; each edge takes the larger of its two ends). A dark underlay marks fixes at or above the threshold. Seasons before 2004-05 are scored for the catalog tracks only and are for comparison within that era.'));
+    } else if (state.era5) row(HF.cssVar('--era5'), 'Hurricane-force-equivalent track');
     if (state.era5null) row(HF.cssVar('--ink-muted'), 'Matched null case (below threshold)');
     if (state.era5peaks) row(HF.cssVar('--era5'), 'Cyclone peak position (stronger dot: at or above threshold)');
     box.appendChild(HF.el('p', { class: 'legend-note' },
@@ -1546,6 +1676,7 @@
     if (state.tab === 'map') renderMap(lows);
     if (state.tab === 'clim') renderCharts(lows);
     if (state.tab === 'events') renderTable(lows);
+    if (state.tab === 'strong') renderStrong();
     if (state.tab === 'tele') { renderTele(); return; }
     announceResults(lows.length);
   }
@@ -2292,6 +2423,8 @@
     document.getElementById('fEra5Null').checked = state.era5null;
     document.getElementById('fEra5Peaks').checked = state.era5peaks;
     document.getElementById('fEra5Pre').disabled = !era5Wanted();
+    document.getElementById('fEra5Prob').checked = state.era5prob;
+    document.getElementById('fEra5Prob').disabled = !state.era5;
     document.getElementById('fSearch').value = state.search;
     Array.prototype.forEach.call(document.querySelectorAll('#fMonths .chip'), function (chip) {
       var on = !!state.months[chip.dataset.month];
@@ -2433,6 +2566,7 @@
       document.body.classList.toggle('tele-active', state.tab === 'tele');
       // QC lists the whole archive's flags, so the filters do not apply either.
       document.body.classList.toggle('qc-active', state.tab === 'qc');
+      document.body.classList.toggle('strong-active', state.tab === 'strong');
       if (state.tab !== 'map') setPlaying(false, true);   // nothing to watch; do not run unseen
       placeGlobe();
       syncMapMode();
@@ -2470,9 +2604,21 @@
       document.getElementById(c[0]).addEventListener('change', function (e) {
         state[c[1]] = e.target.checked;
         document.getElementById('fEra5Pre').disabled = !era5Wanted();
+        document.getElementById('fEra5Prob').disabled = !state.era5;
         render();
       });
     });
+    document.getElementById('fEra5Prob').addEventListener('change', function (e) {
+      state.era5prob = e.target.checked;
+      render();
+    });
+    document.getElementById('era5FocusClear').addEventListener('click', function () {
+      state.era5focus = null;
+      state.era5focusPan = false;
+      render();
+    });
+    document.getElementById('strongList').addEventListener('change', function (e) { state.strong.list = e.target.value; renderStrong(); });
+    document.getElementById('strongBasin').addEventListener('change', function (e) { state.strong.basin = e.target.value; renderStrong(); });
     document.getElementById('fEra5Pre').addEventListener('change', function (e) {
       state.era5pre = e.target.checked;
       render();
