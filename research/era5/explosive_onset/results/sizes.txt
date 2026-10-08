@@ -1,0 +1,13 @@
+ARM B (case times, 895 times): instantaneous_10m_wind_gust 2.85 GB, mean_sea_level_pressure 1.94 GB, 10m_u_component_of_wind 2.96 GB, 10m_v_component_of_wind 2.98 GB; total 10.74 GB; per time 12.00 MB
+ARM B (sampled non-case times, 600 times): instantaneous_10m_wind_gust 1.91 GB, mean_sea_level_pressure 1.30 GB, 10m_u_component_of_wind 1.99 GB, 10m_v_component_of_wind 2.00 GB; total 7.21 GB; per time 12.01 MB
+ARM B (all, 1495 times): instantaneous_10m_wind_gust 4.76 GB, mean_sea_level_pressure 3.25 GB, 10m_u_component_of_wind 4.95 GB, 10m_v_component_of_wind 4.99 GB; total 17.94 GB; per time 12.00 MB
+ARM B reduced (gust + MSLP only, no u10/v10): 8.01 GB
+ARM A: times in WB2 range 1250 (case 740, non-case 510); times after 2023-01-09 245 (case 155); distinct WB2 8-time chunks 1007
+  temperature: 7.88 GB over 1007 chunks (7.8 MB per chunk)
+  geopotential: 7.72 GB over 1007 chunks (7.7 MB per chunk)
+  vertical_velocity: 11.36 GB over 1007 chunks (11.3 MB per chunk)
+ARM A total (WB2, temperature + geopotential + vertical_velocity): 26.96 GB
+ARM A if only case-time chunks (no non-case sample): 595 chunks, 15.93 GB (proportional estimate)
+ARCO pressure-level object per time per variable (all 37 levels), one sample time: 85 MB, 80 MB, 127 MB
+  covering the 245 post-2023-01-09 times with those 3 variables: 71.6 GB (not planned)
+TOTAL ARM B 17.94 GB + ARM A 26.96 GB = 44.91 GB
