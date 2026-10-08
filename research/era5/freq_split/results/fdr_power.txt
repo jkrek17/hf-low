@@ -1,0 +1,73 @@
+ERA5 PROXY, pipeline A. BH FDR across all distinct permutation tests (52 tests; duplicated estimates counted once). mde_rr: RR per SD detectable
+at 80% power (two-sided 0.05), exp(2.8 x clustered SE). Primary rows also get Bonferroni x2.
+
+                                           test       factor     rr       z  p_perm  mde_rr   q_bh
+         primary | atl NAO octapr 2004-2025 lag all cyclones 0.9738 -2.5846  0.0050  1.0292 0.0096
+         primary | atl NAO octapr 2004-2025 lag        share 1.1254  3.4960  0.0005  1.0992 0.0026
+         primary | atl NAO octapr 2004-2025 lag      hf lows 1.0959  3.1534  0.0050  1.0847 0.0096
+         primary | pac PNA octapr 2004-2025 lag all cyclones 1.0276  4.3935  0.0030  1.0175 0.0074
+         primary | pac PNA octapr 2004-2025 lag        share 1.0431  1.4354  0.2394  1.0858 0.2964
+         primary | pac PNA octapr 2004-2025 lag      hf lows 1.0719  2.1077  0.0475  1.0967 0.0681
+    S1 same-time | atl NAO octapr 2004-2025 now all cyclones 0.9724 -2.3360  0.0115  1.0341 0.0199
+    S1 same-time | atl NAO octapr 2004-2025 now        share 1.2447  5.9022  0.0005  1.1094 0.0026
+    S1 same-time | atl NAO octapr 2004-2025 now      hf lows 1.2103  5.4370  0.0005  1.1033 0.0026
+    S1 same-time | pac PNA octapr 2004-2025 now all cyclones 1.0526  5.4404  0.0005  1.0268 0.0026
+    S1 same-time | pac PNA octapr 2004-2025 now        share 1.1264  3.5174  0.0010  1.0994 0.0040
+    S1 same-time | pac PNA octapr 2004-2025 now      hf lows 1.1857  5.1709  0.0005  1.0966 0.0026
+      S2 Jun-May | atl NAO junmay 2004-2025 lag all cyclones 0.9822 -2.1039  0.0255  1.0242 0.0402
+      S2 Jun-May | atl NAO junmay 2004-2025 lag        share 1.1134  3.6993  0.0015  1.0847 0.0052
+      S2 Jun-May | atl NAO junmay 2004-2025 lag      hf lows 1.0937  3.6359  0.0045  1.0714 0.0096
+      S2 Jun-May | pac PNA junmay 2004-2025 lag all cyclones 1.0228  3.5851  0.0020  1.0178 0.0058
+      S2 Jun-May | pac PNA junmay 2004-2025 lag        share 1.0499  1.4726  0.1544  1.0969 0.1984
+      S2 Jun-May | pac PNA junmay 2004-2025 lag      hf lows 1.0738  2.1081  0.0300  1.0992 0.0459
+        S3 chain | atl NAO octapr 2004-2025 lag all cyclones 0.9738 -2.5846  0.0055  1.0292 0.0096
+        S3 chain | atl NAO octapr 2004-2025 lag        share 1.1254  3.4960  0.0005  1.0992 0.0026
+        S3 chain | atl NAO octapr 2004-2025 lag      hf lows 1.0959  3.1534  0.0060  1.0847 0.0096
+        S3 chain | pac PNA octapr 2004-2025 lag all cyclones 1.0276  4.3935  0.0025  1.0175 0.0074
+        S3 chain | pac PNA octapr 2004-2025 lag        share 1.0431  1.4354  0.2504  1.0858 0.2964
+        S3 chain | pac PNA octapr 2004-2025 lag      hf lows 1.0719  2.1077  0.0540  1.0967 0.0681
+        S4 depth | atl NAO octapr 1979-2025 lag all cyclones 0.9816 -2.6059  0.0035  1.0201 0.0083
+        S4 depth | atl NAO octapr 1979-2025 lag        share 1.1076  3.4317  0.0005  1.0869 0.0026
+        S4 depth | atl NAO octapr 1979-2025 lag  dq_atl lows 1.0872  2.9610  0.0025  1.0823 0.0068
+        S4 depth | atl NAO octapr 1979-2000 lag all cyclones 0.9867 -1.2644  0.1564  1.0300 0.1984
+        S4 depth | atl NAO octapr 1979-2000 lag        share 1.0869  1.9113  0.0325  1.1299 0.0483
+        S4 depth | atl NAO octapr 1979-2000 lag  dq_atl lows 1.0725  1.5754  0.0650  1.1325 0.0866
+        S4 depth | atl NAO octapr 2004-2025 lag all cyclones 0.9738 -2.5846  0.0045  1.0292 0.0096
+        S4 depth | atl NAO octapr 2004-2025 lag        share 1.1458  3.1794  0.0050  1.1273 0.0096
+        S4 depth | atl NAO octapr 2004-2025 lag  dq_atl lows 1.1157  2.8725  0.0170  1.1126 0.0285
+        S4 depth | pac PNA octapr 1979-2025 lag all cyclones 1.0219  3.4714  0.0015  1.0176 0.0052
+        S4 depth | pac PNA octapr 1979-2025 lag        share 1.1146  4.8766  0.0005  1.0643 0.0026
+        S4 depth | pac PNA octapr 1979-2025 lag  dq_pac lows 1.1389  5.4790  0.0005  1.0687 0.0026
+        S4 depth | pac PNA octapr 1979-2000 lag all cyclones 1.0194  1.9325  0.0485  1.0282 0.0681
+        S4 depth | pac PNA octapr 1979-2000 lag        share 1.1180  3.0393  0.0020  1.1082 0.0058
+        S4 depth | pac PNA octapr 1979-2000 lag  dq_pac lows 1.1397  3.5060  0.0010  1.1101 0.0040
+        S4 depth | pac PNA octapr 2004-2025 lag all cyclones 1.0276  4.3935  0.0035  1.0175 0.0074
+        S4 depth | pac PNA octapr 2004-2025 lag        share 1.1108  3.7112  0.0065  1.0825 0.0116
+        S4 depth | pac PNA octapr 2004-2025 lag  dq_pac lows 1.1415  4.6590  0.0005  1.0828 0.0026
+  S5 other index | atl PNA octapr 2004-2025 lag all cyclones 1.0207  1.9433  0.0180  1.0300 0.0292
+  S5 other index | atl PNA octapr 2004-2025 lag        share 0.8817 -3.8121  0.0010  1.0969 0.0040
+  S5 other index | atl PNA octapr 2004-2025 lag      hf lows 0.8999 -3.4187  0.0045  1.0902 0.0096
+  S5 other index | pac NAO octapr 2004-2025 lag all cyclones 0.9946 -0.5339  0.5472  1.0290 0.6324
+  S5 other index | pac NAO octapr 2004-2025 lag        share 1.0209  0.6957  0.5652  1.0868 0.6389
+  S5 other index | pac NAO octapr 2004-2025 lag      hf lows 1.0154  0.5109  0.6777  1.0871 0.7302
+  S5 other index | atl ONI octapr 2004-2025 lag all cyclones 1.0087  0.9083  0.4078  1.0272 0.4819
+  S5 other index | atl ONI octapr 2004-2025 lag        share 1.0024  0.0686  0.9475  1.1035 0.9475
+  S5 other index | atl ONI octapr 2004-2025 lag      hf lows 1.0112  0.3602  0.7661  1.0902 0.7811
+  S5 other index | pac ONI octapr 2004-2025 lag all cyclones 1.0034  0.3771  0.6996  1.0258 0.7302
+  S5 other index | pac ONI octapr 2004-2025 lag        share 1.0140  0.4217  0.7022  1.0969 0.7302
+  S5 other index | pac ONI octapr 2004-2025 lag      hf lows 1.0175  0.5233  0.6537  1.0973 0.7232
+S6 joint | atl NAO (joint) octapr 2004-2025 lag all cyclones 0.9737 -2.7535  0.0060  1.0275 0.0111
+S6 joint | atl NAO (joint) octapr 2004-2025 lag        share 1.1324  3.7365  0.0005  1.0977 0.0026
+S6 joint | atl NAO (joint) octapr 2004-2025 lag      hf lows 1.1026  3.3082  0.0030  1.0862 0.0074
+S6 joint | pac PNA (joint) octapr 2004-2025 lag all cyclones 1.0277  4.4249  0.0020  1.0175 0.0058
+S6 joint | pac PNA (joint) octapr 2004-2025 lag        share 1.0425  1.4071  0.2489  1.0863 0.3010
+S6 joint | pac PNA (joint) octapr 2004-2025 lag      hf lows 1.0714  2.0876  0.0585  1.0969 0.0800
+
+Primary, Bonferroni x2:
+                                  test       factor     rr  p_perm  p_bonf2   q_bh
+primary | atl NAO octapr 2004-2025 lag all cyclones 0.9738  0.0050   0.0100 0.0096
+primary | atl NAO octapr 2004-2025 lag        share 1.1254  0.0005   0.0010 0.0026
+primary | atl NAO octapr 2004-2025 lag      hf lows 1.0959  0.0050   0.0100 0.0096
+primary | pac PNA octapr 2004-2025 lag all cyclones 1.0276  0.0030   0.0060 0.0074
+primary | pac PNA octapr 2004-2025 lag        share 1.0431  0.2394   0.4788 0.2964
+primary | pac PNA octapr 2004-2025 lag      hf lows 1.0719  0.0475   0.0950 0.0681
