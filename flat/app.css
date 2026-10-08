@@ -38,6 +38,7 @@
   --chrome-navy-ink-soft: #cfe0f3;
   --accent:        #0a3f73;
   --era5:          #17776f;
+  --hist: #a1246b;                                                                             /* 1979-2003 historic candidates, ERA5 proxy */
   --p1: #d6d0e6; --p2: #aa9bd3; --p3: #8566bf; --p4: #5e3a9e; --p5: #34115f;   /* P(HF) ramp, ERA5 proxy */
   --accent-soft:   #e4edf8;
 
@@ -152,6 +153,7 @@
     --chrome-navy:      #123a63;
     --accent:        #93b8e6;
     --era5:          #5fc7bd;
+    --hist: #e27bb7;
     --p1: #4a4663; --p2: #6f62a3; --p3: #9a85d6; --p4: #c4adf3; --p5: #ece0ff;
     --accent-soft:   #16263a;
     --seq-1: #0d366b; --seq-2: #184f95; --seq-3: #256abf;
@@ -203,6 +205,7 @@
   --chrome-navy:      #123a63;
   --accent:        #93b8e6;
   --era5:          #5fc7bd;
+  --hist: #e27bb7;
   --p1: #4a4663; --p2: #6f62a3; --p3: #9a85d6; --p4: #c4adf3; --p5: #ece0ff;
   --accent-soft:   #16263a;
   --seq-1: #0d366b; --seq-2: #184f95; --seq-3: #256abf;
@@ -503,6 +506,9 @@ main { padding: 0 var(--sp-5) var(--sp-6); }
   display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap; padding: 0 0 var(--sp-3);
 }
 .panel-tools .tool-note { margin-left: auto; text-align: right; }
+.atlas-tools { display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; }
+.atlas-tools[hidden] { display: none; }
+.atlas-tools label { font-size: var(--fs-sm); color: var(--ink-2); }
 .tool-note { margin: 0; font-size: var(--fs-sm); color: var(--ink-2); font-variant-numeric: tabular-nums; }
 
 .segmented {
