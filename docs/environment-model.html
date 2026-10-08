@@ -135,6 +135,17 @@
   <p>In the HF fit the largest standardised weights are the current gust index, then column water vapour, Eady growth rate and central pressure (deeper raises the chance), with sea-surface temperature, latitude and basin next; the jet term is small (about a twentieth of the gust index&rsquo;s weight). These are partial effects among correlated predictors (water vapour and sea temperature enter with opposite signs), so read them as which groups matter, not as physical signs. For the rapid-deepening classes the opposite holds: the state terms and the three phase-space terms do nearly all the work, and the rest of the environment adds 0.015 (class skill score).</p>
 </section>
 
+<section id="reading">
+  <div class="tag">What the environment terms are, and are not</div>
+  <h2>Reading the environment predictors correctly</h2>
+  <ul>
+    <li><strong>They are raw values in a circle centred on the low,</strong> not anomalies, and not rotated into the direction of motion (only B is). Radii: 500 km for everything except the jet, which is the maximum 250 hPa wind within 1000 km. All are measured at the fix time (no earlier or later fields).</li>
+    <li><strong>Circles on a 1.5&deg; grid contain the storm itself.</strong> Divergence, vorticity advection, water vapour, heat flux and Eady growth within 500 km of a deep low partly reflect the low&rsquo;s own circulation, so they describe the storm&rsquo;s current state as much as an outside precursor. They are near-storm terms, not upstream ones.</li>
+    <li><strong>Latitude and season enter only as simple terms.</strong> Water vapour, sea temperature and Eady growth all vary strongly with latitude and season, and the model has no anomaly version, so some of their weight may be latitude or season in disguise. The composites page found the same confounding for dew point.</li>
+    <li><strong>It detects jet strength, not jet structure.</strong> There is no jet entrance or exit, left or right of the streak, and no upstream trough in this model. 300 hPa divergence is the nearest crude proxy for jet-streak lift. Separate tests of the jet-maximum position (no gain) and of upstream trough depth (not detectable) are described in the repository (<code>research/era5/intensity_extra</code>, <code>jet_trough</code>).</li>
+  </ul>
+</section>
+
 <section id="outputs">
   <div class="tag">What comes out</div>
   <h2>The forecasts</h2>
@@ -185,7 +196,7 @@
   </figure>
 
   <h3>Reliability and stability</h3>
-  <p>Hurricane-force and rapid-deepening probabilities are reliable to within about 0.03 across the range (when the model says 0.7 to 0.8, ERA5 shows 0.73; 0.4 to 0.5, 0.46). Trained on 2004&ndash;2014 and tested on 2015&ndash;2025, the full model scores 0.426 for HF within 24 hours (0.309 for the classes), the same as the leave-one-season-out values by decade (0.40, 0.42, 0.44), so skill does not fall over time. Skill by basin has not been broken out.</p>
+  <p>Hurricane-force and rapid-deepening probabilities are reliable to within about 0.03 across the range (when the model says 0.7 to 0.8, ERA5 shows 0.73; 0.4 to 0.5, 0.46). Trained on 2004&ndash;2014 and tested on 2015&ndash;2025, the full model scores 0.426 for HF within 24 hours (0.309 for the classes), the same as the leave-one-season-out values by decade (0.40, 0.42, 0.44), so skill does not fall over time. Skill by basin is not shown here.</p>
 </section>
 
 <section id="forecasts">
@@ -199,7 +210,7 @@
       <tr><td>GFS-fed minus ERA5-fed skill score</td><td class="num">&minus;0.041 [&minus;0.066, &minus;0.024]</td><td class="num">&minus;0.061 [&minus;0.077, &minus;0.036]</td></tr>
     </tbody>
   </table></div>
-  <p class="muted">95% intervals from season-block resampling. Skill does not decay across leads 0&ndash;48 h. The registered criterion for the loss against ERA5 (no worse than 0.05) passed in the Atlantic and failed in the Pacific.</p>
+  <p class="muted">Compare the GFS-fed score with the ERA5-fed score for the same storms (second row), not with the 0.370 above, which is a different sample and target definition. 95% intervals from season-block resampling. Skill does not decay across leads 0&ndash;48 h. The registered criterion for the loss against ERA5 (no worse than 0.05) passed in the Atlantic and failed in the Pacific.</p>
   <p class="limit">Caveats: the five GFS seasons are the same seasons used to calibrate the gust threshold, so the test is not independent of that calibration. The Hart and environment terms were not tested on GFS. The truth is still ERA5&rsquo;s own gust index; against the archive (secondary check, indicative only) the skill scores are +0.17 and +0.25.</p>
 </section>
 
@@ -215,7 +226,7 @@
   <h2>What not to read into it</h2>
   <ul>
     <li><strong>Perfect prognosis.</strong> The model forecasts what ERA5 does 24&ndash;48 hours later from what ERA5 shows now. Fed an operational analysis or forecast, skill depends on how close that is to ERA5 (see the GFS test).</li>
-    <li><strong>The target is a proxy.</strong> It predicts ERA5&rsquo;s gust index crossing 71.7 kt, not an observed hurricane-force wind. ERA5 counts 6&ndash;19% more events than the archive over 2004&ndash;2025, and tropical cyclones and transitions are included, which are a known source of false alarms.</li>
+    <li><strong>The target is a proxy.</strong> It predicts ERA5&rsquo;s gust index crossing 71.7 kt, not an observed hurricane-force wind. From 2006 on ERA5 counted 6&ndash;19% more events than the archive in the calibration comparison, and tropical cyclones and transitions are included, which are a known source of false alarms.</li>
     <li><strong>Fit and test from 2004-05 on.</strong> No hurricane-force number before 2001 is reported here.</li>
     <li><strong>Classes need the track to survive 24 hours</strong>, so rapid decay is under-counted.</li>
     <li><strong>The held-out results were looked at once</strong> (one full run and its re-run on rounded inputs), and no predictor, threshold or setting was changed afterwards.</li>
