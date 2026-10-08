@@ -59,7 +59,7 @@ Three questions to put to every result before it goes out. Each has a failure in
 2. **Does an artefact correlate with position, era, or recording practice?** The teleconnection work measures where and when storms occur, so contamination that varies with location (land in a gust radius) or with era (archive lead fixes appearing in 2017, the warning category appearing in 2001) can manufacture or hide the signal. Check coverage and skill by era and by basin before pooling.
 3. **What is the real sample size?** For any question about a climate index it is the number of seasons, and for a strongly autocorrelated index like ONI it is about one value per season. State n, give an interval or a signal-to-noise figure, and do not report a trend from a handful of points as a finding.
 
-For any hypothesis test against a predictor, follow `hf-preregistered-test` (plan committed first, lagged indices, season-level n, FDR, power). For field composites, follow `hf-storm-composites` before pulling anything.
+For any hypothesis test against a predictor, follow `hf-preregistered-test` (plan committed first, lagged indices, season-level n, FDR, power). For field composites, follow `hf-storm-composites` before pulling anything. To score an ERA5-trained product on GFS or GEFS forecasts, follow `hf-nwp-forecast-test`.
 
 Report each check as passed, failed, or not checked with the reason. "Not checked" is acceptable. Reporting an unchecked number as established is not.
 
