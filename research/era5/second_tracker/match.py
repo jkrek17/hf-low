@@ -168,6 +168,37 @@ for t in ("M", "V"):
             s4.append(dict(tracker=t, variant=f">={mn} HF fixes", basin=b, recall=pt, lo=lo, hi=hi, n=n))
 pd.DataFrame(s4).to_csv(f"{OUT}/s4_sensitivities.csv", index=False)
 
+
+# ---------------------------------------------------------------- POST HOC control: chance-level recall
+say("\n== POST HOC (not registered): chance control. Same rule with A's HF fixes moved 15 degrees east, or 5 days later ==")
+import datetime as _dt
+
+
+def shifted(src, kind):
+    out = {}
+    for k, a in src.items():
+        a = a.copy()
+        if kind == "lon":
+            a[:, 2] = (a[:, 2] + 15) % 360
+        else:
+            a[:, 0] = [int((_dt.datetime.strptime(str(int(x)), "%Y%m%d%H") + _dt.timedelta(days=5)).strftime("%Y%m%d%H")) for x in a[:, 0]]
+        out[k] = a
+    return out
+
+
+ctl = []
+for kind in ("lon", "time"):
+    sh = shifted(HFX, kind)
+    for t in ("M", "V"):
+        rows = [(r.track, match_event(t, sh[r.track], DKM[t])[0]) for r in ev.itertuples()]
+        x = ev.merge(pd.DataFrame(rows, columns=["track", "matched"]), on="track")
+        x = x[x.octapr]
+        for b in ("atl", "pac"):
+            y = x[x.basin == b]
+            say(f"control shift {kind:4s} {t} {b}: {100*y.matched.mean():5.1f}% ({int(y.matched.sum())}/{len(y)})")
+            ctl.append(dict(shift=kind, tracker=t, basin=b, share=y.matched.mean()))
+pd.DataFrame(ctl).to_csv(f"{OUT}/posthoc_chance_control.csv", index=False)
+
 # ---------------------------------------------------------------- S1 reverse direction, S2, S3
 say("\n== S1 reverse: top-N most intense tracker tracks (N = A HF events in that season and basin) matched to an A HF event ==")
 
@@ -253,8 +284,8 @@ s3 = []
 
 def week_of(time, season):
     """whole weeks since 5 October of the season's start year"""
-    t = pd.to_datetime(time.astype(str), format="%Y%m%d%H")
-    start = pd.to_datetime(season.astype(str) + "-10-05")
+    t = pd.to_datetime(time.astype("int64").astype(str), format="%Y%m%d%H")
+    start = pd.to_datetime(season.astype("int64").astype(str) + "-10-05")
     return (t - start).dt.days // 7
 
 
@@ -292,7 +323,7 @@ gi = lab[int(round(320 / 1.5)) % 240, int(round((72 + 90) / 1.5))]
 gl = lab == gi
 LA2, LO2 = np.meshgrid(np.radians(C.LAT), np.radians(C.LON), indexing="xy")  # (121, 240)
 xyz = np.stack([np.cos(LA2) * np.cos(LO2), np.cos(LA2) * np.sin(LO2), np.sin(LA2)], -1)
-tree = cKDTree(xyz[gl.T])
+tree = cKDTree(xyz[gl])
 
 
 def dgl(la, lo):

@@ -1,0 +1,96 @@
+A HF events 2004-05..2021-22: 1641 (atl 906, pac 735); first HF fix 5 Oct-25 Apr: 1490
+tracker M: 83038 tracks, 931848 fixes
+tracker V: 50040 tracks, 532689 fixes
+
+== PRIMARY: recall of A HF events (first HF fix 5 Oct-25 Apr), 98.75% season-block interval (Bonferroni over 4) ==
+M atl: recall  88.9%  (726/817)  98.75% [ 86.2,  91.2]  -> agree
+M pac: recall  92.3%  (621/673)  98.75% [ 89.8,  94.6]  -> agree
+V atl: recall  95.8%  (783/817)  98.75% [ 93.7,  97.8]  -> agree
+V pac: recall  97.6%  (657/673)  98.75% [ 96.1,  99.0]  -> agree
+OVERALL (registered rule): yes
+
+== SECONDARY: M all-year (labelled secondary), 95% interval ==
+M all-year atl:  89.6% (812/906) [ 87.8,  91.2]
+M all-year pac:  92.9% (683/735) [ 91.2,  94.6]
+
+== S4 recall sensitivities (Oct-Apr events, 95% interval) ==
+M D/2         atl:  87.4% (714/817) [ 85.5,  89.2]
+M D/2         pac:  91.5% (616/673) [ 89.0,  93.7]
+M 2D          atl:  95.2% (778/817) [ 93.4,  96.8]
+M 2D          pac:  96.9% (652/673) [ 95.3,  98.3]
+M whole-track atl:  82.6% (675/817) [ 80.2,  85.1]
+M whole-track pac:  89.0% (599/673) [ 86.5,  91.5]
+M >= 2 HF fixes atl:  93.8% (518/552) [ 92.1,  95.4]
+M >= 2 HF fixes pac:  96.4% (430/446) [ 95.1,  97.7]
+M >= 3 HF fixes atl:  94.7% (357/377) [ 93.1,  96.3]
+M >= 3 HF fixes pac:  97.7% (300/307) [ 96.4,  99.0]
+V D/2         atl:  88.2% (721/817) [ 86.5,  90.0]
+V D/2         pac:  94.7% (637/673) [ 93.1,  96.1]
+V 2D          atl:  99.9% (816/817) [ 99.6, 100.0]
+V 2D          pac: 100.0% (673/673) [100.0, 100.0]
+V whole-track atl:  80.5% (658/817) [ 79.0,  82.0]
+V whole-track pac:  93.5% (629/673) [ 91.1,  95.6]
+V >= 2 HF fixes atl:  96.7% (534/552) [ 94.9,  98.4]
+V >= 2 HF fixes pac:  99.1% (442/446) [ 98.3,  99.8]
+V >= 3 HF fixes atl:  96.0% (362/377) [ 93.5,  98.2]
+V >= 3 HF fixes pac:  99.7% (306/307) [ 99.0, 100.0]
+
+== POST HOC (not registered): chance control. Same rule with A's HF fixes moved 15 degrees east, or 5 days later ==
+control shift lon  M atl:   6.5% (53/817)
+control shift lon  M pac:   1.2% (8/673)
+control shift lon  V atl:  30.4% (248/817)
+control shift lon  V pac:  14.3% (96/673)
+control shift time M atl:  17.3% (141/817)
+control shift time M pac:  12.8% (86/673)
+control shift time V atl:  46.5% (380/817)
+control shift time V pac:  37.3% (251/673)
+
+== S1 reverse: top-N most intense tracker tracks (N = A HF events in that season and basin) matched to an A HF event ==
+M top-N matched atl:  36.7% (300/817) [ 33.5,  39.8]
+M top-N matched pac:  28.8% (194/673) [ 25.6,  31.8]
+V top-N matched atl:  45.9% (375/817) [ 43.6,  48.1]
+V top-N matched pac:  44.7% (301/673) [ 42.1,  47.2]
+ceiling A-by-minp atl:  61.9% (506/817) [ 58.7,  64.9]
+ceiling A-by-minp pac:  54.4% (366/673) [ 50.0,  58.4]
+
+== S2 seasonal track counts, 5 Oct-25 Apr peak date, 18 seasons ==
+M atl: tracker mean 209, A mean 422, ratio 0.50, Pearson 0.66 (p 0.003), Spearman 0.62 (p 0.006)
+M pac: tracker mean 230, A mean 443, ratio 0.52, Pearson 0.30 (p 0.226), Spearman 0.26 (p 0.290)
+V atl: tracker mean 503, A mean 422, ratio 1.19, Pearson 0.36 (p 0.145), Spearman 0.35 (p 0.151)
+V pac: tracker mean 542, A mean 443, ratio 1.23, Pearson 0.79 (p 0.000), Spearman 0.78 (p 0.000)
+
+== S3 weekly counts: A HF events vs tracker top-N tracks, Pearson r pooled over weeks ==
+M atl: weekly r = 0.59 [0.54, 0.64]  (weeks 540, A events 817, tracker top-N 817)
+M pac: weekly r = 0.50 [0.44, 0.56]  (weeks 540, A events 673, tracker top-N 673)
+V atl: weekly r = 0.55 [0.49, 0.61]  (weeks 540, A events 817, tracker top-N 817)
+V pac: weekly r = 0.51 [0.45, 0.57]  (weeks 540, A events 673, tracker top-N 673)
+
+== S5 who is missed (events in the primary set; run for each tracker and basin whose recall is below 95%) ==
+M atl north60: recall 85.1% with flag (n=309) vs 91.1% without; Fisher p 0.0113
+M atl gl100: recall 74.4% with flag (n=39) vs 89.6% without; Fisher p 0.0073
+M atl tc: recall 93.8% with flag (n=16) vs 88.8% without; Fisher p 1.0000
+M atl n_hf: median matched 2.0 vs missed 1.0; Mann-Whitney p 0.0000
+M atl n_fix: median matched 17.0 vs missed 9.0; Mann-Whitney p 0.0000
+M atl minp: median matched 961.5 vs missed 971.3; Mann-Whitney p 0.0000
+M pac north60: recall 66.7% with flag (n=3) vs 92.4% without; Fisher p 0.2146
+M pac gl100: recall 66.7% with flag (n=3) vs 92.4% without; Fisher p 0.2146
+M pac tc: recall 100.0% with flag (n=19) vs 92.0% without; Fisher p 0.3877
+M pac n_hf: median matched 2.0 vs missed 1.0; Mann-Whitney p 0.0000
+M pac n_fix: median matched 19.0 vs missed 10.5; Mann-Whitney p 0.0000
+M pac minp: median matched 963.1 vs missed 971.9; Mann-Whitney p 0.0000
+V atl: recall 95.8% >= 95%, S5 not run (as registered)
+V pac: recall 97.6% >= 95%, S5 not run (as registered)
+S5 BH q (within family):
+tracker basin  factor      p   q_bh
+      M   atl north60 0.0113 0.0169
+      M   atl   gl100 0.0073 0.0126
+      M   atl      tc 1.0000 1.0000
+      M   atl    n_hf 0.0000 0.0000
+      M   atl   n_fix 0.0000 0.0000
+      M   atl    minp 0.0000 0.0000
+      M   pac north60 0.2146 0.2576
+      M   pac   gl100 0.2146 0.2576
+      M   pac      tc 0.3877 0.4229
+      M   pac    n_hf 0.0000 0.0000
+      M   pac   n_fix 0.0000 0.0000
+      M   pac    minp 0.0000 0.0000

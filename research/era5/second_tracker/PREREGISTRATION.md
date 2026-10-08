@@ -72,4 +72,10 @@ This study uses no teleconnection index and no held-out outcome, so it spends no
 
 ## Deviations (post hoc)
 
-(none yet)
+All of these were logged after the first full run of `match.py` (commit `24d0216` froze the tracker code before that run; the match script was committed before it was run). The primary results did not change between runs; later edits fixed crashes in the weekly (S3) and missed-event (S5) sections only.
+
+1. **Chance control added (post hoc, not registered).** Because matching at 500-700 km against thousands of tracks can succeed by chance, recall was recomputed with A's HF fixes moved 15 degrees east, or 5 days later. Reported beside the primary results; it does not change any registered decision.
+2. **Event count.** The inventory above (1,512 events in October-April) counted by the month of the peak fix. The registered scoring window is the first HF fix between 5 October and 25 April, which gives 1,490 events (Atlantic 817, Pacific 673). The registered rule was used.
+3. **Detector wording made exact.** "Laplacian" is 4 x (mean of the 8 neighbours minus the centre) / (1.5 degrees)^2, in grid units without a latitude factor. "Biquadratic fit" is the closed-form quadratic through the 3x3 neighbourhood from central differences. Neither was tuned.
+4. **S5 flags.** "Greenland within 100 km" uses the 1.5 degree WeatherBench2 land-sea mask (coarser than the 0.25 degree mask of `research/era5/highlat`). "Transitioning tropical cyclone" is the `tc` flag of A's own `lifecycle_events.csv`, for the events that have one.
+5. **S3.** Only the weekly correlation was computed; the weekly matched/unmatched counts are in the per-event tables (`results/events_M.csv`, `events_V.csv`).
