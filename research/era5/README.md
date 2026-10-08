@@ -8,15 +8,21 @@ nothing here feeds `docs/`, and no site data depends on it.
 They are committed because the work cost real effort to establish and the
 findings below are worth not rediscovering.
 
-## WHAT DOES NOT EXIST HERE
+## What exists now (2026-10-08; `STATUS.md` on `main` is the ledger)
 
-**There is no calibrated gust index.** No HF-equivalent criterion has been
-fitted, validated, or applied. If you have been told a calibration exists, it
-does not. What exists is the pilot evidence that a gust-based criterion is the
-right shape for one, and a stationarity test that says where it could safely be
-applied. Both are described below.
+The pilot notes below predate the work that followed and are kept as the
+record of what the pilot found. Since then:
 
-There is also no extended event record. The archive still starts in 2001.
+- Pipeline A (`hf_history/`) is a calibrated gust-index threshold with a proxy
+  event catalog for 1979-2025, and pipeline B (`event_fields.py`,
+  `criterion.py`, `series.py`) gives a per-moment probability. Both are
+  proxies, neither is validated before the archive begins, and gust values
+  before 2001 drift upward at fixed storm depth (`c9dc994`, `c55e74d`).
+- `intensity/` is the near-storm framework built on pipeline A's tracks: Hart
+  phase space and environment give 24 h intensity-class probabilities and the
+  chance of reaching pipeline A's HF gust index within 24 or 48 h. It is fitted
+  and tested on 2004-05 onward only.
+- `stationarity2` reversed the pre-1979 gradient result described below.
 
 ## The store
 
@@ -142,3 +148,5 @@ distance to the era being extrapolated to.
     tip.py              Greenland tip-jet damping check
     envdemo.py          environment and access demo
     stationarity.py     the observing-era gate described above
+    hf_history/         pipeline A (its own README)
+    intensity/          near-storm intensity framework on pipeline A tracks (its own README)
