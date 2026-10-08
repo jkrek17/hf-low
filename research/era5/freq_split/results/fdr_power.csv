@@ -1,0 +1,61 @@
+test,factor,rr,z,p_perm,mde_rr,primary,q_bh
+primary | atl NAO octapr 2004-2025 lag,all cyclones,0.97378,-2.5846,0.0049975,1.0292,True,0.0096248
+primary | atl NAO octapr 2004-2025 lag,share,1.1254,3.496,0.00049975,1.0992,True,0.0025987
+primary | atl NAO octapr 2004-2025 lag,hf lows,1.0959,3.1534,0.0049975,1.0847,True,0.0096248
+primary | pac PNA octapr 2004-2025 lag,all cyclones,1.0276,4.3935,0.0029985,1.0175,True,0.0074249
+primary | pac PNA octapr 2004-2025 lag,share,1.0431,1.4354,0.23938,1.0858,True,0.29638
+primary | pac PNA octapr 2004-2025 lag,hf lows,1.0719,2.1077,0.047476,1.0967,True,0.068128
+S1 same-time | atl NAO octapr 2004-2025 now,all cyclones,0.97243,-2.336,0.011494,1.0341,False,0.019923
+S1 same-time | atl NAO octapr 2004-2025 now,share,1.2447,5.9022,0.00049975,1.1094,False,0.0025987
+S1 same-time | atl NAO octapr 2004-2025 now,hf lows,1.2103,5.437,0.00049975,1.1033,False,0.0025987
+S1 same-time | pac PNA octapr 2004-2025 now,all cyclones,1.0526,5.4404,0.00049975,1.0268,False,0.0025987
+S1 same-time | pac PNA octapr 2004-2025 now,share,1.1264,3.5174,0.0009995,1.0994,False,0.003998
+S1 same-time | pac PNA octapr 2004-2025 now,hf lows,1.1857,5.1709,0.00049975,1.0966,False,0.0025987
+S2 Jun-May | atl NAO junmay 2004-2025 lag,all cyclones,0.98223,-2.1039,0.025487,1.0242,False,0.040161
+S2 Jun-May | atl NAO junmay 2004-2025 lag,share,1.1134,3.6993,0.0014993,1.0847,False,0.0051976
+S2 Jun-May | atl NAO junmay 2004-2025 lag,hf lows,1.0937,3.6359,0.0044978,1.0714,False,0.0096248
+S2 Jun-May | pac PNA junmay 2004-2025 lag,all cyclones,1.0228,3.5851,0.001999,1.0178,False,0.0057749
+S2 Jun-May | pac PNA junmay 2004-2025 lag,share,1.0499,1.4726,0.15442,1.0969,False,0.19839
+S2 Jun-May | pac PNA junmay 2004-2025 lag,hf lows,1.0738,2.1081,0.029985,1.0992,False,0.045859
+S3 chain | atl NAO octapr 2004-2025 lag,all cyclones,0.97378,-2.5846,0.0054973,1.0292,False,0.0096248
+S3 chain | atl NAO octapr 2004-2025 lag,share,1.1254,3.496,0.00049975,1.0992,False,0.0025987
+S3 chain | atl NAO octapr 2004-2025 lag,hf lows,1.0959,3.1534,0.005997,1.0847,False,0.0096248
+S3 chain | pac PNA octapr 2004-2025 lag,all cyclones,1.0276,4.3935,0.0024988,1.0175,False,0.0074249
+S3 chain | pac PNA octapr 2004-2025 lag,share,1.0431,1.4354,0.25037,1.0858,False,0.29638
+S3 chain | pac PNA octapr 2004-2025 lag,hf lows,1.0719,2.1077,0.053973,1.0967,False,0.068128
+S4 depth | atl NAO octapr 1979-2025 lag,all cyclones,0.98164,-2.6059,0.0034983,1.0201,False,0.0082687
+S4 depth | atl NAO octapr 1979-2025 lag,share,1.1076,3.4317,0.00049975,1.0869,False,0.0025987
+S4 depth | atl NAO octapr 1979-2025 lag,dq_atl lows,1.0872,2.961,0.0024988,1.0823,False,0.0068388
+S4 depth | atl NAO octapr 1979-2000 lag,all cyclones,0.98674,-1.2644,0.15642,1.03,False,0.19839
+S4 depth | atl NAO octapr 1979-2000 lag,share,1.0869,1.9113,0.032484,1.1299,False,0.048262
+S4 depth | atl NAO octapr 1979-2000 lag,dq_atl lows,1.0725,1.5754,0.064968,1.1325,False,0.086624
+S4 depth | atl NAO octapr 2004-2025 lag,all cyclones,0.97378,-2.5846,0.0044978,1.0292,False,0.0096248
+S4 depth | atl NAO octapr 2004-2025 lag,share,1.1458,3.1794,0.0049975,1.1273,False,0.0096248
+S4 depth | atl NAO octapr 2004-2025 lag,dq_atl lows,1.1157,2.8725,0.016992,1.1126,False,0.028503
+S4 depth | pac PNA octapr 1979-2025 lag,all cyclones,1.0219,3.4714,0.0014993,1.0176,False,0.0051976
+S4 depth | pac PNA octapr 1979-2025 lag,share,1.1146,4.8766,0.00049975,1.0643,False,0.0025987
+S4 depth | pac PNA octapr 1979-2025 lag,dq_pac lows,1.1389,5.479,0.00049975,1.0687,False,0.0025987
+S4 depth | pac PNA octapr 1979-2000 lag,all cyclones,1.0194,1.9325,0.048476,1.0282,False,0.068128
+S4 depth | pac PNA octapr 1979-2000 lag,share,1.118,3.0393,0.001999,1.1082,False,0.0057749
+S4 depth | pac PNA octapr 1979-2000 lag,dq_pac lows,1.1397,3.506,0.0009995,1.1101,False,0.003998
+S4 depth | pac PNA octapr 2004-2025 lag,all cyclones,1.0276,4.3935,0.0034983,1.0175,False,0.0074249
+S4 depth | pac PNA octapr 2004-2025 lag,share,1.1108,3.7112,0.0064968,1.0825,False,0.011649
+S4 depth | pac PNA octapr 2004-2025 lag,dq_pac lows,1.1415,4.659,0.00049975,1.0828,False,0.0025987
+S5 other index | atl PNA octapr 2004-2025 lag,all cyclones,1.0207,1.9433,0.017991,1.03,False,0.029235
+S5 other index | atl PNA octapr 2004-2025 lag,share,0.8817,-3.8121,0.0009995,1.0969,False,0.003998
+S5 other index | atl PNA octapr 2004-2025 lag,hf lows,0.89995,-3.4187,0.0044978,1.0902,False,0.0096248
+S5 other index | pac NAO octapr 2004-2025 lag,all cyclones,0.99457,-0.53388,0.54723,1.029,False,0.63235
+S5 other index | pac NAO octapr 2004-2025 lag,share,1.0209,0.69566,0.56522,1.0868,False,0.63894
+S5 other index | pac NAO octapr 2004-2025 lag,hf lows,1.0154,0.51088,0.67766,1.0871,False,0.73024
+S5 other index | atl ONI octapr 2004-2025 lag,all cyclones,1.0087,0.90829,0.4078,1.0272,False,0.48195
+S5 other index | atl ONI octapr 2004-2025 lag,share,1.0024,0.068609,0.94753,1.1035,False,0.94753
+S5 other index | atl ONI octapr 2004-2025 lag,hf lows,1.0112,0.3602,0.76612,1.0902,False,0.78114
+S5 other index | pac ONI octapr 2004-2025 lag,all cyclones,1.0034,0.3771,0.69965,1.0258,False,0.73024
+S5 other index | pac ONI octapr 2004-2025 lag,share,1.014,0.42172,0.70215,1.0969,False,0.73024
+S5 other index | pac ONI octapr 2004-2025 lag,hf lows,1.0175,0.52333,0.65367,1.0973,False,0.72321
+S6 joint | atl NAO (joint) octapr 2004-2025 lag,all cyclones,0.97366,-2.7535,0.005997,1.0275,False,0.011137
+S6 joint | atl NAO (joint) octapr 2004-2025 lag,share,1.1324,3.7365,0.00049975,1.0977,False,0.0025987
+S6 joint | atl NAO (joint) octapr 2004-2025 lag,hf lows,1.1026,3.3082,0.0029985,1.0862,False,0.0074249
+S6 joint | pac PNA (joint) octapr 2004-2025 lag,all cyclones,1.0277,4.4249,0.001999,1.0175,False,0.0057749
+S6 joint | pac PNA (joint) octapr 2004-2025 lag,share,1.0425,1.4071,0.24888,1.0863,False,0.30097
+S6 joint | pac PNA (joint) octapr 2004-2025 lag,hf lows,1.0714,2.0876,0.058471,1.0969,False,0.080013

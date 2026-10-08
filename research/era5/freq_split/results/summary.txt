@@ -1,0 +1,162 @@
+ERA5 PROXY, pipeline A (800 km ocean gust index; HF-equivalent >= 71.7 kt).
+RR(HF) = RR(all cyclones) x RR(share). Per SD of the index. Daily genesis counts,
+Poisson with month FE + season trend; SEs clustered by season; p from season-block
+permutation; [lo, hi] season-block bootstrap 95%; LOSO = leave-one-season-out range.
+f = log RR(share) / log RR(HF): the fraction of the effect carried by the share.
+permutations = bootstrap draws = 2000.
+
+[primary] atl NAO octapr 2004-2025 index lag
+  tracks 9636, outcome 'hf' 1003 (share 0.1041), days 4606, dispersion all 0.93
+  RR(all)   0.974  (log -0.0266, se 0.0103, z -2.58, p_perm 0.0050)  boot [0.956, 0.995]  LOSO [0.970, 0.979]
+  RR(share) 1.125  (log +0.1181, se 0.0338, z +3.50, p_perm 0.0005)  boot [1.045, 1.197]  LOSO [1.110, 1.143]
+  RR(HF)    1.096  (log +0.0915, se 0.0290, z +3.15, p_perm 0.0050)  boot [1.028, 1.155]  LOSO [1.082, 1.109]
+  f(share) 1.29  boot [1.07, 1.78]  LOSO [1.23, 1.38]
+  OR(share, track logistic) 1.145 (se of log 0.0407, z +3.34)
+
+[primary] pac PNA octapr 2004-2025 index lag
+  tracks 10000, outcome 'hf' 825 (share 0.0825), days 4606, dispersion all 0.98
+  RR(all)   1.028  (log +0.0273, se 0.0062, z +4.39, p_perm 0.0030)  boot [1.015, 1.040]  LOSO [1.025, 1.031]
+  RR(share) 1.043  (log +0.0422, se 0.0294, z +1.44, p_perm 0.2394)  boot [0.988, 1.101]  LOSO [1.029, 1.057]
+  RR(HF)    1.072  (log +0.0695, se 0.0330, z +2.11, p_perm 0.0475)  boot [1.009, 1.139]  LOSO [1.054, 1.088]
+  f(share) 0.61  boot [-0.65, 0.79]  LOSO [0.53, 0.66]
+  OR(share, track logistic) 1.047 (se of log 0.0327, z +1.42)
+
+[S1 same-time] atl NAO octapr 2004-2025 index now
+  tracks 9628, outcome 'hf' 1004 (share 0.1043), days 4606, dispersion all 0.93
+  RR(all)   0.972  (log -0.0280, se 0.0120, z -2.34, p_perm 0.0115)  boot [0.952, 0.997]  LOSO [0.967, 0.978]
+  RR(share) 1.245  (log +0.2189, se 0.0371, z +5.90, p_perm 0.0005)  boot [1.153, 1.334]  LOSO [1.235, 1.275]
+  RR(HF)    1.210  (log +0.1909, se 0.0351, z +5.44, p_perm 0.0005)  boot [1.125, 1.295]  LOSO [1.201, 1.241]
+  f(share) 1.15  boot [1.02, 1.31]  LOSO [1.12, 1.17]
+  OR(share, track logistic) 1.279 (se of log 0.0423, z +5.81)
+
+[S1 same-time] pac PNA octapr 2004-2025 index now
+  tracks 10019, outcome 'hf' 824 (share 0.0822), days 4606, dispersion all 0.97
+  RR(all)   1.053  (log +0.0513, se 0.0094, z +5.44, p_perm 0.0005)  boot [1.034, 1.074]  LOSO [1.049, 1.057]
+  RR(share) 1.126  (log +0.1191, se 0.0339, z +3.52, p_perm 0.0010)  boot [1.050, 1.205]  LOSO [1.113, 1.143]
+  RR(HF)    1.186  (log +0.1704, se 0.0329, z +5.17, p_perm 0.0005)  boot [1.111, 1.266]  LOSO [1.170, 1.204]
+  f(share) 0.70  boot [0.45, 0.83]  LOSO [0.66, 0.73]
+  OR(share, track logistic) 1.141 (se of log 0.0351, z +3.76)
+
+[S2 Jun-May] atl NAO junmay 2004-2025 index lag
+  tracks 16922, outcome 'hf' 1100 (share 0.0650), days 7994, dispersion all 0.96
+  RR(all)   0.982  (log -0.0179, se 0.0085, z -2.10, p_perm 0.0255)  boot [0.967, 0.999]  LOSO [0.979, 0.987]
+  RR(share) 1.113  (log +0.1075, se 0.0290, z +3.70, p_perm 0.0015)  boot [1.047, 1.176]  LOSO [1.101, 1.128]
+  RR(HF)    1.094  (log +0.0895, se 0.0246, z +3.64, p_perm 0.0045)  boot [1.037, 1.144]  LOSO [1.083, 1.105]
+  f(share) 1.20  boot [1.01, 1.47]  LOSO [1.15, 1.23]
+  OR(share, track logistic) 1.140 (se of log 0.0352, z +3.73)
+
+[S2 Jun-May] pac PNA junmay 2004-2025 index lag
+  tracks 18358, outcome 'hf' 896 (share 0.0488), days 7994, dispersion all 1.00
+  RR(all)   1.023  (log +0.0226, se 0.0063, z +3.59, p_perm 0.0020)  boot [1.010, 1.035]  LOSO [1.020, 1.027]
+  RR(share) 1.050  (log +0.0487, se 0.0330, z +1.47, p_perm 0.1544)  boot [0.983, 1.113]  LOSO [1.035, 1.066]
+  RR(HF)    1.074  (log +0.0712, se 0.0338, z +2.11, p_perm 0.0300)  boot [1.004, 1.138]  LOSO [1.059, 1.089]
+  f(share) 0.68  boot [-0.59, 0.91]  LOSO [0.60, 0.75]
+  OR(share, track logistic) 1.051 (se of log 0.0337, z +1.47)
+
+[S3 chain] atl NAO octapr 2004-2025 index lag
+  tracks 9636, outcome 'hf' 1003 (share 0.1041), days 4606, dispersion all 0.93
+  RR(all)   0.974  (log -0.0266, se 0.0103, z -2.58, p_perm 0.0055)  boot [0.955, 0.994]  LOSO [0.970, 0.979]
+  RR(share) 1.125  (log +0.1181, se 0.0338, z +3.50, p_perm 0.0005)  boot [1.052, 1.195]  LOSO [1.110, 1.143]
+  RR(HF)    1.096  (log +0.0915, se 0.0290, z +3.15, p_perm 0.0060)  boot [1.034, 1.156]  LOSO [1.082, 1.109]
+  f(share) 1.29  boot [1.07, 1.73]  LOSO [1.23, 1.38]
+  stage RR: deep|all 1.019 (z +2.57), HF|deep 1.105 (z +3.09)
+
+[S3 chain] pac PNA octapr 2004-2025 index lag
+  tracks 10000, outcome 'hf' 825 (share 0.0825), days 4606, dispersion all 0.98
+  RR(all)   1.028  (log +0.0273, se 0.0062, z +4.39, p_perm 0.0025)  boot [1.015, 1.039]  LOSO [1.025, 1.031]
+  RR(share) 1.043  (log +0.0422, se 0.0294, z +1.44, p_perm 0.2504)  boot [0.981, 1.104]  LOSO [1.029, 1.057]
+  RR(HF)    1.072  (log +0.0695, se 0.0330, z +2.11, p_perm 0.0540)  boot [1.002, 1.142]  LOSO [1.054, 1.088]
+  f(share) 0.61  boot [-0.61, 0.83]  LOSO [0.53, 0.66]
+  stage RR: deep|all 0.993 (z -0.90), HF|deep 1.051 (z +1.58)
+
+[S4 depth] atl NAO octapr 1979-2025 index lag
+  tracks 20475, outcome 'dq_atl' 2145 (share 0.1048), days 9856, dispersion all 0.91
+  RR(all)   0.982  (log -0.0185, se 0.0071, z -2.61, p_perm 0.0035)  boot [0.968, 0.996]  LOSO [0.979, 0.984]
+  RR(share) 1.108  (log +0.1022, se 0.0298, z +3.43, p_perm 0.0005)  boot [1.041, 1.171]  LOSO [1.095, 1.119]
+  RR(HF)    1.087  (log +0.0837, se 0.0283, z +2.96, p_perm 0.0025)  boot [1.025, 1.148]  LOSO [1.076, 1.097]
+  f(share) 1.22  boot [1.05, 1.77]  LOSO [1.19, 1.26]
+
+[S4 depth] atl NAO octapr 1979-2000 index lag
+  tracks 9487, outcome 'dq_atl' 1011 (share 0.1066), days 4620, dispersion all 0.89
+  RR(all)   0.987  (log -0.0134, se 0.0106, z -1.26, p_perm 0.1564)  boot [0.968, 1.008]  LOSO [0.982, 0.991]
+  RR(share) 1.087  (log +0.0834, se 0.0436, z +1.91, p_perm 0.0325)  boot [0.996, 1.172]  LOSO [1.061, 1.106]
+  RR(HF)    1.073  (log +0.0700, se 0.0444, z +1.58, p_perm 0.0650)  boot [0.977, 1.162]  LOSO [1.048, 1.092]
+  f(share) 1.19  boot [-0.63, 2.98]  LOSO [1.11, 1.29]
+
+[S4 depth] atl NAO octapr 2004-2025 index lag
+  tracks 9636, outcome 'dq_atl' 1008 (share 0.1046), days 4606, dispersion all 0.93
+  RR(all)   0.974  (log -0.0266, se 0.0103, z -2.58, p_perm 0.0045)  boot [0.955, 0.993]  LOSO [0.970, 0.979]
+  RR(share) 1.146  (log +0.1361, se 0.0428, z +3.18, p_perm 0.0050)  boot [1.045, 1.232]  LOSO [1.121, 1.173]
+  RR(HF)    1.116  (log +0.1095, se 0.0381, z +2.87, p_perm 0.0170)  boot [1.028, 1.191]  LOSO [1.095, 1.139]
+  f(share) 1.24  boot [1.07, 1.76]  LOSO [1.20, 1.31]
+
+[S4 depth] pac PNA octapr 1979-2025 index lag
+  tracks 21434, outcome 'dq_pac' 1846 (share 0.0861), days 9856, dispersion all 0.97
+  RR(all)   1.022  (log +0.0216, se 0.0062, z +3.47, p_perm 0.0015)  boot [1.010, 1.035]  LOSO [1.019, 1.025]
+  RR(share) 1.115  (log +0.1085, se 0.0222, z +4.88, p_perm 0.0005)  boot [1.067, 1.160]  LOSO [1.107, 1.123]
+  RR(HF)    1.139  (log +0.1301, se 0.0237, z +5.48, p_perm 0.0005)  boot [1.087, 1.190]  LOSO [1.130, 1.150]
+  f(share) 0.83  boot [0.72, 0.92]  LOSO [0.81, 0.85]
+
+[S4 depth] pac PNA octapr 1979-2000 index lag
+  tracks 10066, outcome 'dq_pac' 877 (share 0.0871), days 4620, dispersion all 0.95
+  RR(all)   1.019  (log +0.0192, se 0.0099, z +1.93, p_perm 0.0485)  boot [0.999, 1.040]  LOSO [1.014, 1.024]
+  RR(share) 1.118  (log +0.1115, se 0.0367, z +3.04, p_perm 0.0020)  boot [1.038, 1.199]  LOSO [1.103, 1.141]
+  RR(HF)    1.140  (log +0.1307, se 0.0373, z +3.51, p_perm 0.0010)  boot [1.057, 1.220]  LOSO [1.123, 1.163]
+  f(share) 0.85  boot [0.62, 1.01]  LOSO [0.81, 0.89]
+
+[S4 depth] pac PNA octapr 2004-2025 index lag
+  tracks 10000, outcome 'dq_pac' 828 (share 0.0828), days 4606, dispersion all 0.98
+  RR(all)   1.028  (log +0.0273, se 0.0062, z +4.39, p_perm 0.0035)  boot [1.014, 1.040]  LOSO [1.025, 1.031]
+  RR(share) 1.111  (log +0.1051, se 0.0283, z +3.71, p_perm 0.0065)  boot [1.048, 1.167]  LOSO [1.093, 1.121]
+  RR(HF)    1.142  (log +0.1324, se 0.0284, z +4.66, p_perm 0.0005)  boot [1.077, 1.199]  LOSO [1.123, 1.153]
+  f(share) 0.79  boot [0.60, 0.89]  LOSO [0.76, 0.82]
+
+[S5 other index] atl PNA octapr 2004-2025 index lag
+  tracks 9636, outcome 'hf' 1003 (share 0.1041), days 4606, dispersion all 0.93
+  RR(all)   1.021  (log +0.0205, se 0.0105, z +1.94, p_perm 0.0180)  boot [1.002, 1.043]  LOSO [1.016, 1.026]
+  RR(share) 0.882  (log -0.1259, se 0.0330, z -3.81, p_perm 0.0010)  boot [0.825, 0.936]  LOSO [0.865, 0.900]
+  RR(HF)    0.900  (log -0.1054, se 0.0308, z -3.42, p_perm 0.0045)  boot [0.847, 0.953]  LOSO [0.884, 0.915]
+  f(share) 1.19  boot [1.02, 1.54]  LOSO [1.15, 1.24]
+  OR(share, track logistic) 0.865 (se of log 0.0359, z -4.04)
+
+[S5 other index] pac NAO octapr 2004-2025 index lag
+  tracks 10000, outcome 'hf' 825 (share 0.0825), days 4606, dispersion all 0.98
+  RR(all)   0.995  (log -0.0054, se 0.0102, z -0.53, p_perm 0.5472)  boot [0.976, 1.014]  LOSO [0.991, 1.001]
+  RR(share) 1.021  (log +0.0207, se 0.0297, z +0.70, p_perm 0.5652)  boot [0.961, 1.080]  LOSO [1.001, 1.031]
+  RR(HF)    1.015  (log +0.0152, se 0.0298, z +0.51, p_perm 0.6777)  boot [0.954, 1.074]  LOSO [0.995, 1.024]
+  f(share) 1.36  boot [-3.42, 5.59]  LOSO [-0.14, 2.25]
+  OR(share, track logistic) 1.020 (se of log 0.0324, z +0.60)
+
+[S5 other index] atl ONI octapr 2004-2025 index lag
+  tracks 9656, outcome 'hf' 1007 (share 0.1043), days 4620, dispersion all 0.93
+  RR(all)   1.009  (log +0.0087, se 0.0096, z +0.91, p_perm 0.4078)  boot [0.988, 1.030]  LOSO [1.003, 1.013]
+  RR(share) 1.002  (log +0.0024, se 0.0352, z +0.07, p_perm 0.9475)  boot [0.926, 1.081]  LOSO [0.987, 1.025]
+  RR(HF)    1.011  (log +0.0111, se 0.0308, z +0.36, p_perm 0.7661)  boot [0.944, 1.082]  LOSO [0.998, 1.031]
+  f(share) 0.22  boot [-4.20, 6.40]  LOSO [-2.73, 31.34]
+  OR(share, track logistic) 1.003 (se of log 0.0417, z +0.08)
+
+[S5 other index] pac ONI octapr 2004-2025 index lag
+  tracks 10040, outcome 'hf' 825 (share 0.0822), days 4620, dispersion all 0.98
+  RR(all)   1.003  (log +0.0034, se 0.0091, z +0.38, p_perm 0.6997)  boot [0.984, 1.024]  LOSO [0.998, 1.009]
+  RR(share) 1.014  (log +0.0139, se 0.0330, z +0.42, p_perm 0.7021)  boot [0.925, 1.072]  LOSO [0.997, 1.040]
+  RR(HF)    1.018  (log +0.0174, se 0.0332, z +0.52, p_perm 0.6537)  boot [0.925, 1.079]  LOSO [0.997, 1.042]
+  f(share) 0.80  boot [-1.53, 3.42]  LOSO [-0.37, 1.23]
+  OR(share, track logistic) 1.017 (se of log 0.0356, z +0.47)
+
+[S6 joint] atl NAO (with NAO+PNA) octapr 2004-2025 index lag
+  tracks 9636, outcome 'hf' 1003 (share 0.1041), days 4606, dispersion all 0.93
+  RR(all)   0.974  (log -0.0267, se 0.0097, z -2.75, p_perm 0.0060)  boot [0.957, 0.993]  LOSO [0.970, 0.978]
+  RR(share) 1.132  (log +0.1244, se 0.0333, z +3.74, p_perm 0.0005)  boot [1.052, 1.199]  LOSO [1.118, 1.150]
+  RR(HF)    1.103  (log +0.0977, se 0.0295, z +3.31, p_perm 0.0030)  boot [1.036, 1.164]  LOSO [1.086, 1.116]
+  f(share) 1.27  boot [1.07, 1.69]  LOSO [1.22, 1.36]
+  OR(share, track logistic) 1.155 (se of log 0.0402, z +3.59)
+
+[S6 joint] pac PNA (with PNA+NAO) octapr 2004-2025 index lag
+  tracks 10000, outcome 'hf' 825 (share 0.0825), days 4606, dispersion all 0.98
+  RR(all)   1.028  (log +0.0273, se 0.0062, z +4.42, p_perm 0.0020)  boot [1.014, 1.040]  LOSO [1.025, 1.031]
+  RR(share) 1.042  (log +0.0416, se 0.0295, z +1.41, p_perm 0.2489)  boot [0.987, 1.101]  LOSO [1.027, 1.056]
+  RR(HF)    1.071  (log +0.0689, se 0.0330, z +2.09, p_perm 0.0585)  boot [1.007, 1.139]  LOSO [1.053, 1.087]
+  f(share) 0.60  boot [-0.74, 0.80]  LOSO [0.52, 0.66]
+  OR(share, track logistic) 1.047 (se of log 0.0328, z +1.39)
+
+Depth-equivalent cuts (S4): {"atl": {"minp_cut": 966.2, "n_hf_2004_2025": 1007, "n_depth_2004_2025": 1012}, "pac": {"minp_cut": 965.0, "n_hf_2004_2025": 825, "n_depth_2004_2025": 831}}

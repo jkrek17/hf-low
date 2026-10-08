@@ -1,0 +1,165 @@
+ERA5 PROXY, pipeline A events. Slopes per SD of the index, NAO and PNA fitted together,
+month fixed effects + linear season term. se: season-block bootstrap; p: season-block permutation;
+LOSO: leave-one-season-out range; q: BH over the primary rows (lagged index, no position).
+
+== lagged ==
+atl all   minp       NAO   -0.921 hPa      se 0.293  t  -3.14  p 0.0030  LOSO [-1.026, -0.806]  q 0.017  n 2250 / 47 seasons
+atl all   minp       PNA   +0.020 hPa      se 0.363  t  +0.06  p 0.9481  LOSO [-0.093, +0.115]  q 0.976  n 2250 / 47 seasons
+atl all   anom_clim  NAO   -0.073 hPa      se 0.253  t  -0.29  p 0.8192  LOSO [-0.155, +0.025]  q 0.976  n 2250 / 47 seasons
+atl all   anom_clim  PNA   -0.064 hPa      se 0.329  t  -0.19  p 0.8292  LOSO [-0.188, +0.018]  q 0.976  n 2250 / 47 seasons
+atl all   depth_ring NAO   -0.720 hPa      se 0.218  t  -3.31  p 0.0010  LOSO [-0.811, -0.621]  q 0.009  n 2250 / 47 seasons
+atl all   depth_ring PNA   +0.091 hPa      se 0.224  t  +0.41  p 0.6663  LOSO [+0.006, +0.171]  q 0.976  n 2250 / 47 seasons
+atl all   bg         NAO   +0.647 hPa      se 0.226  t  +2.86  p 0.0110  LOSO [+0.571, +0.746]  q 0.051  n 2250 / 47 seasons
+atl all   bg         PNA   -0.155 hPa      se 0.266  t  -0.58  p 0.5345  LOSO [-0.293, -0.060]  q 0.976  n 2250 / 47 seasons
+atl all   ndr_max    NAO   -0.012 Bergeron se 0.015  t  -0.85  p 0.4286  LOSO [-0.020, -0.008]  q 0.923  n 2204 / 47 seasons
+atl all   ndr_max    PNA   -0.002 Bergeron se 0.017  t  -0.11  p 0.8901  LOSO [-0.008, +0.003]  q 0.976  n 2204 / 47 seasons
+atl 2004+ minp       NAO   -0.937 hPa      se 0.440  t  -2.13  p 0.0480  LOSO [-1.146, -0.692]  q nan  n 1100 / 22 seasons
+atl 2004+ minp       PNA   -0.335 hPa      se 0.489  t  -0.69  p 0.4545  LOSO [-0.510, -0.151]  q nan  n 1100 / 22 seasons
+atl 2004+ anom_clim  NAO   -0.129 hPa      se 0.323  t  -0.40  p 0.7572  LOSO [-0.270, -0.011]  q nan  n 1100 / 22 seasons
+atl 2004+ anom_clim  PNA   -0.421 hPa      se 0.415  t  -1.01  p 0.3097  LOSO [-0.581, -0.304]  q nan  n 1100 / 22 seasons
+atl 2004+ depth_ring NAO   -0.704 hPa      se 0.326  t  -2.16  p 0.0250  LOSO [-0.884, -0.487]  q nan  n 1100 / 22 seasons
+atl 2004+ depth_ring PNA   -0.011 hPa      se 0.354  t  -0.03  p 0.9730  LOSO [-0.129, +0.155]  q nan  n 1100 / 22 seasons
+atl 2004+ bg         NAO   +0.575 hPa      se 0.259  t  +2.22  p 0.0969  LOSO [+0.448, +0.673]  q nan  n 1100 / 22 seasons
+atl 2004+ bg         PNA   -0.410 hPa      se 0.377  t  -1.09  p 0.2368  LOSO [-0.570, -0.251]  q nan  n 1100 / 22 seasons
+atl 2004+ ndr_max    NAO   -0.010 Bergeron se 0.023  t  -0.42  p 0.6803  LOSO [-0.026, -0.001]  q nan  n 1075 / 22 seasons
+atl 2004+ ndr_max    PNA   +0.008 Bergeron se 0.021  t  +0.38  p 0.7443  LOSO [+0.000, +0.017]  q nan  n 1075 / 22 seasons
+atl 2004+ g800max    NAO   -0.009 kt       se 0.235  t  -0.04  p 0.9760  LOSO [-0.147, +0.087]  q 0.976  n 1100 / 22 seasons
+atl 2004+ g800max    PNA   +0.118 kt       se 0.276  t  +0.43  p 0.6444  LOSO [+0.021, +0.245]  q 0.976  n 1100 / 22 seasons
+atl 2004+ hf_hours   NAO   +0.015 h        se 0.458  t  +0.03  p 0.9750  LOSO [-0.208, +0.209]  q 0.976  n 1100 / 22 seasons
+atl 2004+ hf_hours   PNA   +0.107 h        se 0.532  t  +0.20  p 0.8102  LOSO [-0.072, +0.486]  q 0.976  n 1100 / 22 seasons
+pac all   minp       NAO   +0.048 hPa      se 0.259  t  +0.19  p 0.8771  LOSO [-0.039, +0.122]  q 0.976  n 1903 / 47 seasons
+pac all   minp       PNA   -0.899 hPa      se 0.304  t  -2.95  p 0.0010  LOSO [-0.985, -0.774]  q 0.009  n 1903 / 47 seasons
+pac all   anom_clim  NAO   +0.213 hPa      se 0.234  t  +0.91  p 0.4026  LOSO [+0.110, +0.278]  q 0.923  n 1903 / 47 seasons
+pac all   anom_clim  PNA   -0.908 hPa      se 0.289  t  -3.14  p 0.0020  LOSO [-0.991, -0.775]  q 0.014  n 1903 / 47 seasons
+pac all   depth_ring NAO   -0.281 hPa      se 0.216  t  -1.30  p 0.2078  LOSO [-0.344, -0.216]  q 0.582  n 1903 / 47 seasons
+pac all   depth_ring PNA   +0.124 hPa      se 0.255  t  +0.49  p 0.5914  LOSO [+0.035, +0.206]  q 0.976  n 1903 / 47 seasons
+pac all   bg         NAO   +0.494 hPa      se 0.217  t  +2.28  p 0.0250  LOSO [+0.423, +0.550]  q 0.100  n 1903 / 47 seasons
+pac all   bg         PNA   -1.032 hPa      se 0.172  t  -6.01  p 0.0010  LOSO [-1.088, -0.981]  q 0.009  n 1903 / 47 seasons
+pac all   ndr_max    NAO   +0.003 Bergeron se 0.013  t  +0.26  p 0.7992  LOSO [-0.001, +0.007]  q 0.976  n 1878 / 47 seasons
+pac all   ndr_max    PNA   +0.010 Bergeron se 0.013  t  +0.74  p 0.4835  LOSO [+0.003, +0.014]  q 0.967  n 1878 / 47 seasons
+pac 2004+ minp       NAO   -0.067 hPa      se 0.339  t  -0.20  p 0.8801  LOSO [-0.241, +0.070]  q nan  n 896 / 22 seasons
+pac 2004+ minp       PNA   -1.543 hPa      se 0.471  t  -3.27  p 0.0020  LOSO [-1.730, -1.286]  q nan  n 896 / 22 seasons
+pac 2004+ anom_clim  NAO   +0.071 hPa      se 0.278  t  +0.26  p 0.8761  LOSO [-0.058, +0.166]  q nan  n 896 / 22 seasons
+pac 2004+ anom_clim  PNA   -1.502 hPa      se 0.417  t  -3.60  p 0.0010  LOSO [-1.652, -1.278]  q nan  n 896 / 22 seasons
+pac 2004+ depth_ring NAO   -0.375 hPa      se 0.305  t  -1.23  p 0.2677  LOSO [-0.504, -0.224]  q nan  n 896 / 22 seasons
+pac 2004+ depth_ring PNA   -0.095 hPa      se 0.338  t  -0.28  p 0.7732  LOSO [-0.257, +0.052]  q nan  n 896 / 22 seasons
+pac 2004+ bg         NAO   +0.446 hPa      se 0.328  t  +1.36  p 0.1898  LOSO [+0.263, +0.554]  q nan  n 896 / 22 seasons
+pac 2004+ bg         PNA   -1.407 hPa      se 0.242  t  -5.82  p 0.0010  LOSO [-1.495, -1.304]  q nan  n 896 / 22 seasons
+pac 2004+ ndr_max    NAO   +0.005 Bergeron se 0.016  t  +0.30  p 0.7852  LOSO [-0.001, +0.014]  q nan  n 883 / 22 seasons
+pac 2004+ ndr_max    PNA   +0.007 Bergeron se 0.021  t  +0.33  p 0.7443  LOSO [-0.002, +0.015]  q nan  n 883 / 22 seasons
+pac 2004+ g800max    NAO   +0.245 kt       se 0.242  t  +1.01  p 0.3526  LOSO [+0.121, +0.388]  q 0.898  n 896 / 22 seasons
+pac 2004+ g800max    PNA   +0.519 kt       se 0.256  t  +2.03  p 0.0370  LOSO [+0.392, +0.636]  q 0.129  n 896 / 22 seasons
+pac 2004+ hf_hours   NAO   +0.099 h        se 0.427  t  +0.23  p 0.8282  LOSO [-0.132, +0.260]  q 0.976  n 896 / 22 seasons
+pac 2004+ hf_hours   PNA   +0.870 h        se 0.452  t  +1.92  p 0.0919  LOSO [+0.626, +1.024]  q 0.286  n 896 / 22 seasons
+
+== lagged+position ==
+atl all   minp       NAO   -0.590 hPa      se 0.296  t  -1.99  p 0.0539  LOSO [-0.689, -0.476]  q nan  n 2250 / 47 seasons
+atl all   minp       PNA   -0.045 hPa      se 0.335  t  -0.13  p 0.8891  LOSO [-0.159, +0.041]  q nan  n 2250 / 47 seasons
+atl all   anom_clim  NAO   -0.514 hPa      se 0.280  t  -1.83  p 0.0509  LOSO [-0.609, -0.408]  q nan  n 2250 / 47 seasons
+atl all   anom_clim  PNA   -0.100 hPa      se 0.313  t  -0.32  p 0.7113  LOSO [-0.222, -0.011]  q nan  n 2250 / 47 seasons
+atl all   depth_ring NAO   -1.010 hPa      se 0.217  t  -4.66  p 0.0010  LOSO [-1.095, -0.923]  q nan  n 2250 / 47 seasons
+atl all   depth_ring PNA   +0.142 hPa      se 0.217  t  +0.65  p 0.5255  LOSO [+0.056, +0.229]  q nan  n 2250 / 47 seasons
+atl all   bg         NAO   +0.496 hPa      se 0.199  t  +2.50  p 0.0210  LOSO [+0.433, +0.572]  q nan  n 2250 / 47 seasons
+atl all   bg         PNA   -0.242 hPa      se 0.257  t  -0.94  p 0.2517  LOSO [-0.357, -0.161]  q nan  n 2250 / 47 seasons
+atl all   ndr_max    NAO   +0.028 Bergeron se 0.014  t  +2.04  p 0.0490  LOSO [+0.022, +0.034]  q nan  n 2204 / 47 seasons
+atl all   ndr_max    PNA   -0.003 Bergeron se 0.015  t  -0.17  p 0.8771  LOSO [-0.009, +0.002]  q nan  n 2204 / 47 seasons
+atl 2004+ minp       NAO   -0.457 hPa      se 0.398  t  -1.15  p 0.3117  LOSO [-0.642, -0.249]  q nan  n 1100 / 22 seasons
+atl 2004+ minp       PNA   -0.333 hPa      se 0.438  t  -0.76  p 0.4266  LOSO [-0.500, -0.178]  q nan  n 1100 / 22 seasons
+atl 2004+ anom_clim  NAO   -0.504 hPa      se 0.397  t  -1.27  p 0.1978  LOSO [-0.684, -0.336]  q nan  n 1100 / 22 seasons
+atl 2004+ anom_clim  PNA   -0.394 hPa      se 0.406  t  -0.97  p 0.3337  LOSO [-0.560, -0.236]  q nan  n 1100 / 22 seasons
+atl 2004+ depth_ring NAO   -0.951 hPa      se 0.323  t  -2.95  p 0.0030  LOSO [-1.122, -0.765]  q nan  n 1100 / 22 seasons
+atl 2004+ depth_ring PNA   +0.029 hPa      se 0.348  t  +0.08  p 0.9241  LOSO [-0.105, +0.213]  q nan  n 1100 / 22 seasons
+atl 2004+ bg         NAO   +0.447 hPa      se 0.239  t  +1.87  p 0.1668  LOSO [+0.327, +0.566]  q nan  n 1100 / 22 seasons
+atl 2004+ bg         PNA   -0.423 hPa      se 0.337  t  -1.25  p 0.1698  LOSO [-0.559, -0.281]  q nan  n 1100 / 22 seasons
+atl 2004+ ndr_max    NAO   +0.028 Bergeron se 0.024  t  +1.18  p 0.1898  LOSO [+0.014, +0.039]  q nan  n 1075 / 22 seasons
+atl 2004+ ndr_max    PNA   +0.004 Bergeron se 0.021  t  +0.21  p 0.8402  LOSO [-0.004, +0.012]  q nan  n 1075 / 22 seasons
+atl 2004+ g800max    NAO   +0.088 kt       se 0.243  t  +0.36  p 0.7253  LOSO [-0.047, +0.180]  q nan  n 1100 / 22 seasons
+atl 2004+ g800max    PNA   +0.119 kt       se 0.252  t  +0.47  p 0.6324  LOSO [+0.015, +0.239]  q nan  n 1100 / 22 seasons
+atl 2004+ hf_hours   NAO   +0.283 h        se 0.492  t  +0.58  p 0.5874  LOSO [+0.043, +0.475]  q nan  n 1100 / 22 seasons
+atl 2004+ hf_hours   PNA   +0.084 h        se 0.510  t  +0.16  p 0.8621  LOSO [-0.075, +0.460]  q nan  n 1100 / 22 seasons
+pac all   minp       NAO   +0.049 hPa      se 0.256  t  +0.19  p 0.8482  LOSO [-0.059, +0.110]  q nan  n 1903 / 47 seasons
+pac all   minp       PNA   -1.088 hPa      se 0.286  t  -3.81  p 0.0010  LOSO [-1.159, -0.958]  q nan  n 1903 / 47 seasons
+pac all   anom_clim  NAO   +0.228 hPa      se 0.236  t  +0.97  p 0.3936  LOSO [+0.124, +0.296]  q nan  n 1903 / 47 seasons
+pac all   anom_clim  PNA   -0.922 hPa      se 0.301  t  -3.06  p 0.0030  LOSO [-0.997, -0.782]  q nan  n 1903 / 47 seasons
+pac all   depth_ring NAO   -0.306 hPa      se 0.216  t  -1.41  p 0.1449  LOSO [-0.374, -0.214]  q nan  n 1903 / 47 seasons
+pac all   depth_ring PNA   -0.017 hPa      se 0.256  t  -0.07  p 0.9301  LOSO [-0.110, +0.081]  q nan  n 1903 / 47 seasons
+pac all   bg         NAO   +0.534 hPa      se 0.189  t  +2.82  p 0.0100  LOSO [+0.468, +0.594]  q nan  n 1903 / 47 seasons
+pac all   bg         PNA   -0.905 hPa      se 0.172  t  -5.25  p 0.0010  LOSO [-0.960, -0.856]  q nan  n 1903 / 47 seasons
+pac all   ndr_max    NAO   +0.001 Bergeron se 0.012  t  +0.05  p 0.9540  LOSO [-0.003, +0.004]  q nan  n 1878 / 47 seasons
+pac all   ndr_max    PNA   +0.011 Bergeron se 0.014  t  +0.78  p 0.4126  LOSO [+0.005, +0.014]  q nan  n 1878 / 47 seasons
+pac 2004+ minp       NAO   -0.061 hPa      se 0.320  t  -0.19  p 0.8931  LOSO [-0.237, +0.055]  q nan  n 896 / 22 seasons
+pac 2004+ minp       PNA   -1.747 hPa      se 0.391  t  -4.46  p 0.0020  LOSO [-1.882, -1.550]  q nan  n 896 / 22 seasons
+pac 2004+ anom_clim  NAO   +0.066 hPa      se 0.274  t  +0.24  p 0.8751  LOSO [-0.084, +0.148]  q nan  n 896 / 22 seasons
+pac 2004+ anom_clim  PNA   -1.595 hPa      se 0.416  t  -3.83  p 0.0010  LOSO [-1.732, -1.367]  q nan  n 896 / 22 seasons
+pac 2004+ depth_ring NAO   -0.409 hPa      se 0.295  t  -1.39  p 0.1988  LOSO [-0.553, -0.228]  q nan  n 896 / 22 seasons
+pac 2004+ depth_ring PNA   -0.353 hPa      se 0.332  t  -1.06  p 0.2847  LOSO [-0.493, -0.189]  q nan  n 896 / 22 seasons
+pac 2004+ bg         NAO   +0.475 hPa      se 0.293  t  +1.62  p 0.1399  LOSO [+0.331, +0.585]  q nan  n 896 / 22 seasons
+pac 2004+ bg         PNA   -1.241 hPa      se 0.259  t  -4.79  p 0.0010  LOSO [-1.344, -1.146]  q nan  n 896 / 22 seasons
+pac 2004+ ndr_max    NAO   +0.006 Bergeron se 0.016  t  +0.35  p 0.7692  LOSO [-0.001, +0.013]  q nan  n 883 / 22 seasons
+pac 2004+ ndr_max    PNA   +0.019 Bergeron se 0.020  t  +0.97  p 0.3137  LOSO [+0.011, +0.028]  q nan  n 883 / 22 seasons
+pac 2004+ g800max    NAO   +0.257 kt       se 0.231  t  +1.11  p 0.2977  LOSO [+0.137, +0.377]  q nan  n 896 / 22 seasons
+pac 2004+ g800max    PNA   +0.570 kt       se 0.283  t  +2.02  p 0.0190  LOSO [+0.472, +0.681]  q nan  n 896 / 22 seasons
+pac 2004+ hf_hours   NAO   +0.093 h        se 0.433  t  +0.21  p 0.8272  LOSO [-0.156, +0.214]  q nan  n 896 / 22 seasons
+pac 2004+ hf_hours   PNA   +0.920 h        se 0.448  t  +2.05  p 0.0559  LOSO [+0.711, +1.109]  q nan  n 896 / 22 seasons
+
+== at-deepest ==
+atl all   minp       NAO   -1.934 hPa      se 0.251  t  -7.69  p nan  LOSO [+nan, +nan]  q nan  n 2252 / 47 seasons
+atl all   minp       PNA   +0.007 hPa      se 0.298  t  +0.02  p nan  LOSO [+nan, +nan]  q nan  n 2252 / 47 seasons
+atl all   anom_clim  NAO   -0.502 hPa      se 0.243  t  -2.07  p nan  LOSO [+nan, +nan]  q nan  n 2252 / 47 seasons
+atl all   anom_clim  PNA   +0.113 hPa      se 0.270  t  +0.42  p nan  LOSO [+nan, +nan]  q nan  n 2252 / 47 seasons
+atl all   depth_ring NAO   -0.777 hPa      se 0.203  t  -3.84  p nan  LOSO [+nan, +nan]  q nan  n 2252 / 47 seasons
+atl all   depth_ring PNA   +0.135 hPa      se 0.190  t  +0.71  p nan  LOSO [+nan, +nan]  q nan  n 2252 / 47 seasons
+atl all   bg         NAO   +0.276 hPa      se 0.233  t  +1.18  p nan  LOSO [+nan, +nan]  q nan  n 2252 / 47 seasons
+atl all   bg         PNA   -0.022 hPa      se 0.258  t  -0.08  p nan  LOSO [+nan, +nan]  q nan  n 2252 / 47 seasons
+atl all   ndr_max    NAO   -0.003 Bergeron se 0.013  t  -0.23  p nan  LOSO [+nan, +nan]  q nan  n 2206 / 47 seasons
+atl all   ndr_max    PNA   -0.007 Bergeron se 0.013  t  -0.53  p nan  LOSO [+nan, +nan]  q nan  n 2206 / 47 seasons
+atl 2004+ minp       NAO   -1.970 hPa      se 0.339  t  -5.81  p nan  LOSO [+nan, +nan]  q nan  n 1102 / 22 seasons
+atl 2004+ minp       PNA   +0.040 hPa      se 0.364  t  +0.11  p nan  LOSO [+nan, +nan]  q nan  n 1102 / 22 seasons
+atl 2004+ anom_clim  NAO   -0.402 hPa      se 0.281  t  -1.43  p nan  LOSO [+nan, +nan]  q nan  n 1102 / 22 seasons
+atl 2004+ anom_clim  PNA   +0.130 hPa      se 0.338  t  +0.39  p nan  LOSO [+nan, +nan]  q nan  n 1102 / 22 seasons
+atl 2004+ depth_ring NAO   -0.767 hPa      se 0.321  t  -2.39  p nan  LOSO [+nan, +nan]  q nan  n 1102 / 22 seasons
+atl 2004+ depth_ring PNA   +0.398 hPa      se 0.312  t  +1.28  p nan  LOSO [+nan, +nan]  q nan  n 1102 / 22 seasons
+atl 2004+ bg         NAO   +0.364 hPa      se 0.298  t  +1.22  p nan  LOSO [+nan, +nan]  q nan  n 1102 / 22 seasons
+atl 2004+ bg         PNA   -0.267 hPa      se 0.352  t  -0.76  p nan  LOSO [+nan, +nan]  q nan  n 1102 / 22 seasons
+atl 2004+ ndr_max    NAO   -0.010 Bergeron se 0.017  t  -0.61  p nan  LOSO [+nan, +nan]  q nan  n 1077 / 22 seasons
+atl 2004+ ndr_max    PNA   -0.001 Bergeron se 0.020  t  -0.04  p nan  LOSO [+nan, +nan]  q nan  n 1077 / 22 seasons
+atl 2004+ g800max    NAO   +0.439 kt       se 0.217  t  +2.02  p nan  LOSO [+nan, +nan]  q nan  n 1102 / 22 seasons
+atl 2004+ g800max    PNA   -0.319 kt       se 0.208  t  -1.53  p nan  LOSO [+nan, +nan]  q nan  n 1102 / 22 seasons
+atl 2004+ hf_hours   NAO   +0.459 h        se 0.366  t  +1.25  p nan  LOSO [+nan, +nan]  q nan  n 1102 / 22 seasons
+atl 2004+ hf_hours   PNA   -0.674 h        se 0.384  t  -1.76  p nan  LOSO [+nan, +nan]  q nan  n 1102 / 22 seasons
+pac all   minp       NAO   +0.179 hPa      se 0.299  t  +0.60  p nan  LOSO [+nan, +nan]  q nan  n 1902 / 47 seasons
+pac all   minp       PNA   -1.758 hPa      se 0.279  t  -6.30  p nan  LOSO [+nan, +nan]  q nan  n 1902 / 47 seasons
+pac all   anom_clim  NAO   +0.171 hPa      se 0.249  t  +0.69  p nan  LOSO [+nan, +nan]  q nan  n 1902 / 47 seasons
+pac all   anom_clim  PNA   -1.742 hPa      se 0.256  t  -6.82  p nan  LOSO [+nan, +nan]  q nan  n 1902 / 47 seasons
+pac all   depth_ring NAO   +0.261 hPa      se 0.223  t  +1.17  p nan  LOSO [+nan, +nan]  q nan  n 1902 / 47 seasons
+pac all   depth_ring PNA   +0.671 hPa      se 0.226  t  +2.98  p nan  LOSO [+nan, +nan]  q nan  n 1902 / 47 seasons
+pac all   bg         NAO   -0.090 hPa      se 0.197  t  -0.46  p nan  LOSO [+nan, +nan]  q nan  n 1902 / 47 seasons
+pac all   bg         PNA   -2.413 hPa      se 0.176  t -13.72  p nan  LOSO [+nan, +nan]  q nan  n 1902 / 47 seasons
+pac all   ndr_max    NAO   +0.017 Bergeron se 0.012  t  +1.43  p nan  LOSO [+nan, +nan]  q nan  n 1877 / 47 seasons
+pac all   ndr_max    PNA   +0.010 Bergeron se 0.016  t  +0.63  p nan  LOSO [+nan, +nan]  q nan  n 1877 / 47 seasons
+pac 2004+ minp       NAO   +0.143 hPa      se 0.481  t  +0.30  p nan  LOSO [+nan, +nan]  q nan  n 895 / 22 seasons
+pac 2004+ minp       PNA   -2.188 hPa      se 0.381  t  -5.74  p nan  LOSO [+nan, +nan]  q nan  n 895 / 22 seasons
+pac 2004+ anom_clim  NAO   +0.150 hPa      se 0.445  t  +0.34  p nan  LOSO [+nan, +nan]  q nan  n 895 / 22 seasons
+pac 2004+ anom_clim  PNA   -2.113 hPa      se 0.374  t  -5.65  p nan  LOSO [+nan, +nan]  q nan  n 895 / 22 seasons
+pac 2004+ depth_ring NAO   +0.373 hPa      se 0.393  t  +0.95  p nan  LOSO [+nan, +nan]  q nan  n 895 / 22 seasons
+pac 2004+ depth_ring PNA   +0.421 hPa      se 0.388  t  +1.08  p nan  LOSO [+nan, +nan]  q nan  n 895 / 22 seasons
+pac 2004+ bg         NAO   -0.223 hPa      se 0.310  t  -0.72  p nan  LOSO [+nan, +nan]  q nan  n 895 / 22 seasons
+pac 2004+ bg         PNA   -2.533 hPa      se 0.249  t -10.19  p nan  LOSO [+nan, +nan]  q nan  n 895 / 22 seasons
+pac 2004+ ndr_max    NAO   +0.022 Bergeron se 0.019  t  +1.15  p nan  LOSO [+nan, +nan]  q nan  n 882 / 22 seasons
+pac 2004+ ndr_max    PNA   +0.003 Bergeron se 0.025  t  +0.14  p nan  LOSO [+nan, +nan]  q nan  n 882 / 22 seasons
+pac 2004+ g800max    NAO   -0.018 kt       se 0.278  t  -0.06  p nan  LOSO [+nan, +nan]  q nan  n 895 / 22 seasons
+pac 2004+ g800max    PNA   +0.504 kt       se 0.187  t  +2.70  p nan  LOSO [+nan, +nan]  q nan  n 895 / 22 seasons
+pac 2004+ hf_hours   NAO   -0.163 h        se 0.528  t  -0.31  p nan  LOSO [+nan, +nan]  q nan  n 895 / 22 seasons
+pac 2004+ hf_hours   PNA   +1.268 h        se 0.510  t  +2.48  p nan  LOSO [+nan, +nan]  q nan  n 895 / 22 seasons
+
+== position of the deepest fix, lagged index (deg per SD) ==
+atl lat  NAO +1.459 se 0.181 t +8.07 p 0.0010 LOSO [+1.402, +1.509]
+atl lat  PNA -0.094 se 0.215 t -0.44 p 0.6693 LOSO [-0.165, -0.012]
+atl lon  NAO +1.899 se 0.379 t +5.01 p 0.0020 LOSO [+1.774, +2.020]
+atl lon  PNA -0.722 se 0.438 t -1.65 p 0.0999 LOSO [-0.864, -0.534]
+pac lat  NAO -0.009 se 0.181 t -0.05 p 0.9700 LOSO [-0.057, +0.082]
+pac lat  PNA -0.132 se 0.196 t -0.67 p 0.4535 LOSO [-0.202, -0.079]
+pac lon  NAO +0.347 se 0.676 t +0.51 p 0.5794 LOSO [+0.048, +0.659]
+pac lon  PNA +1.147 se 0.626 t +1.83 p 0.0500 LOSO [+0.816, +1.361]
+
+ICC by season: {"atl_minp": 0.02, "atl_anom_clim": 0.008, "atl_depth_ring": 0.006, "atl_bg": 0.032, "atl_ndr_max": 0.005, "atl_g800max": 0.003, "atl_hf_hours": 0.012, "pac_minp": 0.003, "pac_anom_clim": 0.004, "pac_depth_ring": -0.008, "pac_bg": 0.051, "pac_ndr_max": -0.009, "pac_g800max": 0.01, "pac_hf_hours": 0.003}

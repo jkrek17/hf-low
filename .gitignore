@@ -24,3 +24,40 @@ tests/create_xml_windhazards/out/
 tests/pressure_gap_fill/out/
 tests/tcwind_jtwc/out/
 tests/tc_pressure/out/
+
+# Bookkeeping written by tools/publish.py --deploy ... --flat so a later
+# run knows which files it placed. It belongs next to the deployed site on
+# the NOAA server, not in the committed flat/ copy (and the flat-sync job
+# in .github/workflows/pages.yml skips it by name).
+flat/.awips-publish-manifest.json
+
+# tools/fetch_hsf.py cache: raw OPC High Seas Forecast text from the Iowa State
+# IEM archive (~70 MB for 2002-now). Re-fetchable, so never committed.
+data/hsf_cache/
+
+# tools/parse_hsf.py output: every analysed low centre in the cache, about 67 MB
+# and regenerable from data/hsf_cache/ in a couple of minutes. Only the derived
+# precursors.csv is committed, so this must never be.
+data/hf_lows/hsf_lows.csv
+
+# Python wheels left in the tree by a pip install or download. Research scripts
+# under research/ need numpy, numcodecs and scipy, but the wheels themselves are
+# re-downloadable and tens of MB each - three separate large files have come
+# within one `git add -A` of this history already.
+*.whl
+
+# research/era5/event_fields.csv is the labelled table criterion.py rebuilds in
+# seconds from the per-season event_fields_<season>.csv caches. Those caches are
+# kept because reproducing them cost 52 GB of ERA5 streaming; the join is cheap.
+research/era5/event_fields.csv
+
+# research/era5/event_fields_<season>.csv are per-season cyclone-feature caches.
+# Expensive to rebuild (about 190 GB of ERA5 streaming for the 47 seasons) but
+# fully reproducible from event_fields.py, and they are invalidated whenever the
+# feature definition changes - which it just did, to mask gusts to ocean. The
+# committed artefacts are the scripts and the derived hf_probability.csv.gz.
+research/era5/event_fields_[0-9]*.csv
+
+# research/era5/buoy_drift/work/ holds the ISD buoy downloads and the ERA5
+# point extractions (tens of MB, regenerable by the two fetch scripts there).
+research/era5/buoy_drift/work/

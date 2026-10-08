@@ -1,0 +1,22 @@
+{
+ "threshold_kt": 71.7,
+ "deep_stage": "minp <= 1000.0 hPa and n_fix >= 8, or HF",
+ "depth_cuts": {
+  "atl": {
+   "minp_cut": 966.2,
+   "n_hf_2004_2025": 1007,
+   "n_depth_2004_2025": 1012
+  },
+  "pac": {
+   "minp_cut": 965.0,
+   "n_hf_2004_2025": 825,
+   "n_depth_2004_2025": 831
+  }
+ },
+ "nperm": 2000,
+ "nboot": 2000,
+ "seed": 20261008,
+ "n_tracks_file": 75087,
+ "lag": "mean of days -10..-4 before genesis",
+ "now": "mean of days -3..+3"
+}

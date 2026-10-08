@@ -1,0 +1,75 @@
+Life cycle of pipeline A HF-equivalent events (ERA5 PROXY, not the archive)
+lifecycle.py; inputs: results/era5_hf_catalog*.csv, ../tc_candidates.csv, data/hf_lows/*.csv
+HF fix = in-domain 6-hourly fix with g800 >= 71.7 kt. Durations are counts of 6-hourly fixes x 6 h.
+Brackets: 95% season-block bootstrap interval (seasons resampled within basin, 2,000 draws).
+Main sample: seasons 2004-05..2025-26, tropical-cyclone-linked events excluded.
+
+== Sample ==
+2004+      events  2000  tc-linked  114  atl 1104  pac 896
+2001-03    events   268  tc-linked   21  atl 140  pac 128
+1979-2000  events  1889  tc-linked  110  atl 1010  pac 879
+main sample (2004+, no TC link): 1886 events, 22 seasons
+
+== Censoring (main sample) ==
+atl: genesis observed (first fix >=1000 hPa, >21N) 0.566; HF at first in-domain fix 0.071; out-of-domain HF before onset 0.016; usable for lead time 0.556 (n=578)
+pac: genesis observed (first fix >=1000 hPa, >21N) 0.691; HF at first in-domain fix 0.071; out-of-domain HF before onset 0.037; usable for lead time 0.678 (n=574)
+all: genesis observed (first fix >=1000 hPa, >21N) 0.622; HF at first in-domain fix 0.071; out-of-domain HF before onset 0.025; usable for lead time 0.611 (n=1152)
+
+== Main numbers, 2004-05..2025-26, no TC link ==
+--- atl (n=1039; lead-time n=578)
+genesis -> first HF fix, h: median 36 [36, 36]; quartiles 24/54; share <= 24 h 0.34 [0.29, 0.38]
+hours at HF: median 12 [12, 12]; quartiles 6/24; 90th pct 36; share 6 h only 0.35 [0.32, 0.38]; share >= 24 h 0.27 [0.24, 0.30]
+first-to-last HF span, h: median 6; share with >1 HF episode 0.17 [0.15, 0.20]
+onset minus min-pressure time, h: median -6 [-6, -6]; onset before min pressure 0.66 [0.63, 0.69]; at 0.21
+peak gust minus min-pressure time, h: median 0 [-6, 0]; peak gust before min pressure 0.47 [0.44, 0.51]; at 0.27; after 0.25
+onset minus max-deepening mid-time, h: median 12 [6, 12]
+share of HF fixes before / after min-pressure fix: 0.46 / 0.29
+max 24 h deepening, Bergerons: median 1.22; share >= 1 (bomb) 0.64
+latitude at onset / min pressure / peak gust: median 54.8 / 58.0 / 56.8
+translation speed while HF, kt: median 25; distance covered while HF (events with >=2 consecutive HF fixes), km: median 509
+--- pac (n=847; lead-time n=574)
+genesis -> first HF fix, h: median 36 [30, 36]; quartiles 24/48; share <= 24 h 0.31 [0.27, 0.35]
+hours at HF: median 12 [12, 12]; quartiles 6/24; 90th pct 36; share 6 h only 0.35 [0.31, 0.38]; share >= 24 h 0.30 [0.28, 0.33]
+first-to-last HF span, h: median 6; share with >1 HF episode 0.16 [0.14, 0.19]
+onset minus min-pressure time, h: median -12 [-12, -12]; onset before min pressure 0.77 [0.73, 0.79]; at 0.16
+peak gust minus min-pressure time, h: median -6 [-6, -6]; peak gust before min pressure 0.62 [0.59, 0.65]; at 0.24; after 0.14
+onset minus max-deepening mid-time, h: median 12 [6, 12]
+share of HF fixes before / after min-pressure fix: 0.58 / 0.20
+max 24 h deepening, Bergerons: median 1.43; share >= 1 (bomb) 0.77
+latitude at onset / min pressure / peak gust: median 42.5 / 47.5 / 44.0
+translation speed while HF, kt: median 29; distance covered while HF (events with >=2 consecutive HF fixes), km: median 643
+--- all (n=1886; lead-time n=1152)
+genesis -> first HF fix, h: median 36 [36, 36]; quartiles 24/48; share <= 24 h 0.32 [0.29, 0.35]
+hours at HF: median 12 [12, 12]; quartiles 6/24; 90th pct 36; share 6 h only 0.35 [0.33, 0.37]; share >= 24 h 0.28 [0.26, 0.30]
+first-to-last HF span, h: median 6; share with >1 HF episode 0.17 [0.15, 0.19]
+onset minus min-pressure time, h: median -12 [-12, -6]; onset before min pressure 0.71 [0.69, 0.73]; at 0.18
+peak gust minus min-pressure time, h: median -6 [-6, -6]; peak gust before min pressure 0.54 [0.52, 0.56]; at 0.26; after 0.20
+onset minus max-deepening mid-time, h: median 12 [6, 12]
+share of HF fixes before / after min-pressure fix: 0.51 / 0.25
+max 24 h deepening, Bergerons: median 1.32; share >= 1 (bomb) 0.70
+latitude at onset / min pressure / peak gust: median 47.5 / 52.5 / 49.2
+translation speed while HF, kt: median 27; distance covered while HF (events with >=2 consecutive HF fixes), km: median 591
+
+== Basin difference (Atlantic minus Pacific), main sample ==
+genesis->onset median h: 0 [0, 6]
+hours at HF median: 0 [0, 0]
+peak gust - min pressure median h: 6 [0, 6]
+
+== By month of onset, main sample, both basins ==
+Sep-Nov: n=381; genesis->onset median 42 [36, 42] h (n=247); hours at HF median 12; share >=24 h 0.22; peak gust - min p median -6 h
+Dec-Feb: n=1126; genesis->onset median 30 [30, 36] h (n=664); hours at HF median 12; share >=24 h 0.33; peak gust - min p median -6 h
+Mar-May: n=336; genesis->onset median 36 [36, 42] h (n=221); hours at HF median 12; share >=24 h 0.21; peak gust - min p median -6 h
+Jun-Aug: n=43; genesis->onset median 66 [54, 102] h (n=20); hours at HF median 12; share >=24 h 0.30; peak gust - min p median 0 h
+
+== Tropical-cyclone-linked events, 2004+ (genesis is tropical; lead time not meaningful) ==
+n=114; hours at HF median 30; onset latitude median 31.2; onset months Aug-Nov share 0.96
+
+== Earlier seasons, 1979-80..2000-01, no TC link (PROXY; gust index drifts upward before 2001,
+   which moves crossings earlier and lengthens durations; not comparable with 2004+) ==
+n=1779; genesis->onset median 36 h (n=1048); hours at HF median 12; share >=24 h 0.29; peak gust - min p median -6 h
+
+== Check against the archive (events matched to one archive event, 2004+, no TC link) ==
+matched events n=1244
+ERA5 onset minus archive first HF fix, h: median 0; quartiles -6/0; within +/-12 h 0.88
+hours at HF, ERA5 vs archive (HF fixes x 6 h): medians 18 vs 18; Spearman rho 0.60
+archive: first fix already HF 0.55; archive first fix minus ERA5 genesis, h: median 30

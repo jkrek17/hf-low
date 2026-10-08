@@ -1,11 +1,15 @@
 HF extratropical low archive - data quality report
-generated 2026-10-07T12:32:19Z
+generated 2026-10-08T05:00:52Z
 
+  bfEvents                 1928
+  bfRecovered              1423
+  bfUsable                 696
   categoriesMapped         7
   categoriesUnknown        1
   class_low                1890
   class_nocentre           13
   class_tipjet             29
+  coverageTrend            1
   datesRepaired            1
   duplicateTimes           18
   exactDuplicates          50
@@ -13,10 +17,70 @@ generated 2026-10-07T12:32:19Z
   idsReused                11
   idsSuspect               3
   lows                     1932
+  practiceChangeBasins     2
+  precursorRows            6658
+  precursorsAccepted       6658
   pressuresDropped         1
   pressuresRepaired        1
   rowsDropped              3
   rowsRead                 8126
+  speedImplausible         41
+
+Backfill coverage (data/hf_lows/precursors.csv)
+  *** COVERAGE TREND: Bf statistics are NOT safe to compare across seasons ***
+  usable = gapless pressure chain, steps <= 6 h, reaching back >= 24 h from the first HF fix (window 72 h, recovered fixes of confidence >= medium)
+  cells: events with an HF fix / with any recovered fix / with a usable window / share %
+  season    atl                       pac                       
+  2001-02   -                           1    0    0    0.0      
+  2002-03   -                          22   14    5   22.7      
+  2003-04    11    9    2   18.2       27   22   11   40.7      
+  2004-05    45   36   16   35.6       36   30    8   22.2      
+  2005-06    33   22    9   27.3       33   28   10   30.3      
+  2006-07    67   47   16   23.9       48   34   11   22.9      
+  2007-08    42   31   13   31.0       51   40   13   25.5      
+  2008-09    51   40   16   31.4       33   26    9   27.3      
+  2009-10    30   23   11   36.7       41   36   16   39.0      
+  2010-11    32   25   11   34.4       30   28   19   63.3      
+  2011-12    40   23   14   35.0       46   40   18   39.1      
+  2012-13    42   31   20   47.6       40   31   12   30.0      
+  2013-14    46   31   13   28.3       27   18   12   44.4      
+  2014-15    57   42   22   38.6       31   24    9   29.0      
+  2015-16    51   44   21   41.2       50   37   21   42.0      
+  2016-17    50   41   21   42.0       34   21   11   32.4      
+  2017-18    47   26   27   57.4       27   16    6   22.2      
+  2018-19    46   32   35   76.1       35   27    9   25.7      
+  2019-20    42   26   26   61.9       33   27   14   42.4      
+  2020-21    42   27   24   57.1       44   32   11   25.0      
+  2021-22    57   44   25   43.9       44   34   13   29.5      
+  2022-23    42   30   15   35.7       41   25   11   26.8      
+  2023-24    40   29   13   32.5       50   37   19   38.0      
+  2024-25    43   31   10   23.3       42   35   11   26.2      
+  2025-26    66   48   29   43.9       40   23    8   20.0      
+  all       1022  738  409   40.0     906  685  287   31.7      
+
+Coverage uniformity, seasons from 2004-05 (share of HF events with a usable window; gate: spread > 20 points or slope > 2 standard errors)
+  series   seasons   min %   max %  spread  slope/season  std err
+  atl           22    23.3    76.1    52.8         +0.75     0.42
+  pac           22    20.0    63.3    43.3         -0.18     0.34
+  all           22    23.5    54.3    30.8         +0.36     0.27
+  coverageTrend: TRUE - atl: seasonal share spans 52.8 points (23.3% to 76.1%), more than 20; pac: seasonal share spans 43.3 points (20.0% to 63.3%), more than 20; all: seasonal share spans 30.8 points (23.5% to 54.3%), more than 20
+
+Covered vs uncovered storms, seasons from 2004-05 (is recovery selective? median minimum pressure hPa / latitude of first HF fix)
+  series  group       events  median minP  median lat
+  atl     covered        407        963.0        53.7
+  atl     uncovered      604        964.0        56.3
+  pac     covered        271        965.0        47.0
+  pac     uncovered      585        964.0        43.7
+  all     covered        678        964.0        50.7
+  all     uncovered     1189        964.0        48.3
+
+practice-change (3)
+  atl  id=(all lows): Atlantic: from the 2017-18 season, analysts log developing-hurricane-force fixes before each event's first HF fix and storm-force fixes after its last. Lead/trail fixes per event: 0.00/0.00 before, 1.70/0.82 from then on. The storms did not change; the recorded track did. Deepening, duration and distance over the recorded track are not comparable across this boundary - use the HF-window figures (deep24, berg, bomb, hfDurH, hfDistNm, hfSpdKt).
+  pac  id=(all lows): Pacific: from the 2013-14 season, analysts log developing-hurricane-force fixes before each event's first HF fix and storm-force fixes after its last. Lead/trail fixes per event: 0.04/0.04 before, 0.88/0.86 from then on. The storms did not change; the recorded track did. Deepening, duration and distance over the recorded track are not comparable across this boundary - use the HF-window figures (deep24, berg, bomb, hfDurH, hfDistNm, hfSpdKt).
+  all  id=(all lows): Explosive share (>= 1 Bergeron, of all events with an HF fix): on the recorded track 8.6% (2004-2016) -> 36.8% (2017-2025); on HF fixes only 6.8% -> 9.4%. Across the 44 season-basins, lead fixes per event correlate with the recorded-track share at r = +0.930 and with the HF-only share at r = +0.227.
+
+backfill-coverage-trend (1)
+  all  id=(all lows): Bf coverage is NOT uniform across seasons, so the Bf statistics are not safe to compare across seasons (a trend in what can be measured would read as a trend in the weather): atl: seasonal share spans 52.8 points (23.3% to 76.1%), more than 20; pac: seasonal share spans 43.3 points (20.0% to 63.3%), more than 20; all: seasonal share spans 30.8 points (23.5% to 54.3%), more than 20
 
 category-mapped (7)
   atl row 2103  id=2017201844 date=2018041000: Category "missing" read as UNK (Unclassified)
@@ -63,6 +127,49 @@ pressure-dropped (1)
 
 pressure-repaired (1)
   pac row 2198  id=2015201607 date=2015102500: Pressure "976*" read as 976 hPa (annotation dropped)
+
+speed-implausible (41)
+  atl  id=2022202325 date=2023013006: fastest leg 90 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2021202217 date=2021122006: fastest leg 108 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2018201938 date=2019030706: fastest leg 99 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2017201835 date=2018022418: fastest leg 116 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2017201837 date=2018030518: fastest leg 108 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2016201745 date=2017031418: fastest leg 114 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2017201814 date=2017121012: fastest leg 94 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2017201815 date=2017121418: fastest leg 149 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2015201638 date=2016022000: fastest leg 162 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2014201548 date=2015031218: fastest leg 98 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2014201553 date=2015032206: fastest leg 123 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2014201557 date=2015042006: fastest leg 96 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2015201613 date=2015122018: fastest leg 101 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2013201422 date=2014010206: fastest leg 162 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2013201402 date=2013102906: fastest leg 106 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2013201421 date=2013123000: fastest leg 112 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2011201229 date=2012013018: fastest leg 117 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2012201309 date=2012111112: fastest leg 122 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2010201102 date=2010100318: fastest leg 137 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2008200944 date=2009031000: fastest leg 124 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2007200824 date=2008010900: fastest leg 113 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2007200829 date=2008012400: fastest leg 146 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2007200840 date=2008031700: fastest leg 96 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2008200912 date=2008110400: fastest leg 131 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2008200913 date=2008110812: fastest leg 171 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2008200923 date=2008122212: fastest leg 137 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2006200751 date=2007022106: fastest leg 174 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2007200808 date=2007110300: fastest leg 140 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2007200812 date=2007112912: fastest leg 100 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2007200822 date=2007122906: fastest leg 130 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2005200624 date=2006022512: fastest leg 138 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2005200627 date=2006022800: fastest leg 133 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  atl  id=2005200629 date=2006030600: fastest leg 96 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  pac  id=2025202631 date=2026013000: fastest leg 100 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  pac  id=2025202619 date=2025120106: fastest leg 91 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  pac  id=2024202508 date=2024110906: fastest leg 102 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  pac  id=2015201631 date=2016012412: fastest leg 102 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  pac  id=2016201707 date=2016110112: fastest leg 184 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  pac  id=2016201716 date=2016122006: fastest leg 542 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  pac  id=2006200710 date=2006110912: fastest leg 113 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
+  pac  id=2002200319 date=2003031806: fastest leg 120 kt between consecutive fixes; a cyclone centre does not move that fast, so check these positions for a mistyped digit or a sign error
 
 time-duplicate (18)
   atl  id=2024202505 date=2024102006: Two different fixes share 2024102006Z; both kept, but one date is probably mistyped
