@@ -2,7 +2,7 @@
 
 The ledger for this repository: what is in flight, what exists, what does not, and what may not be relied on yet. Read it at the start of a session and update it at the end, in the same pull request as the work. When this file and git disagree, git is right and this file gets fixed.
 
-Last updated: 2026-10-08 (HF-share environment ingredients added; hemispheric pattern search before it), after Jason decided decision 1 (within-era only), and after the gust-drift findings and the reconciliation of `c9dc994` were recomputed from committed data (`c55e74d`, merged into the integration branch as `8c95de7`). Earlier the same day this repository (`jkrek17/hf-low`) was split from `jkrek17/awips-tools`. Commit hashes below are this repository's. Pull request numbers refer to `jkrek17/awips-tools` unless they say otherwise.
+Last updated: 2026-10-08 (climatology atlas added; HF-share environment ingredients before it; hemispheric pattern search before it), after Jason decided decision 1 (within-era only), and after the gust-drift findings and the reconciliation of `c9dc994` were recomputed from committed data (`c55e74d`, merged into the integration branch as `8c95de7`). Earlier the same day this repository (`jkrek17/hf-low`) was split from `jkrek17/awips-tools`. Commit hashes below are this repository's. Pull request numbers refer to `jkrek17/awips-tools` unless they say otherwise.
 
 ## Threads
 
@@ -199,6 +199,14 @@ Pre-registered (`PREREGISTRATION.md`, `efc74a5`, before any statistic). Archive 
 - **NAO/PNA:** the share of overdispersion explained is undefined (nothing to explain). Rates: archive Atlantic NAO RR 1.064 per SD (p 0.12), Pacific PNA 1.119 (p 0.003). Post hoc: lagged NAO/PNA tercile removes about 17% of the spatial excess, the hemispheric pattern index (PR 41) about 37% (Atlantic) and 8% (Pacific); most remains.
 - Deep cyclones are strongly more regular than Poisson (weekly E -0.37): probably tracker spacing, so a Poisson null is poor for tracked lows in general.
 - Verified by a fresh agent: event counts, observed dispersion, E, gap counts, Knox counts and expectations (archive and proxy), index rate ratios (`VERIFICATION.md`); archive Atlantic NAO 1.064 vs 1.0525 differs only by missing-day handling. Not independently checked: bootstrap intervals, M4 grid, power, sensitivity, deep tier, post hoc conditioning.
+
+### Climatology atlas: `research/era5/climatology_atlas/` (hf-low PR 54, merged into the integration branch as `43de864`)
+
+- Descriptive only (no test, no trend, decision 1). Archive (HF-window metrics, `docs/data/hf-lows.json`) and ERA5 pipeline A proxy side by side, 2004-05 to 2025-26, tropical-cyclone-linked events included. Archive 1,867 events (Atlantic 1,011, Pacific 856); proxy 2,000 (1,104, 896). Reads committed files only; no ERA5 pull.
+- Products (README has the numbers): HF-centre hours per season in 5 x 10 degree boxes (all months and by month), first-HF, minimum-pressure and last-HF positions, monthly events and HF hours with season-block intervals, season counts and ranks, minimum-pressure and deepening distributions, hours at HF, speed and distance, mean motion field, how many HF lows are active at once, proxy tropical-cyclone share by month, and a within-era candidate list of historic storms 1979-2003 (proxy, unconfirmed). Ten figures and the tables behind them are in `results/`; copies are in the project's `climatology-atlas/` folder.
+- Headline: busiest box is the Atlantic 60-65N, 40-30W (96.8 HF-centre h per season archive, 88.9 proxy) and the Pacific 40-45N, 160-170E (43.1, 47.7); archive events per season Atlantic 46.0 (sd 9.6), Pacific 38.9 (sd 7.5); at least one HF low active at 14.5% (Atlantic) and 12.5% (Pacific) of October-April times, never more than 3.
+- A fresh Sonnet agent recomputed the quoted numbers: all match. Not independently checked: bootstrap intervals, speeds and the motion field, month-by-month latitudes, parts of the historic lists (listed in the README).
+- Not done: genesis maps before 2004 (about 370 GB, needs Jason), sea state, the tightened tropical-cyclone definition (agenda question 9). The map thread can use `hf_hours_per_season_*.csv`, `events_*.csv` and `motion_steps.csv.gz` as layers.
 
 ### ERA5 pipeline B: `event_fields.py`, `criterion.py`, `series.py` (integration branch)
 
