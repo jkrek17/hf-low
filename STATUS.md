@@ -266,6 +266,14 @@ Pipeline A, ERA5 proxy, Oct-Apr 2004-05..2025-26. Catalog of ten candidate pairs
 - Lead, not a finding: for all cyclones, NAO x PNA shifts peak longitude east by +1.11 deg per SD x SD in 2001-02 on (q 0.18 across 68 tests); HF lows do not show it.
 - Verified by a fresh agent: events, the interaction coefficients and standard errors, bootstrap intervals and p-values for the four primary pairs. Not checked: power figures, q-values, secondary tiers, the combined family.
 
+### Does the NAO x PNA longitude lead replicate on 1979-2000: `research/era5/nao_pna_replication/` (integration branch, hf-low PR 93, merged as `dae8078`; plan `08dbc0d`)
+
+- Question (agenda RA-8): PR 40's post hoc lead, NAO x PNA moves Atlantic all-cyclone peak longitude +1.11 deg per SD x SD (q 0.18 of 68), on winters never used. ERA5 proxy; PR 38 MSLP-only tracker (pipeline A detector and linker); position = minimum pressure, not gust peak; Dec-Mar only.
+- Result: does not replicate. 1979-80..2000-01 (22 winters, 4,364 tracks): -0.68 deg (95% -1.54 to +0.16), wrong sign. Not a well-powered null: null SE 0.46, detectable shift at 80% power 1.29 deg. Bridge on 2001-2013 (not independent): +0.63 (-0.14 to +1.49). Pacific control -0.23. 0 of 7 tests pass BH.
+- Verification: a fresh Sonnet agent reproduced counts, gammas, CR1 SE and sign-flip p. Not independently checked: bootstrap intervals, power simulation, S3/S4, q values.
+- Looks: sixth at pre-2001 seasons; no 2015-25 look. Log line already in the PR.
+- Open: gust-peak position cannot be tested before 2004 (Decision 1); Oct, Nov, Apr absent from the committed tracks.
+
 ### Hemispheric state vs HF lows: `research/era5/hemispheric/` (hf-low PR 41, merged into the integration branch)
 
 ERA5 proxy predictors (Z500, 250 hPa wind, SST; 5.6 degrees; 7-day mean of days -7 to -1) against the archive's weekly HF counts, Oct-Apr. Plan committed first (`1ff3201`), models frozen before the look (`4947105`), results `0a1f46e`. Fitted on 2004-05 to 2014-15, scored once on 2015-16 to 2025-26.
