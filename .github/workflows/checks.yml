@@ -1,0 +1,78 @@
+# Runs the project's own checks on every pull request and on pushes to main and
+# the research branch.
+#
+# Until this workflow existed nothing ran the test suites automatically: they
+# passed because sessions remembered to run them. On a day with a hundred
+# pull requests, most of them merged by the thread that opened them, a check
+# that depends on being remembered is not a check. This makes the result
+# visible on the pull request before the merge.
+#
+# Two jobs:
+#   invariants  tests/invariants/run.py - corrections that were turned into
+#               checks (see failures/), plus the failure library's own rules.
+#   suites      every tests/*/test_*.js and tests/*/test_*.py present on the
+#               branch, and the site build in --check mode. The loop is over
+#               what exists, because main and the research branch do not carry
+#               the same suites.
+#
+# Standard library and stock Node only; nothing is installed. Research scripts
+# under research/ are not run here: they need numpy and stream ERA5.
+
+name: Checks
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - 'claude/exciting-fermat-8vcvgq'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  invariants:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Invariants and failure library
+        run: python3 tests/invariants/run.py
+
+  suites:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Site build (check only, writes nothing)
+        run: python3 tools/build_hf_lows.py --check
+      - name: Test suites
+        run: |
+          status=0
+          for f in tests/*/test_*.js; do
+            [ -e "$f" ] || continue
+            echo "::group::node $f"
+            node "$f" || status=1
+            echo "::endgroup::"
+          done
+          for f in tests/*/test_*.py; do
+            [ -e "$f" ] || continue
+            echo "::group::python $f"
+            python3 "$f" || status=1
+            echo "::endgroup::"
+          done
+          exit $status
