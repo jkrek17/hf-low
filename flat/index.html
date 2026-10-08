@@ -21,6 +21,8 @@
     color: var(--ink-2); background: var(--surface-sunk); border: 1px solid var(--border-strong);
   }
   @media print { .badge-env { display: none !important; } }
+  .badge-link { text-decoration: none; color: var(--accent); background: var(--accent-soft); border-color: var(--border-strong); font-weight: 600; }
+  .badge-link:hover { text-decoration: underline; }
 
   /* Lat/lon readout under the cursor (globe.js). Scoped here rather than in
      assets/app.css so it doesn't collide with in-flight styling work there;
@@ -49,6 +51,7 @@
     <p class="sub">North Atlantic &amp; North Pacific &middot; <span id="vintage">loading&hellip;</span></p>
   </div>
   <div class="topbar-actions">
+    <a class="badge badge-link" href="composites.html" title="ERA5 proxy composites of HF lows against storm-force-only lows">Composites</a>
     <span class="badge badge-warn" title="Not an official product. Derived from a hand-maintained archive.">Experimental</span>
     <span class="badge badge-env" id="envBadge" hidden></span>
     <button type="button" id="themeToggle" class="icon-btn" aria-label="Switch colour theme" title="Switch colour theme">
