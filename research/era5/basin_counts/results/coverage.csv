@@ -1,0 +1,4 @@
+sample,share_both_zero,share_atl_zero,share_pac_zero,mean_atl,mean_pac,var_over_mean_atl,var_over_mean_pac,r_drop_both_zero
+ARCH,0.1288,0.2788,0.3167,1.367,1.229,1.181,1.098,-0.1936
+PRX,0.1212,0.2788,0.3136,1.526,1.25,1.276,1.105,-0.1867
+DEP,0.1242,0.3121,0.2924,1.532,1.329,1.514,1.163,-0.1549
