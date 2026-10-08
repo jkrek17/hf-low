@@ -9,7 +9,7 @@ Last updated: 2026-10-08, after the gust-drift findings and the reconciliation o
 | Branch | Head | Was | What it holds |
 |---|---|---|---|
 | `main` | | | The archive CSVs, the site, the build and publish tools, the site tests, and the session rules. No research code. |
-| `claude/exciting-fermat-8vcvgq` | `57b389f` | integration branch | **All of the research:** precursor recovery, ERA5 pipelines A and B, per-cyclone P(HF), the gust-drift finding (`c9dc994`) and its recomputation (`drift_check.py`, `c55e74d`, hf-low PR 8), the near-storm intensity framework (`research/era5/intensity/`, hf-low PRs 7 and 12), pipeline A's full track population, collision review. Has `main` merged in, so sessions here load the rules. |
+| `claude/exciting-fermat-8vcvgq` | `9cfc1bc` | integration branch | **All of the research:** precursor recovery, ERA5 pipelines A and B, per-cyclone P(HF), the gust-drift finding (`c9dc994`) and its recomputation (`drift_check.py`, `c55e74d`, hf-low PR 8), the near-storm intensity framework (`research/era5/intensity/`, hf-low PRs 7 and 12), pipeline A's full track population, the HF life cycle (`hf_history/lifecycle.py`, hf-low PR 16), collision review. Has `main` merged in, so sessions here load the rules. |
 | `claude/hf-lows-qc-mode` | `0800e90` | new during the split | Everything on the integration branch, plus a QC mode for the page that writes corrections to the spreadsheet. |
 | `claude/era5-hf-history` | `b964cd1` | PR 80, with PR 82 merged in | Superseded: fully contained in the integration branch. |
 | `claude/era5-hf-probability` | `71013e5` | PR 82 | Superseded: fully contained in the integration branch. |
@@ -45,6 +45,12 @@ Working defaults that sessions follow until Jason confirms or changes them. Jaso
   - Pressure-depth counts are the cross-check before 2001.
   - Fitting and testing stay at 2004-05 and later.
   - A separate thread is testing ERA5 winds against buoy and ship records from before 2001, to try to settle decision 1 without the 370 GB re-run.
+- **Life-cycle definitions** (thread "HF low climatology gaps", 2026-10-08):
+  - An HF fix is an in-domain fix at or above 71.7 kt, the rule that makes a track an event.
+  - Genesis counts as observed only when the first fix is at 1000 hPa or above and north of 21N.
+  - Onset counts as censored when the first in-domain fix is already HF, or when an out-of-domain HF fix precedes it.
+  - Events within 400 km of an IBTrACS point at the same time are reported apart from the main numbers.
+  - The main numbers use 2004-05 on.
 
 - **Intensity framework working choices** (thread "Cyclone phase-space intensity framework"; details in `research/era5/intensity/README.md`):
   - Population: every pipeline A low below 1010 hPa in domain at 00/12 UTC, not only catalog events.
@@ -77,6 +83,14 @@ Working defaults that sessions follow until Jason confirms or changes them. Jaso
 - Per-cyclone P(HF) (`probability.py`, `results/probability.txt`): a logistic fit on the same gust index, P = 0.5 at 73.6 kt; a Pacific term is reported alongside as marginal.
 - Tested against the gust drift (`research/era5/drift_check-result.txt`, section 6): its 800 km gust at fixed MSLP 955-975 hPa rises +0.665 kt/decade over 1979-2000 (t = +2.44), flat from 2004 (t = +0.61). Density at the threshold, 8.82 events per kt per season, sets how far a drift moves the count. The README now carries the caveat.
 - Reproduction streams about 370 GB and needs go-ahead.
+- Life cycle (`lifecycle.py`, `results/lifecycle.txt`, hf-low PR 16). It reads committed files only.
+  - Sample: seasons 2004-05 on, leaving out the 114 events linked to tropical cyclones. That leaves 1,886 events.
+  - Genesis to the first fix at or above 71.7 kt: median 36 h, quartiles 24/48, over the 1,152 events whose genesis is observed.
+  - Time at HF: median 12 h, quartiles 6/24.
+  - Onset comes before minimum pressure in 71% of events (Atlantic 66%, Pacific 77%).
+  - ERA5 onset is within 12 h of the archive's first HF fix for 88% of the 1,244 matched events.
+  - Every number was recomputed independently.
+  - The method note, `results/lifecycle-plan.md`, was written after the run and says so. Read the result as descriptive, not pre-registered.
 
 ### Near-storm intensity framework: `research/era5/intensity/` (integration branch)
 
