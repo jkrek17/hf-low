@@ -268,6 +268,13 @@ Pre-registered (`PREREGISTRATION.md`, `efc74a5`, before any statistic). Archive 
 - Limits: the definition is not uniquely identified (at least 3 HF fixes alone also gives 22.4 and 20.5), the OPC area edges are recalled not sourced, the published authors' counting rule was not read, and the early archive seasons are short-counted so a direct overlap test is thin. A fresh Sonnet agent recomputed the numbers; the Atlantic linked chain differs by 0.2-0.3 events. Not checked: bootstrap intervals, the Chelton and Jelenak rows, the 5 degree area sensitivity.
 - Rows for Jason: none wrong; `results/linked_ids_for_review.csv` lists 21 possible split or duplicate ID pairs (0.6 and 0.3 events per season). Nothing edited in the archive or sheet.
 
+### Pacific lead on the Atlantic HF state: `research/era5/pacific_lead/` (hf-low PR 81, merged into the integration branch as `2f1222f`)
+
+- Question (agenda RA-5): does a Pacific pattern index one or two weeks earlier predict the Atlantic HF state? ERA5 proxy indices of PR 41 (out of sample, leave-one-season-out), archive weekly counts, 22 seasons 2004-05 to 2025-26. Plan committed first (`3a71ae4`); 6 primary tests, 18 in all.
+- Result: **no lead.** Lag 1: Atlantic count RR 0.952 per SD (0.892-1.014), Atlantic index partial r -0.060 (-0.152, 0.028). Lag 2: RR 1.020 (0.968-1.088), r +0.038 (-0.050, 0.131). 0 of 6 primary and 0 of 18 tests pass FDR in the predicted direction. Power at RR 1.10 per SD: 83% (one-sided p < 0.05), 65% (Bonferroni 6); lag-2 index interval does not exclude r up to 0.13. The two indices are anticorrelated in the same week (-0.60) and the lagged correlation is symmetric about lag 0 (post hoc).
+- Loose end: the 1979-2000 pipeline A depth-count analogue is positive (RR 1.076, p 0.012, q 0.18) and not replicated. Daily-resolution lag (literature's ~6 days) is untested and needs the daily-field pull (about 17 GB).
+- Looks: seventh at 2015-25, third at 1979-2000. A fresh Sonnet agent recomputed the estimates, P1/P3 p, correlations and 1979-2000 analogues; not independently checked: the power run, q values, S1/S2/S4 rows, S5 envelope.
+
 ### ERA5 pipeline B: `event_fields.py`, `criterion.py`, `series.py` (integration branch)
 
 - A per-moment probability from four features, fitted on early (2004-05), late (2021-25), and full (2004 to 2025) windows.
