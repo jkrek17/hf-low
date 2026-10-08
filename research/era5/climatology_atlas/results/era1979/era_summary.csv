@@ -1,0 +1,7 @@
+era,basin,seasons,events,events_per_season,median_minp,share_minp_lt_960,median_gust_kt,median_lat_first_hf,median_lat_min_pressure,median_hf_hours,median_speed_kt,median_maxdeep_berg,tc_share,caveat
+E1 1979-2000,atl,22,1010,45.909,962.050,0.443,77.700,56.250,59.000,12.000,22.370,1.170,0.045,"ERA5 proxy, not observation; gust levels not comparable across 2001"
+E1 1979-2000,pac,22,879,39.955,963.700,0.377,77.200,41.750,46.250,12.000,28.330,1.410,0.074,"ERA5 proxy, not observation; gust levels not comparable across 2001"
+E2 2001-2003,atl,3,140,46.667,965.050,0.300,76.500,54.375,57.000,12.000,24.595,1.120,0.050,"ERA5 proxy, not observation; gust levels not comparable across 2001"
+E2 2001-2003,pac,3,128,42.667,963.500,0.383,77.400,40.625,45.750,12.000,28.305,1.405,0.109,"ERA5 proxy, not observation; gust levels not comparable across 2001"
+E3 2004-2025,atl,22,1104,50.182,963.100,0.412,77.900,53.500,57.500,12.000,24.545,1.200,0.059,"ERA5 proxy, not observation; gust levels not comparable across 2001"
+E3 2004-2025,pac,22,896,40.727,963.600,0.377,77.500,42.250,47.500,12.000,29.370,1.410,0.055,"ERA5 proxy, not observation; gust levels not comparable across 2001"

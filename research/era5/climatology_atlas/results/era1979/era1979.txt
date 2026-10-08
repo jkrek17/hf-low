@@ -1,0 +1,33 @@
+ERA5 PROXY (pipeline A), NOT DIRECT OBSERVATION. Gust-based levels are not comparable across 2001 (decision 1); no trend is claimed.
+
+Eras (never pooled for gust-based levels): E1 1979-2000 (22 seasons); E2 2001-2003 (3 seasons); E3 2004-2025 (22 seasons)
+Proxy events: E1 1979-2000: 1889, E2 2001-2003: 268, E3 2004-2025: 2000
+
+Depth cut Atlantic: <= 967 hPa minimum MSLP (E3 mean annual count 52.6 vs gust events 50.2; chosen on E3 only)
+Depth cut Pacific: <= 965 hPa minimum MSLP (E3 mean annual count 40.3 vs gust events 40.7; chosen on E3 only)
+
+== Era summary, gust-based proxy events (compare SHAPE across eras, not levels) ==
+E1 1979-2000 Atlantic: 1010 events, 45.9/season; median min MSLP 962.0; share <960 0.443; median gust index 77.7 kt; median lat of first HF 56.2N; min-MSLP 59.0N; hours at HF 12; speed 22.4 kt; deepening 1.17 Bergerons; TC share 0.045
+E1 1979-2000 Pacific: 879 events, 40.0/season; median min MSLP 963.7; share <960 0.377; median gust index 77.2 kt; median lat of first HF 41.8N; min-MSLP 46.2N; hours at HF 12; speed 28.3 kt; deepening 1.41 Bergerons; TC share 0.074
+E2 2001-2003 Atlantic: 140 events, 46.7/season; median min MSLP 965.0; share <960 0.300; median gust index 76.5 kt; median lat of first HF 54.4N; min-MSLP 57.0N; hours at HF 12; speed 24.6 kt; deepening 1.12 Bergerons; TC share 0.050
+E2 2001-2003 Pacific: 128 events, 42.7/season; median min MSLP 963.5; share <960 0.383; median gust index 77.4 kt; median lat of first HF 40.6N; min-MSLP 45.8N; hours at HF 12; speed 28.3 kt; deepening 1.40 Bergerons; TC share 0.109
+E3 2004-2025 Atlantic: 1104 events, 50.2/season; median min MSLP 963.1; share <960 0.412; median gust index 77.9 kt; median lat of first HF 53.5N; min-MSLP 57.5N; hours at HF 12; speed 24.5 kt; deepening 1.20 Bergerons; TC share 0.059
+E3 2004-2025 Pacific: 896 events, 40.7/season; median min MSLP 963.6; share <960 0.377; median gust index 77.5 kt; median lat of first HF 42.2N; min-MSLP 47.5N; hours at HF 12; speed 29.4 kt; deepening 1.41 Bergerons; TC share 0.055
+
+== Share of Oct-Apr events by month of first HF fix, per era (shape) ==
+Atlantic E1 1979-2000: 10: 0.074, 11: 0.117, 12: 0.210, 1: 0.232, 2: 0.202, 3: 0.124, 4: 0.041
+Atlantic E2 2001-2003: 10: 0.047, 11: 0.094, 12: 0.134, 1: 0.299, 2: 0.197, 3: 0.165, 4: 0.063
+Atlantic E3 2004-2025: 10: 0.086, 11: 0.098, 12: 0.202, 1: 0.208, 2: 0.203, 3: 0.156, 4: 0.047
+Pacific E1 1979-2000: 10: 0.091, 11: 0.151, 12: 0.207, 1: 0.200, 2: 0.191, 3: 0.133, 4: 0.026
+Pacific E2 2001-2003: 10: 0.115, 11: 0.177, 12: 0.265, 1: 0.150, 2: 0.168, 3: 0.088, 4: 0.035
+Pacific E3 2004-2025: 10: 0.117, 11: 0.131, 12: 0.222, 1: 0.223, 2: 0.166, 3: 0.101, 4: 0.040
+
+== Depth-based series: events per season with minimum MSLP at or below the cut ==
+Atlantic E1 1979-2000: mean 52.2, sd 8.9, range 38-78 (no trend fitted)
+Atlantic E2 2001-2003: mean 52.0, sd 14.8, range 35-62 (no trend fitted)
+Atlantic E3 2004-2025: mean 52.6, sd 9.8, range 33-72 (no trend fitted)
+Atlantic five highest seasons 1979-2025 by depth: 1989-90 (78), 2013-14 (72), 2006-07 (72), 1993-94 (69), 2019-20 (65)
+Pacific E1 1979-2000: mean 42.8, sd 8.6, range 26-57 (no trend fitted)
+Pacific E2 2001-2003: mean 49.3, sd 10.4, range 41-61 (no trend fitted)
+Pacific E3 2004-2025: mean 40.3, sd 7.9, range 22-58 (no trend fitted)
+Pacific five highest seasons 1979-2025 by depth: 2002-03 (61), 2015-16 (58), 1997-98 (57), 2009-10 (55), 1986-87 (55)
