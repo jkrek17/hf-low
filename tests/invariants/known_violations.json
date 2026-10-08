@@ -87,6 +87,18 @@
     {
       "key": "research/era5/hf_vs_storm/make_figs.py",
       "failure": "2026-10-08-verifier-scripts-hardcode-clone-path"
+    },
+    {
+      "key": "research/era5/hf_conversion/verify/verify_numbers.py",
+      "failure": "2026-10-08-verifier-scripts-hardcode-clone-path"
+    },
+    {
+      "key": "research/era5/hf_lifecycle/verify/verify_numbers.py",
+      "failure": "2026-10-08-verifier-scripts-hardcode-clone-path"
+    },
+    {
+      "key": "research/era5/hf_pattern_phase/verify/verify_numbers.py",
+      "failure": "2026-10-08-verifier-scripts-hardcode-clone-path"
     }
   ]
 }
