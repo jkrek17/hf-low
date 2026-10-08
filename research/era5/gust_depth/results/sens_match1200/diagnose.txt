@@ -1,0 +1,71 @@
+Archive-to-track matching: 1200 km; archive events 2004-2025: 1871; matched 0.976
+basin  cls     
+atl    low               ('atl', 'low'): n=970, matched=0.98
+       nocentre      ('atl', 'nocentre'): n=13, matched=0.85
+       tipjet          ('atl', 'tipjet'): n=29, matched=0.97
+pac    low               ('pac', 'low'): n=859, matched=0.98
+
+=== pac: fit seasons 2021-2025, 220 archive 'low' events; G*=71.1 kt, D*=966.4 hPa (published G 71.7)
+  test 2004-2020, all tracks:  AUC gust 0.972  AUC depth 0.948
+    G71.7  n_obs=628 n_fc=692 bias=1.10 POD=0.69 FAR=0.38 CSI=0.49 HSS=0.638
+    G*     n_obs=628 n_fc=742 bias=1.18 POD=0.71 FAR=0.40 CSI=0.48 HSS=0.631
+    D*     n_obs=628 n_fc=768 bias=1.22 POD=0.58 FAR=0.52 CSI=0.36 HSS=0.502
+    dAUC (G - D) = +0.024  95% [+0.019, +0.029]  p=0.0020
+    dHSS (G - D) = +0.129  95% [+0.092, +0.163]  p=0.0020
+  test 2004-2020, real cyclones:  AUC gust 0.962  AUC depth 0.921
+    G71.7  n_obs=584 n_fc=651 bias=1.11 POD=0.71 FAR=0.36 CSI=0.51 HSS=0.638
+    G*     n_obs=584 n_fc=696 bias=1.19 POD=0.73 FAR=0.39 CSI=0.50 HSS=0.631
+    D*     n_obs=584 n_fc=730 bias=1.25 POD=0.62 FAR=0.50 CSI=0.38 HSS=0.502
+    dAUC (G - D) = +0.041  95% [+0.029, +0.052]  p=0.0020
+  leave-one-test-season-out: dAUC +0.022..+0.025, dHSS +0.119..+0.138
+  fit seasons (thresholds fitted here): AUC gust 0.980 depth 0.945; HSS G* 0.718 D* 0.469
+
+=== atl: fit seasons 2021-2025, 235 archive 'low' events; G*=72.4 kt, D*=965.8 hPa (published G 71.7)
+  test 2004-2020, all tracks:  AUC gust 0.963  AUC depth 0.935
+    G71.7  n_obs=707 n_fc=855 bias=1.21 POD=0.70 FAR=0.42 CSI=0.46 HSS=0.607
+    G*     n_obs=707 n_fc=802 bias=1.13 POD=0.67 FAR=0.41 CSI=0.46 HSS=0.608
+    D*     n_obs=707 n_fc=784 bias=1.11 POD=0.55 FAR=0.50 CSI=0.36 HSS=0.497
+    dAUC (G - D) = +0.028  95% [+0.021, +0.035]  p=0.0020
+    dHSS (G - D) = +0.111  95% [+0.081, +0.140]  p=0.0020
+  test 2004-2020, real cyclones:  AUC gust 0.954  AUC depth 0.915
+    G71.7  n_obs=628 n_fc=765 bias=1.22 POD=0.73 FAR=0.40 CSI=0.49 HSS=0.616
+    G*     n_obs=628 n_fc=720 bias=1.15 POD=0.71 FAR=0.38 CSI=0.49 HSS=0.619
+    D*     n_obs=628 n_fc=710 bias=1.13 POD=0.60 FAR=0.47 CSI=0.39 HSS=0.507
+    dAUC (G - D) = +0.039  95% [+0.027, +0.051]  p=0.0020
+  leave-one-test-season-out: dAUC +0.026..+0.029, dHSS +0.106..+0.119
+  fit seasons (thresholds fitted here): AUC gust 0.968 depth 0.936; HSS G* 0.660 D* 0.484
+  non-'low' archive events (tip jet / centreless): 42, matched 39; of matched, gust>=71.7: 17, minp<=D*: 16
+
+=== H2a: gust at fixed depth (OLS, real cyclones, seasons 2004-2025, season-clustered SE)
+ pac: n=8076, R2=0.646
+    lat   -1.005 kt (se 0.022, p 0)  [kt per degree latitude]
+    west  -2.269 kt (se 0.324, p 2.4e-12)  [kt, west sector vs east]
+    cold  +5.057 kt (se 0.318, p 6.7e-57)  [kt, Nov-Feb vs other months]
+    logn  +0.073 kt (se 0.390, p 0.85)  [kt per unit log(n_fix)]
+    minp slope at 975 hPa: -0.787 kt per hPa
+ atl: n=7940, R2=0.572
+    lat   -0.317 kt (se 0.018, p 3.1e-69)  [kt per degree latitude]
+    west  -5.329 kt (se 0.297, p 5.3e-72)  [kt, west sector vs east]
+    cold  +2.717 kt (se 0.350, p 8.4e-15)  [kt, Nov-Feb vs other months]
+    logn  +1.976 kt (se 0.270, p 2.5e-13)  [kt per unit log(n_fix)]
+    minp slope at 975 hPa: -0.811 kt per hPa
+
+=== H2b: G-only vs D-only (published thresholds, genesis Oct-Apr cut as in freq_split; full-year tracks 2004-2025)
+ pac: published depth cut 965.0 hPa; counts: neither=17164, both=482, G-only=414, D-only=404
+    D-only  n= 404  mean lat  51.0  west 0.46  cold 0.75  median n_fix 16  archive-matched 0.18  mean gust 65.3 kt  mean minp 959.6
+    G-only  n= 414  mean lat  42.2  west 0.65  cold 0.68  median n_fix 15  archive-matched 0.50  mean gust 77.3 kt  mean minp 975.1
+    both    n= 482  mean lat  45.6  west 0.61  cold 0.70  median n_fix 20  archive-matched 0.79  mean gust 81.3 kt  mean minp 955.3
+    G-only minus D-only, peak latitude (deg): -8.842  [-9.604, -8.005]  p=0.0020
+    G-only minus D-only, west-sector share: +0.199  [+0.123, +0.280]  p=0.0020
+    G-only minus D-only, cold-season share: -0.069  [-0.131, -0.016]  p=0.0080
+    G-only minus D-only, median n_fix: -1.000  [-3.000, +1.000]  p=0.6240
+    G-only minus D-only, archive-matched share: +0.322  [+0.248, +0.394]  p=0.0020
+ atl: published depth cut 966.2 hPa; counts: neither=15467, both=649, G-only=455, D-only=421
+    D-only  n= 421  mean lat  58.5  west 0.33  cold 0.70  median n_fix 14  archive-matched 0.18  mean gust 65.1 kt  mean minp 961.1
+    G-only  n= 455  mean lat  51.5  west 0.40  cold 0.53  median n_fix 16  archive-matched 0.46  mean gust 76.9 kt  mean minp 975.6
+    both    n= 649  mean lat  54.8  west 0.31  cold 0.73  median n_fix 18  archive-matched 0.71  mean gust 82.3 kt  mean minp 955.0
+    G-only minus D-only, peak latitude (deg): -6.934  [-8.096, -5.831]  p=0.0020
+    G-only minus D-only, west-sector share: +0.074  [-0.000, +0.147]  p=0.0600
+    G-only minus D-only, cold-season share: -0.169  [-0.230, -0.108]  p=0.0020
+    G-only minus D-only, median n_fix: +2.000  [+0.000, +2.000]  p=0.0920
+    G-only minus D-only, archive-matched share: +0.279  [+0.216, +0.344]  p=0.0020
