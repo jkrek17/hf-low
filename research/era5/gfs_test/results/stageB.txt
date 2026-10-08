@@ -1,0 +1,32 @@
+Stage B scoring (research/era5/gfs_test/b_score.py). Truth: OPC archive weekly counts, seasons 2004..2018 (450 weeks per basin).
+ERA5 index = z+u-only discovery-fit PR 41 index on ERA5 (a proxy; Deviation 6); GEFS index = same frozen weights on GEFS v12 control, model-climatology anomalies.
+Bootstrap: 2000 whole-season resamples, seed 20261008. Power sims: 500 per effect level.
+Skill = 1 - (held-out Poisson deviance with index)/(held-out deviance of month dummies + log1p(prev week)), pooled over held-out seasons, leave-one-season-out.
+
+== ATL (total archive events 623) ==
+B.1 Spearman(GEFS index, ERA5 z+u index) = 0.960  95% CI [0.948, 0.968]  one-sided p(rho<=0.5) = 0.0005  criterion rho>0.5: PASS (CI lower bound above 0.5: True)
+B.2 GEFS held-out deviance skill = 9.14%  95% CI [5.39, 12.87]%  one-sided p(skill<=0) = 0.0005  criterion (positive, interval above 0): PASS
+    deviances: baseline 470.73, with GEFS index 427.70
+    power of B.2 at the PR 41 effect (RR 1.18/SD, post hoc): 48.4%; false-positive rate at RR 1.0: 0.0%; minimum detectable RR/SD at 80% power: 1.242 (linear interpolation of the power grid); dispersion phi 1.000
+    power by planted RR per SD: 1.0:0%, 1.05:2%, 1.1:6%, 1.15:26%, 1.18:48%, 1.2:59%, 1.25:84%, 1.3:95%, 1.4:99%, 1.5:100%, 1.7:100%, 2.0:100%, 2.5:100%
+    REFERENCE, NOT A TEST: same skill with the ERA5 z+u index on the same weeks:
+      all_2004_2018: 11.42%  95% CI [7.80, 14.76]%  p(skill<=0)=0.0005
+      seasons_2004_2014: 13.30%  95% CI [9.56, 16.80]%  p(skill<=0)=0.0005
+      seasons_2015_2018: 6.76%  95% CI [0.81, 12.85]%  p(skill<=0)=0.0040
+    (GEFS-index skill on seasons 2015-2018 alone, from the same folds: 4.47%)
+
+== PAC (total archive events 532) ==
+B.1 Spearman(GEFS index, ERA5 z+u index) = 0.942  95% CI [0.926, 0.952]  one-sided p(rho<=0.5) = 0.0005  criterion rho>0.5: PASS (CI lower bound above 0.5: True)
+B.2 GEFS held-out deviance skill = 6.78%  95% CI [2.63, 10.76]%  one-sided p(skill<=0) = 0.0005  criterion (positive, interval above 0): PASS
+    deviances: baseline 471.20, with GEFS index 439.23
+    power of B.2 at the PR 41 effect (RR 1.18/SD, post hoc): 34.8%; false-positive rate at RR 1.0: 0.0%; minimum detectable RR/SD at 80% power: 1.277 (linear interpolation of the power grid); dispersion phi 1.000
+    power by planted RR per SD: 1.0:0%, 1.05:0%, 1.1:6%, 1.15:21%, 1.18:35%, 1.2:44%, 1.25:71%, 1.3:87%, 1.4:100%, 1.5:100%, 1.7:100%, 2.0:100%, 2.5:100%
+    REFERENCE, NOT A TEST: same skill with the ERA5 z+u index on the same weeks:
+      all_2004_2018: 7.35%  95% CI [2.83, 11.77]%  p(skill<=0)=0.0005
+      seasons_2004_2014: 9.23%  95% CI [3.43, 14.57]%  p(skill<=0)=0.0010
+      seasons_2015_2018: 1.64%  95% CI [-4.62, 6.78]%  p(skill<=0)=0.2869
+    (GEFS-index skill on seasons 2015-2018 alone, from the same folds: 0.74%)
+
+Raw one-sided p values (to be combined by the parent into the 14-test BH family): B1_atl=0.0005, B1_pac=0.0005, B2_atl=0.0005, B2_pac=0.0005
+BH q over these 4 only (NOT the 14-test family): B1_atl=0.0005, B1_pac=0.0005, B2_atl=0.0005, B2_pac=0.0005
+A B.2 null with power under 80% is 'cannot tell', not 'no effect' (preregistration).

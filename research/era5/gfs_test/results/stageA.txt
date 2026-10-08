@@ -1,0 +1,125 @@
+GFS Stage A scoring. Pipeline A (ERA5) is a proxy; GFS seasons 2021-2025 (Oct-Apr) lie inside the gust-threshold calibration block 2021-22..2025-26.
+Bootstrap: 2,000 season-block resamples, seed 20261008, 95% percentile intervals; p one-sided, floor 1/2001.
+
+== Registered criteria (p: one-sided bootstrap; q: Benjamini-Hochberg over the 10 owned here; parent combines with Stage B's 4)
+  A1.1 atl pass=True  p=0.0005 q=0.0008
+  A1.2 atl pass=False p=0.1334 q=0.1906
+  A1.3 atl pass=True  p=0.0005 q=0.0008
+  A2.1 atl pass=True  p=0.0005 q=0.0008
+  A2.2 atl pass=True  p=0.2109 q=0.2636
+  A1.1 pac pass=True  p=0.0005 q=0.0008
+  A1.2 pac pass=False p=0.3393 q=0.3770
+  A1.3 pac pass=True  p=0.0005 q=0.0008
+  A2.1 pac pass=True  p=0.0005 q=0.0008
+  A2.2 pac pass=False p=0.7946 q=0.7946
+  passing: 7 of 10
+
+== Archive categories: {"Atl": {"HF": 3081, "DHF": 723, "S": 454, "DS": 14, "G": 4, "s": 2, "missing": 1}, "Pac": {"HF": 2755, "S": 596, "DHF": 450, "DS": 24, "G": 12, "TY": 3, "ABS": 3, "TS": 1, "IL": 1, "TYPHOON": 1, "TYPH": 1}}
+   malformed rows (dropped): [{"file": "Atl", "ID": 2018201920, "date": "2018232906", "Latitude": 38.9, "Longitude": -38.2, "Category": "S", "Pressure": "995"}, {"file": "Pac", "ID": 2024202506, "date": "20241101018", "Latitude": 53.7, "Longitude": -164.2, "Category": "HF", "Pressure": "956"}, {"file": "Pac", "ID": 2015201640, "date": "2016023000", "Latitude": 43.0, "Longitude": 142.5, "Category": "ABS", "Pressure": null}]
+   labels changed if the malformed Pac row is read as 2024110118: {"atl": 0, "pac": 0}
+
+== A1 atl
+  lead  0 n=2122 freq=0.151 (pos 321) BSS +0.2338 [+0.191, +0.283] p=0.0005 | AUC 0.882 [0.869, 0.901] (raw G AUC 0.889)
+  lead 24 n=2122 freq=0.151 (pos 321) BSS +0.2408 [+0.211, +0.278] p=0.0005 | AUC 0.881 [0.869, 0.901] (raw G AUC 0.888)
+  lead 48 n=2122 freq=0.151 (pos 321) BSS +0.2396 [+0.197, +0.280] p=0.0005 | AUC 0.877 [0.863, 0.899] (raw G AUC 0.883)
+  power (A1.1 criterion passes, planted expected BSS 0.050, beta 0.543, 300 sims): 0.973
+  A1.1 passes=True
+  A1.2 AUC0 0.882 AUC24 0.881 AUC48 0.877 ordered=True diff0-48 +0.005 [-0.004, +0.016] p=0.1334 passes=False
+  A1.3 2021 lead0 freq 0.210 (n=424) threshold 70.98 kt (share above 0.210); 2022-25 lead 24 n=1698 pos=232 POD 0.690 FAR 0.498 bias 1.375 HSS 0.502 [+0.474, +0.543] p(HSS<0.30)=0.0005 passes=True
+
+== A1 pac
+  lead  0 n=2122 freq=0.126 (pos 268) BSS +0.2653 [+0.222, +0.324] p=0.0005 | AUC 0.900 [0.880, 0.923] (raw G AUC 0.904)
+  lead 24 n=2122 freq=0.126 (pos 267) BSS +0.2748 [+0.237, +0.316] p=0.0005 | AUC 0.904 [0.888, 0.925] (raw G AUC 0.908)
+  lead 48 n=2122 freq=0.125 (pos 266) BSS +0.2431 [+0.179, +0.305] p=0.0005 | AUC 0.899 [0.883, 0.918] (raw G AUC 0.902)
+  power (A1.1 criterion passes, planted expected BSS 0.050, beta 0.545, 300 sims): 0.980
+  A1.1 passes=True
+  A1.2 AUC0 0.900 AUC24 0.904 AUC48 0.899 ordered=False diff0-48 +0.001 [-0.017, +0.013] p=0.3393 passes=False
+  A1.3 2021 lead0 freq 0.120 (n=424) threshold 73.70 kt (share above 0.120); 2022-25 lead 24 n=1698 pos=216 POD 0.514 FAR 0.410 bias 0.870 HSS 0.489 [+0.452, +0.522] p(HSS<0.30)=0.0005 passes=True
+
+== A2 counts: scored fixes 90131 (of 318612 GFS track rows); no ERA5 match within 500 km 11091; matched 79040; median match dist 82 km
+   lead>=12 fixes 74929, share using nodp12 fallback 0.1371; by lead {"12": 0.21554092582033071, "24": 0.18922880514445128, "36": 0.10963386133471825, "48": 0.0}
+   speed missing share by lead {"0": 1.0, "12": 0.10445285366232958, "24": 0.09191923968036314, "36": 0.0, "48": 0.0}; ERA5 dp12 missing where dp12 model used 3161; matched basin differs 0
+   g800 GFS minus ERA5 at matched fixes: {"mean": -0.5119534412955465, "n": 79040, "by_lead": {"0": -0.5811521692516619, "12": -0.3507841542750929, "24": -0.5047999119282215, "36": -0.5122257053291536, "48": -0.6596803792628841}, "by_basin": {"atl": -0.3912936377602373, "pac": -0.6222908491982754}}
+   no-match by basin_lead {"atl_0": 573, "atl_12": 1032, "atl_24": 1451, "atl_36": 1331, "atl_48": 1094, "pac_0": 638, "pac_12": 1043, "pac_24": 1531, "pac_36": 1336, "pac_48": 1062}
+
+== A2 atl (BSS vs frozen basin-month climatology; primary truth)
+  lead  0 n=7349 base=0.0825 clim=0.0626 meanp=0.0607 BSS +0.2881 [+0.242, +0.327] p=0.0005 AUC 0.907 [0.893, 0.920]
+          thr(2021)=0.2039 2022-25 n=5972 pos=457 POD 0.547 FAR 0.493 HSS 0.485 [+0.440, +0.520] (2021 in-sample HSS 0.587)
+          A2.2 matched n=6776 GFS-fed BSS +0.2877 ERA-fed +0.3383 diff -0.0507 [-0.075, -0.030] |d|<=0.05:False CI within:False p_equiv=0.5067 | g800 bias -0.47 kt rmse 11.66 msl bias -0.58
+          A2.4 recal a=+0.777 b=0.997 (2021 n=1377 pos=149) 2022-25 BSS before +0.2730 [+0.223, +0.315] after +0.2698 [+0.199, +0.325] gain -0.0033 [-0.028, +0.019]
+          secondary archive truth base=0.0580 (pos 426) BSS vs hf24 clim +0.2450 [+0.199, +0.276] AUC 0.904 | thr 0.2114 POD 0.606 FAR 0.599 HSS 0.447 [+0.393, +0.488]
+  lead 12 n=9263 base=0.0681 clim=0.0626 meanp=0.0679 BSS +0.3320 [+0.286, +0.368] p=0.0005 AUC 0.926 [0.917, 0.939]
+          thr(2021)=0.2364 2022-25 n=7516 pos=474 POD 0.624 FAR 0.525 HSS 0.504 [+0.460, +0.540] (2021 in-sample HSS 0.574)
+          A2.2 matched n=8231 GFS-fed BSS +0.3396 ERA-fed +0.3753 diff -0.0357 [-0.056, -0.017] |d|<=0.05:True CI within:False p_equiv=0.0830 | g800 bias -0.20 kt rmse 11.77 msl bias -0.82
+          A2.4 recal a=+0.053 b=0.829 (2021 n=1747 pos=157) 2022-25 BSS before +0.3157 [+0.268, +0.355] after +0.3125 [+0.261, +0.355] gain -0.0032 [-0.008, +0.002]
+          secondary archive truth base=0.0512 (pos 474) BSS vs hf24 clim +0.1802 [+0.103, +0.237] AUC 0.897 | thr 0.2450 POD 0.631 FAR 0.635 HSS 0.429 [+0.361, +0.496]
+  lead 24 n=10058 base=0.0627 clim=0.0623 meanp=0.0633 BSS +0.3268 [+0.266, +0.376] p=0.0005 AUC 0.930 [0.919, 0.945]
+          thr(2021)=0.3148 2022-25 n=8193 pos=476 POD 0.555 FAR 0.495 HSS 0.498 [+0.448, +0.537] (2021 in-sample HSS 0.589)
+          A2.2 matched n=8607 GFS-fed BSS +0.3359 ERA-fed +0.3771 diff -0.0411 [-0.066, -0.024] |d|<=0.05:True CI within:False p_equiv=0.2109 | g800 bias -0.43 kt rmse 12.23 msl bias -0.84
+          A2.4 recal a=+0.041 b=0.845 (2021 n=1865 pos=155) 2022-25 BSS before +0.3061 [+0.241, +0.360] after +0.3051 [+0.239, +0.360] gain -0.0010 [-0.007, +0.004]
+          secondary archive truth base=0.0490 (pos 493) BSS vs hf24 clim +0.1678 [+0.095, +0.213] AUC 0.888 | thr 0.3145 POD 0.553 FAR 0.610 HSS 0.427 [+0.365, +0.464]
+  lead 36 n=9202 base=0.0636 clim=0.0622 meanp=0.0667 BSS +0.3348 [+0.274, +0.381] p=0.0005 AUC 0.933 [0.918, 0.947]
+          thr(2021)=0.2476 2022-25 n=7471 pos=438 POD 0.637 FAR 0.526 HSS 0.511 [+0.460, +0.551] (2021 in-sample HSS 0.605)
+          A2.2 matched n=7871 GFS-fed BSS +0.3486 ERA-fed +0.3941 diff -0.0455 [-0.063, -0.022] |d|<=0.05:True CI within:False p_equiv=0.3453 | g800 bias -0.36 kt rmse 12.49 msl bias -0.89
+          A2.4 recal a=+0.012 b=0.862 (2021 n=1731 pos=147) 2022-25 BSS before +0.3124 [+0.256, +0.358] after +0.3130 [+0.258, +0.359] gain +0.0006 [-0.002, +0.002]
+          secondary archive truth base=0.0513 (pos 472) BSS vs hf24 clim +0.1675 [+0.078, +0.230] AUC 0.890 | thr 0.3254 POD 0.555 FAR 0.601 HSS 0.433 [+0.360, +0.480]
+  lead 48 n=7363 base=0.0638 clim=0.0619 meanp=0.0665 BSS +0.3436 [+0.282, +0.381] p=0.0005 AUC 0.936 [0.919, 0.951]
+          thr(2021)=0.2898 2022-25 n=5957 pos=349 POD 0.616 FAR 0.499 HSS 0.522 [+0.469, +0.560] (2021 in-sample HSS 0.587)
+          A2.2 matched n=6269 GFS-fed BSS +0.3602 ERA-fed +0.4191 diff -0.0590 [-0.073, -0.043] |d|<=0.05:False CI within:False p_equiv=0.8616 | g800 bias -0.55 kt rmse 12.80 msl bias -1.00
+          A2.4 recal a=-0.060 b=0.784 (2021 n=1406 pos=121) 2022-25 BSS before +0.3299 [+0.253, +0.377] after +0.3330 [+0.260, +0.381] gain +0.0030 [-0.002, +0.008]
+          secondary archive truth base=0.0543 (pos 400) BSS vs hf24 clim +0.1896 [+0.118, +0.249] AUC 0.893 | thr 0.3217 POD 0.567 FAR 0.572 HSS 0.457 [+0.406, +0.499]
+  A2.3 BSS by lead +0.2881 +0.3320 +0.3268 +0.3348 +0.3436 non-increasing=False
+  A2.1 passes=True ; A2.2 (lead 24) passes=True
+  reliability lead 24 (deciles of forecast probability): bin n mean_fc obs
+    0 n=1006 fc=0.0000 obs=0.0000 (p 0.0000-0.0000)
+    1 n=1006 fc=0.0002 obs=0.0010 (p 0.0000-0.0005)
+    2 n=1006 fc=0.0009 obs=0.0010 (p 0.0005-0.0013)
+    3 n=1005 fc=0.0019 obs=0.0030 (p 0.0013-0.0026)
+    4 n=1006 fc=0.0038 obs=0.0030 (p 0.0026-0.0052)
+    5 n=1006 fc=0.0073 obs=0.0159 (p 0.0052-0.0101)
+    6 n=1005 fc=0.0144 obs=0.0189 (p 0.0101-0.0200)
+    7 n=1006 fc=0.0311 obs=0.0447 (p 0.0200-0.0478)
+    8 n=1006 fc=0.0925 obs=0.1103 (p 0.0479-0.1717)
+    9 n=1006 fc=0.4808 obs=0.4294 (p 0.1717-0.9867)
+
+== A2 pac (BSS vs frozen basin-month climatology; primary truth)
+  lead  0 n=7853 base=0.0642 clim=0.0461 meanp=0.0457 BSS +0.3027 [+0.289, +0.313] p=0.0005 AUC 0.917 [0.906, 0.928]
+          thr(2021)=0.1526 2022-25 n=6268 pos=400 POD 0.603 FAR 0.505 HSS 0.509 [+0.463, +0.564] (2021 in-sample HSS 0.523)
+          A2.2 matched n=7215 GFS-fed BSS +0.3044 ERA-fed +0.3722 diff -0.0678 [-0.086, -0.041] |d|<=0.05:False CI within:False p_equiv=0.9190 | g800 bias -0.69 kt rmse 10.81 msl bias -0.29
+          A2.4 recal a=+0.661 b=1.105 (2021 n=1585 pos=104) 2022-25 BSS before +0.2994 [+0.284, +0.312] after +0.3262 [+0.289, +0.360] gain +0.0268 [+0.001, +0.048]
+          secondary archive truth base=0.0450 (pos 353) BSS vs hf24 clim +0.3206 [+0.253, +0.365] AUC 0.936 | thr 0.3172 POD 0.474 FAR 0.407 HSS 0.507 [+0.449, +0.563]
+  lead 12 n=10028 base=0.0512 clim=0.0460 meanp=0.0510 BSS +0.3351 [+0.300, +0.365] p=0.0005 AUC 0.939 [0.935, 0.944]
+          thr(2021)=0.3205 2022-25 n=8024 pos=408 POD 0.527 FAR 0.436 HSS 0.521 [+0.474, +0.570] (2021 in-sample HSS 0.548)
+          A2.2 matched n=8985 GFS-fed BSS +0.3391 ERA-fed +0.3839 diff -0.0448 [-0.065, -0.028] |d|<=0.05:True CI within:False p_equiv=0.2709 | g800 bias -0.49 kt rmse 11.15 msl bias -0.43
+          A2.4 recal a=-0.327 b=0.867 (2021 n=2004 pos=105) 2022-25 BSS before +0.3343 [+0.292, +0.368] after +0.3341 [+0.305, +0.355] gain -0.0001 [-0.013, +0.015]
+          secondary archive truth base=0.0383 (pos 384) BSS vs hf24 clim +0.2860 [+0.207, +0.352] AUC 0.936 | thr 0.4905 POD 0.428 FAR 0.444 HSS 0.466 [+0.439, +0.501]
+  lead 24 n=11091 base=0.0463 clim=0.0459 meanp=0.0470 BSS +0.3160 [+0.264, +0.359] p=0.0005 AUC 0.941 [0.931, 0.950]
+          thr(2021)=0.2721 2022-25 n=8909 pos=407 POD 0.563 FAR 0.483 HSS 0.516 [+0.477, +0.562] (2021 in-sample HSS 0.523)
+          A2.2 matched n=9560 GFS-fed BSS +0.3240 ERA-fed +0.3845 diff -0.0605 [-0.077, -0.036] |d|<=0.05:False CI within:False p_equiv=0.7946 | g800 bias -0.58 kt rmse 11.75 msl bias -0.35
+          A2.4 recal a=-0.357 b=0.835 (2021 n=2182 pos=106) 2022-25 BSS before +0.3211 [+0.254, +0.373] after +0.3255 [+0.278, +0.363] gain +0.0044 [-0.010, +0.023]
+          secondary archive truth base=0.0363 (pos 403) BSS vs hf24 clim +0.2451 [+0.141, +0.334] AUC 0.914 | thr 0.3709 POD 0.518 FAR 0.506 HSS 0.486 [+0.403, +0.559]
+  lead 36 n=10053 base=0.0486 clim=0.0458 meanp=0.0496 BSS +0.3249 [+0.283, +0.365] p=0.0005 AUC 0.941 [0.937, 0.946]
+          thr(2021)=0.1803 2022-25 n=8102 pos=388 POD 0.665 FAR 0.559 HSS 0.502 [+0.438, +0.571] (2021 in-sample HSS 0.528)
+          A2.2 matched n=8717 GFS-fed BSS +0.3387 ERA-fed +0.4050 diff -0.0663 [-0.092, -0.037] |d|<=0.05:False CI within:False p_equiv=0.8601 | g800 bias -0.65 kt rmse 11.86 msl bias -0.38
+          A2.4 recal a=-0.335 b=0.818 (2021 n=1951 pos=101) 2022-25 BSS before +0.3342 [+0.283, +0.373] after +0.3378 [+0.304, +0.364] gain +0.0036 [-0.010, +0.021]
+          secondary archive truth base=0.0375 (pos 377) BSS vs hf24 clim +0.2524 [+0.160, +0.329] AUC 0.918 | thr 0.4532 POD 0.490 FAR 0.451 HSS 0.500 [+0.439, +0.540]
+  lead 48 n=7871 base=0.0495 clim=0.0455 meanp=0.0510 BSS +0.3465 [+0.293, +0.396] p=0.0005 AUC 0.945 [0.940, 0.951]
+          thr(2021)=0.2006 2022-25 n=6338 pos=310 POD 0.700 FAR 0.515 HSS 0.547 [+0.506, +0.582] (2021 in-sample HSS 0.520)
+          A2.2 matched n=6809 GFS-fed BSS +0.3738 ERA-fed +0.4429 diff -0.0691 [-0.108, -0.019] |d|<=0.05:False CI within:False p_equiv=0.7786 | g800 bias -0.76 kt rmse 11.77 msl bias -0.46
+          A2.4 recal a=-0.352 b=0.794 (2021 n=1533 pos=80) 2022-25 BSS before +0.3611 [+0.302, +0.421] after +0.3621 [+0.320, +0.406] gain +0.0010 [-0.013, +0.019]
+          secondary archive truth base=0.0408 (pos 321) BSS vs hf24 clim +0.2506 [+0.150, +0.335] AUC 0.911 | thr 0.5199 POD 0.418 FAR 0.452 HSS 0.454 [+0.414, +0.499]
+  A2.3 BSS by lead +0.3027 +0.3351 +0.3160 +0.3249 +0.3465 non-increasing=False
+  A2.1 passes=True ; A2.2 (lead 24) passes=False
+  reliability lead 24 (deciles of forecast probability): bin n mean_fc obs
+    0 n=1109 fc=0.0000 obs=0.0000 (p 0.0000-0.0000)
+    1 n=1109 fc=0.0001 obs=0.0009 (p 0.0000-0.0002)
+    2 n=1110 fc=0.0004 obs=0.0000 (p 0.0002-0.0006)
+    3 n=1108 fc=0.0009 obs=0.0009 (p 0.0006-0.0013)
+    4 n=1109 fc=0.0019 obs=0.0018 (p 0.0013-0.0027)
+    5 n=1110 fc=0.0041 obs=0.0054 (p 0.0027-0.0058)
+    6 n=1109 fc=0.0086 obs=0.0090 (p 0.0058-0.0125)
+    7 n=1108 fc=0.0196 obs=0.0352 (p 0.0126-0.0295)
+    8 n=1109 fc=0.0575 obs=0.0622 (p 0.0296-0.1059)
+    9 n=1110 fc=0.3764 obs=0.3468 (p 0.1059-0.9755)
+
+elapsed 71 s
