@@ -297,7 +297,7 @@ def main():
     # stretches where the speed is too low by the knot factor (1.944): ERA5/buoy
     # jumps to about 1.9 and drops back to about 1.0 in one month. A station-month
     # whose median ln(U_e/U_b) exceeds UNIT_SCREEN in size is dropped whole.
-    P("1b. ISD UNIT-ERROR SCREEN: station-months with |median ln(U_e/U_b)| > %.2f dropped" % UNIT_SCREEN)
+    P("1b. ISD UNIT-ERROR SCREEN: station-months with >= 10 valid pairs (both winds >= 3 m/s) and |median ln(U_e/U_b)| > %.2f dropped" % UNIT_SCREEN)
     drop = np.zeros(len(st), bool)
     for k in kept:
         bad = []

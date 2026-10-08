@@ -36,7 +36,7 @@ ERA5 months read: 156 (18956 analysis times).
    995340 Nickersn Atl  lsm 0.01 / max 0.71  pairs   1122  seasons 2001-2004  DROPPED (land in the 3 x 3 neighbourhood)
    21 of 26 stations kept.
 
-1b. ISD UNIT-ERROR SCREEN: station-months with |median ln(U_e/U_b)| > 0.35 dropped
+1b. ISD UNIT-ERROR SCREEN: station-months with >= 10 valid pairs (both winds >= 3 m/s) and |median ln(U_e/U_b)| > 0.35 dropped
    992930 SNomad    27 months dropped, 1996-10 to 2001-01, median ERA5/buoy 1.89 (knot factor 1.944)
    996210 NNomad    22 months dropped, 1992-10 to 2000-03, median ERA5/buoy 1.87 (knot factor 1.944)
    996300 44014     42 months dropped, 1992-10 to 2001-01, median ERA5/buoy 1.86 (knot factor 1.944)
