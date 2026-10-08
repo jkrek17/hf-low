@@ -17,7 +17,7 @@
     maxPressure: 1010,
     bombOnly: false,
     search: '',
-    layer: 'tracks',       // 'tracks' | 'density' | 'genesis' | 'peak' | 'atlas' | 'bymonth' | 'playback'
+    layer: 'tracks',       // 'tracks' | 'density' | 'genesis' | 'peak' | 'atlas' | 'prob' | 'bymonth' | 'playback'
     currents: false,   // ocean currents background layer - independent of `layer`, off by default
     era5: false,       // ERA5 proxy tracks under the Tracks layer, off by default
     era5null: false,   // ... matched null-case tracks
@@ -28,6 +28,8 @@
     atlas: { view: 'boxes', src: 'archive', field: 'annmax' },   // the Atlas layer
     strong: { list: 'minp', basin: 'all' },   // the Strongest storms tab   // key of the ERA5 track picked from the Strongest list, drawn whatever the filters say
     monthEra5: true,   // By month: add the ERA5 proxy storms of earlier seasons (teal), on by default
+    probMin: 1,        // HF probability layer: draw edges at or above this P class (1 = all)
+    probPre: true,     // HF probability layer: include 1979-2003 (catalog events and matched nulls only)
     era5pre: false,    // ... and before 2001-02 (within-era comparison only), off by default
     sort: { key: 'start', dir: -1 },
     selectedKey: null
@@ -1019,6 +1021,7 @@
     prob:  { varName: 'HF_ERA5_PROB',  loader: 'era5ProbLoader',  decode: function (r) { return r; } },
     lists: { varName: 'HF_ERA5_LISTS', loader: 'era5ListsLoader', decode: function (r) { return r; } },
     atlas: { varName: 'HF_ATLAS',      loader: 'atlasLoader',     decode: function (r) { return r; } },
+    allp:  { varName: 'HF_ERA5_ALLP',  loader: 'allpLoader',      decode: function (r) { return HF.era5.decodeAllP(r); } },
     gust:  { varName: 'HF_GUST_CLIMO', loader: 'gustLoader',      decode: function (r) { return r; } }
   };
   var era5Attached = {};                       // ev / nul: P(HF) already attached to the decoded tracks
@@ -1117,6 +1120,7 @@
     var probOn = state.era5 && state.era5prob && attachEra5Prob() && era5Attached.ev;
     HF.globe.setEra5(ev, nul, peaks, { prob: !!probOn, focus: focus });
     HF.globe.setAtlas(atlasModel());
+    HF.globe.setProb(probModel());
   }
 
   /* ------------------------------------------------------------- atlas
@@ -1233,6 +1237,64 @@
     return out;
   }
 
+  /* ---------------------------------------------------- HF probability
+     Every track the P(HF) tables score (docs/data/era5-allprob.js, lazy
+     loaded, built by tools/build_era5_allprob.py), coloured per edge by P(HF
+     within 24 h). A pipeline A ERA5 proxy model output, not an observation.
+     Basin, season range and the month chips apply; the 1979-2003 sample (catalog
+     events and their matched null cases only) is its own tick. */
+
+  var P_LABELS = ['under 5 %', '5 to 20 %', '20 to 50 %', '50 to 80 %', '80 % or more'];
+  var probShown = { tracks: 0, fixes: 0, hi: 0 };
+
+  function probModel() {
+    if (state.layer !== 'prob' || !ensureEra5('allp')) return null;
+    var D = era5Data.allp;
+    var idx = HF.era5.filterAllP(D, {
+      basin: state.basin === 'both' ? 'all' : state.basin,
+      season0: state.probPre || state.season0 == null ? 0 : state.season0,
+      season1: state.season1 == null ? 9999 : state.season1,
+      months: state.months
+    });
+    var nf = 0, hi = 0;
+    for (var a = 0; a < idx.length; a++) {
+      for (var k = D.off[idx[a]]; k < D.off[idx[a] + 1]; k++) { nf++; if (D.cls[k] >= 4) hi++; }
+    }
+    probShown = { tracks: idx.length, fixes: nf, hi: hi };
+    var KIND = ['2004-2025 low', '1979-2003 catalog event', '1979-2003 matched null case'];
+    return {
+      D: D, idx: idx, minC: state.probMin,
+      tip: function (t, k) {
+        var pct = D.p[k] / 10, lat = D.lat[k], lon = D.lon[k];
+        return 'P(HF within 24 h) ' + (pct < 1 ? pct.toFixed(1) : Math.round(pct)) + ' % | fix ' + HF.era5.fixTimeLabel(D, k) +
+          ' | ' + fmtLat(lat) + ', ' + fmtLon(lon) + ' | ' + (D.basin[t] ? 'Pacific' : 'Atlantic') + ', ' + KIND[D.kind[t]] +
+          ', season ' + HF.seasonLabel(D.season[t]) + ', track ' + D.id[t] + ' | ERA5 proxy model output (pipeline A, model N), not an observation' +
+          (D.season[t] < 2004 ? ' | before 2004: compare within that era only' : '');
+      }
+    };
+  }
+
+  function probNote() {
+    if (era5Status.allp === 'failed') return ' The probability data could not be loaded.';
+    if (era5Status.allp !== 'ready') return ' Loading the probability tracks…';
+    return probShown.tracks.toLocaleString() + ' ERA5 proxy tracks, ' + probShown.fixes.toLocaleString() + ' scored fixes (00 and 12 UTC), each edge coloured by the model’s probability of a hurricane-force-equivalent gust (pipeline A, 71.7 kt) within 24 h of its later fix. ' +
+      'A model output on an ERA5 proxy, not an observation. 2004-2025 is every scored low' +
+      (state.probPre ? '; 1979-2003 is only the catalog events and their matched null cases (the other lows have no committed fixes), within-era only: the gust index drifts before 2001-02, so read those as shape, not rates' : '; the 1979-2003 sample is switched off') +
+      '. ' + probShown.hi.toLocaleString() + ' fixes are at 50 % or more.' + (state.probMin > 1 ? ' Edges under ' + ['', '', '5 %', '20 %', '50 %'][state.probMin] + ' are hidden.' : '') + ' Basin, months and the season end apply, and the season start too unless the 1979-2003 tick is on. Hover a fix for its probability and time; drag to rotate, scroll to zoom.';
+  }
+
+  function appendProbLegend(box) {
+    box.appendChild(HF.el('h3', {}, 'P(HF within 24 h)'));
+    for (var c = 5; c >= 1; c--) {
+      var r = HF.el('div', { class: 'legend-row' }), sw = HF.el('span', { class: 'legend-swatch' });
+      sw.style.background = HF.cssVar('--p' + c);
+      r.appendChild(sw); r.appendChild(document.createTextNode(P_LABELS[c - 1]));
+      box.appendChild(r);
+    }
+    box.appendChild(HF.el('p', { class: 'legend-note' },
+      'ERA5 proxy model output (pipeline A, model N, leave-one-season-out), not an observation. Scored at 00 and 12 UTC; each edge takes the larger of its two ends. Lines under 5 % are faint on purpose.'));
+  }
+
   function atlasNote() {
     var v = state.atlas.view, A = window.HF_ATLAS;
     if (!A || era5Status.atlas !== 'ready') return era5Status.atlas === 'failed' ? ' The atlas data could not be loaded.' : ' Loading the atlas…';
@@ -1318,6 +1380,8 @@
       note.textContent = 'First tracked fix of each event — where the archive picked the low up, not true cyclogenesis.';
     } else if (layer === 'atlas') {
       note.textContent = atlasNote();
+    } else if (layer === 'prob') {
+      note.textContent = probNote();
     } else if (layer === 'peak') {
       note.textContent = 'Position of each event’s lowest analyzed pressure; marker size grows as pressure falls.';
     } else {
@@ -1341,6 +1405,7 @@
       note.textContent += ' ERA5 proxy layers are drawn on the Tracks layer only.';
     }
     document.getElementById('atlasTools').hidden = layer !== 'atlas';
+    document.getElementById('probTools').hidden = layer !== 'prob';
     document.getElementById('atlasSrc').disabled = state.atlas.view === 'historic' || state.atlas.view === 'gust';
     document.getElementById('atlasField').hidden = state.atlas.view !== 'gust';
     document.getElementById('atlasFieldLabel').hidden = state.atlas.view !== 'gust';
@@ -1399,6 +1464,11 @@
     lows = lows || [];
     var box = HF.clear(document.getElementById('mapLegend'));
     var layer = mapLayer();
+
+    if (layer === 'prob') {
+      appendProbLegend(box);
+      return;
+    }
 
     if (layer === 'atlas') {
       appendAtlasLegend(box);
@@ -2895,6 +2965,8 @@
       state.era5focusPan = false;
       render();
     });
+    document.getElementById('probMin').addEventListener('change', function (e) { state.probMin = Number(e.target.value); render(); });
+    document.getElementById('probPre').addEventListener('change', function (e) { state.probPre = e.target.checked; render(); });
     document.getElementById('atlasView').addEventListener('change', function (e) { state.atlas.view = e.target.value; render(); });
     document.getElementById('atlasField').addEventListener('change', function (e) { state.atlas.field = e.target.value; render(); });
     document.getElementById('atlasSrc').addEventListener('change', function (e) { state.atlas.src = e.target.value; render(); });

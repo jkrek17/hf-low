@@ -21,6 +21,8 @@
     color: var(--ink-2); background: var(--surface-sunk); border: 1px solid var(--border-strong);
   }
   @media print { .badge-env { display: none !important; } }
+  .badge-link { text-decoration: none; color: var(--accent); background: var(--accent-soft); border-color: var(--border-strong); font-weight: 600; }
+  .badge-link:hover { text-decoration: underline; }
 
   /* Lat/lon readout under the cursor (globe.js). Scoped here rather than in
      assets/app.css so it doesn't collide with in-flight styling work there;
@@ -49,6 +51,7 @@
     <p class="sub">North Atlantic &amp; North Pacific &middot; <span id="vintage">loading&hellip;</span></p>
   </div>
   <div class="topbar-actions">
+    <a class="badge badge-link" href="composites.html" title="ERA5 proxy composites of HF lows against storm-force-only lows">Composites</a>
     <span class="badge badge-warn" title="Not an official product. Derived from a hand-maintained archive.">Experimental</span>
     <span class="badge badge-env" id="envBadge" hidden></span>
     <button type="button" id="themeToggle" class="icon-btn" aria-label="Switch colour theme" title="Switch colour theme">
@@ -137,6 +140,7 @@
         <button type="button" class="seg" data-layer="density" aria-pressed="false">Fix density</button>
         <button type="button" class="seg" data-layer="genesis" aria-pressed="false">First fix</button>
         <button type="button" class="seg" data-layer="peak" aria-pressed="false">Peak intensity</button>
+        <button type="button" class="seg" data-layer="prob" aria-pressed="false" title="Every scored ERA5 proxy track, each edge coloured by the model's probability of a hurricane-force-equivalent gust within 24 h">HF probability</button>
         <button type="button" class="seg" data-layer="atlas" aria-pressed="false">Atlas</button>
         <button type="button" class="seg" data-layer="bymonth" aria-pressed="false" title="All events of one calendar month, all seasons together; step through the months">By month</button>
         <button type="button" class="seg" data-layer="playback" aria-pressed="false">Playback</button>
@@ -175,6 +179,21 @@
       <script type="text/plain" id="era5ProbLoader" src="era5-prob.js"></script>
       <script type="text/plain" id="era5ListsLoader" src="era5-lists.js"></script>
       <button type="button" class="btn" id="fitBounds">Fit to events</button>
+      <div class="atlas-tools" id="probTools" hidden>
+        <label class="check" title="Before 2004 the tables score only the catalog events and their matched null cases, for comparison within that era">
+          <input type="checkbox" id="probPre" checked> include 1979-2003 (catalog events and matched null cases only; ERA5 proxy)
+        </label>
+        <div class="filter">
+          <label for="probMin">Show edges at or above</label>
+          <select id="probMin">
+            <option value="1">All (including under 5 %)</option>
+            <option value="2">5 % and above</option>
+            <option value="3">20 % and above</option>
+            <option value="4">50 % and above</option>
+          </select>
+        </div>
+        <script type="text/plain" id="allpLoader" src="era5-allprob.js"></script>
+      </div>
       <div class="atlas-tools" id="atlasTools" hidden>
         <label for="atlasView">Atlas view</label>
         <select id="atlasView">

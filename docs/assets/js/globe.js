@@ -122,6 +122,8 @@ window.HF = window.HF || {};
   var curGrid = null;                    // cached computeDensityGrid() result, layer 'density' only
   var atlasModel = null;                 // atlas layer: {kind: 'boxes'|'motion'|'historic', ...} from app.js
   var atlasHits = [];                    // atlas arrows / markers drawn last frame: {x, y, tip}
+  var probModel = null;                  // 'prob' layer: {D, idx, tip(k), tr(k)} from app.js (HF.era5.decodeAllP shape)
+  var hoveredProb = null;                // {t: track index, k: fix index} under the pointer
   var hoveredAtlas = null;               // index into atlasModel.cells (boxes) or atlasHits (the others)
   var hoveredCellKey = null;             // "latIdx:lonIdx", density layer only
   var densityRamp = null;                // --seq-1..7, resolved lazily and reset on theme change
@@ -2099,9 +2101,128 @@ window.HF = window.HF || {};
     ctx.lineCap = 'butt';
   }
 
+
+  /* ------------------------------------------------------------ P(HF) tracks
+     The "HF probability" layer: every track the P(HF) tables score, each edge
+     coloured by the larger P of its two ends (P looks 24 h ahead), five
+     classes, one Path2D per class. Fixes are projected once, inlined, from the
+     trig precomputed by HF.era5.decodeAllP. While the view moves only the
+     classes that carry signal (P at or above 5 %) are drawn. ERA5 proxy model
+     output, not an observation; the wording is app.js's. */
+
+  function probStyle(c, n) {
+    // weight and alpha per class; the low classes are a haze, the top ones read as lines
+    var thin = n > 8000 ? 0 : 1;
+    return [null,
+      { w: 0.5, a: thin ? 0.16 : 0.3, v: '--p2' },
+      { w: 0.7, a: 0.4, v: '--p2' },
+      { w: 0.8, a: 0.5, v: '--p3' },
+      { w: 1.0, a: 0.7, v: '--p4' },
+      { w: 1.3, a: 0.85, v: '--p5' }][c];
+  }
+
+  function drawProb() {
+    hitPoints = [];
+    if (!probModel) return;
+    var D = probModel.D, idx = probModel.idx, n = idx.length;
+    var moving = dragging || !!inertia || !!transition || performance.now() - lastWheelT < 150;
+    var R = baseR * view.zoom, vcp = Math.cos(view.phi), vsp = Math.sin(view.phi), lam0 = view.lambda;
+    var paths = [null, new Path2D(), new Path2D(), new Path2D(), new Path2D(), new Path2D()];
+    var dots = [null, new Path2D(), new Path2D(), new Path2D(), new Path2D(), new Path2D()];
+    var minC = Math.max(probModel.minC || 1, moving ? 2 : 1);
+    for (var a = 0; a < n; a++) {
+      var t = idx[a], k0 = D.off[t], k1 = D.off[t + 1], px = 0, py = 0, pvis = false, pc = 0;
+      for (var k = k0; k < k1; k++) {
+        var dl = D.lam[k] - lam0, cosDl = Math.cos(dl);
+        var vis = vsp * D.sp[k] + vcp * D.cp[k] * cosDl >= 0;
+        var x = cx + D.cp[k] * Math.sin(dl) * R, y = cy - (vcp * D.sp[k] - vsp * D.cp[k] * cosDl) * R;
+        var c = D.cls[k];
+        // an edge across a gap in the in-domain fixes (a track that left and re-entered) is not drawn
+        if (k > k0 && pvis && vis && D.step[k] - D.step[k - 1] <= 1) {
+          var ec = c > pc ? c : pc;
+          if (ec >= minC) { paths[ec].moveTo(px, py); paths[ec].lineTo(x, y); }
+        } else if (k1 - k0 === 1 && vis && c >= minC) {
+          dots[c].moveTo(x + 1.6, y); dots[c].arc(x, y, 1.6, 0, Math.PI * 2);
+        }
+        px = x; py = y; pvis = vis; pc = c;
+      }
+    }
+    ctx.lineCap = 'round';
+    ctx.setLineDash([]);
+    for (var c2 = minC; c2 <= 5; c2++) {
+      var st = probStyle(c2, n);
+      ctx.strokeStyle = HF.cssVar(st.v) || '#6a3fa8';
+      ctx.fillStyle = ctx.strokeStyle;
+      ctx.lineWidth = st.w;
+      ctx.globalAlpha = st.a;
+      ctx.stroke(paths[c2]);
+      ctx.globalAlpha = Math.min(1, st.a + 0.15);
+      ctx.fill(dots[c2]);
+    }
+    ctx.globalAlpha = 1;
+    ctx.lineCap = 'butt';
+    if (hoveredProb) {
+      var ht = hoveredProb.t, h0 = D.off[ht], h1 = D.off[ht + 1], hp = null;
+      ctx.lineCap = 'round';
+      for (var pass = 0; pass < 2; pass++) {
+        for (var k2 = h0; k2 < h1; k2++) {
+          var q = project(D.lon[k2], D.lat[k2]);
+          if (!q || !q.visible) { hp = null; continue; }
+          if (hp && D.step[k2] - D.step[k2 - 1] <= 1) {
+            ctx.beginPath(); ctx.moveTo(hp.x, hp.y); ctx.lineTo(q.x, q.y);
+            if (pass === 0) { ctx.strokeStyle = HF.cssVar('--ink') || '#222'; ctx.globalAlpha = 0.45; ctx.lineWidth = 4.6; }
+            else { ctx.strokeStyle = HF.cssVar('--p' + Math.max(D.cls[k2], D.cls[k2 - 1])) || '#6a3fa8'; ctx.globalAlpha = 1; ctx.lineWidth = 2.6; }
+            ctx.stroke();
+          }
+          hp = q;
+        }
+        hp = null;
+      }
+      ctx.globalAlpha = 1;
+      var hq = project(D.lon[hoveredProb.k], D.lat[hoveredProb.k]);
+      if (hq && hq.visible) {
+        ctx.beginPath(); ctx.arc(hq.x, hq.y, 6, 0, Math.PI * 2);
+        ctx.strokeStyle = HF.cssVar('--ink') || '#222'; ctx.lineWidth = 2; ctx.stroke();
+      }
+      ctx.lineCap = 'butt';
+    }
+  }
+
+  function handleProbHover(px, py, evt) {
+    var hit = null;
+    if (probModel && !dragging) {
+      var D = probModel.D, idx = probModel.idx, R = baseR * view.zoom;
+      var vcp = Math.cos(view.phi), vsp = Math.sin(view.phi), lam0 = view.lambda, best = 10 * 10;
+      for (var a = 0; a < idx.length; a++) {
+        var t = idx[a];
+        for (var k = D.off[t]; k < D.off[t + 1]; k++) {
+          var dl = D.lam[k] - lam0, cosDl = Math.cos(dl);
+          if (vsp * D.sp[k] + vcp * D.cp[k] * cosDl < 0) continue;
+          var dx = cx + D.cp[k] * Math.sin(dl) * R - px;
+          if (dx > 10 || dx < -10) continue;
+          var dy = cy - (vcp * D.sp[k] - vsp * D.cp[k] * cosDl) * R - py;
+          var d = dx * dx + dy * dy;
+          // nearer wins; at equal distance the higher P
+          if (d < best || (d === best && hit && D.p[k] > D.p[hit.k])) { best = d; hit = { t: t, k: k }; }
+        }
+      }
+    }
+    var same = (!hit && !hoveredProb) || (hit && hoveredProb && hit.k === hoveredProb.k);
+    if (!same) {
+      hoveredProb = hit;
+      dirty = true;
+      scheduleFrame();
+      canvas.style.cursor = hit ? 'pointer' : '';
+      if (hit) HF.showTip(probModel.tip(hit.t, hit.k), evt); else HF.hideTip();
+    } else if (hit) {
+      HF.moveTip(evt);
+    }
+  }
+
   /* ------------------------------------------------------------ dispatch */
 
   function drawFeatures() {
+    if (curLayer === 'prob') return drawProb();
     if (curLayer === 'atlas') return drawAtlas();
     if (curLayer === 'density') return drawDensity();
     if (curLayer === 'genesis') return drawPoints('genesis');
@@ -2431,6 +2552,7 @@ window.HF = window.HF || {};
 
     var px = evt.clientX - rect.left, py = evt.clientY - rect.top;
 
+    if (curLayer === 'prob') { handleProbHover(px, py, evt); return; }
     if (curLayer === 'atlas') { handleAtlasHover(px, py, evt); return; }
     if (curLayer === 'density') { handleDensityHover(px, py, evt); return; }
     if (curLayer === 'composite') { handleCompositeHover(px, py, evt); return; }
@@ -2542,6 +2664,7 @@ window.HF = window.HF || {};
       hoveredKey = undefined;
       hoveredCellKey = null;
       hoveredAtlas = null;
+      hoveredProb = null;
       hoveredCompId = null;
     } else {
       handleHover(evt, rect);
@@ -2874,6 +2997,13 @@ window.HF = window.HF || {};
   /** Tracks layer only: ERA5 proxy tracks to draw under the archive's, or
       null/empty for none. app.js owns the filtering (HF.era5.filter). */
   /** Atlas layer model (see drawAtlas), or null. */
+  globe.setProb = function (model) {
+    probModel = model || null;
+    hoveredProb = null;
+    dirty = true;
+    scheduleFrame();
+  };
+
   globe.setAtlas = function (model) {
     atlasModel = model || null;
     hoveredAtlas = null;
