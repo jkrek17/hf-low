@@ -297,6 +297,24 @@ def main(sens):
             S2.append(dict(family="secondary", basin=r.basin, outcome=r.outcome, test=f"{r.var} {t}", p=getattr(r, f"{t}_p")))
     S2 = pd.DataFrame(S2); S2["q"] = J.bh(S2.p.values)
     pd.concat([P, S2]).to_csv(f"{OD}/fdr_table.csv", index=False, float_format="%.5g")
+    # verdicts: literal pre-registered rule and the amended wording (PREREGISTRATION.md, deviations 2)
+    V = []
+    for r in main_.itertuples():
+        q = {t: P[(P.basin == r.basin) & (P.outcome == r.outcome) & (P.test == f"{r.var} {t}")].q.iloc[0] for t in ("T1", "T2", "T3")}
+        thr = (q["T1"] < .05 and q["T2"] < .05 and q["T3"] < .05 and r.slope_post > r.slope_pre and 15 <= r.knot_pct <= 85)
+        lit = ("threshold supported" if thr else "smooth ramp" if q["T1"] < .05 else "cannot tell / no relation")
+        if thr:
+            am = "threshold supported"
+        elif q["T2"] < .05:
+            am = "nonlinear; kink and sharp smooth curve cannot be told apart"
+        elif q["T1"] < .05:
+            am = "smooth ramp (straight line as good as one knot)"
+        else:
+            am = "no relation detected beyond storm state"
+        V.append(dict(basin=r.basin, outcome=r.outcome, var=r.var, q_T1=q["T1"], q_T2=q["T2"], q_T3=q["T3"],
+                      knot=r.knot, knot_lo=getattr(r, "knot_lo", np.nan), knot_hi=getattr(r, "knot_hi", np.nan), unit=r.unit,
+                      OR_per_sd_line=r.or_per_sd_lin, OR_across_knot=r.OR_knot_hinge, literal_rule=lit, amended=am))
+    V = pd.DataFrame(V); V.to_csv(f"{OD}/verdicts.csv", index=False, float_format="%.5g")
     w(f"Jet speed / upstream trough depth: threshold or smooth ramp (ERA5 proxy, pipeline A, framework fixes)")
     w(f"Fit seasons 2004-05..2014-15, held out 2015-16..2025-26. Run {datetime.date.today()}; {time.time() - t0:.0f} s.")
     w()
@@ -305,9 +323,28 @@ def main(sens):
     w()
     w("== Secondary variables (separate BH family of %d)" % len(S2))
     w(S2.to_string(index=False, float_format=lambda v: f"{v:.4g}"))
+    w(); w("== Verdicts, primary variables (literal pre-registered rule, then amended wording)")
+    w(V.to_string(index=False, float_format=lambda v: f"{v:.4g}"))
+    w(); w("== Thresholds table (main), key columns")
+    kc = ["basin", "outcome", "var", "ev_fit", "ev_test", "knot", "knot_pct", "knot_lo", "knot_hi", "slope_pre", "slope_post", "or_per_sd_lin", "OR_knot_hinge", "OR_knot_spl",
+          "T1_gain", "T1_lo", "T1_hi", "T2_gain", "T2_lo", "T2_hi", "T3_gain", "T3_lo", "T3_hi", "T3rev_gain", "T3rev_p"]
+    w(main_[kc].to_string(index=False, float_format=lambda v: f"{v:.4g}"))
+    w(); w("== Adjusted probabilities (held-out covariates, fit-season model), percentiles of the variable: hinge / spline / line")
+    pc = ["basin", "outcome", "var"] + [f"x{q}" for q in (10, 50, 90)] + [f"P{q}_{m}" for q in (10, 50, 90) for m in ("hinge", "spl", "lin")]
+    w(main_[pc].to_string(index=False, float_format=lambda v: f"{v:.4g}"))
+    w(); w("== Jet x trough interaction (spline each, product of standardised variables added)")
+    w(I.to_string(index=False, float_format=lambda v: f"{v:.4g}"))
+    w(); w("== Added skill: framework full vs + trough (held-out seasons)")
+    w(A.to_string(index=False, float_format=lambda v: f"{v:.4g}"))
+    w(); w("== Jet x trough terciles (fit-season terciles per basin)")
+    w(G.to_string(index=False, float_format=lambda v: f"{v:.4g}"))
+    if sens:
+        w(); w("== Sensitivities (not in the FDR family): tag, key results")
+        sc = ["tag", "basin", "outcome", "var", "ev_test", "knot", "knot_pct", "or_per_sd_lin", "OR_knot_hinge", "T1_gain", "T1_p", "T2_gain", "T2_p", "T3_gain", "T3_p"]
+        w(T[T.tag.isin(["lead24", "octapr", "unadjusted", "eddy"])][sc].to_string(index=False, float_format=lambda v: f"{v:.4g}"))
     with open(f"{OD}/jet_trough-result.txt", "w") as f:
         f.write("\n".join(OUT) + "\n")
-    open(f"{OD}/looks.log", "a").write(f"{datetime.datetime.utcnow().isoformat()}Z full analysis run; held-out seasons scored once per declared model (sens={sens})\n")
+    open(f"{OD}/looks.log", "a").write(f"{datetime.datetime.now(datetime.timezone.utc).isoformat()}Z full analysis run; held-out seasons scored once per declared model (sens={sens})\n")
 
 
 if __name__ == "__main__":

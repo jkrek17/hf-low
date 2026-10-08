@@ -1,0 +1,9 @@
+basin,outcome,var,q_T1,q_T2,q_T3,knot,knot_lo,knot_hi,unit,OR_per_sd_line,OR_across_knot,literal_rule,amended
+atl,BOMB,jet250,0.0022846,0.97441,0.9995,128.57,126.21,130.83,kt,2.8678,3.1262,smooth ramp,smooth ramp (straight line as good as one knot)
+atl,BOMB,trough_up,0.14147,0.14147,0.015992,48.118,45.44,262.92,m,1.2312,0.99474,cannot tell / no relation,no relation detected beyond storm state
+atl,HFON,jet250,0.0022846,0.0022846,0.062514,104.66,78.618,120.34,kt,1.288,1.0839,smooth ramp,nonlinear; kink and sharp smooth curve cannot be told apart
+atl,HFON,trough_up,0.67166,0.18124,0.97441,98.51,46.55,277.89,m,1.1506,0.90886,cannot tell / no relation,no relation detected beyond storm state
+pac,BOMB,jet250,0.0022846,0.17134,0.9995,153.25,132.95,158.12,kt,2.6652,2.0503,smooth ramp,smooth ramp (straight line as good as one knot)
+pac,BOMB,trough_up,0.3404,0.97441,0.20225,39.576,36.657,197.33,m,1.2381,0.847,cannot tell / no relation,no relation detected beyond storm state
+pac,HFON,jet250,0.0022846,0.9995,0.97441,154.97,96.108,155.8,kt,1.4813,1.2254,smooth ramp,smooth ramp (straight line as good as one knot)
+pac,HFON,trough_up,0.1949,0.92562,0.40397,54.94,39.555,215.44,m,0.89779,0.69114,cannot tell / no relation,no relation detected beyond storm state
