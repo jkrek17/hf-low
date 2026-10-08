@@ -1,0 +1,39 @@
+PH1 (post hoc) share of the M3 -> M1 Brier reduction by current g800 (M3 = smooth additive splines, M1 = boosted trees):
+  <55 kt      share  -0.3% [-25.0, 17.5]
+  55-71.7 kt  share  16.9% [-21.0, 44.5]
+  >=71.7 kt   share  83.4% [59.9, 127.4]
+PH1b share of the M0 -> M3 reduction (what smooth curves capture), same strata:
+  <55 kt      share  18.9%
+  55-71.7 kt  share  49.4%
+  >=71.7 kt   share  31.7%
+
+PH3 (post hoc) M3b = M3 + the five pre-specified products. BSS: M3 +0.4455, M3b +0.4496, M1 +0.4549
+  M3b - M3 (the five pairs): +0.0041 [+0.0029, +0.0055], seasons better 19/22
+  M1 - M3b (what remains for trees): +0.0053 [+0.0006, +0.0098], seasons better 13/22
+PH4 (post hoc) M0 + splines for Hart B, VTL, VTU: +0.0112 [+0.0094, +0.0128], seasons better 22/22, share of M3 - M0 49%
+PH4 (post hoc) M0 + splines for Hart B, VTL, VTU + g800: +0.0141 [+0.0123, +0.0160], seasons better 22/22, share of M3 - M0 62%
+PH4 (post hoc) M0 + splines for seven other predictors picked post hoc from the S9 table (sst, flux, lat, eady, vadv500, msl, jet250): +0.0056 [+0.0036, +0.0076], seasons better 17/22, share of M3 - M0 25%
+
+PH2 (post hoc) g800 partial dependence, logit, 0.1-99.9th percentile (M0 logistic, M1 trees):
+  g800    0.0 kt  M0 -11.51  M1 -8.52
+  g800   33.5 kt  M0 -7.75  M1 -8.52
+  g800   34.7 kt  M0 -7.62  M1 -8.35
+  g800   35.8 kt  M0 -7.49  M1 -7.64
+  g800   37.0 kt  M0 -7.36  M1 -7.61
+  g800   38.2 kt  M0 -7.22  M1 -7.54
+  g800   39.3 kt  M0 -7.10  M1 -7.50
+  g800   40.5 kt  M0 -6.97  M1 -7.52
+  g800   41.7 kt  M0 -6.83  M1 -7.31
+  g800   42.9 kt  M0 -6.70  M1 -7.25
+  g800   44.2 kt  M0 -6.55  M1 -7.13
+  g800   45.5 kt  M0 -6.41  M1 -6.91
+  g800   46.9 kt  M0 -6.25  M1 -6.77
+  g800   48.4 kt  M0 -6.08  M1 -6.56
+  g800   49.9 kt  M0 -5.91  M1 -6.45
+  g800   51.6 kt  M0 -5.72  M1 -6.21
+  g800   53.5 kt  M0 -5.51  M1 -5.99
+  g800   55.7 kt  M0 -5.26  M1 -5.77
+  g800   58.3 kt  M0 -4.97  M1 -5.63
+  g800   61.8 kt  M0 -4.58  M1 -5.25
+  g800   67.0 kt  M0 -3.99  M1 -4.53
+  g800   90.7 kt  M0 -2.44  M1 -0.99

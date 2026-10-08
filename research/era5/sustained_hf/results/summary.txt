@@ -1,0 +1,134 @@
+RA-22: do the share results hold for sustained HF lows? ERA5 proxy (pipeline A) except PR41 (archive). Per +1 SD of the index.
+Family A: 26 headline tests (k = 2, 3), BH. Family B: 6 sustained-minus-brief contrasts, BH. Family C: 12 paired differences, BH.
+
+== PR14 RR(HF_k)
+  Atlantic  k=1: 1.096 [1.028, 1.155] p 0.0050  
+  Atlantic  k=2: 1.109 [1.000, 1.203] p 0.0245 q_A 0.0255 detectable 1.137  holds; vs k=1: same within noise
+  Atlantic  k=3: 1.137 [0.991, 1.262] p 0.0230 q_A 0.0249 detectable 1.184  holds; vs k=1: same within noise
+  Pacific   k=1: 1.072 [1.009, 1.139] p 0.0475  
+  Pacific   k=2: 1.128 [1.031, 1.212] p 0.0055 q_A 0.0071 detectable 1.126  holds; vs k=1: same within noise
+  Pacific   k=3: 1.152 [1.029, 1.273] p 0.0055 q_A 0.0071 detectable 1.166  holds; vs k=1: same within noise
+== PR14 RR(share_k)
+  Atlantic  k=1: 1.125 [1.045, 1.197] p 0.0005  
+  Atlantic  k=2: 1.139 [1.012, 1.247] p 0.0080 q_A 0.0094 detectable 1.156  holds; vs k=1: same within noise
+  Atlantic  k=3: 1.168 [1.009, 1.308] p 0.0070 q_A 0.0087 detectable 1.199  holds; vs k=1: same within noise
+  Pacific   k=1: 1.043 [0.988, 1.101] p 0.2394  
+  Pacific   k=2: 1.098 [1.005, 1.177] p 0.0285 q_A 0.0285 detectable 1.120  holds; vs k=1: same within noise
+  Pacific   k=3: 1.121 [1.005, 1.238] p 0.0220 q_A 0.0249 detectable 1.161  holds; vs k=1: same within noise
+== PR64 RR(HF_k)
+  Atlantic  k=1: 1.291 [1.236, 1.369] p 0.0005  
+  Atlantic  k=2: 1.316 [1.234, 1.413] p 0.0005 q_A 0.0009 detectable 1.096  holds; vs k=1: same within noise
+  Atlantic  k=3: 1.385 [1.283, 1.510] p 0.0005 q_A 0.0009 detectable 1.120  holds; vs k=1: larger
+  Pacific   k=1: 1.165 [1.093, 1.261] p 0.0005  
+  Pacific   k=2: 1.219 [1.124, 1.347] p 0.0005 q_A 0.0009 detectable 1.137  holds; vs k=1: larger
+  Pacific   k=3: 1.264 [1.155, 1.417] p 0.0005 q_A 0.0009 detectable 1.162  holds; vs k=1: larger
+== PR64 RR(share_k)
+  Atlantic  k=1: 1.271 [1.210, 1.354] p 0.0005  
+  Atlantic  k=2: 1.295 [1.210, 1.397] p 0.0005 q_A 0.0009 detectable 1.101  holds; vs k=1: same within noise
+  Atlantic  k=3: 1.364 [1.262, 1.491] p 0.0005 q_A 0.0009 detectable 1.123  holds; vs k=1: larger
+  Pacific   k=1: 1.129 [1.067, 1.210] p 0.0005  
+  Pacific   k=2: 1.180 [1.095, 1.294] p 0.0005 q_A 0.0009 detectable 1.126  holds; vs k=1: larger
+  Pacific   k=3: 1.224 [1.123, 1.361] p 0.0005 q_A 0.0009 detectable 1.152  holds; vs k=1: larger
+== PR41 RR(HF_k) archive
+  Atlantic  k=1: 1.236 [1.162, 1.333] p 0.0005  
+  Atlantic  k=2: 1.268 [1.181, 1.378] p 0.0005 q_A 0.0009 detectable 1.105  holds; vs k=1: same within noise
+  Atlantic  k=3: 1.351 [1.263, 1.461] p 0.0005 q_A 0.0009 detectable 1.107  holds; vs k=1: larger
+  Pacific   k=1: 1.193 [1.103, 1.309] p 0.0005  
+  Pacific   k=2: 1.215 [1.108, 1.373] p 0.0005 q_A 0.0009 detectable 1.159  holds; vs k=1: same within noise
+  Pacific   k=3: 1.275 [1.146, 1.461] p 0.0005 q_A 0.0009 detectable 1.187  holds; vs k=1: larger
+== PR63 P1 share without terrain-type fixes (RR)
+  Atlantic  k=1: 1.141 [1.064, 1.213] p 0.0005  
+  Atlantic  k=2: 1.156 [1.045, 1.262] p 0.0035 q_A 0.0054 detectable 1.149  holds; vs k=1: paired difference not computed
+  Atlantic  k=3: 1.174 [1.029, 1.308] p 0.0040 q_A 0.0058 detectable 1.190  holds; vs k=1: paired difference not computed
+== PR63 P3 mediation (share given Greenland high / share)
+  Atlantic  k=1: 0.923 [0.870, 0.987] p 0.0200  
+  Atlantic  k=2: 0.881 [0.824, 0.949] p 0.0010 q_A 0.0017 detectable 1.107  holds; vs k=1: paired difference not computed
+  Atlantic  k=3: 0.890 [0.829, 0.959] p 0.0020 q_A 0.0033 detectable 1.113  holds; vs k=1: paired difference not computed
+== PR63 F4 Greenland high on share, per SD
+  Atlantic  k=1: 0.870 [0.823, 0.924] p 0.0005  
+  Atlantic  k=2: 0.832 [0.766, 0.910] p 0.0005 q_A 0.0009 detectable 1.130  holds; vs k=1: paired difference not computed
+  Atlantic  k=3: 0.824 [0.742, 0.924] p 0.0005 q_A 0.0009 detectable 1.174  holds; vs k=1: paired difference not computed
+== PR14 f
+  Atlantic  k=1: 1.290 [1.069, 1.778]  
+  Atlantic  k=2: 1.257 [1.005, 2.133]  
+  Atlantic  k=3: 1.207 [0.783, 2.009]  
+  Pacific   k=1: 0.608 [-0.650, 0.795]  
+  Pacific   k=2: 0.774 [0.262, 0.887]  
+  Pacific   k=3: 0.807 [0.230, 0.908]  
+== PR64 f
+  Atlantic  k=1: 0.939 [0.863, 1.006]  
+  Atlantic  k=2: 0.943 [0.863, 1.006]  
+  Atlantic  k=3: 0.952 [0.889, 1.006]  
+  Pacific   k=1: 0.791 [0.671, 0.876]  
+  Pacific   k=2: 0.838 [0.738, 0.908]  
+  Pacific   k=3: 0.863 [0.773, 0.925]  
+== PR64 share channel part of change
+  Atlantic  k=1: 0.921 [0.820, 1.000]  
+  Atlantic  k=2: 0.922 [0.829, 1.000]  
+  Atlantic  k=3: 0.931 [0.846, 0.998]  
+  Pacific   k=1: 0.809 [0.717, 0.903]  
+  Pacific   k=2: 0.853 [0.775, 0.931]  
+  Pacific   k=3: 0.880 [0.816, 0.947]  
+== PR64 RR(all)
+  Atlantic  k=1: 1.016 [0.998, 1.035] p 0.1169  
+  Atlantic  k=2: 1.016 [0.998, 1.035] p 0.1169 detectable 1.026  
+  Atlantic  k=3: 1.016 [0.998, 1.035] p 0.1169 detectable 1.026  
+  Pacific   k=1: 1.033 [1.017, 1.051] p 0.0015  
+  Pacific   k=2: 1.033 [1.017, 1.051] p 0.0015 detectable 1.023  
+  Pacific   k=3: 1.033 [1.017, 1.051] p 0.0015 detectable 1.023  
+== PR14 RR(all)
+  Atlantic  k=1: 0.974 [0.956, 0.995] p 0.0050  
+  Atlantic  k=2: 0.974 [0.956, 0.995] p 0.0050 detectable 1.029  
+  Atlantic  k=3: 0.974 [0.956, 0.995] p 0.0050 detectable 1.029  
+  Pacific   k=1: 1.028 [1.015, 1.040] p 0.0030  
+  Pacific   k=2: 1.028 [1.015, 1.040] p 0.0030 detectable 1.018  
+  Pacific   k=3: 1.028 [1.015, 1.040] p 0.0030 detectable 1.018  
+== PR63 P2 retained: share without terrain-type fixes / share (descriptive)
+  Atlantic  k=1: 1.014 [0.989, 1.038] p 0.2390  
+  Atlantic  k=2: 1.015 [0.990, 1.042] p 0.2300 detectable 1.037  
+  Atlantic  k=3: 1.005 [0.991, 1.021] p 0.4660 detectable 1.022  
+== PR63 NAO share, original (RR)
+  Atlantic  k=1: 1.125 [1.047, 1.195]  
+  Atlantic  k=2: 1.139 [1.021, 1.244]  
+  Atlantic  k=3: 1.168 [1.016, 1.307]  
+== PR63 NAO share given Greenland high (RR)
+  Atlantic  k=1: 1.039 [0.934, 1.148]  
+  Atlantic  k=2: 1.004 [0.877, 1.139]  
+  Atlantic  k=3: 1.039 [0.902, 1.186]  
+
+== Sustained (>=3 fixes) minus brief (exactly 1 fix): ratio of RR per SD, family B
+  PR14 daily    Atlantic  RR brief 1.071, middle 1.057, sustained 1.137; sustained/brief 1.062 [0.877, 1.270] p 0.4658 q_B 0.466 detectable 1.307  -> no clear preference
+  PR14 daily    Pacific   RR brief 0.976, middle 1.076, sustained 1.152; sustained/brief 1.180 [0.999, 1.361] p 0.0360 q_B 0.108 detectable 1.239  -> no clear preference
+  PR64 weekly   Atlantic  RR brief 1.211, middle 1.200, sustained 1.385; sustained/brief 1.144 [0.992, 1.337] p 0.0670 q_B 0.113 detectable 1.232  -> no clear preference
+  PR64 weekly   Pacific   RR brief 1.075, middle 1.118, sustained 1.264; sustained/brief 1.176 [1.045, 1.356] p 0.0285 q_B 0.108 detectable 1.188  -> no clear preference
+  PR41 archive  Atlantic  RR brief 1.177, middle 1.118, sustained 1.351; sustained/brief 1.148 [0.979, 1.328] p 0.0755 q_B 0.113 detectable 1.245  -> no clear preference
+  PR41 archive  Pacific   RR brief 1.151, middle 1.083, sustained 1.275; sustained/brief 1.108 [0.968, 1.330] p 0.2034 q_B 0.244 detectable 1.255  -> no clear preference
+  cells favouring sustained 0, brief 0, point estimates above 1: 6 of 6 -> overall: no clear preference; leans sustained
+
+== Paired differences RR(HF_k)/RR(HF_1), family C
+  PR14 daily    Atlantic  h2-h1: 1.012 [0.953, 1.065] p 0.6512 q_C 0.651
+  PR14 daily    Atlantic  h3-h1: 1.038 [0.947, 1.139] p 0.3593 q_C 0.410
+  PR14 daily    Pacific   h2-h1: 1.053 [0.994, 1.107] p 0.0510 q_C 0.109
+  PR14 daily    Pacific   h3-h1: 1.075 [0.994, 1.151] p 0.0590 q_C 0.109
+  PR64 weekly   Atlantic  h2-h1: 1.019 [0.967, 1.073] p 0.3758 q_C 0.410
+  PR64 weekly   Atlantic  h3-h1: 1.073 [1.002, 1.148] p 0.0350 q_C 0.105
+  PR64 weekly   Pacific   h2-h1: 1.046 [1.002, 1.096] p 0.0635 q_C 0.109
+  PR64 weekly   Pacific   h3-h1: 1.085 [1.030, 1.161] p 0.0190 q_C 0.092
+  PR41 archive  Atlantic  h2-h1: 1.026 [0.976, 1.064] p 0.1654 q_C 0.248
+  PR41 archive  Atlantic  h3-h1: 1.093 [1.026, 1.162] p 0.0055 q_C 0.066
+  PR41 archive  Pacific   h2-h1: 1.019 [0.987, 1.060] p 0.3263 q_C 0.410
+  PR41 archive  Pacific   h3-h1: 1.069 [1.013, 1.143] p 0.0230 q_C 0.092
+
+== Secondary (S1 consecutive run, S2 count-matched gust cut; own family, none changes a verdict)
+  total fixes             k=2 Atlantic  n 661: PR14 RR(HF) 1.109 [1.000, 1.203] share 1.139 (p 0.0080); PR64 RR(HF) 1.316 [1.234, 1.413] share 1.295 (p 0.0005)
+  total fixes             k=2 Pacific   n 542: PR14 RR(HF) 1.128 [1.031, 1.212] share 1.098 (p 0.0285); PR64 RR(HF) 1.219 [1.124, 1.347] share 1.180 (p 0.0005)
+  total fixes             k=3 Atlantic  n 438: PR14 RR(HF) 1.137 [0.991, 1.262] share 1.168 (p 0.0070); PR64 RR(HF) 1.385 [1.283, 1.510] share 1.364 (p 0.0005)
+  total fixes             k=3 Pacific   n 374: PR14 RR(HF) 1.152 [1.029, 1.273] share 1.121 (p 0.0220); PR64 RR(HF) 1.264 [1.155, 1.417] share 1.224 (p 0.0005)
+  consecutive run         k=2 Atlantic  n 619: PR14 RR(HF) 1.112 [1.004, 1.206] share 1.142 (p 0.0070); PR64 RR(HF) 1.316 [1.234, 1.420] share 1.295 (p 0.0005)
+  consecutive run         k=2 Pacific   n 503: PR14 RR(HF) 1.138 [1.018, 1.254] share 1.107 (p 0.0280); PR64 RR(HF) 1.232 [1.135, 1.365] share 1.193 (p 0.0005)
+  consecutive run         k=3 Atlantic  n 374: PR14 RR(HF) 1.153 [1.002, 1.295] share 1.184 (p 0.0050); PR64 RR(HF) 1.390 [1.270, 1.522] share 1.368 (p 0.0005)
+  consecutive run         k=3 Pacific   n 331: PR14 RR(HF) 1.125 [0.993, 1.256] share 1.095 (p 0.0940); PR64 RR(HF) 1.279 [1.152, 1.462] share 1.239 (p 0.0005)
+  count-matched gust cut  k=2 Atlantic  n 660: PR14 RR(HF) 1.118 [1.019, 1.203] share 1.148 (p 0.0070); PR64 RR(HF) 1.297 [1.210, 1.415] share 1.277 (p 0.0005)
+  count-matched gust cut  k=2 Pacific   n 544: PR14 RR(HF) 1.116 [1.025, 1.217] share 1.086 (p 0.0585); PR64 RR(HF) 1.224 [1.135, 1.356] share 1.186 (p 0.0005)
+  count-matched gust cut  k=3 Atlantic  n 429: PR14 RR(HF) 1.127 [1.010, 1.241] share 1.157 (p 0.0125); PR64 RR(HF) 1.321 [1.203, 1.484] share 1.300 (p 0.0005)
+  count-matched gust cut  k=3 Pacific   n 371: PR14 RR(HF) 1.151 [1.027, 1.294] share 1.120 (p 0.0310); PR64 RR(HF) 1.311 [1.183, 1.494] share 1.270 (p 0.0005)
