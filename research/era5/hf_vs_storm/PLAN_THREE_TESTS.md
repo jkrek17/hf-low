@@ -1,4 +1,4 @@
-# Plan: three follow-up composite tests (not started; waiting for Jason's go)
+# Plan: three follow-up composite tests (run on Jason's go; results in hf_lifecycle, hf_pattern_phase, hf_conversion, PR 133)
 
 ERA5 proxy, pipeline A, seasons 2004-05 to 2025-26, Atlantic and Pacific separately, transitioning tropical cyclones in. Each test gets its own PREREGISTRATION.md committed before any field is read.
 Common rules: season-block bootstrap (2,000 resamples of 22 seasons) for every difference; Benjamini-Hochberg q < 0.05 within each test's family and across grid points within each map;

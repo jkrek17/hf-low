@@ -2,7 +2,7 @@
 
 Plan: [PREREGISTRATION.md](PREREGISTRATION.md) (committed first, `1d11f8c`; two deviations logged at its end). **ERA5 proxy, pipeline A** (`research/era5/hf_history`), seasons 2004-05 to 2025-26,
 transitioning tropical cyclones in, Atlantic and Pacific separately. HF = gust index >= 71.7 kt (2,000 storms); SF = peak gust index in [54, 71.7) kt (8,136), matched on basin x month.
-Published page: https://claude.ai/artifact/3PCaev43n6ATE2AoAKE8eL . Follow-up plan (not started): [PLAN_THREE_TESTS.md](PLAN_THREE_TESTS.md).
+Published page: https://claude.ai/artifact/3PCaev43n6ATE2AoAKE8eL . Follow-up plan, since run: [PLAN_THREE_TESTS.md](PLAN_THREE_TESTS.md); results in `research/era5/hf_lifecycle`, `hf_pattern_phase` and `hf_conversion` (PR 133).
 
 ## Answer in plain words
 - Before formation: HF onsets follow a slightly deeper trough and stronger 250 hPa jet than storm-force peaks. Atlantic box (53.5N, 41W): Z500 -7.2 m [-11.8, -2.2] and jet +1.12 m/s over days -10 to -4, -22.0 m and +1.94 m/s on the onset day. Pacific (42N, 171E): -5.8 m and +0.82 m/s, -9.1 m and +1.31 m/s. SST: no difference. The difference builds from about day -7 (Atlantic).
