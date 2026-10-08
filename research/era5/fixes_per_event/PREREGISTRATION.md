@@ -94,3 +94,32 @@ is the reference for ERA5 evaluation, so a falling fixes-per-event matters for f
 ## Deviations (post hoc)
 
 None yet.
+
+## Addendum A (written 2026-10-08 before any outcome of it was computed): late HF onset north of 60N in the archive
+
+Optional separate secondary question relayed by the coordinator; reported separately, outside the P/S families above, with its own
+BH family (2 tests). Uses the archive rows already loaded; no new data.
+
+- **Question.** PR 86 (ERA5 proxy, pipeline A) found that Atlantic events with the gust maximum at or north of 60N are about 3 times
+  as likely to have their first HF fix strictly 6 h or more after the lowest-pressure fix (OR 3.10; late 53% vs 27%). RA-26 and PR 96
+  ruled out barrier flow and the 67N domain edge. Do archive Atlantic events whose first HF fix is at or north of 60N show the same?
+- **Definitions (archive).** Event minimum-pressure time = earliest row of the event (any category) with the lowest Pressure; late =
+  first HF fix at least 6 h after it; same-fix or earlier = not late. North = latitude of the first HF fix at or north of 60N.
+  Seasons 2004-05..2025-26, Atlantic. The archive's lowest pressure is the forecaster's analysis and the rows may stop before or start
+  after the true minimum; the archive has no wind, only the HF category, so "late wind" here means late **HF category**, not a late
+  gust maximum. This is a related, not identical, quantity to PR 86's.
+- **P-A1 (primary).** Logistic OR of late (>=6 h) for north versus south, season-block bootstrap 95% interval (2000 draws, seed 11),
+  one-sided direction OR > 1 prespecified; two-sided p reported.
+- **P-A2.** Same with late defined as >=12 h.
+- **Decision.** "Archive agrees with the proxy" if P-A1 OR > 1 and q < 0.05 (BH over the two); "archive does not agree" only if the
+  interval excludes 3.10 from below with power stated, otherwise "can't tell". Power by planted OR 3.1 on the observed base rate.
+- Not a test of barrier flow or of the 67N edge (those were closed in PR 94 and PR 96). No model is fitted on one block and scored on another; no looks to log.
+
+## Deviations (post hoc)
+
+- S6's season-block bootstrap first relabelled resampled seasons to the original slots, which erases the trend and centres the null
+  at zero (p 0.97 and 0.997). That was a coding error caught on reading the output, fixed to resample seasons with their own labels
+  (p 0.004 and 0.008). Both are shown in the commit history; only the fixed version is reported. Nothing else changed after outcomes.
+- The post hoc block in `analyse.py` (segment slopes and a joint linear-plus-step fit) is labelled post hoc in the result file.
+- The one HF row with an 11-digit stamp (`pac:2024202506`, `20241101018`) is read as 2024-11-01 18Z. It lies between the 12Z and
+  00Z fixes, so the reading is not in doubt; it belongs on the sheet-fixes list.
