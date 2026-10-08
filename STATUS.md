@@ -304,7 +304,7 @@ Work nobody has started. A thread picking one up changes its status here in its 
 | 2 | Break the near-storm framework's skill out by basin. | Carried over: `intensity/README.md` | Committed 2004-2025 input tables. No pull. | Not started |
 | 3 | Gale and storm-force targets for the near-storm framework. | Carried over: Jason deferred these ("later") | Committed inputs; needs a gust-index threshold for each class. No pull. | Not started |
 | 4 | Apply the fitted near-storm model to 1979-2003. | Carried over: Open work above | Pipeline A tracks and environment fields exist. Gust outcomes before 2001 carry the decision-1 caveat. No pull. | Not started |
-| 5 | Seasonal cycle, and whether HF lows share the Pacific midwinter suppression. | Carried over: climatology agenda question 4 | Archive and pipeline A tracks. No pull. | Not started |
+| 5 | Seasonal cycle, and whether HF lows share the Pacific midwinter suppression. | Carried over: climatology agenda question 4 | Archive and pipeline A tracks; a small ERA5 eddy pull (v250 about 34 GB, MSLP about 4 GB, under the gate). | **Done** (hf-low PR 45, merged into the integration branch as `146405c`; pre-registered in `d5c9f44`; reframed after the first run, logged as post hoc). Archive per-day peak: Pacific January, Atlantic February (not separated from January). Pacific v250 eddy variance is lowest in January while HF share peaks Dec-Jan; the share carries the HF excess (post hoc). Counts recomputed by a fresh agent; q-values and post hoc rows not. Not done: jet and Eady fields. |
 | 6 | Where HF lows form and intensify: ocean fronts and moisture. | Carried over: climatology agenda question 5 | Near-storm environment fields; a pull only if the non-HF population lacks them (size it then). | Started 2026-10-08, one slice only: ENSO flavor vs Kuroshio genesis (see What exists). Fronts and moisture not started |
 | 7 | Deep-storm record since 1979 and HF trend since 2001. | Carried over: climatology agenda question 6 | Pipeline A tracks. No pull. Depends on decision 1 for anything gust-based before 2001. | Not started |
 | 8 | Sea state under HF lows. | Carried over: climatology agenda question 7 | ERA5 wave fields, estimated under 10 GB for 2004-05 on (unverified; size with HEAD requests first). May use the buoy thread's data. | Not started |
@@ -325,6 +325,7 @@ Sources: `research/era5/intensity/README.md` (integration branch); the buoy drif
 
 Corrections that belong in the spreadsheet, because a CSV-only fix is overwritten by the next fetch.
 
+- One Pacific archive row has an 11-digit date (`20241101018`, event 2024202506); it was dropped by the seasonal-cycle analysis and changes no count. Another 15 Pacific HF rows share an ID and time with different positions.
 - 38 suspected position errors in `data/hf_lows/archive_position_suspects.csv` (integration branch), including 8 first hurricane-force fixes the tracker refuses to anchor on. The QC mode on `claude/hf-lows-qc-mode` is a route for making such fixes in the sheet once it is merged and deployed.
 
 ## Cutover from awips-tools
