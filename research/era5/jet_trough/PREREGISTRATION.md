@@ -154,4 +154,24 @@ reported. The held-out look count is kept in `results/looks.log`.
 
 ## Deviations log
 
-(empty at commit)
+Logged before the held-out seasons were scored (the code was run only in a mechanics mode whose
+"held-out" seasons were 2010-11..2014-15, inside the fit period; `JT_DEV=1`):
+
+1. **Implementation, not a change of plan.** The focal variable is clipped to the fit 1st-99th percentile for
+   every functional form so they are comparable. The spline is a restricted cubic spline with knots at the
+   fit 1st, 25th, 50th, 75th and 99th percentiles (4 df). The power run used B = 500 bootstrap resamples
+   per simulated data set.
+2. **Power result and the verdict wording (amended after `results/power.txt`, before the held-out run).**
+   With a true hinge (odds ratio 2.0 across knot +/- 0.5 SD), T2 (hinge over line) is detected 37-99% of the
+   time, but T3 (hinge over the 4-df spline) only 4-12%, and the full threshold rule 3-12%. The false-positive
+   rate for T3 under a smooth ramp is 4-7% at p < 0.01, so the 11-season bootstrap p is somewhat too
+   liberal. The 4-df spline imitates a one-knot curve well enough that these data cannot separate a kink from
+   a sharp smooth curve. Read literally, the rule would label everything "smooth ramp" because T3 cannot pass,
+   which would be a power artefact. The amended wording, applied to all results: **T2 passes and T3 does
+   not: "nonlinear; a threshold and a sharp smooth curve cannot be told apart"**. "Threshold supported" is
+   kept as the rule above and is reported as rarely reachable (power at most 12%). "Smooth ramp" is reserved
+   for T1 passing with T2 not passing, where T2 has power of 37% or more. Both the literal-rule label and
+   the amended one are printed for every row.
+3. **T1 power.** For a straight-line odds ratio of 1.15 per SD, T1 is detected 21-41% of the time, so
+   the "no relation beyond storm state" verdict is available only for effects larger than that; the minimum
+   detectable effect is reported with any such verdict.
