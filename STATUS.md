@@ -140,6 +140,20 @@ Pipeline A, ERA5 proxy. Plan committed first (`933e68f`); results `95809d1`. Oct
 - ONI, Pacific NAO: null. Atlantic PNA on the share: 0.88 (exploratory, 1 of 52 distinct tests).
 - Verified by a fresh agent: the headline decomposition, odds ratios, same-time and depth values, the two main permutation p-values and the Atlantic leave-one-season-out range. Not independently checked: bootstrap intervals, the Jun-May, chain, other-index and joint rows, power figures and FDR q-values (listed in the README).
 
+### High-latitude Atlantic HF lows: `research/era5/highlat/` (hf-low PR 29, merged into the integration branch as `5f9ee7b`)
+
+Pipeline A (ERA5 proxy), Atlantic, 2004-05 on; archive shares from the current payload. Plan committed before the analysis (`PLAN.md`). Details, intervals and limits are in `FINDINGS.md` there.
+
+- **Archive:** 377 of 1,011 Atlantic HF lows (37.3%, 95% CI 32.7-42.3) have an HF fix at or north of 60N, against 12 of 856 (1.4%) in the Pacific. The archive has no Atlantic fix north of 66.6N.
+- **Where pipeline A's gust comes from:** at HF-strength fixes north of 60N the gust maximum lies more than 400 km from the centre and within 300 km of Greenland in 31.4%, against 4.7% south of 60N (difference +0.268, CI 0.227-0.301). Where it does, the wind is from the north or north-east in 79% (barrier-type flow along the east coast), not mostly the westerly tip jet.
+- **Not all terrain:** with ocean within 300 km of Greenland removed, 24.0% of Atlantic events still peak north of 60N (34.0% now), against 0.4% in the Pacific.
+- **Proxy trust:** FAR north of 60N is 0.443 against 0.258 south (+0.185, CI 0.122-0.244); recall does not differ (+0.014, CI -0.040 to +0.071). 5.5% of events depend on points within 100 km of Greenland and 2.3% on sea-ice points. The 225 events that need the 300 km band match the archive 47.1% of the time against 73.3%. Unmatched can mean OPC did not warn, so this mixes proxy error with archive omission.
+- **Recommendation, not a change:** no terrain mask; report Atlantic events north of 60N as a stratum with lower confidence. A 100 km mask is a cheap sensitivity check.
+- **Archive pressure at HF is lower, not higher, near Greenland and Iceland** (-3.5 and -6.5 hPa against south of 60N); the orographic-weakness test is not supported (the Iceland Low confounds it).
+- **Station check** (Prins Christian Sund, ISD): median mean wind 36 kt when A's maximum is at Cape Farewell against 13-17 kt otherwise; no report reached 64 kt; no rank correlation with the index within those times (-0.18, n = 163).
+- Checked by a fresh verifier: the archive shares, pressure medians, location shares, mask counts and match rates. Not independently checked: the bootstrap intervals, the wind-direction split, the sea-ice interval, the station numbers. The verifier caught a sea-ice count error (28 events, now 25).
+- Not done: a trend in the high-latitude share, anything north of 67N, why the Pacific has so little.
+
 ### ERA5 pipeline B: `event_fields.py`, `criterion.py`, `series.py` (integration branch)
 
 - A per-moment probability from four features, fitted on early (2004-05), late (2021-25), and full (2004 to 2025) windows.
@@ -194,6 +208,7 @@ Do not build on these without closing the gate or stating the dependence.
 - **Pipeline B series against the archive.** `series-result.txt` flags a trend in the series minus the archive over the 22 overlap seasons (+30.4 per decade, t = 2.63 against a critical 2.09). The commit notes that Mann-Kendall does not confirm it and that part of the divergence is the archive's own labelling. Do not read the series sum as a trend estimate.
 - **Pipeline B `p_full`.** In-sample for seasons from 2004.
 - **Pipeline B at high latitude.** Over-predicts by about 55% at 60 to 71N and in the most land-affected quartile (`c9dc994`).
+- **Pipeline A at high latitude.** Its false-alarm ratio against the archive is 0.443 north of 60N against 0.258 south (`research/era5/highlat/FINDINGS.md`); terrain-type gust maxima are 31% of HF-strength fixes there. Quote Atlantic counts north of 60N as a separate stratum.
 - **Windows before 2004.** `RECORD_START = 2004`. The 2001-2006 transfer row in pipeline A's `skill.txt` (bias 2.05, HSS 0.44) reflects the archive starting up, not a failure of the threshold: the 2001-02 season holds 1 archive event against 85 ERA5 events in pipeline A's own table. Do not use seasons before 2004-05 to fit or to test.
 
 ## Reported by a session, now confirmed in the repository
