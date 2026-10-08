@@ -1,0 +1,25 @@
+family,basin,test,what,est,lo,hi,p
+H1,pac,T1a,dAUC G-D (all tracks),0.021059,0.015512,0.026101,0.00049975
+H1,pac,T1c,dHSS G-D (all tracks),0.12374,0.087564,0.16237,0.00049975
+H1,pac,T1b,dAUC G-D (real cyclones),0.038854,0.029614,0.048948,0.00049975
+H1,atl,T1a,dAUC G-D (all tracks),0.028433,0.020869,0.035796,0.00049975
+H1,atl,T1c,dHSS G-D (all tracks),0.11086,0.080755,0.13677,0.00049975
+H1,atl,T1b,dAUC G-D (real cyclones),0.039557,0.027285,0.052373,0.00049975
+H2,pac,T2a,gust at fixed depth: lat (kt per degree latitude),-1.0053,-1.0481,-0.96242,0
+H2,pac,T2b,"gust at fixed depth: west (kt, west sector vs east)",-2.2692,-2.9039,-1.6344,2.4394e-12
+H2,pac,T2c,"gust at fixed depth: cold (kt, Nov-Feb vs other months)",5.057,4.4335,5.6805,6.6734e-57
+H2,pac,T2d,gust at fixed depth: logn (kt per unit log(n_fix)),0.072804,-0.69256,0.83817,0.8521
+H2,atl,T2a,gust at fixed depth: lat (kt per degree latitude),-0.31666,-0.35195,-0.28137,3.1246e-69
+H2,atl,T2b,"gust at fixed depth: west (kt, west sector vs east)",-5.3291,-5.9111,-4.747,5.2933e-72
+H2,atl,T2c,"gust at fixed depth: cold (kt, Nov-Feb vs other months)",2.7166,2.0306,3.4026,8.3943e-15
+H2,atl,T2d,gust at fixed depth: logn (kt per unit log(n_fix)),1.9764,1.4472,2.5057,2.4907e-13
+H2,pac,T2e,G-only minus D-only: peak latitude (deg),-8.8417,-9.7211,-7.9769,0.00049975
+H2,pac,T2f,G-only minus D-only: west-sector share,0.19914,0.12813,0.27593,0.00049975
+H2,pac,T2g,G-only minus D-only: cold-season share,-0.068781,-0.12455,-0.014258,0.009
+H2,pac,T2h,G-only minus D-only: median n_fix,-1,-3,1,0.554
+H2,pac,T2i,G-only minus D-only: archive-matched share,0.3123,0.23724,0.39021,0.00049975
+H2,atl,T2e,G-only minus D-only: peak latitude (deg),-6.9336,-7.9989,-5.7404,0.00049975
+H2,atl,T2f,G-only minus D-only: west-sector share,0.074407,-0.001291,0.14584,0.054
+H2,atl,T2g,G-only minus D-only: cold-season share,-0.16884,-0.22683,-0.10521,0.00049975
+H2,atl,T2h,G-only minus D-only: median n_fix,2,0,2,0.103
+H2,atl,T2i,G-only minus D-only: archive-matched share,0.2819,0.21907,0.34612,0.00049975
