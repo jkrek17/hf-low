@@ -122,6 +122,15 @@ in both basins and for Pacific HF (q = 0.003); the local trough only for Pacific
 - Seasons before 2004-05 are not used (decision 1). HF figures before 2001 would carry the gust drift caveat.
 - Bomb frequency conditions on the track surviving 24 h (the framework's class-eligible fixes).
 
+## Independent check
+
+A fresh Sonnet agent, given only the three input tables and the definitions, recomputed the tercile and threshold
+frequencies, jet SDs, event counts and adjusted odds ratios. Everything matched within rounding except three small
+differences from its own covariate conventions: Atlantic bomb odds per SD of jet 2.90 against 2.87 here, Pacific 2.70
+against 2.67, Pacific HF-onset 1.50 against 1.48; the figures here sit inside its season-bootstrap intervals. Not
+independently recomputed: the hinge and spline held-out gains and FDR q values, the knot intervals, the power simulation,
+the interaction tests, the added-skill Brier scores, and the sensitivities.
+
 ## Analysis history
 
 Pre-registration committed first (`7cd1aac`); fields extracted and predictors computed without any outcome (`8fedea0`);
