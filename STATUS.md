@@ -206,6 +206,30 @@ Fix these as the files are next touched, in the same commit.
 - The unexplained +2.6 residual in the explosive share (commit `a9be84c`).
 - Hard-coded `/home/user/awips-tools/...` paths in `research/era5/` pilot scripts (`compare.py`, `envdemo.py`, `matchmonth.py`, `mismatch.py`, `sample.py`, `tip.py`). They will not run from a clone of this repository as written.
 
+## Future tasks
+
+Work nobody has started. A thread picking one up changes its status here in its ledger PR. Items marked "carried over" were already logged as open or deferred elsewhere and are copied here so Jason can prune them. Work already running (teleconnection question 1, question 2 more-vs-stronger storms, high-latitude Atlantic, HF wind structure, ERA5 wind drift vs buoys, the decision-1 count-drift test) is not listed. Started 2026-10-08.
+
+| # | Task | From | Data, and whether it needs a go-ahead | Status |
+|---|---|---|---|---|
+| 1 | **Test the near-storm intensity framework on GFS analyses**, to see whether its skill holds on operational data. The model (`research/era5/intensity/`, hf-low PR 12) is perfect-prognosis on ERA5, so its skill on a forecast model's analysis is unknown. | **Requested by Jason**, 2026-10-08 | GFS analyses; source, period and size not yet checked. Not ERA5, but size it first and treat a pull over 50 GB as needing Jason's go-ahead. Pre-register the comparison before scoring. | Not started |
+| 2 | Break the near-storm framework's skill out by basin. | Carried over: `intensity/README.md` | Committed 2004-2025 input tables. No pull. | Not started |
+| 3 | Gale and storm-force targets for the near-storm framework. | Carried over: Jason deferred these ("later") | Committed inputs; needs a gust-index threshold for each class. No pull. | Not started |
+| 4 | Apply the fitted near-storm model to 1979-2003. | Carried over: Open work above | Pipeline A tracks and environment fields exist. Gust outcomes before 2001 carry the decision-1 caveat. No pull. | Not started |
+| 5 | Seasonal cycle, and whether HF lows share the Pacific midwinter suppression. | Carried over: climatology agenda question 4 | Archive and pipeline A tracks. No pull. | Not started |
+| 6 | Where HF lows form and intensify: ocean fronts and moisture. | Carried over: climatology agenda question 5 | Near-storm environment fields; a pull only if the non-HF population lacks them (size it then). | Not started |
+| 7 | Deep-storm record since 1979 and HF trend since 2001. | Carried over: climatology agenda question 6 | Pipeline A tracks. No pull. Depends on decision 1 for anything gust-based before 2001. | Not started |
+| 8 | Sea state under HF lows. | Carried over: climatology agenda question 7 | ERA5 wave fields, estimated under 10 GB for 2004-05 on (unverified; size with HEAD requests first). May use the buoy thread's data. | Not started |
+| 9 | Whether HF lows come in clusters. | Carried over: climatology agenda question 8 | Archive and pipeline A catalog. No pull. | Not started |
+| 10 | Share of HF lows that come from tropical cyclones. | Carried over: climatology agenda question 9 | Pipeline A catalog and IBTrACS (`research/era5/tc_candidates.csv`). No pull. Shares a TC definition with item 15. | Not started |
+| 11 | Does the MJO's heating longitude change Pacific HF-low intensity 10 days later? One pre-registered test. | Carried over: science question 4 | CPC MJO pentads on the repo's frozen EOFs; pipeline A catalog. No pull. | Not started |
+| 12 | Does ENSO change the seasonal intensity distribution (tail counts below 950 hPa)? Expected null. | Carried over: science question 5 | Monthly ONI; pipeline A catalog, depth outcomes only. No pull. | Not started |
+| 13 | Do the archive and the ERA5 proxy agree on the intensity-teleconnection relation? | Carried over: science question 6 | Archive CSVs on `main`, 2004-05 on, with a season trend term for the fixes-per-event drift. No pull. | Not started |
+| 14 | Does the environment (jet, Eady growth, SST gradient) carry the teleconnection signal? | Carried over: science question 7 | Near-storm thread's environment fields and fitted outputs (hf-low PR 12). No pull. | Not started |
+| 15 | Do teleconnection states change how often transitioning tropical cyclones become HF lows? Low power. | Carried over: science question 8 | `research/era5/tc_candidates.csv`, pipeline A catalog. No pull. | Not started |
+
+Sources: `research/era5/intensity/README.md` (integration branch); `/mnt/project-files/climatology-agenda/hf-climatology-agenda.md`; `/mnt/project-files/science-questions/teleconnection-intensity-questions.md` (question 3 was answered with question 1).
+
 ## Fixes wanted in the sheet
 
 Corrections that belong in the spreadsheet, because a CSV-only fix is overwritten by the next fetch.
