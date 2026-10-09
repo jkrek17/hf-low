@@ -1,0 +1,116 @@
+{
+  "no-session-paths": [
+    {
+      "key": "research/era5/compare.py",
+      "failure": "2026-10-08-hardcoded-home-paths"
+    },
+    {
+      "key": "research/era5/envdemo.py",
+      "failure": "2026-10-08-hardcoded-home-paths"
+    },
+    {
+      "key": "research/era5/matchmonth.py",
+      "failure": "2026-10-08-hardcoded-home-paths"
+    },
+    {
+      "key": "research/era5/mismatch.py",
+      "failure": "2026-10-08-hardcoded-home-paths"
+    },
+    {
+      "key": "research/era5/sample.py",
+      "failure": "2026-10-08-hardcoded-home-paths"
+    },
+    {
+      "key": "research/era5/tip.py",
+      "failure": "2026-10-08-hardcoded-home-paths"
+    },
+    {
+      "key": "research/era5/archive_era_term/verify/verify_numbers.py",
+      "failure": "2026-10-08-verifier-scripts-hardcode-clone-path"
+    },
+    {
+      "key": "research/era5/basin_counts/verify/verify_numbers.py",
+      "failure": "2026-10-08-verifier-scripts-hardcode-clone-path"
+    },
+    {
+      "key": "research/era5/clustering/verify/verify_numbers.py",
+      "failure": "2026-10-08-verifier-scripts-hardcode-clone-path"
+    },
+    {
+      "key": "research/era5/enso_deepening/verify/verify_numbers.py",
+      "failure": "2026-10-08-verifier-scripts-hardcode-clone-path"
+    },
+    {
+      "key": "research/era5/front_hours/verify/verify_numbers.py",
+      "failure": "2026-10-08-verifier-scripts-hardcode-clone-path"
+    },
+    {
+      "key": "research/era5/greenland_share/verify/verify_numbers.py",
+      "failure": "2026-10-08-verifier-scripts-hardcode-clone-path"
+    },
+    {
+      "key": "research/era5/gust_scaling/verify/verify_numbers.py",
+      "failure": "2026-10-08-verifier-scripts-hardcode-clone-path"
+    },
+    {
+      "key": "research/era5/hf_vs_storm/verify/verify_numbers.py",
+      "failure": "2026-10-08-verifier-scripts-hardcode-clone-path"
+    },
+    {
+      "key": "research/era5/late_edge/verify/verify_numbers.py",
+      "failure": "2026-10-08-verifier-scripts-hardcode-clone-path"
+    },
+    {
+      "key": "research/era5/late_wind/verify/verify_numbers.py",
+      "failure": "2026-10-08-verifier-scripts-hardcode-clone-path"
+    },
+    {
+      "key": "research/era5/nao_share_barrier/verify/verify_numbers.py",
+      "failure": "2026-10-08-verifier-scripts-hardcode-clone-path"
+    },
+    {
+      "key": "research/era5/pair_families/verify/verify_numbers.py",
+      "failure": "2026-10-08-verifier-scripts-hardcode-clone-path"
+    },
+    {
+      "key": "research/era5/second_tracker_conversion/verify/verify_numbers.py",
+      "failure": "2026-10-08-verifier-scripts-hardcode-clone-path"
+    },
+    {
+      "key": "research/era5/share_p99/verify/verify_part1.py",
+      "failure": "2026-10-08-verifier-scripts-hardcode-clone-path"
+    },
+    {
+      "key": "research/era5/hf_vs_storm/analyse_storm.py",
+      "failure": "2026-10-08-verifier-scripts-hardcode-clone-path"
+    },
+    {
+      "key": "research/era5/hf_vs_storm/make_figs.py",
+      "failure": "2026-10-08-verifier-scripts-hardcode-clone-path"
+    },
+    {
+      "key": "research/era5/hf_conversion/verify/verify_numbers.py",
+      "failure": "2026-10-08-verifier-scripts-hardcode-clone-path"
+    },
+    {
+      "key": "research/era5/hf_lifecycle/verify/verify_numbers.py",
+      "failure": "2026-10-08-verifier-scripts-hardcode-clone-path"
+    },
+    {
+      "key": "research/era5/hf_pattern_phase/verify/verify_numbers.py",
+      "failure": "2026-10-08-verifier-scripts-hardcode-clone-path"
+    },
+    {
+      "key": "research/era5/gfs_test/a_tracks.py",
+      "failure": "2026-10-08-verifier-scripts-hardcode-clone-path"
+    },
+    {
+      "key": "research/era5/gfs_test/b_fetch.py",
+      "failure": "2026-10-08-verifier-scripts-hardcode-clone-path"
+    },
+    {
+      "key": "research/era5/gfs_test/b_index.py",
+      "failure": "2026-10-08-verifier-scripts-hardcode-clone-path"
+    }
+  ]
+}
