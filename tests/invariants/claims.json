@@ -1,0 +1,12 @@
+[
+  {
+    "sentence": "There is no calibrated gust index",
+    "files": ["research/era5/README.md"],
+    "false_when_exists": "research/era5/hf_history/results/threshold.json"
+  },
+  {
+    "sentence": "There is also no extended event record",
+    "files": ["research/era5/README.md"],
+    "false_when_exists": "research/era5/hf_history/results/era5_hf_catalog.csv"
+  }
+]

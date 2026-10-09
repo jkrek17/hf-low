@@ -29,6 +29,9 @@ These two never run on a general instruction, a plan approval, or your own initi
 - Update `STATUS.md` on `main`: branch heads, what now exists, any gate you opened or closed, anything left unfinished. When your work is on a research branch, the ledger update is a small pull request of its own against `main`.
 - If your change makes a sentence in a README or docstring false ("there is no ...", "not yet ..."), fix that sentence in the same commit.
 - Put the numbers in the commit body. Work that is not ready is committed as `WIP:` with what holds it back, not left in scratch space.
+- Turn every correction into something durable. A correction is anything that made you change work you had treated as done: Jason said so, a verifier's number did not match, a reviewer called a claim overstated, a check failed for a real reason. Add one file under `failures/` and convert it, preferring a test or hook over a written rule. `failures/README.md` has the format.
+- If that class of failure is already in `failures/`, fixing the instance is not enough. Open a pull request that changes how the work is done and title it "Upgrade for review:" so Jason sees it.
+- Run `python3 tests/invariants/run.py` before you open or merge a pull request. A NEW violation gets fixed, not added to the known list.
 
 ## Things that are easy to get wrong here
 
@@ -36,3 +39,4 @@ These two never run on a general instruction, a plan approval, or your own initi
 - The ERA5 record is a proxy. Call it one wherever it appears, and never present it as validated before the archive begins.
 - Two ERA5 pipelines exist with different definitions. Say which one a number came from.
 - A season runs 1 June to 31 May. The independent sample for any climate-index question is seasons, not storms.
+- A script that opens `/home/...` or `/tmp/...` runs once. Find the repository from the script's own location, and read committed files.
