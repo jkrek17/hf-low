@@ -136,6 +136,31 @@
   <p class="limit"><strong>Moisture caveat.</strong> HF storms look moister within 500 km, but the dewpoint is raw and not adjusted for latitude, and HF onsets sit further south (2.6&deg; Atlantic, 5.7&deg; Pacific). Do not read the dewpoint panels as moisture causing HF. 23 of 28 pre-registered structure tests pass. ERA5 under-resolves the strongest winds, so areas are biased low; shapes and HF-minus-storm-force differences are more trustworthy than absolute values.</p>
 </section>
 
+<section id="upper-air">
+  <div class="tag">Around every HF low</div>
+  <h2>Upper-air composites of all HF lows</h2>
+  <p>Every HF low from October to April, 2004 to 9 January 2023 (664 Atlantic, 559 Pacific), averaged around the storm centre and rotated so the direction of motion points right. Columns: 48, 24 and 12 hours before onset, onset and peak. Top row: the mean field; bottom row: the difference from the 1990&ndash;2019 climate. This is a descriptive average of ERA5 at 1.5&deg; (a proxy, not direct observation), not a test.</p>
+  <div class="pair">
+<figure class="fig">
+  <div class="scroll"><a href="composites-env-atl-z500.png"><img src="composites-env-atl-z500.png" alt="North Atlantic mean 500 hPa height around HF lows, 48 hours before onset to peak" loading="lazy"></a></div>
+  <figcaption><span class="basin-atl">North Atlantic</span>, 500 hPa height. Two days before onset the mean upper low is about 2,000 km to the left of the track; by onset it is over the storm (anomaly &minus;100 m at 48 h, &minus;261 m at onset, &minus;280 m at peak).</figcaption>
+</figure><figure class="fig">
+  <div class="scroll"><a href="composites-env-pac-z500.png"><img src="composites-env-pac-z500.png" alt="North Pacific mean 500 hPa height around HF lows, 48 hours before onset to peak" loading="lazy"></a></div>
+  <figcaption><span class="basin-pac">North Pacific</span>, 500 hPa height. The upper low also starts to the left, but is still about 1,400 km left at onset and over the storm only at peak (anomaly &minus;74 m, &minus;197 m, &minus;218 m).</figcaption>
+</figure>
+  </div>
+  <div class="pair">
+<figure class="fig">
+  <div class="scroll"><a href="composites-env-atl-wind250.png"><img src="composites-env-atl-wind250.png" alt="North Atlantic mean 250 hPa wind around HF lows" loading="lazy"></a></div>
+  <figcaption><span class="basin-atl">North Atlantic</span>, 250 hPa wind. The mean wind over the storm is 39&ndash;45 m/s 48&ndash;24 hours before onset and 26 m/s at onset; the jet maximum moves from ahead of the storm to behind and to the right.</figcaption>
+</figure><figure class="fig">
+  <div class="scroll"><a href="composites-env-pac-wind250.png"><img src="composites-env-pac-wind250.png" alt="North Pacific mean 250 hPa wind around HF lows" loading="lazy"></a></div>
+  <figcaption><span class="basin-pac">North Pacific</span>, 250 hPa wind: 53&ndash;58 m/s over the storm 48&ndash;24 hours before onset, 35 m/s at onset; the maximum ends up about 1,000 km behind.</figcaption>
+</figure>
+  </div>
+  <p class="limit"><strong>Read with care.</strong> These are ERA5 proxy fields on a coarse 1.5&deg; grid; they are not observations. The storm&rsquo;s own circulation has not been removed, so the wind pattern near the centre (the weaker wind at the centre and part of the shift of the jet to behind the storm) is partly the storm itself, not the jet. An average smears jet streaks and troughs, so it cannot show entrance and exit regions, trough tilt or trough position. The 48-hour columns rest on the 151 Atlantic and 92 Pacific storms that already had a track then. Wind speed is the grid-point speed interpolated to the storm box. A fresh agent recomputed every number quoted here from the raw fields; the bootstrap intervals and the figure pixels were not rechecked. The 250 hPa divergence maps and the north-up views are in the repository under <code>research/era5/hf_env_composites</code>.</p>
+</section>
+
 <section id="followups">
   <div class="tag">Three follow-up tests</div>
   <h2>When, which pattern, which storms</h2>
