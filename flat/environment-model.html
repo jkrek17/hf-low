@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Storm environment model - Hurricane Force Extratropical Low Archive</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="description" content="An ERA5 proxy model that estimates, for each extratropical low, the chance it reaches hurricane-force gusts within 24 hours, from the storm's own state and the environment around it.">
+<style>
+  /* Self-contained on purpose: the flat/ copy of the site is a single folder and only
+     index.html gets its paths rewritten, so this page uses no files from assets/ and
+     refers to its figures by bare file name. Tokens mirror assets/app.css. */
+  :root {
+    color-scheme: light;
+    --page: #f9f9f7; --surface: #fcfcfb; --surface-sunk: #f2f2ee; --border: #e1e0d9; --border-strong: #c3c2b7;
+    --ink: #0b0b0b; --ink-2: #52514e; --ink-muted: #6d6b66;
+    --atl: #2a78d6; --pac: #eb6834;
+    --navy: #0a3161; --navy-ink: #ffffff; --navy-soft: #cfe0f3; --accent: #0a3f73; --accent-soft: #e4edf8;
+    --badge-ink: #8a5a00; --badge-bg: #fdf3dd; --badge-border: #f4dfae;
+    --font: system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --page: #0d0d0d; --surface: #1a1a19; --surface-sunk: #141413; --border: #2c2c2a; --border-strong: #383835;
+      --ink: #ffffff; --ink-2: #c3c2b7; --ink-muted: #a09e97; --atl: #3987e5; --pac: #d95926;
+      --navy: #123a63; --accent: #93b8e6; --accent-soft: #16263a;
+      --badge-ink: #f1c76b; --badge-bg: #2b2210; --badge-border: #4d3d17;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --surface-sunk: #141413; --border: #2c2c2a; --border-strong: #383835;
+    --ink: #ffffff; --ink-2: #c3c2b7; --ink-muted: #a09e97; --atl: #3987e5; --pac: #d95926;
+    --navy: #123a63; --accent: #93b8e6; --accent-soft: #16263a;
+    --badge-ink: #f1c76b; --badge-bg: #2b2210; --badge-border: #4d3d17;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--ink); font: 15px/1.55 var(--font); }
+  a { color: var(--accent); }
+  .masthead { background: var(--navy); color: var(--navy-ink); padding: 14px 16px; }
+  .masthead-in { max-width: 1180px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; justify-content: space-between; }
+  .masthead h1 { margin: 0; font-size: 18px; font-weight: 650; }
+  .masthead a { color: var(--navy-soft); }
+  main { max-width: 1180px; margin: 0 auto; padding: 20px 16px 56px; display: flex; flex-direction: column; gap: 28px; min-width: 0; }
+  h2 { font-size: 22px; line-height: 1.25; margin: 0 0 6px; text-wrap: balance; }
+  h3 { font-size: 16px; margin: 0 0 4px; }
+  p { margin: 0 0 10px; max-width: 74ch; }
+  section { border-top: 1px solid var(--border); padding-top: 20px; min-width: 0; }
+  .note { background: var(--badge-bg); color: var(--ink); border: 1px solid var(--badge-border); border-left: 4px solid var(--badge-ink); border-radius: 6px; padding: 12px 14px; }
+  .note strong { color: var(--badge-ink); }
+  .answers { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px; }
+  .answers ul { margin: 6px 0 0; padding-left: 20px; } .answers li { margin-bottom: 6px; max-width: 80ch; }
+  .tag { font-size: 12px; font-weight: 650; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2); }
+  .muted { color: var(--ink-2); font-size: 13px; }
+  .limit { border-left: 3px solid var(--border-strong); padding-left: 10px; color: var(--ink-2); }
+  .fig { margin: 12px 0 18px; min-width: 0; }
+  .fig figcaption { font-size: 14px; margin-top: 6px; max-width: 80ch; }
+  .fig img { display: block; width: 100%; height: auto; background: #fff; border: 1px solid var(--border); border-radius: 4px; }
+  .scroll { overflow-x: auto; }
+  .scroll img { min-width: 720px; }
+  .pair { display: grid; grid-template-columns: 1fr; gap: 12px 16px; min-width: 0; }
+  .pair .scroll img { min-width: 0; }
+  @media (min-width: 900px) { .pair { grid-template-columns: 1fr 1fr; } }
+  .basin-atl { color: var(--atl); font-weight: 650; } .basin-pac { color: var(--pac); font-weight: 650; }
+  table { border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+  th, td { text-align: left; padding: 5px 10px; border-bottom: 1px solid var(--border); }
+  .tablewrap { overflow-x: auto; }
+  footer { border-top: 1px solid var(--border); padding-top: 14px; }
+
+  .tablewrap table { min-width: 560px; }
+  td.num, th.num { text-align: right; }
+  .grid2 { display: grid; grid-template-columns: 1fr; gap: 12px 24px; }
+  @media (min-width: 900px) { .grid2 { grid-template-columns: 1fr 1fr; } }
+  dl.preds { margin: 6px 0 0; } dl.preds dt { font-weight: 650; margin-top: 8px; } dl.preds dd { margin: 0; max-width: 80ch; color: var(--ink-2); }
+</style>
+</head>
+<body>
+<header class="masthead"><div class="masthead-in">
+  <h1>Storm environment model: will this low reach hurricane force?</h1>
+  <a href="index.html">&larr; Back to the archive</a>
+</div></header>
+<main>
+<div class="note"><strong>ERA5 proxy model, not direct observation.</strong> Everything here is built on ERA5 reanalysis and cyclone tracks found in ERA5 itself (pipeline A), seasons 2004-05 to 2025-26. &ldquo;Hurricane force&rdquo; in this model means the 800 km ocean gust index reaches 71.7 kt in ERA5. That is a proxy for what OPC warns, it has not been validated before the archive begins, and ERA5 reads low in the strongest storms. The only test on real forecasts used a reduced version of the model (see &ldquo;On real forecasts&rdquo;). It is research, not a forecast product.</div>
+
+<div class="answers">
+  <div class="tag">In plain words</div>
+  <ul>
+    <li><strong>What does it do?</strong> For every low at 00 and 12 UTC it gives a probability that the storm reaches hurricane-force gusts (in ERA5) within the next 24 hours, and a probability for how fast its central pressure will fall or fill.</li>
+    <li><strong>Does it work?</strong> Yes, on ERA5 itself, and most of the skill comes from the storm&rsquo;s own state (how deep it is, how fast it is already deepening). Against a basin-and-month climatology, the full model scores a Brier skill score of 0.42 for hurricane force within 24 hours, tested one season at a time over 22 seasons. The storm-state-only model scores 0.37; the cyclone-structure (Hart) terms add 0.015 and the rest of the environment 0.038.</li>
+    <li><strong>Does it hold on real forecasts?</strong> Partly tested. A reduced, storm-state-only version fed GFS forecast tracks keeps most of its skill (Brier skill score +0.33 Atlantic, +0.32 Pacific at +24 h, 0.04 to 0.06 below the same model fed ERA5). The environment terms have not been tried on GFS.</li>
+    <li><strong>Where do you see it?</strong> The HF probability layer on the <a href="index.html">map</a> colours every scored track by this model&rsquo;s probability, with one difference: the map uses the version without the gust predictor (see below).</li>
+  </ul>
+</div>
+
+<section id="how">
+  <div class="tag">How it works</div>
+  <h2>From a storm&rsquo;s fix to a probability</h2>
+  <p><strong>1. Measure.</strong> ERA5 tracks give every low below 1010 hPa a position every 6 hours. At each 00 and 12 UTC fix the model measures 23 numbers (the exact list used in the code is below). Fields are on a 1.5&deg; grid, the resolution class of the cyclone phase space method (Hart, 2003); circles are centred on the low.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th scope="col">Group</th><th scope="col">Predictor (code name)</th><th scope="col">What it is</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="10">Storm state</td><td>Central pressure (<code>msl</code>)</td><td>Depth of the low, hPa</td></tr>
+      <tr><td>12 h pressure change (<code>dp12</code>, <code>young</code>)</td><td>How fast it is deepening or filling now; <code>young</code> flags tracks under 12 h old (no change available, set to 0)</td></tr>
+      <tr><td>Track age (<code>logage</code>)</td><td>Log of hours since the track began</td></tr>
+      <tr><td>Speed (<code>speed</code>)</td><td>Translation speed over the previous 6 h</td></tr>
+      <tr><td>Current gust index (<code>g800</code>)</td><td>Strongest ERA5 ocean gust within 800 km, kt</td></tr>
+      <tr><td>Latitude (<code>lat</code>), basin (<code>pac</code>)</td><td>Where the low is</td></tr>
+      <tr><td>Time of year (<code>doy_c</code>, <code>doy_s</code>)</td><td>Cosine and sine of day of year</td></tr>
+      <tr><td rowspan="3">Cyclone phase space (500 km)</td><td><code>B</code></td><td>Lopsidedness of the 900&ndash;600 hPa layer across the direction of motion: large for frontal waves</td></tr>
+      <tr><td><code>VTL</code>, <code>VTU</code></td><td>Thermal-wind terms, 900&ndash;600 and 600&ndash;300 hPa: negative is a cold core, positive a warm core</td></tr>
+      <tr><td colspan="2" class="muted">Hart&rsquo;s own levels are at 50 hPa spacing; here the layers use 900/850/700/600 and 600/500/400/300 hPa, so magnitudes are not FSU&rsquo;s. Motion uses the previous 6 h only, so no future position enters.</td></tr>
+      <tr><td rowspan="9">Environment</td><td>Jet (<code>jet250</code>)</td><td>Strongest 250 hPa wind within 1000 km</td></tr>
+      <tr><td><code>div300</code>, <code>vadv500</code></td><td>300 hPa divergence and 500 hPa absolute vorticity advection, mean within 500 km (lift ahead of a trough)</td></tr>
+      <tr><td>Baroclinicity (<code>eady</code>)</td><td>850&ndash;500 hPa Eady growth rate, 500 km mean</td></tr>
+      <tr><td><code>sst</code>, <code>sstgrad</code>, <code>nosst</code></td><td>Sea-surface temperature, its strongest gradient, and a flag for no ocean in the circle</td></tr>
+      <tr><td>Instability (<code>sst_t500</code>)</td><td>Sea-surface minus 500 hPa temperature</td></tr>
+      <tr><td>Heat flux (<code>flux</code>)</td><td>Upward sensible plus latent heat flux from the sea, 500 km mean</td></tr>
+      <tr><td>Moisture (<code>tcwv</code>)</td><td>Total column water vapour, 500 km mean</td></tr>
+    </tbody>
+  </table></div>
+  <p><strong>2. Combine.</strong> Within each training run the predictors are filled in where missing (median), clipped at the 0.5th and 99.5th percentile and standardised. A logistic regression then gives each predictor a weight, adds the weighted values and turns the total into a probability between 0 and 1. The classes use the multinomial version (five probabilities that sum to 1). There is one fit per forecast: HF within 24 h, HF within 48 h, and the five classes. The penalty on the weights is fixed at 1 and never tuned; no trees and no interactions.</p>
+  <p><strong>3. Validate.</strong> Fit on 21 seasons, score the 22nd, repeat for all 22 seasons from 2004-05 to 2025-26. Compare against the climatology of that basin and month (skill score 0 means no better). Yes/no scores use a probability cut chosen on the training seasons so that the number of forecasts equals the number observed, then applied unchanged to the held-out season. Uncertainty comes from resampling whole seasons.</p>
+  <p><strong>4. Where the skill comes from.</strong> For hurricane force within 24 hours (Brier skill score against climatology, leave-one-season-out):</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th scope="col">Predictors</th><th scope="col" class="num">Skill score</th><th scope="col">Adds</th></tr></thead>
+    <tbody>
+      <tr><td>Storm state without the current gust index (depth, 12 h change, age, speed, place, season)</td><td class="num">0.262</td><td>about 60% of the full model</td></tr>
+      <tr><td>Storm state with the current gust index</td><td class="num">0.370</td><td>+0.108 from the gust index</td></tr>
+      <tr><td>+ cyclone phase space (B, VTL, VTU)</td><td class="num">0.385</td><td>+0.015</td></tr>
+      <tr><td>+ environment (full model)</td><td class="num">0.423</td><td>+0.038</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted">The 0.262 row comes from the HF probability analysis (storm-state model without gust), the other three from the intensity model&rsquo;s own results. The version without the gust index but with all other terms scores 0.380 (the map layer). Because the gust index measures how close a storm already is to the threshold, it is the single largest weight for hurricane force: it is partly the answer, carried forward 24 hours. For onset only (lows not yet hurricane force) the ladder is 0.221, 0.246, 0.291.</p>
+  <p>In the HF fit the largest standardised weights are the current gust index, then column water vapour, Eady growth rate and central pressure (deeper raises the chance), with sea-surface temperature, latitude and basin next; the jet term is small (about a twentieth of the gust index&rsquo;s weight). These are partial effects among correlated predictors (water vapour and sea temperature enter with opposite signs), so read them as which groups matter, not as physical signs. For the rapid-deepening classes the opposite holds: the state terms and the three phase-space terms do nearly all the work, and the rest of the environment adds 0.015 (class skill score).</p>
+</section>
+
+<section id="reading">
+  <div class="tag">What the environment terms are, and are not</div>
+  <h2>Reading the environment predictors correctly</h2>
+  <ul>
+    <li><strong>They are raw values in a circle centred on the low,</strong> not anomalies, and not rotated into the direction of motion (only B is). Radii: 500 km for everything except the jet, which is the maximum 250 hPa wind within 1000 km. All are measured at the fix time (no earlier or later fields).</li>
+    <li><strong>Circles on a 1.5&deg; grid contain the storm itself.</strong> Divergence, vorticity advection, water vapour, heat flux and Eady growth within 500 km of a deep low partly reflect the low&rsquo;s own circulation, so they describe the storm&rsquo;s current state as much as an outside precursor. They are near-storm terms, not upstream ones.</li>
+    <li><strong>Latitude and season enter only as simple terms.</strong> Water vapour, sea temperature and Eady growth all vary strongly with latitude and season, and the model has no anomaly version, so some of their weight may be latitude or season in disguise. The composites page found the same confounding for dew point.</li>
+    <li><strong>It detects jet strength, not jet structure.</strong> There is no jet entrance or exit, left or right of the streak, and no upstream trough in this model. 300 hPa divergence is the nearest crude proxy for jet-streak lift. Separate tests of the jet-maximum position (no gain) and of upstream trough depth (not detectable) are described in the repository (<code>research/era5/intensity_extra</code>, <code>jet_trough</code>).</li>
+  </ul>
+</section>
+
+<section id="outputs">
+  <div class="tag">What comes out</div>
+  <h2>The forecasts</h2>
+  <ul>
+    <li><strong>Hurricane force within 24 hours, and within 48 hours.</strong> The chance the ERA5 800 km gust index reaches 71.7 kt at a later fix in the window. A track that ends inside the window counts as not reaching it. Base rate: 3.4% of fixes within 24 hours, 4.3% within 48 hours.</li>
+    <li><strong>Intensity class over the next 24 hours.</strong> Five classes on deepening rate in Bergerons (24 hPa in 24 hours, scaled by latitude): rapid decay, decay, steady, deepening, rapid deepening. Class frequencies: 0.7%, 18.6%, 60.7%, 16.5%, 3.4%. A fix gets a class only if its track survives 24 hours, so rapid decay is under-counted.</li>
+  </ul>
+  <p>The model is a plain logistic regression (multinomial for the classes), standardised predictors, L2 penalty with the penalty weight fixed at 1 and never tuned. 159,430 fixes on 36,598 tracks.</p>
+</section>
+
+<section id="skill">
+  <div class="tag">How skilful</div>
+  <h2>On ERA5: tested one season at a time</h2>
+  <p>Every season from 2004-05 to 2025-26 was held out once while the model was fitted on the other 21 (22 seasons). Skill is measured against the climatology for that basin and month. Seasons, not fixes, are the independent sample: the intervals below are 90% intervals from resampling whole seasons, and they only describe season-to-season sampling of the skill.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th scope="col">Forecast</th><th scope="col">Predictors</th><th scope="col" class="num">Skill score</th><th scope="col" class="num">AUC</th><th scope="col" class="num">POD</th><th scope="col" class="num">FAR</th><th scope="col" class="num">HSS</th><th scope="col" class="num">HSS by season</th></tr></thead>
+    <tbody>
+      <tr><td>HF within 24 h</td><td>state</td><td class="num">0.370</td><td class="num">0.963</td><td class="num">0.56</td><td class="num">0.44</td><td class="num">0.55</td><td class="num">0.49&ndash;0.61</td></tr>
+      <tr><td>HF within 24 h</td><td>full</td><td class="num">0.423</td><td class="num">0.972</td><td class="num">0.60</td><td class="num">0.40</td><td class="num">0.59</td><td class="num">0.53&ndash;0.65</td></tr>
+      <tr><td>HF within 24 h</td><td>full, no gust (map layer)</td><td class="num">0.380</td><td class="num">0.966</td><td class="num">0.57</td><td class="num">0.43</td><td class="num">0.56</td><td class="num">0.49&ndash;0.63</td></tr>
+      <tr><td>HF within 24 h, onset only*</td><td>state</td><td class="num">0.221</td><td class="num">0.950</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>HF within 24 h, onset only*</td><td>full</td><td class="num">0.291</td><td class="num">0.963</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>HF within 48 h</td><td>full</td><td class="num">0.374</td><td class="num">0.957</td><td class="num">0.57</td><td class="num">0.43</td><td class="num">0.55</td><td class="num">0.48&ndash;0.61</td></tr>
+      <tr><td>Rapid deepening</td><td>state</td><td class="num"></td><td class="num">0.918</td><td class="num">0.36</td><td class="num">0.64</td><td class="num">0.34</td><td class="num">0.27&ndash;0.40</td></tr>
+      <tr><td>Rapid deepening</td><td>full</td><td class="num"></td><td class="num">0.950</td><td class="num">0.49</td><td class="num">0.51</td><td class="num">0.47</td><td class="num">0.41&ndash;0.53</td></tr>
+      <tr><td>Rapid decay</td><td>full</td><td class="num"></td><td class="num">0.948</td><td class="num">0.18</td><td class="num">0.82</td><td class="num">0.18</td><td class="num">0.05&ndash;0.30</td></tr>
+      <tr><td>Five classes (RPSS)</td><td>state / full</td><td class="num">0.242 / 0.305</td><td></td><td></td><td></td><td></td><td></td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted">Skill score is the Brier skill score for the HF rows and the ranked probability skill score for the classes. POD, FAR and HSS use the probability cut at which the training seasons&rsquo; forecast count matches the observed count, applied unchanged to the held-out season. *Onset only: the low is not already hurricane force (base rate 2.2%).</p>
+
+  <h3>What each group of predictors adds</h3>
+  <ul>
+    <li><strong>The storm&rsquo;s own state does most of the work.</strong> Headline AUCs of 0.95&ndash;0.97 are mostly persistence. The useful figure is the gain over state.</li>
+    <li><strong>Rapid deepening is mostly a cyclone-phase-space story.</strong> Adding the three Hart terms lifts HSS from 0.34 to 0.45; the rest of the environment adds only 0.02 more. Rapid deepening sits in the lopsided, cold-core corner of the diagram, the frontal-wave stage.</li>
+    <li><strong>Hurricane force leans more on the environment.</strong> For onset within 24 hours the skill score goes from 0.221 (state) to 0.246 (plus Hart) to 0.291 (everything). The largest environmental terms are column water vapour and the Eady growth rate. Coefficients are partial effects among correlated predictors (sea temperature and water vapour enter with opposite signs), so read them as which groups matter, not as physical signs.</li>
+    <li><strong>Rapid decay is weak</strong> (HSS 0.18) and over-forecasts above 0.2. It is mostly a warm-core, often tropical-cyclone signal.</li>
+    <li><strong>The gust predictor matters for the HF forecast</strong> (0.042 of skill score) and barely for the classes (0.003).</li>
+  </ul>
+
+  <figure class="fig">
+    <div class="scroll"><a href="environment-model-phase-hf24-onset.png"><img src="environment-model-phase-hf24-onset.png" alt="Observed frequency of hurricane-force gusts within 24 hours against the cyclone phase space axes B and the two thermal wind terms" loading="lazy"></a></div>
+    <figcaption>Observed frequency of HF within 24 hours (lows not already HF) across the cyclone phase space. High frequency sits at strong asymmetry (B near 100 m or more) and at strongly cold-core upper levels.</figcaption>
+  </figure>
+  <figure class="fig">
+    <div class="scroll"><a href="environment-model-phase-rapid-deepening.png"><img src="environment-model-phase-rapid-deepening.png" alt="Observed frequency of rapid deepening against the cyclone phase space axes" loading="lazy"></a></div>
+    <figcaption>Observed frequency of rapid deepening in the same space.</figcaption>
+  </figure>
+
+  <h3>Reliability and stability</h3>
+  <p>Hurricane-force and rapid-deepening probabilities are reliable to within about 0.03 across the range (when the model says 0.7 to 0.8, ERA5 shows 0.73; 0.4 to 0.5, 0.46). Trained on 2004&ndash;2014 and tested on 2015&ndash;2025, the full model scores 0.426 for HF within 24 hours (0.309 for the classes), the same as the leave-one-season-out values by decade (0.40, 0.42, 0.44), so skill does not fall over time. Skill by basin is not shown here.</p>
+</section>
+
+<section id="forecasts">
+  <div class="tag">On real forecasts</div>
+  <h2>GFS test: only the reduced model</h2>
+  <p>The same family was run on GFS forecast tracks, five seasons 2021-22 to 2025-26, before any score was seen (frozen model, registered tests). What was tested is the <strong>storm-state-only</strong> model, trained on ERA5 2004&ndash;2020 and never refitted, not the full model on this page.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th scope="col">Test (+24 h)</th><th scope="col" class="num">Atlantic</th><th scope="col" class="num">Pacific</th></tr></thead>
+    <tbody>
+      <tr><td>Skill score of HF probability on GFS tracks, vs climatology</td><td class="num">+0.327 [0.266, 0.376]</td><td class="num">+0.316 [0.264, 0.359]</td></tr>
+      <tr><td>GFS-fed minus ERA5-fed skill score</td><td class="num">&minus;0.041 [&minus;0.066, &minus;0.024]</td><td class="num">&minus;0.061 [&minus;0.077, &minus;0.036]</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted">Compare the GFS-fed score with the ERA5-fed score for the same storms (second row), not with the 0.370 above, which is a different sample and target definition. 95% intervals from season-block resampling. Skill does not decay across leads 0&ndash;48 h. The registered criterion for the loss against ERA5 (no worse than 0.05) passed in the Atlantic and failed in the Pacific.</p>
+  <p class="limit">Caveats: the five GFS seasons are the same seasons used to calibrate the gust threshold, so the test is not independent of that calibration. The Hart and environment terms were not tested on GFS. The truth is still ERA5&rsquo;s own gust index; against the archive (secondary check, indicative only) the skill scores are +0.17 and +0.25.</p>
+</section>
+
+<section id="map">
+  <div class="tag">On the map</div>
+  <h2>How the HF probability layer relates</h2>
+  <p>The map&rsquo;s HF probability layer colours 40,909 tracks by this model&rsquo;s probability of HF within 24 hours. It uses the <strong>version without the gust predictor</strong> (skill score 0.380, HSS 0.56 above) because a gust index is not comparable before 2001 (it drifts upward at fixed depth in ERA5). From 2004-05 on, each probability is from the leave-one-season-out fit, so no storm was scored by a model that saw its own season. For 1979&ndash;2003 the same model, fitted on 2004 onward, is applied to the catalog tracks only: the events and their matched non-events. The other lows before 2004 were not extracted (about 200 GB), so the layer is not a complete 1979&ndash;2003 list, and those earlier values read as &ldquo;this state looks hurricane-force-like by the 2004 standard&rdquo;, not as a count or a level to compare across 2001.</p>
+  <p><a href="index.html">Open the archive and choose the Map tab, HF probability layer.</a></p>
+</section>
+
+<section id="limits">
+  <div class="tag">Limits</div>
+  <h2>What not to read into it</h2>
+  <ul>
+    <li><strong>Perfect prognosis.</strong> The model forecasts what ERA5 does 24&ndash;48 hours later from what ERA5 shows now. Fed an operational analysis or forecast, skill depends on how close that is to ERA5 (see the GFS test).</li>
+    <li><strong>The target is a proxy.</strong> It predicts ERA5&rsquo;s gust index crossing 71.7 kt, not an observed hurricane-force wind. From 2006 on ERA5 counted 6&ndash;19% more events than the archive in the calibration comparison, and tropical cyclones and transitions are included, which are a known source of false alarms.</li>
+    <li><strong>Fit and test from 2004-05 on.</strong> No hurricane-force number before 2001 is reported here.</li>
+    <li><strong>Classes need the track to survive 24 hours</strong>, so rapid decay is under-counted.</li>
+    <li><strong>The held-out results were looked at once</strong> (one full run and its re-run on rounded inputs), and no predictor, threshold or setting was changed afterwards.</li>
+    <li><strong>Not tested:</strong> any season after 2025-26, other operational models, or use by forecasters.</li>
+  </ul>
+</section>
+
+<footer>
+  <p class="muted">Pipeline A (ERA5 proxy), seasons 1 June to 31 May. Code, results and the analysis history are in the repository under <code>research/era5/intensity</code> (hf-low PRs 7 and 12), <code>research/era5/gfs_test</code> (PR 128) and <code>research/era5/hf_probability_tracks</code>.</p>
+  <p class="muted"><a href="index.html">Back to the archive</a> &middot; <a href="composites.html">Composites</a></p>
+</footer>
+</main>
+<script>
+  /* Follow the theme chosen on the archive page, if one was saved. */
+  (function () {
+    try {
+      var saved = localStorage.getItem('hf-theme');
+      if (saved) document.documentElement.setAttribute('data-theme', saved);
+    } catch (err) { /* private mode: follow the system theme */ }
+  })();
+</script>
+</body>
+</html>
