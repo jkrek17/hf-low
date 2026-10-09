@@ -166,6 +166,42 @@ window.HF = window.HF || {};
     return Int32Array.from(out);
   }
 
+  /** By month shading: 12-hourly fixes of every kind-0 low (2004-05 on) per
+      DENS_LAT x DENS_LON cell for each calendar month, in fixes per season.
+      b = 0 atl, 1 pac, -1 both; seasons s0..s1 inclusive. Returns
+      {byMonth: [12 lists of {lat0, lon0, dlat, dlon, h}], max, nSeasons}. */
+  var DENS_LAT = 5, DENS_LON = 10, DENS_NLAT = 18, DENS_NLON = 36;
+  function monthDensity(D, b, s0, s1) {
+    var fmon = D.fmon;
+    if (!fmon) {
+      fmon = D.fmon = new Uint8Array(D.nfix);
+      for (var q = 0; q < D.nfix; q++) fmon[q] = new Date(EPOCH_MS + D.step[q] * 43200000).getUTCMonth();
+    }
+    var n = DENS_NLAT * DENS_NLON, grids = [], m, i, k;
+    for (m = 0; m < 12; m++) grids.push(new Float32Array(n));
+    for (i = 0; i < D.n; i++) {
+      if (D.kind[i] !== 0 || (b >= 0 && D.basin[i] !== b) || D.season[i] < s0 || D.season[i] > s1) continue;
+      for (k = D.off[i]; k < D.off[i + 1]; k++) {
+        var li = Math.floor(D.lat[k] / DENS_LAT), lj = Math.floor((((D.lon[k] + 180) % 360 + 360) % 360) / DENS_LON);   // tracks that cross 180 carry on past it
+        if (li < 0 || li >= DENS_NLAT || lj < 0 || lj >= DENS_NLON) continue;
+        grids[fmon[k]][li * DENS_NLON + lj] += 1;
+      }
+    }
+    var ns = s1 - s0 + 1, max = 0, byMonth = [];
+    for (m = 0; m < 12; m++) {
+      var cells = [];
+      for (i = 0; i < n; i++) {
+        if (!grids[m][i]) continue;
+        var v = grids[m][i] / ns;
+        if (v > max) max = v;
+        cells.push({ lat0: Math.floor(i / DENS_NLON) * DENS_LAT, lon0: (i % DENS_NLON) * DENS_LON - 180,
+                     dlat: DENS_LAT, dlon: DENS_LON, h: v });
+      }
+      byMonth.push(cells);
+    }
+    return { byMonth: byMonth, max: max, nSeasons: ns };
+  }
+
   /** UTC date and hour of fix k, "24 Dec 2013 12 UTC". */
   var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   function fixTimeLabel(D, k) {
@@ -173,6 +209,6 @@ window.HF = window.HF || {};
     return d.getUTCDate() + ' ' + MON[d.getUTCMonth()] + ' ' + d.getUTCFullYear() + ' ' + (d.getUTCHours() < 10 ? '0' : '') + d.getUTCHours() + ' UTC';
   }
 
-  HF.era5 = { decodeAllP: decodeAllP, filterAllP: filterAllP, fixTimeLabel: fixTimeLabel, decode: decode, filter: filter, decodePeaks: decodePeaks, filterPeaks: filterPeaks,
+  HF.era5 = { decodeAllP: decodeAllP, filterAllP: filterAllP, monthDensity: monthDensity, fixTimeLabel: fixTimeLabel, decode: decode, filter: filter, decodePeaks: decodePeaks, filterPeaks: filterPeaks,
               pClass: pClass, attachProb: attachProb, P_EDGES: P_EDGES };
 })(window.HF);
