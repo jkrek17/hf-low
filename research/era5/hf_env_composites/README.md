@@ -11,13 +11,13 @@ track 12, 24 and 48 h before onset. Fields: WeatherBench2 ERA5 at 1.5 degrees. A
 1990-2019 climatology (6-hourly by day of year).
 
 ## Answer in plain words (what the average HF low looks like)
-1. **It forms on the equatorward side of a deep upper low, under the jet, and the two stack by onset.** Two days before
+1. **It forms on the equatorward side of a deep upper low, under the jet, and in the Atlantic the two stack by onset (in the Pacific the 500 hPa low is still about 1,400 km left at onset).** Two days before
    onset the mean 500 hPa low sits about 2,000 km to the left of the storm's track (Atlantic: 5,175 m at x = +800,
    y = +2,000 km; Pacific 5,223 m at +1,000, +2,100) with the surface storm on its southern flank. By onset the
    minimum is over the storm in the Atlantic (5,125 m at onset, 5,092 m at peak) and in the Pacific is still about 1,400 km left at onset (5,193 m) and over the centre at peak (5,188 m).
-   The Z500 anomaly at the composite minimum deepens from -100 m (48 h before) to -261 m (onset) and -280 m (peak) in
-   the Atlantic, and from -74 to -197 and -218 m in the Pacific. A positive Z500 anomaly (a ridge, tens of metres) sits to
-   the right of the storm's track throughout.
+   The minimum of the mean Z500 anomaly deepens from -100 m (48 h before) to -261 m (onset) and -280 m (peak) in
+   the Atlantic, and from -74 to -197 and -218 m in the Pacific. A positive Z500 anomaly (a ridge, 39 to 84 m) sits to
+   the right of the storm's track throughout, 800 to 1,900 km out.
 2. **A strong jet runs over the storm, and by onset it is behind and to the right of it.** The mean 250 hPa wind over
    the storm is 39 to 45 m/s (Atlantic) and 53 to 58 m/s (Pacific) 48 to 24 h before onset, then drops to 26 and 35 m/s
    at onset and 23 and 30 m/s at peak. The jet maximum in the mean field moves from about 600 to 900 km ahead of the
@@ -26,8 +26,8 @@ track 12, 24 and 48 h before onset. Fields: WeatherBench2 ERA5 at 1.5 degrees. A
    storm's own circulation, which is not removed here: its cyclonic wind adds to the jet on its south side and gives a
    wind minimum at the centre, so these maps cannot say how much is jet and how much is storm.
 3. **Upper-level divergence sits just ahead of the surface low.** The 250 hPa divergence maximum is +1.8 to +2.5
-   (Atlantic) and +1.9 to +3.2 (Pacific) x 1e-5 /s, 200 to 500 km ahead of the centre at every time, with convergence
-   behind it. At 500 hPa the divergence is an order of magnitude smaller and noisy at 1.5 degrees; do not read detail
+   (Atlantic) and +1.9 to +3.2 (Pacific) x 1e-5 /s, 200 to 500 km ahead of the centre at every time, with weak convergence
+   behind it only up to 12 h before onset. At 500 hPa the divergence is 2 to 4 times smaller and noisy at 1.5 degrees; do not read detail
    into it.
 4. **What this cannot show.** An average of many storms smears jet streaks and troughs, so entrance and exit quadrants,
    trough tilt and trough position cannot be read from it. The per-storm check (S3) says why: the 250 hPa maximum
@@ -62,7 +62,7 @@ stippling on the speed figures is uninformative; the Z500 and divergence stippli
 Names: `{rot,north}_{atl,pac}_{z500,wind250,wind500,div}.png`. Columns 48, 24, 12 h before onset, onset, peak. Top
 row = mean field (contours of Z500 every 100 m, or white arrows for the wind relative to the storm's motion); bottom row
 = mean anomaly from climatology, stippled where the season-block bootstrap passes BH q < 0.05.
-- `rot_*_z500`: the 500 hPa low starts to the storm's left and moves onto it; the ridge anomaly ahead and right.
+- `rot_*_z500`: the 500 hPa low starts to the storm's left and moves onto it; the ridge anomaly to the right of the track.
 - `rot_*_wind250`, `wind500`: the jet band across the storm and the weaker centre at onset and peak.
 - `rot_*_div`: 250 hPa (rows 1 and 2) and 500 hPa (rows 3 and 4) divergence; read the 250 hPa rows.
 
@@ -84,3 +84,6 @@ row = mean field (contours of Z500 every 100 m, or white arrows for the wind rel
     ERA5_WORK=$W python3 -I extract.py 8       # 34 GB, resumable, stops at 48 GB
     ERA5_WORK=$W python3 -I analyse.py 2000    # needs about 6 GB of memory
     python3 -I figs.py
+
+
+Note: the 250/500 hPa wind-speed fields are the grid-point speed interpolated to the box, not the speed of interpolated u and v (the latter is up to ~10 m/s lower per pixel). Anomaly and Z500 fields are as described in the preregistration.
