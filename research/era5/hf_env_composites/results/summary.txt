@@ -1,0 +1,21 @@
+nboot 2000, seed 20261009
+rot atl m48: n=151 storms, 19 seasons; pixels passing BH q<0.05: z500 2424, u250 2258, v250 1650, u500 2258, v500 1605, ws250 6332, ws500 6551, d250 570, d500 80
+rot atl m24: n=370 storms, 19 seasons; pixels passing BH q<0.05: z500 3429, u250 2913, v250 2731, u500 3053, v500 3009, ws250 6509, ws500 6561, d250 1278, d500 175
+rot atl m12: n=514 storms, 19 seasons; pixels passing BH q<0.05: z500 3652, u250 3344, v250 3131, u500 3268, v500 3127, ws250 6511, ws500 6549, d250 1272, d500 178
+rot atl onset: n=645 storms, 19 seasons; pixels passing BH q<0.05: z500 4408, u250 3253, v250 3266, u500 3355, v500 3475, ws250 6519, ws500 6550, d250 1277, d500 194
+rot atl peak: n=650 storms, 19 seasons; pixels passing BH q<0.05: z500 4346, u250 3231, v250 3240, u500 3361, v500 3329, ws250 6525, ws500 6550, d250 1065, d500 168
+rot pac m48: n=92 storms, 18 seasons; pixels passing BH q<0.05: z500 1784, u250 1384, v250 927, u500 2034, v500 1357, ws250 5947, ws500 6267, d250 401, d500 82
+rot pac m24: n=325 storms, 19 seasons; pixels passing BH q<0.05: z500 2395, u250 2948, v250 3155, u500 2944, v500 3070, ws250 6220, ws500 6436, d250 1287, d500 206
+rot pac m12: n=469 storms, 19 seasons; pixels passing BH q<0.05: z500 2903, u250 3431, v250 3624, u500 3486, v500 3632, ws250 6305, ws500 6466, d250 1660, d500 278
+rot pac onset: n=551 storms, 19 seasons; pixels passing BH q<0.05: z500 3368, u250 3342, v250 3745, u500 3609, v500 3613, ws250 6432, ws500 6543, d250 1740, d500 233
+rot pac peak: n=555 storms, 19 seasons; pixels passing BH q<0.05: z500 3502, u250 3270, v250 3898, u500 3384, v500 3581, ws250 6427, ws500 6546, d250 1763, d500 217
+north atl m48: n=185 storms, 19 seasons; pixels passing BH q<0.05: z500 3097, u250 2458, v250 2413, u500 2465, v500 2007, ws250 6293, ws500 6531, d250 664, d500 63
+north atl m24: n=449 storms, 19 seasons; pixels passing BH q<0.05: z500 3643, u250 3459, v250 2653, u500 3615, v500 2891, ws250 6488, ws500 6561, d250 1321, d500 198
+north atl m12: n=577 storms, 19 seasons; pixels passing BH q<0.05: z500 3915, u250 3652, v250 3123, u500 3904, v500 3304, ws250 6494, ws500 6561, d250 1550, d500 292
+north atl onset: n=664 storms, 19 seasons; pixels passing BH q<0.05: z500 3908, u250 3630, v250 3440, u500 3649, v500 3445, ws250 6502, ws500 6560, d250 1655, d500 267
+north atl peak: n=664 storms, 19 seasons; pixels passing BH q<0.05: z500 3991, u250 3646, v250 3239, u500 3610, v500 3376, ws250 6505, ws500 6560, d250 1594, d500 227
+north pac m48: n=109 storms, 19 seasons; pixels passing BH q<0.05: z500 1804, u250 939, v250 1663, u500 1385, v500 1610, ws250 6039, ws500 6109, d250 488, d500 132
+north pac m24: n=369 storms, 19 seasons; pixels passing BH q<0.05: z500 2963, u250 3380, v250 3076, u500 3049, v500 3396, ws250 6068, ws500 6358, d250 1414, d500 294
+north pac m12: n=496 storms, 19 seasons; pixels passing BH q<0.05: z500 3168, u250 4003, v250 3345, u500 3507, v500 3858, ws250 6282, ws500 6457, d250 1850, d500 406
+north pac onset: n=559 storms, 19 seasons; pixels passing BH q<0.05: z500 3420, u250 4179, v250 3565, u500 3891, v500 3690, ws250 6367, ws500 6453, d250 1989, d500 430
+north pac peak: n=559 storms, 19 seasons; pixels passing BH q<0.05: z500 3548, u250 4180, v250 3700, u500 3952, v500 3613, ws250 6338, ws500 6451, d250 1891, d500 463
