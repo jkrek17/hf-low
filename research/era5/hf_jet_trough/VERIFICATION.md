@@ -1,0 +1,6 @@
+# Verification (fresh Sonnet agent, 2026-10-09)
+Recomputed from committed files and, for the features, from the pre-registration text alone (a separate implementation).
+- MATCH at printed precision: sample (74,009 fixes, 16,874 tracks, 4,012 events); primary-family BSS, gains, season counts, sign-flip p and BH q; basin, onset and couple rows; rapid-deepening and hf48 gains from an independently written leave-one-season-out fit (+0.0080, +0.0051; HSS 0.474 to 0.481 and 0.532 to 0.534); the 15-season sensitivity runs; Q1 and Q2 numbers; descriptive quadrant shares, streak and trough differences. Intervals agree within about 0.0003 (own bootstrap seed).
+- Independent re-implementation of J2/T2 for 5 fixes from one chunk (WB2 chunk 9152): vmaxp, quadrant, s, n, tdepth, tdist, div300max, Lhalf all agree (worst: n 0.43 vs 0.61 for one fix, same quadrant). Spec ambiguities found (divergence smoothing, streak centre) are recorded in PREREGISTRATION.md.
+- Seven README sentences were overstated or untested and were reworded.
+- NOT checked: the Q3 by-eye drawings and gains.png; descriptive q values (0.054, 0.002); the Q2 q; chunk and byte counts (1,946 chunks, 55.50 GB; only 1,946 x 28.53 MB = 55.5 GB was checked); the 12 QC-drawing chunks; the 28-30 September lag-source rows.

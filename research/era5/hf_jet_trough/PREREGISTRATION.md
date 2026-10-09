@@ -82,4 +82,5 @@ Not a forecast test (perfect prognosis: ERA5 at the fix and earlier). 1.5 deg sm
 Oct-Apr scope and the 18-season, 74,009-fix sample; vortex-removal taper 1500 to 2000 km; (s, n) measured from the streak's V maximum; `ttilt`, `tphase` and `tamp` made operational; standardisation by basin and month uses all extracted fixes (outcome-free); `couple` threshold outcome-free; lags are lookups of the track's own earlier fixes (12-hourly); the descriptive companion defines the comparison group directly.
 
 ## Deviations (post hoc)
-(none yet)
+- Clarifications found by the independent re-implementation (code unchanged, wording only): the 300 hPa divergence is computed on the 3 x 3 smoothed vortex-removed wind; the streak frame is centred on the largest V in the whole connected component (not only within 2500 km); azimuthal rings are binned by rounding r/100 km with the 1500 km ring held out to the 2000 km taper; the zonal mean is the mean over the grid row.
+- Post-run deviations are listed in README.md.
