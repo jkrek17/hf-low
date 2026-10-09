@@ -195,5 +195,20 @@ test('all-tracks P(HF): counts, decode of a known track, filter', function () {
   assert.ok(atl.length > 500 && atl.length < s04.length);
   for (var q = 0; q < atl.length; q++) { assert.strictEqual(D.basin[atl[q]], 0); assert.strictEqual(D.month[atl[q]], 1); }
 });
+test('By month density: every kind-0 fix lands in one cell of its own month', function () {
+  var D = HF.era5.decodeAllP(ctx.window.HF_ERA5_ALLP), exp = 0, exp7 = 0, a, k;
+  for (a = 0; a < D.n; a++) {
+    if (D.kind[a] !== 0) continue;
+    for (k = D.off[a]; k < D.off[a + 1]; k++) { exp++; if (D.basin[a] === 0 && D.season[a] >= 2010 && D.season[a] <= 2019 && new Date(Date.UTC(1979, 0, 1) + D.step[k] * 43200000).getUTCMonth() === 0) exp7++; }
+  }
+  var M = HF.era5.monthDensity(D, -1, 2004, 2025), tot = 0, m;
+  assert.strictEqual(M.nSeasons, 22); assert.strictEqual(M.byMonth.length, 12);
+  for (m = 0; m < 12; m++) M.byMonth[m].forEach(function (c) { tot += c.h * 22; assert.ok(c.h > 0 && c.h <= M.max); });
+  assert.strictEqual(Math.round(tot), exp);
+  var A = HF.era5.monthDensity(D, 0, 2010, 2019), jan = 0;
+  assert.strictEqual(A.nSeasons, 10);
+  A.byMonth[0].forEach(function (c) { jan += c.h * 10; });
+  assert.strictEqual(Math.round(jan), exp7);
+});
 console.log('\n' + passed + ' passed, ' + failed + ' failed');
 process.exit(failed ? 1 : 0);

@@ -120,6 +120,7 @@ window.HF = window.HF || {};
   var era5 = null;                       // ERA5 proxy tracks (HF.era5.decode shape) drawn under the archive tracks, or null
   var currentBins = null;                // built lazily from window.HF_CURRENTS, see buildCurrentSegments()
   var curGrid = null;                    // cached computeDensityGrid() result, layer 'density' only
+  var monthDensM = null;                 // By month: {cells, max} density shading under the playback tracks, or null
   var atlasModel = null;                 // atlas layer: {kind: 'boxes'|'motion'|'historic', ...} from app.js
   var atlasHits = [];                    // atlas arrows / markers drawn last frame: {x, y, tip}
   var probModel = null;                  // 'prob' layer: {D, idx, tip(k), tr(k)} from app.js (HF.era5.decodeAllP shape)
@@ -1176,7 +1177,7 @@ window.HF = window.HF || {};
     var step = Math.min(ramp.length - 1, Math.floor(Math.sqrt(frac) * ramp.length));
     var R = baseR * view.zoom;
 
-    ctx.globalAlpha = hovered ? Math.min(1, 0.16 + 0.62 * Math.sqrt(frac) + 0.2) : 0.16 + 0.62 * Math.sqrt(frac);
+    ctx.globalAlpha = hovered ? Math.min(1, 0.28 + 0.6 * Math.sqrt(frac) + 0.2) : 0.16 + 0.62 * Math.sqrt(frac);
     ctx.fillStyle = ramp[step];
     fillClippedRing(segs, R);
     if (hovered) {
@@ -1237,6 +1238,21 @@ window.HF = window.HF || {};
       ctx.globalAlpha = 1;
       strokePath(segs, i === hoveredAtlas ? 1.5 : 0.4, pal.oceanWash);
     }
+  }
+
+  /** By month: density shading of all lows under the tracks. Same square-root
+      ramp as the atlas boxes, a little lighter so the tracks on top read. */
+  function drawMonthDens() {
+    var ramp = densityRampColors(), R = baseR * view.zoom, cells = monthDensM.cells, max = monthDensM.max || 1;
+    for (var i = 0; i < cells.length; i++) {
+      var c = cells[i], segs = visibleSegments(boxRing(c));
+      if (!segs.length) continue;
+      var frac = c.h / max;
+      ctx.globalAlpha = Math.min(0.9, 0.28 + 0.6 * Math.sqrt(frac));
+      ctx.fillStyle = ramp[atlasStep(frac, ramp)];
+      fillClippedRing(segs, R);
+    }
+    ctx.globalAlpha = 1;
   }
 
   function drawAtlasMotion() {
@@ -2229,6 +2245,7 @@ window.HF = window.HF || {};
     if (curLayer === 'peak') return drawPoints('peak');
     if (curLayer === 'playback') {
       // By month passes an ERA5 proxy list (earlier seasons); it goes under the archive's storms.
+      if (monthDensM) drawMonthDens();
       if (era5 && era5.length) drawEra5();
       return drawPlayback();
     }
@@ -3000,6 +3017,13 @@ window.HF = window.HF || {};
   globe.setProb = function (model) {
     probModel = model || null;
     hoveredProb = null;
+    dirty = true;
+    scheduleFrame();
+  };
+
+  globe.setMonthDens = function (model) {
+    if (!model && !monthDensM) return;
+    monthDensM = model || null;
     dirty = true;
     scheduleFrame();
   };

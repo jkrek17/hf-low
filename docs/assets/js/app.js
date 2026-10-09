@@ -27,6 +27,7 @@
     era5focusPan: false,   // rotate the globe to the focused track once it has loaded
     atlas: { view: 'boxes', src: 'archive', field: 'annmax' },   // the Atlas layer
     strong: { list: 'minp', basin: 'all' },   // the Strongest storms tab   // key of the ERA5 track picked from the Strongest list, drawn whatever the filters say
+    monthDens: true,   // By month: shade the month's density of all lows (2004-05 on) under the tracks
     monthEra5: true,   // By month: add the ERA5 proxy storms of earlier seasons (teal), on by default
     probMin: 1,        // HF probability layer: draw edges at or above this P class (1 = all)
     probPre: true,     // HF probability layer: include 1979-2003 (catalog events and matched nulls only)
@@ -1121,6 +1122,7 @@
     HF.globe.setEra5(ev, nul, peaks, { prob: !!probOn, focus: focus });
     HF.globe.setAtlas(atlasModel());
     HF.globe.setProb(probModel());
+    HF.globe.setMonthDens(monthDensModel());
   }
 
   /* ------------------------------------------------------------- atlas
@@ -1235,6 +1237,34 @@
           (r[9] ? '<br>Tropical-cyclone linked' : '') });
     });
     return out;
+  }
+
+  /* ---------------------------------------------------- By month density
+     The By month layer's shading: how many 12-hourly fixes of ALL the
+     lows pipeline A tracks (HF or not) fall in each 5 x 10 degree cell in
+     the month on screen, per season. Built from the per-fix tables of the
+     P(HF) sidecar (era5-allprob.js, kind 0: every scored low of 2004-05 to
+     2025-26, 99.8 % of that period's tracks); no per-fix tracks exist for the
+     other ~31,000 pre-2004 lows, so earlier seasons are not shaded. One colour
+     scale for all twelve months, so the strengthening and weakening of the
+     track reads between months. ERA5 proxy, not direct observation. */
+
+  function seasonLabel(y) { return y + '-' + String((y + 1) % 100).padStart(2, '0'); }
+  var monthDens = null;      // {key, grids: [12][cells], max, nSeasons, byMonth: [12 cell lists]}
+  var monthDensShown = null; // {nSeasons, s0, s1} while the shading is on screen, else null
+
+  function monthDensModel() {
+    monthDensShown = null;
+    if (state.layer !== 'bymonth' || !state.monthDens || !ensureEra5('allp')) return null;
+    var D = era5Data.allp;
+    var s0 = Math.max(2004, state.season0 == null ? 0 : state.season0);
+    var s1 = Math.min(2025, state.season1 == null ? 9999 : state.season1);
+    if (s1 < s0) return null;
+    var b = state.basin === 'atl' ? 0 : state.basin === 'pac' ? 1 : -1;
+    var key = b + '|' + s0 + '|' + s1;
+    if (!monthDens || monthDens.key !== key) { monthDens = HF.era5.monthDensity(D, b, s0, s1); monthDens.key = key; }
+    monthDensShown = { nSeasons: monthDens.nSeasons, s0: s0, s1: s1, max: monthDens.max };
+    return { cells: monthDens.byMonth[play.moy - 1], max: monthDens.max };
   }
 
   /* ---------------------------------------------------- HF probability
@@ -2390,6 +2420,8 @@
     pbEl('pbPrev').hidden = pbEl('pbNext').hidden = play.mode !== 'step';
     pbEl('pbEra5Wrap').hidden = !bym;
     pbEl('pbEra5').checked = state.monthEra5;
+    pbEl('pbDensWrap').hidden = !bym;
+    pbEl('pbDens').checked = state.monthDens;
     syncStepButtons();
     pbEl('pbSeasonWrap').hidden = play.mode === 'composite' || monthly() || moyly();
     pbEl('pbMonthWrap').hidden = !monthly();   // moy: the scrubber's twelve ticks are the picker
@@ -2524,6 +2556,8 @@
       return 'Every event whose first fix falls in each calendar month, all seasons overlaid, so the track can be compared month against month. Circles mark each event’s lowest analyzed pressure.' +
         (state.layer === 'bymonth' && state.monthEra5
           ? ' Teal lines are ERA5 proxy storms (pipeline A) from the seasons before the archive range on screen, back to 1979-80: a reanalysis proxy, not direct observation, and its gust index drifts before 2001-02, so compare where the storms went, not how many.'
+          : '') + (state.layer === 'bymonth' && state.monthDens
+          ? ' Shading is the density of all lows, hurricane-force or not, in this month (12-hourly fixes per season per 5° × 10° cell, one scale for all months; ERA5 proxy tracks, 2004-05 to 2025-26 only because earlier lows have no per-fix tracks; lows are tracked only to about 67°N, so the northern rim is where tracks leave the domain).'
           : '') + tail;
     }
     if (play.unit === 'month') {
@@ -2541,6 +2575,16 @@
     row.appendChild(dot);
     row.appendChild(document.createTextNode(step ? 'Lowest pressure; larger = deeper' : 'Storm now; larger = deeper'));
     box.appendChild(row);
+    if (state.layer === 'bymonth' && state.monthDens) {
+      var dr = HF.el('div', { class: 'legend-row' });
+      var ds = HF.el('span', { class: 'legend-fade' });
+      ds.style.background = 'linear-gradient(90deg, ' + [1, 2, 3, 4, 5, 6, 7].map(function (i) { return HF.cssVar('--seq-' + i); }).join(', ') + ')';
+      dr.appendChild(ds);
+      dr.appendChild(document.createTextNode(monthDensShown
+        ? 'All lows, fixes per season per cell: 0 to ' + (Math.round(monthDensShown.max * 10) / 10) + ' (' + seasonLabel(monthDensShown.s0) + ' to ' + seasonLabel(monthDensShown.s1) + '; ERA5 proxy)'
+        : 'All lows, density (needs a season range from 2004-05 on)'));
+      box.appendChild(dr);
+    }
     if (state.layer === 'bymonth' && state.monthEra5) {
       var er = HF.el('div', { class: 'legend-row' });
       var sw = HF.el('span', { class: 'legend-fade' });
@@ -2617,6 +2661,13 @@
       renderLegend(play.lows);
       onTimeChanged(true);
       if (!state.monthEra5) setEra5OnGlobe();
+    });
+    pbEl('pbDens').addEventListener('change', function (e) {
+      state.monthDens = e.target.checked;
+      pbEl('mapNote').textContent = playbackNote(play.lows);
+      renderLegend(play.lows);
+      onTimeChanged(true);
+      setEra5OnGlobe();
     });
     pbEl('pbPrev').addEventListener('click', function () { stepBy(-1); });
     pbEl('pbNext').addEventListener('click', function () { stepBy(1); });
