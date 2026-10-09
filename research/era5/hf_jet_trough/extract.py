@@ -1,6 +1,8 @@
 """Per-fix J2/T2 features for Oct-Apr fixes (plus 28-30 Sep as lag sources). Resumable; counts bytes read.
 
 usage: ERA5_WORK=DIR extract.py [NPROC]       output DIR/feat/<chunk>.csv (track, time, features); DIR/bytes_<chunk>.txt
+Sensitivity columns (suffix _r1000, _r0: vortex removal 1000 km / none; _x500, _x1000: trough exclusion) exist only for chunks
+processed after the first 304 (newest seasons; re-pulling them would pass the 60 GB limit).
 Stops if the pull passes MAXGB (60 GB). Only features are kept; no raw field is saved. Outcome columns are not read.
 """
 import os, sys, glob
@@ -46,8 +48,12 @@ def job(args):
             cache[ti] = time_fields(A["u"][ti, L[250]], A["v"][ti, L[250]], A["u"][ti, L[300]], A["v"][ti, L[300]], A["z"][ti, L[500]])
         f = fix_features(cache[r.step], r.lat, r.lon, r.heading)
         f.update(track=r.track, time=r.time)
+        for tag, kw, cols in (("r1000", dict(rm=1000), J2 + EXTRA), ("r0", dict(rm=0), J2 + EXTRA),
+                              ("x500", dict(excl=500), T2), ("x1000", dict(excl=1000), T2)):
+            g = fix_features(cache[r.step], r.lat, r.lon, r.heading, **kw)
+            f.update({f"{c}_{tag}": g[c] for c in cols})
         recs.append(f)
-    pd.DataFrame(recs)[["track", "time"] + COLS].to_csv(path + ".tmp", index=False, float_format="%.5g")
+    pd.DataFrame(recs).to_csv(path + ".tmp", index=False, float_format="%.5g")
     os.replace(path + ".tmp", path)
     with open(os.path.join(WORK, f"bytes_{chunk:05d}.txt"), "w") as fh:
         fh.write(str(nb))

@@ -16,7 +16,6 @@ THETA = np.arctan2(BY, BX)
 SIN, COS = np.sin(THETA), np.cos(THETA)
 BRG = np.degrees(np.arctan2(BX, BY)) % 360                    # bearing from north, clockwise
 RING = np.rint(BR / BOX_D).astype(int)
-TAPER = np.clip((2000.0 - BR) / 500.0, 0.0, 1.0)              # 1 inside 1500 km, 0 beyond 2000 km
 KERN = np.outer([1, 2, 1], [1, 2, 1]) / 16.0
 J2 = ["nojet", "vmaxp", "Lhalf", "RE", "LE", "RX", "LX", "s", "n", "dvds", "div300max", "div300dist"]
 T2 = ["notrough", "tdepth", "tdist", "tbear_cos", "tbear_sin", "tamp", "ttilt", "tphase", "nohead"]
@@ -36,15 +35,18 @@ def smooth(a):
     return ndimage.convolve(a, KERN, mode="nearest")
 
 
-def remove_vortex(u, v):
-    """Subtract the azimuthal-mean tangential wind (rings of 100 km to 2000 km, taper 1500-2000 km)."""
+def remove_vortex(u, v, rm=1500):
+    """Subtract the azimuthal-mean tangential wind (100 km rings; weight 1 inside rm km, 0 beyond rm + 500 km). rm = 0: none."""
+    if rm <= 0:
+        return u, v
+    taper = np.clip((rm + 500.0 - BR) / 500.0, 0.0, 1.0)
     vt = u * -SIN + v * COS
     vt0 = np.where(np.isfinite(vt), vt, 0.0)
     cnt = np.bincount(RING.ravel(), weights=np.isfinite(vt).ravel().astype(float), minlength=RING.max() + 1)
     sm = np.bincount(RING.ravel(), weights=vt0.ravel(), minlength=RING.max() + 1)
     mean = np.where(cnt > 0, sm / np.maximum(cnt, 1), 0.0)
     mean[0] = 0.0
-    corr = mean[RING] * TAPER
+    corr = mean[RING] * taper
     return u - corr * -SIN, v - corr * COS
 
 
@@ -60,14 +62,17 @@ def idx(x_km, y_km):
     return [y_km / BOX_D + N0, x_km / BOX_D + N0]
 
 
-def fix_features(F, lat, lon, heading):
+def fix_features(F, lat, lon, heading, dbg=None, rm=1500, excl=750):
+    """dbg: optional dict that receives the box arrays used (for the Q3 drawings); does not change the result."""
     out = {c: np.nan for c in COLS}
     la, lo = destination(lat, lon, 90.0 + np.degrees(np.arctan2(-BY, BX)), BR)
     ok = np.isfinite(sample(F["u250"], la, lo))
     S = {k: np.where(ok, sample(F[k], la, lo), 0.0) for k in ("u250", "v250", "u300", "v300", "zp")}
     vbar_box = np.interp(la, LAT, F["vbar"])
+    if dbg is not None:
+        dbg.update(ok=ok)
     # ---- jet streak ----
-    u, v = remove_vortex(S["u250"], S["v250"])
+    u, v = remove_vortex(S["u250"], S["v250"], rm)
     u, v = smooth(u), smooth(v)
     V = np.hypot(u, v) * KT
     Vp = V - vbar_box
@@ -85,6 +90,8 @@ def fix_features(F, lat, lon, heading):
         comp = lab == lab[i0]
         j = np.unravel_index(np.argmax(np.where(comp, V, -1)), V.shape)
         xm, ym = BX[j], BY[j]
+        if dbg is not None:
+            dbg.update(V=V, comp=comp, jmax=(xm, ym), a=a)
         out["vmaxp"] = float(Vp[comp].max())
         w = V[comp] - 60.0
         x, y = BX[comp], BY[comp]
@@ -112,7 +119,7 @@ def fix_features(F, lat, lon, heading):
         px = lambda sp_: ndimage.map_coordinates(V, idx(np.array([xm + sp_ * a[0]]), np.array([ym + sp_ * a[1]])), order=1, mode="nearest")[0]
         out["dvds"] = float((px(s + 300) - px(s - 300)) / 0.6)
     # ---- 300 hPa divergence of the vortex-removed wind ----
-    u3, v3 = remove_vortex(S["u300"], S["v300"])
+    u3, v3 = remove_vortex(S["u300"], S["v300"], rm)
     d = div1e5(smooth(u3), smooth(v3))
     d = np.where(ok, d, np.nan)
     m15 = BR <= 1500
@@ -130,7 +137,7 @@ def fix_features(F, lat, lon, heading):
     zs = smooth(S["zp"])
     opp = (heading + 180.0) % 360
     dif = np.abs((BRG - opp + 180.0) % 360 - 180.0)
-    sect = (BR >= 500) & (BR <= 3000) & (dif <= 75) & ok
+    sect = (BR >= excl) & (BR <= 3000) & (dif <= 75) & ok
     lmin = zs <= ndimage.minimum_filter(zs, size=3, mode="nearest")
     cand = sect & lmin
     if not cand.any():
@@ -140,6 +147,8 @@ def fix_features(F, lat, lon, heading):
     k = np.argmin(np.where(cand, zs, np.inf))
     ij = np.unravel_index(k, zs.shape)
     xt, yt, zt = BX[ij], BY[ij], zs[ij]
+    if dbg is not None:
+        dbg.update(zs=zs, trough=(xt, yt), sect=sect)
     out["tdepth"], out["tdist"] = float(-zt), float(BR[ij] / 1000)
     rel = np.radians(BRG[ij] - heading)
     out["tbear_cos"], out["tbear_sin"] = float(np.cos(rel)), float(np.sin(rel))
