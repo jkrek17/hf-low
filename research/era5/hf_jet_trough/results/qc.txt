@@ -1,0 +1,8 @@
+fixes with features 75000; Oct-Apr model sample 74009; tracks 16874; seasons 18
+Q1 atl: streak found 1.000 of 34855 fixes with vortex-removed 250 hPa max >= 60 kt (need 0.80); trough found 0.764 of all 34855 fixes (need 0.70), 0.840 of the 31707 fixes with a heading; no heading 0.090
+Q1 pac: streak found 1.000 of 39153 fixes with vortex-removed 250 hPa max >= 60 kt (need 0.80); trough found 0.760 of all 39154 fixes (need 0.70), 0.842 of the 35338 fixes with a heading; no heading 0.097
+Q1 both: streak found 1.000 of 74008 fixes with vortex-removed 250 hPa max >= 60 kt (need 0.80); trough found 0.762 of all 74009 fixes (need 0.70), 0.841 of the 67045 fixes with a heading; no heading 0.094
+Q2 atl: mean 300 hPa divergence within 1000 km, (RE+LX) minus (LE+RX) = +0.177 e-5/s [90% +0.169, +0.184], n 9178 vs 4354, one-sided q 0.0005
+Q2 pac: mean 300 hPa divergence within 1000 km, (RE+LX) minus (LE+RX) = +0.201 e-5/s [90% +0.189, +0.214], n 8193 vs 3881, one-sided q 0.0005
+quadrant shares of fixes with a streak (RE LE RX LX none): atl:0.100/0.081/0.043/0.164/0.612 pac:0.055/0.071/0.028/0.155/0.692
+Q1 and Q2 PASS: features may be used for the skill test (Q3 is a by-eye review)

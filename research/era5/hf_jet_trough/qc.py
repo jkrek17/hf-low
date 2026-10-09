@@ -7,7 +7,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import numpy as np, pandas as pd
 from features import J2, T2, COLS
-WORK = os.environ["ERA5_WORK"]
+WORK = os.environ.get("ERA5_WORK", "")
 FIX = os.path.join(HERE, "..", "intensity", "results", "fixes_2004.csv.gz")
 
 

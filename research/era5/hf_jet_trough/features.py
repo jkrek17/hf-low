@@ -90,8 +90,6 @@ def fix_features(F, lat, lon, heading, dbg=None, rm=1500, excl=750):
         comp = lab == lab[i0]
         j = np.unravel_index(np.argmax(np.where(comp, V, -1)), V.shape)
         xm, ym = BX[j], BY[j]
-        if dbg is not None:
-            dbg.update(V=V, comp=comp, jmax=(xm, ym), a=a)
         out["vmaxp"] = float(Vp[comp].max())
         w = V[comp] - 60.0
         x, y = BX[comp], BY[comp]
@@ -106,6 +104,8 @@ def fix_features(F, lat, lon, heading, dbg=None, rm=1500, excl=750):
         if a[0] * mu + a[1] * mv < 0:
             a = -a
         vmax = V[j]
+        if dbg is not None:
+            dbg.update(V=V, comp=comp, jmax=(xm, ym), a=a)
         half = comp & (V >= 0.5 * (60 + vmax))
         sp = x[:0]
         proj = BX[half] * a[0] + BY[half] * a[1]
