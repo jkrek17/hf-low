@@ -27,15 +27,15 @@ Group W (strength and position of lift), at 500 and 700 hPa:
 4. `adx_km`, `ady_km`: position of the A500 maximum (within 2,500 km) relative to the low, along and across the heading (km/1000).
 5. `afwd500`: mean A500 in the forward half (+-90 deg of heading) minus the rear half, within 2,000 km.
 Group C (coupling), from A500 smoothed:
-6. `nasc`: number of distinct ascent centres within 4,000 km: local maxima (8-neighbour) with A500 >= 0.4 Pa/s, at least 1,000 km apart (keep the stronger of two closer ones).
+6. `nasc`: number of distinct ascent centres within 3,000 km: local maxima (8-neighbour) of smoothed A500 with A500 >= 0.8 Pa/s, at least 1,500 km apart (keep the stronger of two closer ones). (First written as 0.4 Pa/s, 1,000 km, 4,000 km; changed before the pull, see Deviations 1.)
 7. `asc2`: A500 of the second strongest centre (0 if none); `asc2dist` its distance (km/1000, median-filled if none); `asc2cos`, `asc2sin` its bearing relative to heading.
-8. `couple_w` = `nasc` >= 2 and `asc2` >= 0.4 Pa/s and `asc2dist` <= 2.5 (one pre-registered indicator).
+8. `couple_w` = `nasc` >= 2 and `asc2dist` <= 2.5 (one pre-registered indicator). Sensitivities computed in the same pass: the original rule (suffix `_o`: 0.4 Pa/s, 1,000 km, 4,000 km) and 0.6 Pa/s (`_m`, 1,500 km, 3,000 km).
 Lags: all W and C values at 0 and 24 h by lookup of the track's earlier fix (as PR 149); 24 h change in `a500_1000`, `asc2`. Continuous values standardised per basin and calendar month from predictors only.
 Storm-separation sensitivity (logged, not used to select): W recomputed with the ring 750-2,500 km only (`a500_x750`), because the storm's own latent-heating ascent is in the 0-750 km core.
 
 ## Detection QC (before any outcome is joined)
 Run with outcome columns not loaded.
-- Q1 an A500 maximum >= 0.2 Pa/s exists within 2,500 km for >= 80% of fixes; `nasc` >= 2 for between 10% and 70% of fixes (a flag that is nearly always or never on cannot be used).
+- Q1 an A500 maximum >= 0.2 Pa/s exists within 2,500 km for >= 80% of fixes; `nasc` >= 2 for between 10% and 70% of fixes (primary rule) (a flag that is nearly always or never on cannot be used).
 - Q2 physical sign: using PR 149's quadrants (features.csv.gz), mean `a500_1000` is higher in RE and LX than in LE and RX, in both basins, season-block bootstrap q < 0.05. A check that the lift field and the jet quadrants agree, not a skill test.
 - Q3 12 cases (the 4 named storms of the probability README plus 8 random) drawn with the ascent centres marked, reviewed by eye; failures logged, not tuned away.
 If Q1 or Q2 fails the features are not used for the skill test and the failure is the result. No threshold is changed after a QC result; any change is a logged deviation with Q1-Q3 rerun.
@@ -57,4 +57,4 @@ Compressed omega per two-day chunk, mean of 12 random chunks: 11.28 MB (all 13 l
 Not a forecast test (perfect prognosis from ERA5). 1.5 deg omega is smooth: narrow frontal ascent is under-resolved. Omega contains the storm's own ascent and its latent heating, so it is partly an outcome-side diagnostic; the x750 ring and the lags are the guards. No Q-vector, no second-streak detection from wind (needs +40.6 GB), no pull after 2023-01-09, pipeline A only. Pre-registered power: the PR 149 base left an interval of about +-0.002 BSS around zero gains; the same data are used, so an effect of 0.5 BSS point or more is detectable.
 
 ## Deviations (post hoc)
-None yet.
+1. Before the main pull, after the code passed the synthetic test and a 24-chunk dry run (859 fixes, 0.27 GB, no outcome read): the first-written centre rule (0.4 Pa/s, 1,000 km apart, 4,000 km) found two or more centres at 100% of fixes (median 6), so it could not pass Q1 and could not carry information. At 0.6 Pa/s it was 72% (just above the 70% Q1 bound); at 0.8 Pa/s, 1,500 km apart, within 3,000 km it was 35%. The primary rule is now the 0.8 Pa/s one, picked from that outcome-free distribution only; the original and the 0.6 Pa/s versions are kept as sensitivities (`_o`, `_m`). Q1 is rerun on the full set with the new primary rule.
