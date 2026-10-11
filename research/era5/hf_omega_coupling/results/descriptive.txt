@@ -1,0 +1,11 @@
+atl: HF onset anchors on an extracted fix 380; storm-force peak anchors 1316
+pac: HF onset anchors on an extracted fix 296; storm-force peak anchors 1452
+  atl 500 hPa ascent max within 1000 km (Pa/s): HF onset 1.205, storm-force peak 0.836, stratified difference +0.368 [90% +0.331, +0.405], q 0.003
+  atl ascent max 750-2500 km (Pa/s): HF onset 0.983, storm-force peak 0.943, stratified difference +0.024 [90% -0.005, +0.053], q 0.206
+  atl ascent area >= 0.3 Pa/s within 3000 km (1e6 km2): HF onset 1.682, storm-force peak 1.455, stratified difference +0.187 [90% +0.142, +0.225], q 0.003
+  atl share with a second ascent centre (primary rule): HF onset 0.321, storm-force peak 0.265, stratified difference +0.042 [90% -0.001, +0.084], q 0.144
+  pac 500 hPa ascent max within 1000 km (Pa/s): HF onset 1.353, storm-force peak 0.926, stratified difference +0.432 [90% +0.370, +0.495], q 0.003
+  pac ascent max 750-2500 km (Pa/s): HF onset 1.096, storm-force peak 1.031, stratified difference +0.053 [90% +0.029, +0.076], q 0.003
+  pac ascent area >= 0.3 Pa/s within 3000 km (1e6 km2): HF onset 2.035, storm-force peak 1.802, stratified difference +0.192 [90% +0.142, +0.244], q 0.003
+  pac share with a second ascent centre (primary rule): HF onset 0.321, storm-force peak 0.337, stratified difference -0.030 [90% -0.089, +0.024], q 0.330
+Descriptive only (HF is defined by the gust index, so HF storms differ from storm-force ones in strength by construction); not a test.

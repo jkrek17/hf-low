@@ -1,0 +1,60 @@
+Sample: 74009 Oct-Apr fixes, 16874 tracks, 18 seasons 2004-05..2021-22; hf24 events 4012
+Base (PR 12 'full', refit on this sample) BSS +0.4133. Gain = BSS(base+group) - BSS(base), 90% CI over seasons.
+
+== hf24 [primary]  (base BSS +0.4133)
+  W [lags 0,24]                                    gain +0.0088 [+0.0055, +0.0121] BSS +0.4221 p 0.0006 q(fam) 0.002 q(all) 0.002 seasons better 15/18  -> ADDS SKILL
+  C [lags 0,24]                                    gain -0.0000 [-0.0006, +0.0005] BSS +0.4133 p 0.9363 q(fam) 0.936 q(all) 0.936 seasons better 8/18  -> well-powered null (gain >= 0.005 excluded)
+  W+C [lags 0,24]                                  gain +0.0086 [+0.0051, +0.0120] BSS +0.4219 p 0.0011 q(fam) 0.002 q(all) 0.002 seasons better 15/18  -> ADDS SKILL
+
+== hf24 lags 0  (base BSS +0.4133)
+  W [lags 0]                                       gain +0.0086 [+0.0052, +0.0121] BSS +0.4219 p 0.0010 q(fam) 0.002 q(all) 0.002 seasons better 14/18  -> ADDS SKILL
+  C [lags 0]                                       gain +0.0002 [-0.0002, +0.0006] BSS +0.4135 p 0.3924 q(fam) 0.392 q(all) 0.458 seasons better 10/18  -> well-powered null (gain >= 0.005 excluded)
+  W+C [lags 0]                                     gain +0.0086 [+0.0050, +0.0122] BSS +0.4219 p 0.0014 q(fam) 0.002 q(all) 0.003 seasons better 14/18  -> ADDS SKILL
+
+== hf24 lags 0,12,24,48  (base BSS +0.4133)
+  W [lags all]                                     gain +0.0090 [+0.0057, +0.0123] BSS +0.4223 p 0.0004 q(fam) 0.001 q(all) 0.002 seasons better 15/18  -> ADDS SKILL
+  C [lags all]                                     gain -0.0005 [-0.0015, +0.0005] BSS +0.4127 p 0.3855 q(fam) 0.386 q(all) 0.458 seasons better 7/18  -> well-powered null (gain >= 0.005 excluded)
+  W+C [lags all]                                   gain +0.0081 [+0.0046, +0.0118] BSS +0.4214 p 0.0023 q(fam) 0.003 q(all) 0.004 seasons better 14/18  -> ADDS SKILL
+
+== hf24 onset fixes  (base BSS +0.2957)
+  W [lags 0,24]                                    gain +0.0111 [+0.0068, +0.0151] BSS +0.3068 p 0.0010 q(fam) 0.002 q(all) 0.002 seasons better 16/18  -> ADDS SKILL
+  C [lags 0,24]                                    gain -0.0004 [-0.0011, +0.0003] BSS +0.2953 p 0.3104 q(fam) 0.310 q(all) 0.435 seasons better 8/18  -> well-powered null (gain >= 0.005 excluded)
+  W+C [lags 0,24]                                  gain +0.0106 [+0.0065, +0.0145] BSS +0.3063 p 0.0012 q(fam) 0.002 q(all) 0.002 seasons better 15/18  -> ADDS SKILL
+
+== hf24 couple_w alone / x750 ring / other centre rules  (base BSS +0.4133)
+  couple_w                                         gain +0.0003 [-0.0001, +0.0006] BSS +0.4136 p 0.1935 q(fam) 0.412 q(all) 0.301 seasons better 12/18  -> well-powered null (gain >= 0.005 excluded)
+  Wx [lags 0,24]                                   gain -0.0001 [-0.0004, +0.0001] BSS +0.4131 p 0.4122 q(fam) 0.412 q(all) 0.462 seasons better 8/18  -> well-powered null (gain >= 0.005 excluded)
+  C first-written rule [lags 0,24]                 gain -0.0005 [-0.0011, +0.0001] BSS +0.4128 p 0.2346 q(fam) 0.412 q(all) 0.346 seasons better 9/18  -> well-powered null (gain >= 0.005 excluded)
+  C 0.6 Pa/s [lags 0,24]                           gain -0.0004 [-0.0011, +0.0003] BSS +0.4129 p 0.3670 q(fam) 0.412 q(all) 0.458 seasons better 9/18  -> well-powered null (gain >= 0.005 excluded)
+
+== hf24 [primary] atl (descriptive)  (base BSS +0.3977)
+  W [lags 0,24]                                    gain +0.0052 [-0.0001, +0.0099] BSS +0.4029 p 0.1211 q(fam) 0.192 q(all) nan seasons better 13/18  -> can't tell
+  C [lags 0,24]                                    gain +0.0002 [-0.0007, +0.0011] BSS +0.3979 p 0.7458 q(fam) 0.746 q(all) nan seasons better 9/18  -> well-powered null (gain >= 0.005 excluded)
+  W+C [lags 0,24]                                  gain +0.0054 [-0.0000, +0.0106] BSS +0.4032 p 0.1278 q(fam) 0.192 q(all) nan seasons better 12/18  -> can't tell
+
+== hf24 [primary] pac (descriptive)  (base BSS +0.4321)
+  W [lags 0,24]                                    gain +0.0133 [+0.0096, +0.0170] BSS +0.4454 p 0.0000 q(fam) 0.000 q(all) nan seasons better 16/18  -> ADDS SKILL
+  C [lags 0,24]                                    gain -0.0003 [-0.0016, +0.0009] BSS +0.4318 p 0.7233 q(fam) 0.723 q(all) nan seasons better 10/18  -> well-powered null (gain >= 0.005 excluded)
+  W+C [lags 0,24]                                  gain +0.0125 [+0.0084, +0.0166] BSS +0.4446 p 0.0002 q(fam) 0.000 q(all) nan seasons better 14/18  -> ADDS SKILL
+
+== rapid deepening  (base BSS +0.2996)
+  W [lags 0,24]                                    gain +0.0127 [+0.0098, +0.0156] BSS +0.3123 p 0.0000 q(fam) 0.000 q(all) 0.000 seasons better 17/18  -> ADDS SKILL
+  C [lags 0,24]                                    gain -0.0006 [-0.0020, +0.0007] BSS +0.2990 p 0.5064 q(fam) 0.506 q(all) 0.545 seasons better 10/18  -> well-powered null (gain >= 0.005 excluded)
+  W+C [lags 0,24]                                  gain +0.0118 [+0.0085, +0.0153] BSS +0.3114 p 0.0001 q(fam) 0.000 q(all) 0.001 seasons better 16/18  -> ADDS SKILL
+
+== hf48  (base BSS +0.3653)
+  W [lags 0,24]                                    gain +0.0091 [+0.0063, +0.0120] BSS +0.3744 p 0.0002 q(fam) 0.001 q(all) 0.002 seasons better 16/18  -> ADDS SKILL
+  C [lags 0,24]                                    gain +0.0006 [-0.0000, +0.0011] BSS +0.3658 p 0.1401 q(fam) 0.140 q(all) 0.231 seasons better 14/18  -> well-powered null (gain >= 0.005 excluded)
+  W+C [lags 0,24]                                  gain +0.0090 [+0.0060, +0.0119] BSS +0.3742 p 0.0004 q(fam) 0.001 q(all) 0.002 seasons better 15/18  -> ADDS SKILL
+
+== hf24 over J2+T2  (base BSS +0.4162)
+  W [lags 0,24] over J2+T2                         gain +0.0075 [+0.0046, +0.0105] BSS +0.4238 p 0.0010 q(fam) 0.003 q(all) 0.002 seasons better 15/18  -> ADDS SKILL
+  C [lags 0,24] over J2+T2                         gain -0.0002 [-0.0007, +0.0004] BSS +0.4160 p 0.6225 q(fam) 0.622 q(all) 0.646 seasons better 8/18  -> well-powered null (gain >= 0.005 excluded)
+  W+C [lags 0,24] over J2+T2                       gain +0.0072 [+0.0041, +0.0102] BSS +0.4234 p 0.0020 q(fam) 0.003 q(all) 0.004 seasons better 15/18  -> ADDS SKILL
+
+== rapid deepening over J2+T2  (base BSS +0.3078)
+  W [lags 0,24] over J2+T2                         gain +0.0103 [+0.0072, +0.0133] BSS +0.3181 p 0.0002 q(fam) 0.001 q(all) 0.002 seasons better 17/18  -> ADDS SKILL
+  C [lags 0,24] over J2+T2                         gain -0.0007 [-0.0019, +0.0003] BSS +0.3071 p 0.3416 q(fam) 0.342 q(all) 0.455 seasons better 8/18  -> well-powered null (gain >= 0.005 excluded)
+  W+C [lags 0,24] over J2+T2                       gain +0.0096 [+0.0063, +0.0129] BSS +0.3173 p 0.0005 q(fam) 0.001 q(all) 0.002 seasons better 14/18  -> ADDS SKILL
+
+Tests passing 'adds skill' (non-descriptive): 16 of 28; q(all) < 0.05: 16 of 28

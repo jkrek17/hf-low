@@ -1,0 +1,7 @@
+fixes with features 75000; Oct-Apr model sample 74009; tracks 16874; seasons 18
+Q1 atl: ascent maximum >= 0.2 Pa/s within 2500 km at 1.000 of 34855 fixes (need 0.80); fixes with >= 2 centres: primary 0.285 (need 0.10 to 0.70), 0.6 Pa/s 0.641, first-written rule 0.998
+Q1 pac: ascent maximum >= 0.2 Pa/s within 2500 km at 1.000 of 39154 fixes (need 0.80); fixes with >= 2 centres: primary 0.332 (need 0.10 to 0.70), 0.6 Pa/s 0.647, first-written rule 0.997
+Q1 both: ascent maximum >= 0.2 Pa/s within 2500 km at 1.000 of 74009 fixes (need 0.80); fixes with >= 2 centres: primary 0.310 (need 0.10 to 0.70), 0.6 Pa/s 0.644, first-written rule 0.998
+Q2 atl: mean 500 hPa ascent within 1000 km, (RE+LX) minus (LE+RX) = +0.1519 Pa/s [90% +0.1422, +0.1623], n 9178 vs 4354, one-sided q 0.0005
+Q2 pac: mean 500 hPa ascent within 1000 km, (RE+LX) minus (LE+RX) = +0.1375 Pa/s [90% +0.1232, +0.1505], n 8193 vs 3881, one-sided q 0.0005
+Q1 and Q2 PASS: features may be used for the skill test (Q3 is a by-eye review)
