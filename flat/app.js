@@ -27,7 +27,9 @@
     era5focusPan: false,   // rotate the globe to the focused track once it has loaded
     atlas: { view: 'boxes', src: 'archive', field: 'annmax' },   // the Atlas layer
     strong: { list: 'minp', basin: 'all' },   // the Strongest storms tab   // key of the ERA5 track picked from the Strongest list, drawn whatever the filters say
-    monthDens: true,   // By month: shade the month's density of all lows (2004-05 on) under the tracks
+    monthShade: 'heat',     // By month shading: 'heat' (HF event track points) | 'all' (all lows, 2004-05 on) | 'off'
+    monthHeatSrc: 'archive', // heat map source: 'archive' (2004-05 on) | 'era5' (1979-80 to 2003-04 proxy)
+    monthTracks: false,     // By month: draw the event tracks over the shading (off with the heat map)
     monthEra5: true,   // By month: add the ERA5 proxy storms of earlier seasons (teal), on by default
     probMin: 1,        // HF probability layer: draw edges at or above this P class (1 = all)
     probPre: true,     // HF probability layer: include 1979-2003 (catalog events and matched nulls only)
@@ -1106,7 +1108,7 @@
       }
     }
     monthEra5N = null;
-    if (state.layer === 'bymonth' && state.monthEra5 && ensureEra5('ev')) {
+    if (monthTealOn() && ensureEra5('ev')) {
       // The month being shown, from the seasons before the archive range on
       // screen (the archive draws the rest), so one storm is never in both.
       var mm = play.moy, chips = state.months || {}, anyChip = false, ck;
@@ -1123,6 +1125,7 @@
     HF.globe.setAtlas(atlasModel());
     HF.globe.setProb(probModel());
     HF.globe.setMonthDens(monthDensModel());
+    HF.globe.setMonthHeat(monthHeatModel());
   }
 
   /* ------------------------------------------------------------- atlas
@@ -1239,6 +1242,87 @@
     return out;
   }
 
+  /* ----------------------------------------------------- By month heat map
+     Where the track points of the hurricane-force events sit in each calendar
+     month, all seasons pooled: 6-hourly fixes (by the month of the fix),
+     Gaussian-smoothed (HF.era5.heatField, 3.5 degrees on a 1 degree grid),
+     one colour scale for all twelve months and both basins. Source 'archive'
+     is the OPC archive's own events of the seasons on screen (2004-05 on by
+     default); 'era5' is pipeline A's hurricane-force-EQUIVALENT storms of
+     1979-80 to 2003-04, an ERA5 proxy, not direct observation, whose gust
+     index drifts before 2001-02 (compare where, not how many). */
+
+  var MONTH_FULL_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  function monthTealOn() { return state.layer === 'bymonth' && state.monthTracks && state.monthEra5; }
+
+  var monthHeat = null;       // cache: {src, lows, basin, wins, peaks, max, nSeasons, nPts, label}
+  var monthHeatShown = null;  // what is on screen, for the legend and note, or null
+  var monthHeatLegend = null; // the heat map the legend was last drawn for
+
+  function monthHeatPoints(src) {
+    var lat = [], lon = [], mon = [];
+    if (src === 'archive') {
+      (play.lows || []).forEach(function (low) {
+        low.fixes.forEach(function (f) {
+          if (f.lat == null || f.lon == null || f.date == null) return;
+          lat.push(f.lat); lon.push(f.lon); mon.push(Math.floor(f.date / 10000) % 100 - 1);
+        });
+      });
+    } else {
+      HF.era5.filter(era5Data.ev, { basin: state.basin === 'both' ? 'all' : state.basin, season0: 0, season1: 2003 }).forEach(function (e) {
+        var s = String(e.start), t0 = Date.UTC(+s.slice(0, 4), +s.slice(4, 6) - 1, +s.slice(6, 8), +s.slice(8, 10));
+        e.fixes.forEach(function (f, i) {
+          lat.push(f.lat); lon.push(f.lon); mon.push(new Date(t0 + i * 6 * 3600000).getUTCMonth());
+        });
+      });
+    }
+    return { lat: lat, lon: lon, mon: mon };
+  }
+
+  function monthHeatModel() {
+    monthHeatShown = null;
+    if (state.layer !== 'bymonth' || state.monthShade !== 'heat') return null;
+    var src = state.monthHeatSrc;
+    if (src === 'era5' && !ensureEra5('ev')) return null;
+    if (!monthHeat || monthHeat.src !== src || monthHeat.basin !== state.basin || (src === 'archive' && monthHeat.lows !== play.lows)) {
+      var P = monthHeatPoints(src), ns, label;
+      if (src === 'archive') {
+        var s0 = state.season0 == null ? DATA.recordStart : state.season0;
+        var last = DATA.seasons[DATA.seasons.length - 1].start, s1 = state.season1 == null ? last : state.season1;
+        ns = Math.max(1, s1 - s0 + 1); label = seasonLabel(s0) + ' to ' + seasonLabel(s1);
+      } else { ns = 25; label = '1979-80 to 2003-04'; }
+      var H = HF.era5.heatField(P.lat, P.lon, P.mon, P.lat.length, ns), wins = [], peaks = [];
+      for (var m = 0; m < 12; m++) {
+        wins.push({ lat0: H.heat.lat0, lon0: -180, dlat: 1, dlon: 1, nlat: H.heat.nlat, nlon: H.heat.nlon, cls: HF.era5.heatClasses(H.fields[m], H.max) });
+        peaks.push(HF.era5.heatPeaks(H.fields[m]));
+      }
+      monthHeat = { src: src, basin: state.basin, lows: play.lows, wins: wins, peaks: peaks, max: H.max, nSeasons: ns, nPts: P.lat.length, label: label };
+    }
+    monthHeatShown = monthHeat;
+    return { wins: [monthHeat.wins[play.moy - 1]], hideTracks: !state.monthTracks };
+  }
+
+  function monthHeatNote() {
+    var H = monthHeatShown;
+    if (!H) return state.monthHeatSrc === 'era5' ? 'Loading the ERA5 proxy storms.' : 'Heat map loading.';
+    var common = ' Smoothed with a 3.5° Gaussian; one colour scale for all twelve months, so a month that looks paler really is quieter. ';
+    return (H.src === 'archive'
+      ? 'Where the track points of the archive’s hurricane-force events sit in each calendar month, all seasons (' + H.label + ') pooled: ' + H.nPts.toLocaleString() + ' six-hourly fixes, counted in the month of the fix.' + common
+      : 'ERA5 proxy, not direct observation. Where the track points of pipeline A’s hurricane-force-equivalent storms sit in each calendar month, ' + H.label + ': ' + H.nPts.toLocaleString() + ' six-hourly fixes.' + common +
+        'The ERA5 gust index drifts before 2001-02, so compare where the track sits from month to month, not how many storms. ') +
+      monthHeatPeakText().trim();
+  }
+
+  function monthHeatPeakText() {
+    if (!monthHeatShown) return '';
+    var pk = monthHeatShown.peaks[play.moy - 1], out = [];
+    [['atl', 'Atlantic'], ['pac', 'Pacific']].forEach(function (b) {
+      var r = pk[b[0]];
+      if (r.v > 0.03 * monthHeatShown.max) out.push(b[1] + ' ' + fmtLat(r.lat) + ' ' + fmtLon(r.lon));
+    });
+    return out.length ? ' Densest in ' + MONTH_FULL_NAMES[play.moy - 1] + ': ' + out.join(', ') + '.' : '';
+  }
+
   /* ---------------------------------------------------- By month density
      The By month layer's shading: how many 12-hourly fixes of ALL the
      lows pipeline A tracks (HF or not) fall in each 5 x 10 degree cell in
@@ -1255,7 +1339,7 @@
 
   function monthDensModel() {
     monthDensShown = null;
-    if (state.layer !== 'bymonth' || !state.monthDens || !ensureEra5('allp')) return null;
+    if (state.layer !== 'bymonth' || state.monthShade !== 'all' || !ensureEra5('allp')) return null;
     var D = era5Data.allp;
     var s0 = Math.max(2004, state.season0 == null ? 0 : state.season0);
     var s1 = Math.min(2025, state.season1 == null ? 9999 : state.season1);
@@ -2161,7 +2245,11 @@
       var e = stepEntry();
       play.active = e ? e.count : 0;
       HF.globe.setPlaybackFrame(moyly() ? play.engine.stepMoy(play.moy) : monthly() ? play.engine.stepMonth(play.ym) : play.engine.step(play.season), { kind: 'step' });
-      if (state.layer === 'bymonth') setEra5OnGlobe();
+      if (state.layer === 'bymonth') {
+        setEra5OnGlobe();
+        setText(pbEl('mapNote'), playbackNote(play.lows));      // the densest-point sentence follows the month
+        if (monthHeatShown !== monthHeatLegend) { monthHeatLegend = monthHeatShown; renderLegend(play.lows); }
+      }
       return;
     }
     var frame = currentClock().at(play.t, play.tail);
@@ -2418,10 +2506,13 @@
     pbEl('pbModeWrap').hidden = bym;
     pbEl('pbUnitWrap').hidden = play.mode !== 'step' || bym;
     pbEl('pbPrev').hidden = pbEl('pbNext').hidden = play.mode !== 'step';
-    pbEl('pbEra5Wrap').hidden = !bym;
     pbEl('pbEra5').checked = state.monthEra5;
-    pbEl('pbDensWrap').hidden = !bym;
-    pbEl('pbDens').checked = state.monthDens;
+    pbEl('pbShadeWrap').hidden = !bym;
+    pbEl('pbShade').value = state.monthShade;
+    pbEl('pbHeatSrcWrap').hidden = state.monthShade !== 'heat';
+    pbEl('pbHeatSrc').value = state.monthHeatSrc;
+    pbEl('pbTracks').checked = state.monthTracks;
+    pbEl('pbEra5Wrap').hidden = !bym || !state.monthTracks;
     syncStepButtons();
     pbEl('pbSeasonWrap').hidden = play.mode === 'composite' || monthly() || moyly();
     pbEl('pbMonthWrap').hidden = !monthly();   // moy: the scrubber's twelve ticks are the picker
@@ -2552,11 +2643,14 @@
     if (play.mode === 'season') {
       return 'One season on its own calendar. Circle size grows as pressure falls; tails fade with age.' + tail;
     }
+    if (play.unit === 'moy' && state.layer === 'bymonth' && state.monthShade === 'heat') {
+      return monthHeatNote() + tail;
+    }
     if (play.unit === 'moy') {
       return 'Every event whose first fix falls in each calendar month, all seasons overlaid, so the track can be compared month against month. Circles mark each event’s lowest analyzed pressure.' +
-        (state.layer === 'bymonth' && state.monthEra5
+        (monthTealOn()
           ? ' Teal lines are ERA5 proxy storms (pipeline A) from the seasons before the archive range on screen, back to 1979-80: a reanalysis proxy, not direct observation, and its gust index drifts before 2001-02, so compare where the storms went, not how many.'
-          : '') + (state.layer === 'bymonth' && state.monthDens
+          : '') + (state.layer === 'bymonth' && state.monthShade === 'all'
           ? ' Shading is the density of all lows, hurricane-force or not, in this month (12-hourly fixes per season per 5° × 10° cell, one scale for all months; ERA5 proxy tracks, 2004-05 to 2025-26 only because earlier lows have no per-fix tracks; lows are tracked only to about 67°N, so the northern rim is where tracks leave the domain).'
           : '') + tail;
     }
@@ -2575,7 +2669,16 @@
     row.appendChild(dot);
     row.appendChild(document.createTextNode(step ? 'Lowest pressure; larger = deeper' : 'Storm now; larger = deeper'));
     box.appendChild(row);
-    if (state.layer === 'bymonth' && state.monthDens) {
+    if (state.layer === 'bymonth' && state.monthShade === 'heat' && monthHeatShown) {
+      var hr = HF.el('div', { class: 'legend-row' });
+      var hs = HF.el('span', { class: 'legend-fade' });
+      hs.style.background = 'linear-gradient(90deg, ' + [1, 2, 3, 4, 5, 6, 7].map(function (i) { return HF.cssVar('--seq-' + i); }).join(', ') + ')';
+      hr.appendChild(hs);
+      hr.appendChild(document.createTextNode((monthHeatShown.src === 'era5' ? 'ERA5 PROXY, not direct observation. ' : '') +
+        'HF track points per season, smoothed: 3 % to 100 % of the busiest month-cell, ' + (Math.round(monthHeatShown.max * 10) / 10) + ' (' + monthHeatShown.label + ')'));
+      box.appendChild(hr);
+    }
+    if (state.layer === 'bymonth' && state.monthShade === 'all') {
       var dr = HF.el('div', { class: 'legend-row' });
       var ds = HF.el('span', { class: 'legend-fade' });
       ds.style.background = 'linear-gradient(90deg, ' + [1, 2, 3, 4, 5, 6, 7].map(function (i) { return HF.cssVar('--seq-' + i); }).join(', ') + ')';
@@ -2585,7 +2688,7 @@
         : 'All lows, density (needs a season range from 2004-05 on)'));
       box.appendChild(dr);
     }
-    if (state.layer === 'bymonth' && state.monthEra5) {
+    if (monthTealOn()) {
       var er = HF.el('div', { class: 'legend-row' });
       var sw = HF.el('span', { class: 'legend-fade' });
       sw.style.background = HF.cssVar('--era5') || '#17776f';
@@ -2662,13 +2765,20 @@
       onTimeChanged(true);
       if (!state.monthEra5) setEra5OnGlobe();
     });
-    pbEl('pbDens').addEventListener('change', function (e) {
-      state.monthDens = e.target.checked;
+    function monthViewChanged() {
       pbEl('mapNote').textContent = playbackNote(play.lows);
       renderLegend(play.lows);
+      syncTransport();
       onTimeChanged(true);
       setEra5OnGlobe();
+    }
+    pbEl('pbShade').addEventListener('change', function (e) {
+      state.monthShade = e.target.value;
+      state.monthTracks = state.monthShade !== 'heat';   // tracks over a heat map hide it; over the other shadings they are the picture
+      monthViewChanged();
     });
+    pbEl('pbHeatSrc').addEventListener('change', function (e) { state.monthHeatSrc = e.target.value; monthViewChanged(); });
+    pbEl('pbTracks').addEventListener('change', function (e) { state.monthTracks = e.target.checked; monthViewChanged(); });
     pbEl('pbPrev').addEventListener('click', function () { stepBy(-1); });
     pbEl('pbNext').addEventListener('click', function () { stepBy(1); });
 

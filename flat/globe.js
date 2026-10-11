@@ -120,6 +120,7 @@ window.HF = window.HF || {};
   var era5 = null;                       // ERA5 proxy tracks (HF.era5.decode shape) drawn under the archive tracks, or null
   var currentBins = null;                // built lazily from window.HF_CURRENTS, see buildCurrentSegments()
   var curGrid = null;                    // cached computeDensityGrid() result, layer 'density' only
+  var monthHeatM = null;                 // By month heat map: {wins, hideTracks} or null
   var monthDensM = null;                 // By month: {cells, max} density shading under the playback tracks, or null
   var atlasModel = null;                 // atlas layer: {kind: 'boxes'|'motion'|'historic', ...} from app.js
   var atlasHits = [];                    // atlas arrows / markers drawn last frame: {x, y, tip}
@@ -1318,13 +1319,16 @@ window.HF = window.HF || {};
       block with any vertex over the horizon is left out (a thin gap at the
       limb, gone as soon as the view turns). model.wins[i] = {lat0, lon0,
       dlat, dlon, nlat, nlon, cls: Uint8Array (0 = not drawn, 1..n)}. */
-  function drawAtlasGrid() {
+  function drawAtlasGrid() { drawGridWins(atlasModel.wins, 0.86); }
+
+  /** Gridded field in windows: one Path2D per colour class (see drawAtlasGrid). */
+  function drawGridWins(wins, alpha) {
     var ramp = densityRampColors(), n = ramp.length, R = baseR * view.zoom;
     var vcp = Math.cos(view.phi), vsp = Math.sin(view.phi), lam0 = view.lambda;
     var paths = [], c, w, i, j;
     for (c = 0; c <= n; c++) paths.push(new Path2D());
-    for (var wi = 0; wi < atlasModel.wins.length; wi++) {
-      w = atlasModel.wins[wi];
+    for (var wi = 0; wi < wins.length; wi++) {
+      w = wins[wi];
       if (!w.sp) {                                    // trig per row and column, once per window
         w.sp = new Float64Array(w.nlat + 1); w.cp = new Float64Array(w.nlat + 1); w.lam = new Float64Array(w.nlon + 1);
         for (i = 0; i <= w.nlat; i++) { var ph = (w.lat0 + i * w.dlat) * DEG; w.sp[i] = Math.sin(ph); w.cp[i] = Math.cos(ph); }
@@ -1351,7 +1355,7 @@ window.HF = window.HF || {};
         }
       }
     }
-    ctx.globalAlpha = 0.86;
+    ctx.globalAlpha = alpha;
     for (c = 1; c <= n; c++) { ctx.fillStyle = ramp[c - 1]; ctx.fill(paths[c]); }
     ctx.globalAlpha = 1;
   }
@@ -2245,6 +2249,7 @@ window.HF = window.HF || {};
     if (curLayer === 'peak') return drawPoints('peak');
     if (curLayer === 'playback') {
       // By month passes an ERA5 proxy list (earlier seasons); it goes under the archive's storms.
+      if (monthHeatM) { drawGridWins(monthHeatM.wins, 0.9); if (monthHeatM.hideTracks) return; }
       if (monthDensM) drawMonthDens();
       if (era5 && era5.length) drawEra5();
       return drawPlayback();
@@ -3017,6 +3022,13 @@ window.HF = window.HF || {};
   globe.setProb = function (model) {
     probModel = model || null;
     hoveredProb = null;
+    dirty = true;
+    scheduleFrame();
+  };
+
+  globe.setMonthHeat = function (model) {
+    if (!model && !monthHeatM) return;
+    monthHeatM = model || null;
     dirty = true;
     scheduleFrame();
   };

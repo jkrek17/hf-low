@@ -210,5 +210,23 @@ test('By month density: every kind-0 fix lands in one cell of its own month', fu
   A.byMonth[0].forEach(function (c) { jan += c.h * 10; });
   assert.strictEqual(Math.round(jan), exp7);
 });
+test('By month heat map: smoothed field, one scale for twelve months, peaks, dateline wrap', function () {
+  var lat = [], lon = [], mon = [], i;
+  for (i = 0; i < 100; i++) { lat.push(50.2); lon.push(-40.3); mon.push(0); }       // January, Atlantic
+  for (i = 0; i < 50; i++) { lat.push(45.4); lon.push(179.9); mon.push(1); }        // February, across the dateline
+  var H = HF.era5.heatField(lat, lon, mon, lat.length, 10);
+  assert.strictEqual(H.fields.length, 12);
+  assert.ok(H.max > 9.4 && H.max <= 10, 'max ' + H.max);                             // 100 points over 10 seasons, centre within half a degree
+  var C0 = HF.era5.heatClasses(H.fields[0], H.max), C1 = HF.era5.heatClasses(H.fields[1], H.max), n0 = 0;
+  for (i = 0; i < C0.length; i++) if (C0[i]) n0++;
+  assert.ok(n0 > 100); assert.strictEqual(Math.max.apply(null, Array.from(C0)), 7);
+  var c1 = Math.max.apply(null, Array.from(C1));
+  assert.ok(c1 >= 4 && c1 <= 5, 'half the points on the same scale: ' + c1);
+  var P = HF.era5.heatPeaks(H.fields[0]);
+  assert.ok(Math.abs(P.atl.lat - 50.5) < 1.01 && Math.abs(P.atl.lon + 40.5) < 1.01, JSON.stringify(P.atl));
+  var F1 = H.fields[1], L = H.heat;
+  assert.ok(F1[Math.floor(45.4 - L.lat0) * L.nlon + 359] > 1 && F1[Math.floor(45.4 - L.lat0) * L.nlon + 0] > 1);   // both sides of 180
+  for (var m = 2; m < 12; m++) assert.strictEqual(Math.max.apply(null, Array.from(H.fields[m])), 0);
+});
 console.log('\n' + passed + ' passed, ' + failed + ' failed');
 process.exit(failed ? 1 : 0);

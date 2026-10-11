@@ -202,6 +202,66 @@ window.HF = window.HF || {};
     return { byMonth: byMonth, max: max, nSeasons: ns };
   }
 
+  /** By month heat map: Gaussian-smoothed density of track points. Points
+      are parallel arrays (lat, lon in degrees, mon 0..11); each adds a
+      Gaussian of width HEAT.sigma degrees (great-circle: longitude scaled by
+      cos latitude) to a 1 degree grid of cell centres, lat HEAT.lat0 up for
+      HEAT.nlat rows, longitude -180 east for 360 columns. Values are in
+      smoothed points per season (divided by nSeasons). Returns
+      {fields: [12 Float32Array(nlat * nlon)], max} - the maximum over all
+      twelve months, so one colour scale serves every month. */
+  var HEAT = { lat0: 20, nlat: 60, nlon: 360, sigma: 3.5 };
+  function heatField(lat, lon, mon, n, nSeasons) {
+    var NL = HEAT.nlat, NO = HEAT.nlon, sig = HEAT.sigma, R = Math.ceil(3 * sig), k2 = 1 / (2 * sig * sig), lim = 9 * sig * sig;
+    var fields = [], m, p, i, j;
+    for (m = 0; m < 12; m++) fields.push(new Float32Array(NL * NO));
+    for (p = 0; p < n; p++) {
+      var la = lat[p], lo = ((lon[p] + 180) % 360 + 360) % 360, f = fields[mon[p]];
+      var i0 = Math.max(0, Math.floor(la - R - HEAT.lat0)), i1 = Math.min(NL - 1, Math.ceil(la + R - HEAT.lat0));
+      var cosp = Math.max(0.2, Math.cos(la * Math.PI / 180)), span = Math.min(180, Math.ceil(R / cosp));
+      var jc = Math.floor(lo);
+      for (i = i0; i <= i1; i++) {
+        var clat = HEAT.lat0 + i + 0.5, dla = clat - la, cl = Math.cos(clat * Math.PI / 180);
+        for (j = jc - span; j <= jc + span; j++) {
+          var jj = ((j % NO) + NO) % NO, dlo = Math.abs(jj + 0.5 - lo);
+          if (dlo > 180) dlo = 360 - dlo;
+          var d2 = dla * dla + dlo * dlo * cl * cl;
+          if (d2 < lim) f[i * NO + jj] += Math.exp(-d2 * k2);
+        }
+      }
+    }
+    var max = 0;
+    for (m = 0; m < 12; m++) {
+      var F = fields[m];
+      for (i = 0; i < F.length; i++) { F[i] /= nSeasons; if (F[i] > max) max = F[i]; }
+    }
+    return { fields: fields, max: max, heat: HEAT };
+  }
+
+  /** Colour class 0..7 for a field value: 0 (not drawn) under 3 % of the
+      maximum, else the square-root ramp the other density layers use. */
+  function heatClasses(F, max) {
+    var out = new Uint8Array(F.length);
+    for (var i = 0; i < F.length; i++) {
+      var fr = F[i] / max;
+      if (fr < 0.03) continue;
+      out[i] = Math.min(7, Math.max(1, Math.ceil(Math.sqrt(fr) * 7)));
+    }
+    return out;
+  }
+
+  /** Where one month's field peaks, for the Atlantic (longitude -100 to 40)
+      and the Pacific (the rest): {atl: {lat, lon, v}, pac: ...}, centre of
+      the densest cell. */
+  function heatPeaks(F) {
+    var out = { atl: { v: -1 }, pac: { v: -1 } };
+    for (var i = 0; i < HEAT.nlat; i++) for (var j = 0; j < HEAT.nlon; j++) {
+      var v = F[i * HEAT.nlon + j], lon = j - 180 + 0.5, r = lon >= -100 && lon < 40 ? out.atl : out.pac;
+      if (v > r.v) { r.v = v; r.lat = HEAT.lat0 + i + 0.5; r.lon = lon; }
+    }
+    return out;
+  }
+
   /** UTC date and hour of fix k, "24 Dec 2013 12 UTC". */
   var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   function fixTimeLabel(D, k) {
@@ -209,6 +269,6 @@ window.HF = window.HF || {};
     return d.getUTCDate() + ' ' + MON[d.getUTCMonth()] + ' ' + d.getUTCFullYear() + ' ' + (d.getUTCHours() < 10 ? '0' : '') + d.getUTCHours() + ' UTC';
   }
 
-  HF.era5 = { decodeAllP: decodeAllP, filterAllP: filterAllP, monthDensity: monthDensity, fixTimeLabel: fixTimeLabel, decode: decode, filter: filter, decodePeaks: decodePeaks, filterPeaks: filterPeaks,
+  HF.era5 = { decodeAllP: decodeAllP, filterAllP: filterAllP, monthDensity: monthDensity, heatField: heatField, heatClasses: heatClasses, heatPeaks: heatPeaks, fixTimeLabel: fixTimeLabel, decode: decode, filter: filter, decodePeaks: decodePeaks, filterPeaks: filterPeaks,
               pClass: pClass, attachProb: attachProb, P_EDGES: P_EDGES };
 })(window.HF);
