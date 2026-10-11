@@ -142,8 +142,21 @@
     <li><strong>They are raw values in a circle centred on the low,</strong> not anomalies, and not rotated into the direction of motion (only B is). Radii: 500 km for everything except the jet, which is the maximum 250 hPa wind within 1000 km. All are measured at the fix time (no earlier or later fields).</li>
     <li><strong>Circles on a 1.5&deg; grid contain the storm itself.</strong> Divergence, vorticity advection, water vapour, heat flux and Eady growth within 500 km of a deep low partly reflect the low&rsquo;s own circulation, so they describe the storm&rsquo;s current state as much as an outside precursor. They are near-storm terms, not upstream ones.</li>
     <li><strong>Latitude and season enter only as simple terms.</strong> Water vapour, sea temperature and Eady growth all vary strongly with latitude and season, and the model has no anomaly version, so some of their weight may be latitude or season in disguise. The composites page found the same confounding for dew point.</li>
-    <li><strong>It detects jet strength, not jet structure.</strong> There is no jet entrance or exit, left or right of the streak, and no upstream trough in this model. 300 hPa divergence is the nearest crude proxy for jet-streak lift. Separate tests of the jet-maximum position (no gain) and of upstream trough depth (not detectable) are described in the repository (<code>research/era5/intensity_extra</code>, <code>jet_trough</code>).</li>
+    <li><strong>It detects jet strength, not jet structure.</strong> There is no jet entrance or exit, left or right of the streak, and no upstream trough in this model. 300 hPa divergence is the nearest crude proxy for jet-streak lift. A later test of exactly these terms is in the next section; the earlier tests are in the repository (<code>research/era5/intensity_extra</code>, <code>jet_trough</code>).</li>
   </ul>
+</section>
+
+<section id="jet-trough">
+  <div class="tag">A test of jet quadrants and troughs</div>
+  <h2>Do jet entrance/exit and upstream-trough terms help?</h2>
+  <p>We added objective, storm-relative versions of both to the model and tested them the same way (one season held out at a time, 18 seasons, October to April, 74,009 forecast times). The plan was written before any field was read. This is an ERA5 proxy test on the 1.5&deg; grid, not a test on observations or on a forecast model.</p>
+  <ul>
+    <li><strong>For the chance of hurricane force within 24 hours: no.</strong> Jet-streak terms (is the low in the right-entrance or left-exit quadrant, how strong the streak is) change the skill score by +0.002; trough terms by +0.002; both together by +0.003, against a base of 0.413. Gains of half a point or more are ruled out for each alone.</li>
+    <li><strong>For rapid deepening: a small yes.</strong> Trough terms add +0.008 to the skill score (0.300 to 0.308), in 17 of 18 seasons and both basins. As a yes/no forecast the gain is negligible. Jet terms add nothing there.</li>
+    <li><strong>Hurricane force within 48 hours:</strong> jet and trough together add +0.005, marginal.</li>
+    <li><strong>Descriptively,</strong> hurricane-force onsets sit in the right-entrance or left-exit quadrants more often than matched storm-force-only peaks (Atlantic 41% against 30%, Pacific 42% against 26%). That is not a forecasting gain: those storms are already stronger, and the model already knows how strong.</li>
+  </ul>
+  <p class="limit"><strong>Caveat on the trough.</strong> The trough finder often picked the west side of the storm&rsquo;s own upper low rather than a separate upstream trough, so part of the trough result is the storm&rsquo;s own circulation. With the search restricted to troughs at least 1,000 km away the rapid-deepening gain shrinks (+0.005 against +0.008) but stays positive. The model on this page does not use these terms. Code and checks are in <code>research/era5/hf_jet_trough</code>; a fresh agent recomputed the numbers, but the case drawings and two significance values were not independently checked.</p>
 </section>
 
 <section id="outputs">
