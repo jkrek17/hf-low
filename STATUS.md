@@ -600,7 +600,8 @@ Corrections that belong in the spreadsheet, because a CSV-only fix is overwritte
 
 1. Done 2026-10-08: the setup pull request (number 1 in this repository) is merged.
 2. Here: turn on GitHub Pages by hand, Settings > Pages > Build and deployment > Source = "GitHub Actions", then re-run "Deploy archive site to Pages". Its first run failed at the step that tries to enable Pages automatically; the data rebuild, the page validation, and the flat-sync check all passed.
-3. In `awips-tools`: remove `hf-lows` from `OWN_FOLDERS` and the archive build from `site_publish.yml`, so that workflow copies `/hf-lows/` forward as it does other projects' folders.
+3. Done 2026-10-11 (awips-tools PR 85, merged on Jason's "merge it"): `hf-lows` removed from `OWN_FOLDERS`; the old `docs/` and `pages.yml` there stay for step 5. Step 4 done by Jason the same day (WEB_TOKEN and PUBLIC_SITE_REPO set); "Publish to the public site" ran twice by hand at 02:56Z on `9d20dff` and its push step ran and succeeded (not skipped). The content of jkrek17/web `hf-lows/` was not read from here; live URL unchecked.
+   (original step 3 text) In `awips-tools`: remove `hf-lows` from `OWN_FOLDERS` and the archive build from `site_publish.yml`, so that workflow copies `/hf-lows/` forward as it does other projects' folders.
 4. Here: set the secret `WEB_TOKEN` and the variable `PUBLIC_SITE_REPO`. `publish-site.yml` then publishes `/hf-lows/`. Do not do this before step 3, or two repositories write the same folder.
 5. In `awips-tools`: remove the moved files and leave a pointer to this repository. Close pull requests 80, 81, and 82 there with a link to the branches here.
 6. Production: the NOAA copy is made by hand with `tools/publish.py` from a checkout. Point that checkout at this repository.
