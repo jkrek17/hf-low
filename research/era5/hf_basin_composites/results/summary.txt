@@ -1,0 +1,14 @@
+atl m48 msl: deepest mean anomaly -3.3 hPa at 60.0N, -28.5E; mean field min 995.6
+atl m48 z500: deepest mean anomaly -44.9 m at 58.5N, -33.0E; mean field min 5067.5
+atl m48 ws250: largest mean anomaly +5.0 m/s at 45.0N, -57.0E; mean field max 48.6
+atl onset msl: deepest mean anomaly -6.9 hPa at 63.0N, -33.0E; mean field min 991.9
+atl onset z500: deepest mean anomaly -80.2 m at 60.0N, -34.5E; mean field min 5072.7
+atl onset ws250: largest mean anomaly +6.4 m/s at 48.0N, -36.0E; mean field max 47.5
+atl onset latitude: mean 53.5N, 10th to 90th percentile 39.8 to 64.2N; n 664
+pac m48 msl: deepest mean anomaly -1.8 hPa at 60.0N, -132.0E; mean field min 1000.4
+pac m48 z500: deepest mean anomaly -25.2 m at 54.0N, 144.0E; mean field min 5109.0
+pac m48 ws250: largest mean anomaly +4.3 m/s at 42.0N, 139.5E; mean field max 63.6
+pac onset msl: deepest mean anomaly -2.8 hPa at 42.0N, 150.0E; mean field min 1001.4
+pac onset z500: deepest mean anomaly -29.1 m at 43.5N, 145.5E; mean field min 5110.0
+pac onset ws250: largest mean anomaly +5.4 m/s at 48.0N, 163.5E; mean field max 65.1
+pac onset latitude: mean 43.4N, 10th to 90th percentile 35.2 to 52.2N; n 559
