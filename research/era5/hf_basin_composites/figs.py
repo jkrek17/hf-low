@@ -17,7 +17,7 @@ IDX = {n: i for i, n in enumerate(["msl", "z500", "ws250", "a_msl", "a_z500", "a
 
 
 def sub(a, lon0, lon1, lat0, lat1):
-    lons = np.arange(lon0, lon1 + 0.01, 1.5)
+    lons = np.arange(np.ceil(lon0 / 1.5) * 1.5, lon1 + 0.01, 1.5)
     ci = np.rint((lons % 360) / 1.5).astype(int) % 240
     la = (LAT >= lat0) & (LAT <= lat1)
     return a[np.ix_(la, ci)], lons, LAT[la]

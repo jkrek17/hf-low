@@ -15,7 +15,7 @@ Pull: 1,332 chunks, 38.72 GB (sized 38.7 GB by HEAD request; WeatherBench2 u, v,
 The wind-speed anomaly in the storm-centred composites (PR 146, `hf_env_composites/extract.py`) is |V| minus |V_clim| with V_clim the climatological mean vector. That is biased high everywhere (at 45N 30W on 1 January 12 UTC the climatological mean speed is 37.4 m/s but the speed of the mean vector is 28.8 m/s). The first version of these maps used the same definition and showed +7 to +15 m/s over whole basins. Here the anomaly is the mean |V| minus the climatological mean |V| (WeatherBench2 `wind_speed`, `clim_ws.py`) at each event's own day and hour. The PR 146 speed-anomaly panels (and the two 250 hPa wind figures on the site Composites page built from them) carry the old, biased shading; the mean wind-speed numbers in their captions are not affected. Not yet redone.
 
 ## Limits
-Population and times are those of PR 146 (WeatherBench2 ends 2023-01-09; later seasons not covered). 1.5 degree grid. The 48 h maps use all 1,223 lows, unlike PR 146's 48 h column (storms that already had a track). Anomaly is vs 1990-2019, so a warming trend adds a little (the global mean 500 hPa height anomaly over 2004-23 is about +13 m).
+Population and times are those of PR 146 (WeatherBench2 ends 2023-01-09; later seasons not covered). 1.5 degree grid. The 48 h maps use all 1,223 lows, unlike PR 146's 48 h column (storms that already had a track). Anomaly is vs 1990-2019, so a warming trend adds a little.
 
 ## Verification
 See `VERIFICATION.md`.
