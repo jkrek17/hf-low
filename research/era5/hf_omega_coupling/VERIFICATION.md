@@ -1,0 +1,9 @@
+# Verification
+
+A fresh agent (not the one that produced the numbers) recomputed the quoted figures from the committed files with its own leave-one-season-out code (reusing `intensity/model.py` preprocessing and fit; BSS against the training-season basin-by-month climatology as in `evaluate.py`). Tolerances: counts exact; fractions and means to the quoted decimals; gains within 0.001 (observed within 0.0001).
+
+Recomputed and matched: sample (74,009 fixes, 16,874 tracks, 18 seasons, 4,012 hf24 events); Q1 shares (ascent >= 0.2 Pa/s 1.000; two or more centres 0.310 / 0.285 Atlantic / 0.332 Pacific; 0.644 and 0.998 for the other two rules); Q2 differences (+0.1519, +0.1375 Pa/s; n 9178 vs 4354 and 8193 vs 3881); base BSS 0.4133, W gain +0.0086 and C gain +0.0002 at lag 0; descriptive anchor counts, means of a500_1000 and couple_w shares at HF onset and storm-force peak, and the stratified a500_1000 differences (+0.368, +0.432).
+
+Wrinkle: the descriptive anchors are joined to `features_w` on track and time and use the basin in `storms.csv`; one Atlantic HF anchor and five Atlantic storm-force anchors sit on fixes whose basin label in `features_w` is the other one. Filtering on `features_w`'s basin instead gives 379 / 1,311 and changes the Atlantic storm-force mean from 0.836 to 0.835 and the couple_w share from 0.321 to 0.322; Pacific unchanged. Restricting the anchors to Oct-Apr gives 376 / 1,302 and 295 / 1,432. The skill test and QC are not affected.
+
+Not checked: bootstrap intervals, p and q values; the 24 h and all-lag runs, secondary families, J2/T2 increments, per-basin and per-season gains; descriptive measures other than a500_1000 (x750, area, couple_w differences); Q3; whether `features_w` matches the raw omega fields (needs a multi-GB re-pull); a line-by-line diff of the results text files.
