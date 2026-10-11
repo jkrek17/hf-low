@@ -643,6 +643,11 @@ fieldset.filter { display: flex; flex-direction: column; }
 }
 
 .pb-era5opt { margin-top: var(--sp-2); }
+.pb-shade { display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-4); align-items: center; margin-top: var(--sp-2); }
+.pb-shade[hidden], .pb-shade-item[hidden] { display: none; }
+.pb-shade-item { display: inline-flex; align-items: center; gap: var(--sp-2); }
+.pb-shade-item { max-width: 100%; }
+.pb-shade-item select { min-width: 0; max-width: 100%; text-overflow: ellipsis; }
 .pb-era5opt[hidden] { display: none; }
 .pb-step { min-width: 0; white-space: nowrap; }
 .pb-step[hidden] { display: none; }

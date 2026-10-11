@@ -276,9 +276,22 @@
         </div>
         <p class="pb-readout"><span class="pb-date" id="pbDate">&ndash;</span> <span class="pb-count" id="pbCount"></span></p>
       </div>
-      <label class="check pb-era5opt" id="pbDensWrap" hidden title="Shade the map by how many 12-hourly fixes of all lows, hurricane-force or not, fall in each cell in the month on screen (ERA5 proxy tracks, 2004-05 to 2025-26)">
-        <input type="checkbox" id="pbDens" checked> Density of all lows in the month (shading; 2004-05 on, ERA5 proxy)
-      </label>
+      <div class="pb-shade" id="pbShadeWrap" hidden>
+        <label class="pb-shade-item">Shading
+          <select id="pbShade" title="Heat map of where the track points of the hurricane-force events sit in the month, or the density of all lows, or no shading">
+            <option value="heat">HF event heat map</option>
+            <option value="all">Density of all lows (2004-05 on)</option>
+            <option value="off">None</option>
+          </select>
+        </label>
+        <label class="pb-shade-item" id="pbHeatSrcWrap">Events
+          <select id="pbHeatSrc" title="The archive's events (2004-05 on by default), or the ERA5 proxy hurricane-force-equivalent storms of 1979-80 to 2003-04">
+            <option value="archive">Archive events (2004-05 on)</option>
+            <option value="era5">ERA5 proxy storms, 1979-2003 (not direct observation)</option>
+          </select>
+        </label>
+        <label class="check pb-shade-item"><input type="checkbox" id="pbTracks"> Draw event tracks</label>
+      </div>
       <label class="check pb-era5opt" id="pbEra5Wrap" hidden title="ERA5 reanalysis hurricane-force-equivalent storms (pipeline A, a proxy) for the seasons before the archive range on screen, back to 1979-80, drawn in teal under the archive's tracks">
         <input type="checkbox" id="pbEra5" checked> ERA5 proxy storms from earlier seasons, 1979 on (teal; not direct observation)
       </label>
