@@ -66,6 +66,7 @@
   table { border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
   th, td { text-align: left; padding: 5px 10px; border-bottom: 1px solid var(--border); }
   .tablewrap { overflow-x: auto; }
+  .jump { font-size: 14px; margin: 10px 0 14px; } .jump a { white-space: normal; }
   footer { border-top: 1px solid var(--border); padding-top: 14px; }
 </style>
 </head>
@@ -77,13 +78,16 @@
 <main>
 <div class="note"><strong>ERA5 proxy composites, not direct observation.</strong> Every figure here is built from ERA5 reanalysis fields around cyclone tracks found in ERA5 itself (pipeline A), for the 2004-05 to 2025-26 seasons. An &ldquo;HF low&rdquo; here is a cyclone whose ERA5 wind fields look like the ones OPC warns for as hurricane force: the 800 km ocean gust index reaches 71.7 kt. It is a proxy, it has not been validated before the archive begins, and ERA5 reads low in the strongest storms. The archive on the other tabs is the record; these pages are research composites.</div>
 
+<p class="jump"><strong>Jump to:</strong> <a href="#environment">Before formation</a> &middot; <a href="#structure">Storm structure</a> &middot; <a href="#upper-air">Storm-centred upper-air maps (every HF low)</a> &middot; <a href="#followups">Follow-up tests</a></p>
+
 <div class="answers">
   <div class="tag">In plain words</div>
   <ul>
     <li><strong>What pattern comes before an HF low?</strong> A slightly deeper trough and stronger 250 hPa jet than before a storm-force-only low. In the Atlantic box (53&deg;N, 41&deg;W) 500 hPa heights are 7 m lower and the jet 1.1 m/s stronger over days &minus;10 to &minus;4, and 22 m lower and 1.9 m/s stronger on the onset day. The Pacific is weaker (6 m, 0.8 m/s). Sea-surface temperature does not differ.</li>
     <li><strong>What does an HF low look like against a storm-force low?</strong> Deeper (971 against 984 hPa Atlantic, 974 against 985 Pacific), with about 60% steeper pressure gradient, the strongest gust closer in (302 against 407 km Atlantic, 233 against 333 km Pacific) and a wider area of 48-kt gusts. At equal central pressure the wider wind area survives in the Atlantic (+39 km) and not in the Pacific.</li>
     <li><strong>When do they start to differ, and what is not different?</strong> The pressure gradient separates first, 36 to 48 hours before the peak; central pressure 12 to 24 hours before. The hemispheric pattern changes how HF lows look only weakly (Atlantic only, not robust). Among deepening storms, the larger-scale environment separates those that reach HF, but they are already deeper and older.</li>
-  </ul>
+      <li><strong>What does the air around an HF low look like?</strong> Averaged over every HF low (<a href="#upper-air">storm-centred maps below</a>), the 500 hPa low starts about 2,000 km to the left of the track two days before onset and is over the storm by onset in the Atlantic (by the peak in the Pacific), with the jet maximum behind the storm by then (and to its right in the Atlantic). Upper-level divergence sits just ahead of the surface low. Part of the wind pattern is the storm&rsquo;s own circulation.</li>
+</ul>
 </div>
 
 <section id="environment">
@@ -138,7 +142,7 @@
 
 <section id="upper-air">
   <div class="tag">Around every HF low</div>
-  <h2>Upper-air composites of all HF lows</h2>
+  <h2>Storm-centred upper-air maps of all HF lows</h2>
   <p>Every HF low from October to April, 2004 to 9 January 2023 (664 Atlantic, 559 Pacific), averaged around the storm centre and rotated so the direction of motion points right. Columns: 48, 24 and 12 hours before onset, onset and peak. Top row: the mean field; bottom row: the difference from the 1990&ndash;2019 climate. This is a descriptive average of ERA5 at 1.5&deg; (a proxy, not direct observation), not a test.</p>
   <div class="pair">
 <figure class="fig">
@@ -156,6 +160,15 @@
 </figure><figure class="fig">
   <div class="scroll"><a href="composites-env-pac-wind250.png"><img src="composites-env-pac-wind250.png" alt="North Pacific mean 250 hPa wind around HF lows" loading="lazy"></a></div>
   <figcaption><span class="basin-pac">North Pacific</span>, 250 hPa wind: 53&ndash;58 m/s over the storm 48&ndash;24 hours before onset, 35 m/s at onset; the maximum ends up about 1,000 km behind.</figcaption>
+</figure>
+  </div>
+    <div class="pair">
+<figure class="fig">
+  <div class="scroll"><a href="composites-env-atl-div.png"><img src="composites-env-atl-div.png" alt="North Atlantic mean 250 and 500 hPa divergence around HF lows" loading="lazy"></a></div>
+  <figcaption><span class="basin-atl">North Atlantic</span>, divergence. Rows 1 and 2: 250 hPa divergence and its anomaly; the maximum (+1.8 to +2.5 &times; 10<sup>&minus;5</sup>/s) sits 200 to 500 km ahead of the storm centre at every time. Rows 3 and 4: 500 hPa, 2 to 4 times weaker and noisy at 1.5&deg;; read the 250 hPa rows.</figcaption>
+</figure><figure class="fig">
+  <div class="scroll"><a href="composites-env-pac-div.png"><img src="composites-env-pac-div.png" alt="North Pacific mean 250 and 500 hPa divergence around HF lows" loading="lazy"></a></div>
+  <figcaption><span class="basin-pac">North Pacific</span>, divergence. The 250 hPa maximum is +1.9 to +3.2 &times; 10<sup>&minus;5</sup>/s, also just ahead of the centre; the 500 hPa rows are noisy.</figcaption>
 </figure>
   </div>
   <p class="limit"><strong>Read with care.</strong> These are ERA5 proxy fields on a coarse 1.5&deg; grid; they are not observations. The storm&rsquo;s own circulation has not been removed, so the wind pattern near the centre (the weaker wind at the centre and part of the shift of the jet to behind the storm) is partly the storm itself, not the jet. An average smears jet streaks and troughs, so it cannot show entrance and exit regions, trough tilt or trough position. The 48-hour columns rest on the 151 Atlantic and 92 Pacific storms that already had a track then. Wind speed is the grid-point speed interpolated to the storm box. A fresh agent recomputed every number quoted here from the raw fields; the bootstrap intervals and the figure pixels were not rechecked. The 250 hPa divergence maps and the north-up views are in the repository under <code>research/era5/hf_env_composites</code>.</p>
