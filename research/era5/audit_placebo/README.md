@@ -33,9 +33,9 @@ stand out is size in the Atlantic.
 Four of the five definable placebos have a resolved share effect with a conversion fraction whose interval stays above 0.5. The Atlantic HF-trained index
 has the largest share effect (x1.29 against x1.06 for the placebos); in the Pacific the HF-trained index (x1.13) is no larger than the placebos (x1.08, x1.10).
 
-**Shuffle null (100 season-shuffled P0 indices per basin).** The share of the absolute effect that sits in conversion, S, is 0.93 for the Atlantic P0 index against a shuffle
-median of 0.65 and 95th percentile 0.91 (1% of shuffles at or above); 0.78 for the Pacific against 0.61 and 0.87 (11% at or above). So the Atlantic value is
-above what chance indices give; the Pacific value is not distinguishable from them.
+**Shuffle null (100 season-shuffled P0 indices per basin).** About half of the shuffled indices are constant (cross-validation chose no PCs in any fold: 47 of 100 Atlantic, 53 of 100 Pacific), so S is defined for 53 and 47 draws. The share of the absolute effect that sits in conversion, S, is 0.93 for the Atlantic P0 index against a median of 0.65 and 95th percentile of 0.91 among the valid shuffles (1 of 53 at or above; the verifier's own draws gave 3%); 0.78 for the Pacific against 0.61 and 0.87 (11 of 47 at or above; the verifier 7%). An earlier version of this file gave 1% and 11% of 100 draws, dividing by all draws including the undefined ones; that was wrong. The Atlantic value is above most chance indices and the Pacific value is not distinguishable from them, but the comparison is weak and the exceedance rates move from draw to draw.
+
+**Interval caveat.** f_conv is a ratio whose denominator A4 is near zero for the placebos, so its bootstrap interval is heavy-tailed and its upper bound is not reproducible (Atl P2 upper 3.55 here, 5.17 for the verifier; Pac P1 3.06 against 3.47 to 3.35). The lower bound for Atl P2 depends on dropping draws with A4 <= 0 (the plan's `frac_boot_ok` rule): 1.06 here, 0.83 to 1.00 on the verifier's draws. The reading "conversion dominates" (lower bound above 0.5) holds on all of these. Atl P1 "no resolved share effect" holds only marginally (A4 upper limit 1.009 here, 1.010 for the verifier). The A4 and A2 rate-ratio intervals reproduce within bootstrap noise.
 
 **2. Conversion is partly "reached deeper" and partly gust at a given depth.** Among deepening tracks (committed `oos_index`, track-level logistic), adding the track's
 minimum pressure cuts the pattern's log-odds on HF by 0.31 in the Atlantic (0.01 to 0.60) and 0.51 in the Pacific (0.10 to 1.25). Neither meets the rule for "mostly depth"
@@ -59,5 +59,5 @@ if every row were a global null: about 211.)
 - The index is not refit inside the bootstrap, so intervals understate the index's own noise (stated in the plan).
 - "Strong non-HF" (gust 55-71.7 kt) is this audit's label, not the project's storm-force class.
 - Placebo share effects are small; with 22 seasons, the conversion fraction intervals are wide (P2 Atlantic 1.06-3.55). The result is "conversion is not specific", not "a mechanism is absent".
-- Not in this audit: noisy-ingredient mediation check; archive-label conversion; a nested bootstrap. Bootstrap intervals, p and q values were not independently recomputed.
-- Independent recompute of the point estimates by a fresh agent: see VERIFICATION.md.
+- Not in this audit: noisy-ingredient mediation check; archive-label conversion; a nested bootstrap. Permutation p-values and the BH correction were not independently recomputed; point estimates and bootstrap intervals for A4, A2 and f_conv were.
+- Independent recompute: see VERIFICATION.md (two fresh agents).

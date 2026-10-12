@@ -16,5 +16,5 @@ Placebo indices (A4 = share of cyclones reaching HF; A2 = P(HF | deepening); f_c
   P3 pac: A4 1.104 (1.031-1.165); A2 1.097 (1.021-1.163), q 0.022; f_conv 0.94 (0.58 to 1.28); frac_boot_ok 0.995 -> conversion dominates (reading 1)
 
 Shuffle null (100 season-shuffled P0 indices per basin): S = |A2| / (|A1|+|A2|+|A3|)
-  atl: S(P0) = 0.934; shuffle median 0.654, 95th pct 0.906; share of shuffles >= observed 0.01; median |A4| of shuffles 0.033
-  pac: S(P0) = 0.778; shuffle median 0.611, 95th pct 0.874; share of shuffles >= observed 0.11; median |A4| of shuffles 0.031
+  atl: S(P0) = 0.934; 53 of 100 shuffles have a non-constant index; among those, median 0.654, 95th pct 0.906; share >= observed 0.019 (1 of 53); median |A4| 0.033
+  pac: S(P0) = 0.778; 47 of 100 shuffles have a non-constant index; among those, median 0.611, 95th pct 0.874; share >= observed 0.234 (11 of 47); median |A4| 0.031

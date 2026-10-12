@@ -32,7 +32,8 @@ for b in ("atl", "pac"):
     g = D[(D["index"] == "P0") & (D.basin == b)].set_index("test").rr
     a = np.abs(np.log(g[["A1", "A2", "A3"]].astype(float)))
     So = a.A2 / a.sum()
-    s = S[S.basin == b].S
-    out.append(f"  {b}: S(P0) = {So:.3f}; shuffle median {s.median():.3f}, 95th pct {s.quantile(.95):.3f}; share of shuffles >= observed {(s >= So).mean():.2f}; median |A4| of shuffles {S[S.basin==b].A4.abs().median():.3f}")
+    allb = S[S.basin == b]
+    s = allb.S.dropna()                                  # a shuffled index can be constant (no PCs chosen in any fold): S undefined
+    out.append(f"  {b}: S(P0) = {So:.3f}; {len(s)} of {len(allb)} shuffles have a non-constant index; among those, median {s.median():.3f}, 95th pct {s.quantile(.95):.3f}; share >= observed {(s >= So).mean():.3f} ({int((s >= So).sum())} of {len(s)}); median |A4| {allb.A4.abs().median():.3f}")
 open(f"{R}/partA-result.txt", "w").write("\n".join(out) + "\n")
 print("\n".join(out))
