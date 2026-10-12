@@ -1,0 +1,20 @@
+PART A. placebo pattern indices (ERA5 proxy, pipeline A; per +1 SD, 22 seasons)
+
+Reproduction gate (r with committed oos_index >= 0.90 in both basins, A2 inside PR 85 interval):
+  atl: r = 0.938; A2 rate ratio 1.273 (1.202-1.344)
+  pac: r = 0.852; A2 rate ratio 1.143 (1.070-1.219)
+  Gate NOT met (Pacific r < 0.90). Per the plan, P0 refit is the reference; the committed index is not used in Part A.
+
+Placebo indices (A4 = share of cyclones reaching HF; A2 = P(HF | deepening); f_conv = A2/A4 in logs):
+  P0 atl: A4 1.288 (1.219-1.361); A2 1.273 (1.202-1.344), q nan; f_conv 0.95 (0.84 to 1.09); frac_boot_ok 1.000 -> conversion dominates (reading 1)
+  P1 atl: A4 0.954 (0.895-1.009); A2 0.992 (0.931-1.049), q 0.932; f_conv 0.18 (-1.75 to 0.71); frac_boot_ok 0.889 -> no resolved share effect (reading 2)
+  P2 atl: A4 1.059 (1.003-1.125); A2 1.092 (1.048-1.141), q 0.028; f_conv 1.54 (1.06 to 3.55); frac_boot_ok 0.958 -> conversion dominates (reading 1)
+  P3 atl: A4 1.062 (1.028-1.101); A2 1.060 (1.023-1.103), q 0.155; f_conv 0.96 (0.68 to 1.18); frac_boot_ok 0.997 -> conversion dominates (reading 1)
+  P0 pac: A4 1.132 (1.063-1.202); A2 1.143 (1.070-1.219), q nan; f_conv 1.08 (0.89 to 1.31); frac_boot_ok 1.000 -> conversion dominates (reading 1)
+  P1 pac: A4 1.080 (1.014-1.158); A2 1.120 (1.053-1.198), q 0.004; f_conv 1.48 (1.13 to 3.06); frac_boot_ok 0.981 -> conversion dominates (reading 1)
+  P2 pac: index degenerate (cross-validation chose no PCs in every fold); no placebo possible
+  P3 pac: A4 1.104 (1.031-1.165); A2 1.097 (1.021-1.163), q 0.022; f_conv 0.94 (0.58 to 1.28); frac_boot_ok 0.995 -> conversion dominates (reading 1)
+
+Shuffle null (100 season-shuffled P0 indices per basin): S = |A2| / (|A1|+|A2|+|A3|)
+  atl: S(P0) = 0.934; 53 of 100 shuffles have a non-constant index; among those, median 0.654, 95th pct 0.906; share >= observed 0.019 (1 of 53); median |A4| 0.033
+  pac: S(P0) = 0.778; 47 of 100 shuffles have a non-constant index; among those, median 0.611, 95th pct 0.874; share >= observed 0.234 (11 of 47); median |A4| 0.031
