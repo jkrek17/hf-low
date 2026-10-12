@@ -182,6 +182,7 @@
       <script type="text/plain" id="era5Loader" src="era5-tracks.js"></script>
       <script type="text/plain" id="era5ProbLoader" src="era5-prob.js"></script>
       <script type="text/plain" id="era5ListsLoader" src="era5-lists.js"></script>
+      <script type="text/plain" id="era5CmpLoader" src="era5-compare.js"></script>
       <button type="button" class="btn" id="fitBounds">Fit to events</button>
       <div class="atlas-tools" id="probTools" hidden>
         <label class="check" title="Before 2004 the tables score only the catalog events and their matched null cases, for comparison within that era">
@@ -421,6 +422,27 @@
 
   <!-- Events ----------------------------------------------------------- -->
   <section class="panel" id="panel-events" role="tabpanel">
+    <!-- Model against the OPC storms (ERA5 proxy P(HF), see app.js renderCompare) -->
+    <div class="panel-tools">
+      <div class="filter">
+        <label for="cmpView">Model against OPC</label>
+        <select id="cmpView">
+          <option value="opc">OPC hurricane-force storms: what P(HF) said</option>
+          <option value="unl">High-P proxy storms OPC never listed</option>
+        </select>
+      </div>
+      <p class="tool-note" id="cmpNote"></p>
+    </div>
+    <p class="table-basis" id="cmpSummary" role="status"></p>
+    <div class="table-wrap cmp-wrap">
+      <table class="data-table" id="cmpTable">
+        <caption class="sr-only">OPC hurricane-force storms and the ERA5 proxy model P(HF)</caption>
+        <thead></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p class="table-basis" id="cmpBasis"></p>
+    <h2 class="sr-only">All archive events</h2>
     <div class="panel-tools">
       <p class="tool-note" id="tableNote"></p>
       <button type="button" class="btn" id="exportCsv">Download filtered CSV</button>
