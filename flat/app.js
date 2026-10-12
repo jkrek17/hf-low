@@ -763,7 +763,7 @@
   function cmpCall(r) {
     if (r.track < 0) return 'No matching track';
     if (r.pPre < 0) return 'No scored fix before onset';
-    if (r.pPre < 500) return 'Not rated HF-likely';
+    if (r.pPre < 5000) return 'Not rated HF-likely';
     return r.lead >= 12 ? 'Early (12 h or more)' : 'Late (under 12 h)';
   }
 
@@ -792,14 +792,14 @@
         { key: 'basin', label: 'Basin', get: function (r) { return r.low.basin; }, text: function (r) { return r.low.basin === 'pac' ? 'Pacific' : 'Atlantic'; } },
         { key: 'minP', label: 'OPC min hPa', num: 1, get: function (r) { return r.low.minP; }, text: function (r) { return r.low.minP != null ? r.low.minP : '--'; } },
         { key: 'pPre', label: 'Peak P(HF) before onset', num: 1, title: 'Highest P(HF within 24 h) at the 00/12 UTC fixes up to the first archive HF fix.',
-          get: function (r) { return r.pPre < 0 ? null : r.pPre; }, text: function (r) { return r.pPre < 0 ? '--' : (r.pPre / 1000).toFixed(2); } },
-        { key: 'pAll', label: 'Peak P(HF) overall', num: 1, get: function (r) { return r.pAll < 0 ? null : r.pAll; }, text: function (r) { return r.pAll < 0 ? '--' : (r.pAll / 1000).toFixed(2); } },
+          get: function (r) { return r.pPre < 0 ? null : r.pPre; }, text: function (r) { return r.pPre < 0 ? '--' : (r.pPre / 10000).toFixed(2); } },
+        { key: 'pAll', label: 'Peak P(HF) overall', num: 1, get: function (r) { return r.pAll < 0 ? null : r.pAll; }, text: function (r) { return r.pAll < 0 ? '--' : (r.pAll / 10000).toFixed(2); } },
         { key: 'lead', label: 'Lead at P 0.5 (h)', num: 1, title: 'Hours from the first fix with P at or above 0.5 to the first archive HF fix. 12-hourly fixes. P looks 24 h ahead, so a lead beyond 24 h is an early alarm, not extra skill.',
           get: function (r) { return r.lead < 0 ? null : r.lead; }, text: function (r) { return r.lead < 0 ? '--' : r.lead; } },
         { key: 'call', label: 'Model', get: cmpCall, text: cmpCall }
       ];
       var rated = rows.filter(function (r) { return r.track >= 0 && r.pPre >= 0; });
-      var hit = rated.filter(function (r) { return r.pPre >= 500; });
+      var hit = rated.filter(function (r) { return r.pPre >= 5000; });
       var leads = hit.map(function (r) { return r.lead; }).sort(function (a, b) { return a - b; });
       var med = leads.length ? leads[Math.floor(leads.length / 2)] : null;
       var early = hit.filter(function (r) { return r.lead >= 12; }).length;
@@ -818,7 +818,7 @@
         { key: 'minp', label: 'ERA5 min hPa', num: 1, get: function (r) { return r[6]; }, text: function (r) { return (r[6] / 10).toFixed(1); } },
         { key: 'gust', label: 'Gust index (kt)', num: 1, get: function (r) { return r[7]; }, text: function (r) { return (r[7] / 10).toFixed(1); } },
         { key: 'margin', label: 'Over 71.7 kt', num: 1, get: function (r) { return r[9]; }, text: function (r) { return '+' + (r[9] / 10).toFixed(1); } },
-        { key: 'p', label: 'Peak P(HF) before HF', num: 1, get: function (r) { return r[8]; }, text: function (r) { return (r[8] / 1000).toFixed(2); } }
+        { key: 'p', label: 'Peak P(HF) before HF', num: 1, get: function (r) { return r[8]; }, text: function (r) { return (r[8] / 10000).toFixed(2); } }
       ];
       sum.textContent = rows.length + ' proxy storms with P of 0.5 or more before they reach the gust threshold that OPC never listed under either matching rule (2004-05 on); ' +
         rows.filter(function (r) { return r[9] >= 100; }).length + ' are 10 kt or more over the threshold. Most are threshold-edge proxy storms.';
