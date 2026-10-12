@@ -1147,3 +1147,6 @@ fieldset.tele-field, .tele-field { margin: 0 0 var(--sp-3); }
 .qc-form label { display: flex; flex-direction: column; font-size: var(--fs-xs); color: var(--ink-muted); }
 .qc-form label input { width: auto; }
 .qc-form .tool-note { flex-basis: 100%; }
+
+/* Events tab: model-against-OPC block, shorter than the main table so both show */
+.cmp-wrap { max-height: 24rem; }

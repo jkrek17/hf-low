@@ -35,6 +35,7 @@
     probPre: true,     // HF probability layer: include 1979-2003 (catalog events and matched nulls only)
     era5pre: false,    // ... and before 2001-02 (within-era comparison only), off by default
     sort: { key: 'start', dir: -1 },
+    cmp: { view: 'opc', sort: { key: 'start', dir: -1 } },   // the model-vs-OPC block on the Events tab
     selectedKey: null
   };
 
@@ -751,6 +752,107 @@
         ' ERA5 reads low in the most intense storms and is not direct observation. The gust column is the pipeline A gust index and, before 2001-02, is for comparison within that era only. Names are inferred from date and position, not recorded in the data.';
   }
 
+  /* ------------------------------------- model against the OPC storms
+     A block at the top of the Events tab: for each OPC-analysed hurricane-
+     force storm of 2004-05 on (the page's filters apply), the highest P(HF
+     within 24 h) the ERA5-proxy model N gave its matched track before the
+     first archive HF fix, and how many hours ahead P first reached 0.5. The
+     other view lists high-P proxy storms that OPC never listed. Data:
+     data/era5-compare.js (tools/build_era5_compare.py). Pipeline A proxy. */
+
+  function cmpCall(r) {
+    if (r.track < 0) return 'No matching track';
+    if (r.pPre < 0) return 'No scored fix before onset';
+    if (r.pPre < 500) return 'Not rated HF-likely';
+    return r.lead >= 12 ? 'Early (12 h or more)' : 'Late (under 12 h)';
+  }
+
+  function renderCompare(lows) {
+    var tbl = document.getElementById('cmpTable');
+    var note = document.getElementById('cmpNote'), basis = document.getElementById('cmpBasis'), sum = document.getElementById('cmpSummary');
+    var thead = HF.clear(tbl.tHead || tbl.createTHead());
+    var tbody = HF.clear(tbl.tBodies[0]);
+    if (!ensureEra5('cmp')) {
+      note.textContent = era5Status.cmp === 'failed' ? 'The model comparison data could not be loaded.' : 'Loading…';
+      return;
+    }
+    var D = window.HF_ERA5_CMP, view = state.cmp.view, cols, rows;
+    var basinOk = function (b) { return state.basin === 'both' || state.basin === b; };
+    if (view === 'opc') {
+      var byKey = {};
+      lows.forEach(function (l) { byKey[l.basin + ':' + l.id] = l; });
+      rows = [];
+      D.opc.forEach(function (r) {
+        var low = byKey[r[0]];
+        if (!low) return;
+        rows.push({ low: low, track: r[1], pAll: r[2], pPre: r[3], lead: r[4] });
+      });
+      cols = [
+        { key: 'start', label: 'First fix', get: function (r) { return r.low.start; }, text: function (r) { return HF.fmtDate(r.low.start); } },
+        { key: 'basin', label: 'Basin', get: function (r) { return r.low.basin; }, text: function (r) { return r.low.basin === 'pac' ? 'Pacific' : 'Atlantic'; } },
+        { key: 'minP', label: 'OPC min hPa', num: 1, get: function (r) { return r.low.minP; }, text: function (r) { return r.low.minP != null ? r.low.minP : '--'; } },
+        { key: 'pPre', label: 'Peak P(HF) before onset', num: 1, title: 'Highest P(HF within 24 h) at the 00/12 UTC fixes up to the first archive HF fix.',
+          get: function (r) { return r.pPre < 0 ? null : r.pPre; }, text: function (r) { return r.pPre < 0 ? '--' : (r.pPre / 1000).toFixed(2); } },
+        { key: 'pAll', label: 'Peak P(HF) overall', num: 1, get: function (r) { return r.pAll < 0 ? null : r.pAll; }, text: function (r) { return r.pAll < 0 ? '--' : (r.pAll / 1000).toFixed(2); } },
+        { key: 'lead', label: 'Lead at P 0.5 (h)', num: 1, title: 'Hours from the first fix with P at or above 0.5 to the first archive HF fix. 12-hourly fixes. P looks 24 h ahead, so a lead beyond 24 h is an early alarm, not extra skill.',
+          get: function (r) { return r.lead < 0 ? null : r.lead; }, text: function (r) { return r.lead < 0 ? '--' : r.lead; } },
+        { key: 'call', label: 'Model', get: cmpCall, text: cmpCall }
+      ];
+      var rated = rows.filter(function (r) { return r.track >= 0 && r.pPre >= 0; });
+      var hit = rated.filter(function (r) { return r.pPre >= 500; });
+      var leads = hit.map(function (r) { return r.lead; }).sort(function (a, b) { return a - b; });
+      var med = leads.length ? leads[Math.floor(leads.length / 2)] : null;
+      var early = hit.filter(function (r) { return r.lead >= 12; }).length;
+      sum.textContent = rows.length ? (rows.length.toLocaleString() + ' OPC storms; ' + (rows.length - rated.length) +
+        ' have no scorable track. Of the ' + rated.length.toLocaleString() + ' that do, P reached 0.5 before OPC’s first HF fix for ' +
+        hit.length.toLocaleString() + ' (' + Math.round(100 * hit.length / rated.length) + '%), median lead ' + med + ' h, ' +
+        early.toLocaleString() + ' with 12 h or more.') : '';
+      note.textContent = rows.length.toLocaleString() + ' OPC storms match the filters (2004-05 on).';
+      basis.textContent = 'ERA5 proxy model (pipeline A tracks, model N without the gust predictor, leave-one-season-out), not an observation. A storm is matched to the pipeline A track whose peak lies within 500 km of OPC’s peak. Peak P is read at 00/12 UTC fixes only. "Not rated" means P stayed under 0.5 up to OPC’s first HF fix; many are storms the proxy never took to hurricane force.';
+    } else {
+      rows = D.unl.filter(function (r) { return basinOk(r[1] === 0 ? 'atl' : 'pac'); });
+      cols = [
+        { key: 'when', label: 'Peak time', get: function (r) { return r[3]; }, text: function (r) { return ymdLabel(Math.floor(r[3] / 100)); } },
+        { key: 'basin', label: 'Basin', get: function (r) { return r[1]; }, text: function (r) { return r[1] === 0 ? 'Atlantic' : 'Pacific'; } },
+        { key: 'pos', label: 'Peak position', get: function (r) { return r[4]; }, text: function (r) { return HF.fmtLatLon(r[4] / 4, r[5] / 4); } },
+        { key: 'minp', label: 'ERA5 min hPa', num: 1, get: function (r) { return r[6]; }, text: function (r) { return (r[6] / 10).toFixed(1); } },
+        { key: 'gust', label: 'Gust index (kt)', num: 1, get: function (r) { return r[7]; }, text: function (r) { return (r[7] / 10).toFixed(1); } },
+        { key: 'margin', label: 'Over 71.7 kt', num: 1, get: function (r) { return r[9]; }, text: function (r) { return '+' + (r[9] / 10).toFixed(1); } },
+        { key: 'p', label: 'Peak P(HF) before HF', num: 1, get: function (r) { return r[8]; }, text: function (r) { return (r[8] / 1000).toFixed(2); } }
+      ];
+      sum.textContent = rows.length + ' proxy storms with P of 0.5 or more before they reach the gust threshold that OPC never listed under either matching rule (2004-05 on); ' +
+        rows.filter(function (r) { return r[9] >= 100; }).length + ' are 10 kt or more over the threshold. Most are threshold-edge proxy storms.';
+      note.textContent = rows.length + ' storms.';
+      basis.textContent = 'ERA5 proxy (pipeline A). Excludes tropical-cyclone-linked storms and Atlantic storms north of 60N (lower confidence). Neither this list nor ERA5 can show that OPC missed a storm: that needs scatterometer, ship or buoy winds. Source: research/era5/hf_probability_tracks residual_unlisted_both_rules_2004.csv.';
+    }
+    var sk = state.cmp.sort, c = cols.filter(function (x) { return x.key === sk.key; })[0] || cols[0];
+    var hr = HF.el('tr');
+    cols.forEach(function (col) {
+      var th = HF.el('th', { class: col.num ? 'num' : '' }, col.label);
+      th.setAttribute('scope', 'col');
+      if (col.title) th.setAttribute('title', col.title);
+      if (c === col) th.appendChild(HF.el('span', { class: 'sort-caret' }, sk.dir > 0 ? '▲' : '▼'));
+      th.addEventListener('click', function () {
+        if (sk.key === col.key) sk.dir *= -1; else state.cmp.sort = { key: col.key, dir: col.num || col.key === 'start' || col.key === 'when' ? -1 : 1 };
+        renderCompare(lows);
+      });
+      hr.appendChild(th);
+    });
+    thead.appendChild(hr);
+    rows.slice().sort(function (a, b) {
+      var av = c.get(a), bv = c.get(b);
+      if (av == null && bv == null) return 0;
+      if (av == null) return 1;
+      if (bv == null) return -1;
+      return av < bv ? -sk.dir : av > bv ? sk.dir : 0;
+    }).slice(0, TABLE_LIMIT).forEach(function (r) {
+      var tr = HF.el('tr');
+      cols.forEach(function (col) { tr.appendChild(HF.el('td', { class: col.num ? 'num' : '' }, String(col.text(r)))); });
+      tbody.appendChild(tr);
+    });
+    if (rows.length > TABLE_LIMIT) note.textContent += ' Showing the first ' + TABLE_LIMIT + ' by ' + c.label.toLowerCase() + '.';
+  }
+
   function renderTable(lows) {
     var table = document.getElementById('eventsTable');
     var thead = HF.clear(table.tHead || table.createTHead());
@@ -797,6 +899,7 @@
       tbody.appendChild(tr);
     });
 
+    renderCompare(lows);
     document.getElementById('tableNote').textContent =
       lows.length.toLocaleString() + ' event' + (lows.length === 1 ? '' : 's') + ' match the filters';
     document.getElementById('tableMore').textContent =
@@ -1023,6 +1126,7 @@
     peaks: { varName: 'HF_ERA5_PEAKS', loader: 'era5PeaksLoader', decode: function (r) { return HF.era5.decodePeaks(r); } },
     prob:  { varName: 'HF_ERA5_PROB',  loader: 'era5ProbLoader',  decode: function (r) { return r; } },
     lists: { varName: 'HF_ERA5_LISTS', loader: 'era5ListsLoader', decode: function (r) { return r; } },
+    cmp:   { varName: 'HF_ERA5_CMP',   loader: 'era5CmpLoader',   decode: function (r) { return r; } },
     atlas: { varName: 'HF_ATLAS',      loader: 'atlasLoader',     decode: function (r) { return r; } },
     allp:  { varName: 'HF_ERA5_ALLP',  loader: 'allpLoader',      decode: function (r) { return HF.era5.decodeAllP(r); } },
     gust:  { varName: 'HF_GUST_CLIMO', loader: 'gustLoader',      decode: function (r) { return r; } }
@@ -3131,6 +3235,7 @@
     document.getElementById('atlasView').addEventListener('change', function (e) { state.atlas.view = e.target.value; render(); });
     document.getElementById('atlasField').addEventListener('change', function (e) { state.atlas.field = e.target.value; render(); });
     document.getElementById('atlasSrc').addEventListener('change', function (e) { state.atlas.src = e.target.value; render(); });
+    document.getElementById('cmpView').addEventListener('change', function (e) { state.cmp.view = e.target.value; state.cmp.sort = { key: e.target.value === 'opc' ? 'start' : 'when', dir: -1 }; render(); });
     document.getElementById('strongList').addEventListener('change', function (e) { state.strong.list = e.target.value; renderStrong(); });
     document.getElementById('strongBasin').addEventListener('change', function (e) { state.strong.basin = e.target.value; renderStrong(); });
     document.getElementById('fEra5Pre').addEventListener('change', function (e) {
