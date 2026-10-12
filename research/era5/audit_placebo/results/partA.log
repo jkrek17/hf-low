@@ -1,0 +1,13 @@
+atl P0 16s
+atl P1 30s
+atl P2 45s
+atl P3 60s
+pac P0 77s
+pac P1 90s
+/home/claude/hf-low/research/era5/audit_placebo/placelib.py:39: RuntimeWarning: invalid value encountered in divide
+  return (idx - idx.mean()) / idx.std(), lam_used
+pac P2 105s
+pac P3 119s
+/usr/local/lib/python3.13/dist-packages/numpy/lib/_nanfunctions_impl.py:1396: RuntimeWarning: All-NaN slice encountered
+  return _nanquantile_unchecked(
+done 1712s

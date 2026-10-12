@@ -1,0 +1,5 @@
+PART B. conversion effect: depth reached versus gust at a given depth (ERA5 proxy, pipeline A; committed oos_index; deepening tracks; track-level logistic, HF on index)
+Atlantic: 4,521 deepening tracks, 901 HF. log-odds per SD: M1 0.287 (0.220-0.361); M2 +minp 0.199 (0.107-0.293); M3 +minp+position cell 0.256 (0.155-0.362)
+Pacific:  4,947 deepening tracks, 788 HF. log-odds per SD: M1 0.169 (0.091-0.261); M2 +minp 0.083 (-0.027-0.209); M3 +minp+position cell 0.119 (0.005-0.256)
+Attenuation by minp (M2): Atlantic 0.31 (0.01 to 0.60), Pacific 0.51 (0.10 to 1.25). Attenuation by minp + position (M3): Atlantic 0.11 (-0.25 to 0.43), Pacific 0.29 (-0.13 to 0.95).
+Pre-registered readings: both basins "mixed" (M2 lower bound < 0.25 or upper bound >= 0.5).

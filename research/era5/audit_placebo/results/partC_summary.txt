@@ -1,0 +1,6 @@
+result files with a p or q column: 114
+threads (result directories): 42
+rows with a p or q value (tests in machine-readable form, lower bound; includes sensitivity variants and sub-family rows): 4225
+rows marked q < 0.05 by their own file: 1258
+rows in files with a q column: 2627; rows in files with p only: 1598
+expected nominal passes at 0.05 if every row were a global null (crude): 211
