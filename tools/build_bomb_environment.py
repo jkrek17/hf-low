@@ -3,7 +3,7 @@
 
     python3 tools/build_bomb_environment.py --fixes fixes_2004.csv.gz --env env_2004.csv.gz \
         --oof oof_outlook_full.csv.gz --cells diagram_cells.csv --family family.csv \
-        --reliability reliability.csv --matches matches.csv --residual residual_unlisted_both_rules_2004.csv \
+        --reliability reliability.csv --regions regions.csv --matches matches.csv --residual residual_unlisted_both_rules_2004.csv \
         --source "research/era5/bomb_env at <commit>"
 
 Inputs are research/era5/intensity/results (fixes, env), research/era5/bomb_env/results (oof probabilities,
@@ -21,6 +21,10 @@ Wire format of window.HF_OUTLOOK (append-only):
     the next 24 h (next two 00/12 UTC fixes) is in that class.
   diagrams[name] = {x, y, xe, ye, cells}: axis names, 7 quantile edges each, and 36 cells x-major
     [n, rapid-deepening rate*10000 (-1 when none scored), P(below gale), P(gale), P(storm), P(HF) of the NEXT-24 h class, all *10000].
+    The third diagram, trough_baroclinic, has x = vadv500 and y = eady (added after the first two; same cell layout).
+  regions = {cuts: [vadv500 cut, eady cut], rows: [[name, n, n_scored, rd rate, rd lo90, rd hi90, share of rapid-deepening fixes,
+    share of fixes, P(below gale), P(gale), P(storm), P(HF)] x 4 in the order quiet, baroclinic only, forcing only, coupled]}.
+    Region index of a fix = 2 * (vadv500 >= cuts[0]) + (eady >= cuts[1]); the cuts are the upper thirds over all fixes.
 """
 import argparse
 import json
@@ -35,7 +39,7 @@ MARK = "/*@@DATA@@*/"
 
 def main():
     ap = argparse.ArgumentParser()
-    for k in ("fixes", "env", "oof", "cells", "family", "reliability", "matches", "residual", "source"):
+    for k in ("fixes", "env", "oof", "cells", "family", "reliability", "regions", "matches", "residual", "source"):
         ap.add_argument("--" + k, required=True)
     ap.add_argument("--skill", required=True, help="research/era5/bomb_env/results/skill.txt")
     ap.add_argument("--template", default=os.path.join(ROOT, "tools", "bomb_environment.template.html"))
@@ -74,6 +78,12 @@ def main():
                   int(round(r.p_below_gale * 10000)), int(round(r.p_gale * 10000)),
                   int(round(r.p_storm * 10000)), int(round(r.p_hf * 10000))] for r in g.itertuples()]
         dg[name] = {"x": g.xvar.iloc[0], "y": g.yvar.iloc[0], "xe": xe, "ye": ye, "cells": cells}
+    R = pd.read_csv(a.regions)
+    c = dg["trough_baroclinic"]
+    regions = {"cuts": [c["xe"][4], c["ye"][4]],
+               "rows": [[r.region, int(r.n), int(r.n_scored), round(r.rd_rate, 5), round(r.rd_lo90, 5), round(r.rd_hi90, 5),
+                         round(r.share_of_rd, 4), round(r.share_of_fixes, 4), round(r.p_below_gale, 4), round(r.p_gale, 4),
+                         round(r.p_storm, 4), round(r.p_hf, 4)] for r in R.itertuples()]}
     fam = pd.read_csv(a.family).round(4).to_dict("records")
     rel = pd.read_csv(a.reliability).round(4)
     skill = {}
@@ -85,7 +95,7 @@ def main():
     data = {"meta": {"what": "ERA5 PROXY, pipeline A (research/era5/hf_history). Held-out-season model output, not observations.",
                      "source": a.source, "tracks": len(tracks), "fixes": int(len(D)), "base_rd": 0.0343,
                      "cutoffs_kt": [38, 54, 71.7]},
-            "family": fam, "skill": skill, "diagrams": dg, "tracks": tracks}
+            "family": fam, "skill": skill, "diagrams": dg, "regions": regions, "tracks": tracks}
     blob = "window.HF_OUTLOOK=" + json.dumps(data, separators=(",", ":")) + ";"
     html = open(a.template).read()
     assert MARK in html

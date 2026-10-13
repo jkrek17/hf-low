@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Environment check - Hurricane Force Extratropical Low Archive</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<meta name="description" content="Upper-level environment check for an extratropical low: where the storm sits on a jet-and-trough diagram and a jet-and-baroclinicity diagram, and the model's 24-hour outlook for gale, storm and hurricane-force gusts (ERA5 proxy).">
+<meta name="description" content="Upper-level environment check for an extratropical low: where the storm sits on a trough-and-baroclinicity diagram with four named regions plus a jet-and-trough and a jet-and-baroclinicity diagram, and the model's 24-hour outlook for gale, storm and hurricane-force gusts (ERA5 proxy).">
 <style>
   /* Self-contained on purpose: the flat/ copy of the site is a single folder and only
      index.html gets its paths rewritten, so this page uses no files from assets/ and
@@ -71,6 +71,7 @@
   .tablewrap table { min-width: 560px; }
   td.num, th.num { text-align: right; }
   .grid2 { display: grid; grid-template-columns: 1fr; gap: 12px 24px; }
+  .grid2 > * { min-width: 0; }
   @media (min-width: 900px) { .grid2 { grid-template-columns: 1fr 1fr; } }
   dl.preds { margin: 6px 0 0; } dl.preds dt { font-weight: 650; margin-top: 8px; } dl.preds dd { margin: 0; max-width: 80ch; color: var(--ink-2); }
 
@@ -90,6 +91,8 @@
   svg.chart text { fill: var(--ink-2); font: 11px var(--font); }
   svg.chart .ttl { fill: var(--ink); font-weight: 650; font-size: 12px; }
   .gap-top { margin-top: 12px; }
+  .regpill { display: inline-block; padding: 1px 9px; border-radius: 999px; color: #fff; font-weight: 650; font-size: 13px; }
+  .swatch { display: inline-block; width: 11px; height: 11px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
   .legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13px; color: var(--ink-2); margin: 4px 0; }
   .legend i { display: inline-block; width: 11px; height: 11px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
   .stepper { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
@@ -107,7 +110,8 @@
 <div class="answers">
   <div class="tag">In plain words</div>
   <ul>
-    <li><strong>What is it?</strong> For one storm at a time: where its upper-level setting sits on two diagrams (jet strength against vorticity advection, and jet strength against low-level baroclinicity), and the model&rsquo;s chance that its strongest gust over the next 24 hours is below gale, gale, storm or hurricane force.</li>
+    <li><strong>What is it?</strong> For one storm at a time: which of four upper-level regions it sits in (trough forcing against low-level baroclinicity), where it sits on two further diagrams (jet strength against vorticity advection, and jet strength against baroclinicity), and the model&rsquo;s chance that its strongest gust over the next 24 hours is below gale, gale, storm or hurricane force.</li>
+    <li><strong>The four regions.</strong> Quiet, baroclinic only, forcing only and coupled. Coupled lows are 19 % of all fixes but hold <span id="coupShare"></span> of the rapid deepening: both ingredients together matter far more than either alone. The dividing lines are empirical (the upper third of each variable), not physical thresholds.</li>
     <li><strong>How to read the diagrams.</strong> Each box is a slice of all 159,430 lows in 2004-05 to 2025-26 at 00 and 12 UTC. Darker means a larger share of lows in that slice deepened rapidly over the next 24 hours (at least 1 Bergeron: 24 hPa in 24 h at 60&deg;N, the classic &ldquo;bomb&rdquo;). The storm&rsquo;s path runs through the boxes as it evolves.</li>
     <li><strong>Does it work?</strong> <span id="skillLine"></span></li>
   </ul>
@@ -143,6 +147,21 @@
   </div>
 </section>
 
+<section id="regions" hidden>
+  <div class="tag">Regions</div>
+  <h2>Which kind of setting is this low in?</h2>
+  <div class="grid2">
+    <figure class="fig"><svg class="chart" id="dgC" viewBox="0 0 420 360" role="img" aria-label="Trough forcing and baroclinicity diagram with four regions"></svg><figcaption id="capC"></figcaption></figure>
+    <div>
+      <p id="regNow" class="verdict"></p>
+      <p class="muted" id="regPath"></p>
+      <div class="tablewrap"><table id="regTab"></table></div>
+    </div>
+  </div>
+  <dl class="preds" id="regDefs"></dl>
+  <p class="limit">These are names for boxes in a plane of two ERA5 variables, not proven mechanisms. Vorticity advection at 500 hPa is one measure of upper-level forcing and the Eady rate one measure of low-level baroclinicity, so &ldquo;forcing only&rdquo; means weak baroclinicity by this measure, not none. A storm often moves between regions within a day (the strip under the outlook below), so one fix is a snapshot, not a type. The cut points were set at the upper third of each variable after the first run and describe the data; they were not pre-registered. Shares are over all fixes pooled, ERA5 proxy, pipeline A. The gust columns pool storms that were already deep with ones that were not; the outlook model above, which knows the storm&rsquo;s own state, is the sharper wind estimate. Only the 71.7 kt cut is tied to the archive.</p>
+</section>
+
 <section id="diagrams" hidden>
   <div class="tag">Diagrams</div>
   <h2>Where the storm sits, and the path it took</h2>
@@ -152,9 +171,9 @@
   </div>
   <p class="muted">Box size is equal in <em>rank</em>, not in units: each axis is cut at its sixth-percentiles over all lows, so the boxes hold about the same number of fixes. Numbers in the boxes are the rapid-deepening share (%). Dot = a 00 or 12 UTC fix; the ringed dot is the selected one; the line runs from the first fix to the last. A line that climbs toward the dark corner is a storm entering a favourable setting.</p>
   <h3>Outlook through the storm&rsquo;s life</h3>
-  <svg class="chart" id="tl" viewBox="0 0 860 250" role="img" aria-label="Outlook through time"></svg>
+  <svg class="chart" id="tl" viewBox="0 0 860 266" role="img" aria-label="Outlook through time"></svg>
   <div class="legend" id="tlLegend"></div>
-  <p class="muted">Each column is the outlook made at that fix for the following 24 hours. The line is the gust index ERA5 actually reached at that fix (kt, right scale), with dashed lines at 38, 54 and 71.7 kt. The outlook at one fix is compared with the line 12 and 24 hours later.</p>
+  <p class="muted">Each column is the outlook made at that fix for the following 24 hours. The coloured strip under it shows which of the four regions the low was in at that fix. The line is the gust index ERA5 actually reached at that fix (kt, right scale), with dashed lines at 38, 54 and 71.7 kt. The outlook at one fix is compared with the line 12 and 24 hours later.</p>
 </section>
 
 <section id="skill">
@@ -202,6 +221,13 @@
   var D = window.HF_OUTLOOK, CL = ['Below gale', 'Gale', 'Storm', 'Hurricane force'];
   var CC = ['#9aa7b4', '#d9a520', '#e8742c', '#b8232b'];
   var NAMES = { jet250: ['250 hPa jet maximum within 1000 km (kt)', 1], vadv500: ['500 hPa vorticity advection (1e-9 s-2)', 1], eady: ['850-500 hPa Eady growth rate (per day)', 1] };
+  var RC = ['#6b7785', '#1f8a7d', '#7b5ea7', '#c2410c'];
+  var RN = ['Quiet', 'Baroclinic only', 'Forcing only', 'Coupled'];
+  var RDEF = [
+    'Neither ingredient is in its upper third. Almost no rapid deepening starts here.',
+    'Strong low-level temperature contrast with little upper-level forcing: fuel but a weak trigger.',
+    'Strong trough forcing over weak low-level baroclinicity: a trigger but little fuel.',
+    'Both in their upper third: forcing aloft over a strong baroclinic zone. Rapid deepening is concentrated here.'];
   var $ = function (id) { return document.getElementById(id); };
   var NS = 'http://www.w3.org/2000/svg';
   function el(tag, attrs, parent, text) {
@@ -261,6 +287,8 @@
     $('src').textContent = 'Pipeline A (ERA5 proxy), seasons 1 June to 31 May, 2004-05 to 2025-26. ' + D.meta.tracks + ' storm tracks, ' + D.meta.fixes + ' fixes. Source: ' + D.meta.source + '. Code and the pre-registered plan: research/era5/bomb_env.';
   })();
 
+  regTable();
+
   /* ---- pickers ---- */
   var seasons = {};
   storms.forEach(function (s) { seasons[s.season] = 1; });
@@ -282,7 +310,7 @@
 
   function choose(id) {
     sel = byId[id] || null;
-    $('now').hidden = $('diagrams').hidden = !sel;
+    $('now').hidden = $('diagrams').hidden = $('regions').hidden = !sel;
     if (!sel) return;
     var r = $('fixRange');
     r.max = sel.fx.length - 1;
@@ -307,12 +335,13 @@
     }
     return null;
   }
+  var FIELD = { jet250: 'jet', vadv500: 'vadv', eady: 'eady' };
   function cellOf(d, f) {
-    var bx = binPos(f[d.x === 'jet250' ? 'jet' : 'eady'], d.xe), by = binPos(f[d.y === 'vadv500' ? 'vadv' : 'eady'], d.ye);
+    var bx = binPos(f[FIELD[d.x]], d.xe), by = binPos(f[FIELD[d.y]], d.ye);
     if (bx == null || by == null) return null;
     return { bx: Math.min(NB - 1, Math.floor(bx)), by: Math.min(NB - 1, Math.floor(by)), fx: bx, fy: by };
   }
-  function drawDiagram(svg, d, title, cap) {
+  function drawDiagram(svg, d, title, cap, reg) {
     svg.innerHTML = '';
     var pw = W - ML - MR, ph = H - MT - MB, cw = pw / NB, ch = ph / NB;
     var maxr = 0;
@@ -328,11 +357,20 @@
       tx.setAttribute('style', a > 0.45 ? 'fill:var(--navy-ink)' : '');
     }
     for (var k = 0; k <= NB; k++) {
-      el('text', { x: ML + k * cw, y: H - MB + 14, 'text-anchor': 'middle' }, svg, (+d.xe[k]).toFixed(d.x === 'eady' ? 2 : 0));
+      el('text', { x: ML + k * cw, y: H - MB + 14, 'text-anchor': 'middle' }, svg, (+d.xe[k]).toFixed(d.x === 'jet250' ? 0 : (d.x === 'eady' ? 2 : 1)));
       el('text', { x: ML - 5, y: MT + (NB - k) * ch + 4, 'text-anchor': 'end' }, svg, (+d.ye[k]).toFixed(d.y === 'eady' ? 2 : 1));
     }
     el('text', { x: ML + pw / 2, y: H - 6, 'text-anchor': 'middle' }, svg, NAMES[d.x][0]);
     var yl = el('text', { x: 12, y: MT + ph / 2, 'text-anchor': 'middle', transform: 'rotate(-90 12 ' + (MT + ph / 2) + ')' }, svg, NAMES[d.y][0].length > 40 ? NAMES[d.y][0].replace(' (', '\n(').split('\n')[0] : NAMES[d.y][0]);
+    if (reg) {
+      var bxp = ML + 4 * cw, byp = MT + (NB - 4) * ch;
+      el('line', { x1: bxp, x2: bxp, y1: MT, y2: MT + ph, stroke: 'var(--ink)', 'stroke-width': 2, 'stroke-dasharray': '6 3' }, svg);
+      el('line', { x1: ML, x2: ML + pw, y1: byp, y2: byp, stroke: 'var(--ink)', 'stroke-width': 2, 'stroke-dasharray': '6 3' }, svg);
+      [[1, ML + 2 * cw, MT + 0.5 * ch + 2], [3, ML + 5 * cw, MT + 0.5 * ch + 2], [0, ML + 2 * cw, MT + ph - 0.5 * ch + 4], [2, ML + 5 * cw, MT + ph - 0.5 * ch + 4]].forEach(function (q) {
+        var tt = el('text', { x: q[1], y: q[2], 'text-anchor': 'middle', 'font-weight': 700 }, svg, RN[q[0]].toUpperCase());
+        tt.setAttribute('style', 'fill:' + RC[q[0]] + ';stroke:var(--surface);stroke-width:3px;paint-order:stroke;font-size:11px');
+      });
+    }
     var pts = [];
     sel.fx.forEach(function (f, n) {
       var c = cellOf(d, f);
@@ -344,7 +382,36 @@
       if (!p) return;
       el('circle', { cx: p.x, cy: p.y, r: p.n === idx ? 6.5 : 2.6, fill: p.n === idx ? 'var(--page)' : 'var(--ink)', stroke: 'var(--ink)', 'stroke-width': p.n === idx ? 2.4 : 0 }, svg);
     });
-    cap.textContent = title + '. Box shading: share of lows that deepened rapidly within 24 h.';
+    cap.textContent = title + '. Box shading: share of lows that deepened rapidly within 24 h.' + (reg ? ' Dashed lines: the upper third of each variable, which divide the four regions.' : '');
+  }
+
+  function regOf(f) {
+    if (f.vadv == null || f.eady == null) return -1;
+    var c = D.regions.cuts;
+    return (f.vadv >= c[0] ? 2 : 0) + (f.eady >= c[1] ? 1 : 0);
+  }
+  function regTable() {
+    var R = D.regions.rows, base = D.meta.base_rd;
+    var h = '<tr><th>Region</th><th class="num">Share of lows</th><th class="num">Deepen rapidly in 24 h</th><th class="num">Share of all rapid deepening</th><th class="num">Next-24 h peak gust: below gale</th><th class="num">Gale</th><th class="num">Storm</th><th class="num">Hurricane force</th></tr>';
+    R.forEach(function (r, i) {
+      h += '<tr><td><i class="swatch" style="background:' + RC[i] + '"></i>' + RN[i] + '</td><td class="num">' + pct(r[7], 0) + '</td><td class="num">' + pct(r[3], 1) + ' <span class="muted">[' + (100 * r[4]).toFixed(1) + ', ' + (100 * r[5]).toFixed(1) + ']</span></td><td class="num">' + pct(r[6], 0) + '</td><td class="num">' + pct(r[8], 0) + '</td><td class="num">' + pct(r[9], 0) + '</td><td class="num">' + pct(r[10], 0) + '</td><td class="num">' + pct(r[11], 1) + '</td></tr>';
+    });
+    $('regTab').innerHTML = h;
+    $('coupShare').textContent = pct(R[3][6], 0);
+    $('regDefs').innerHTML = RN.map(function (n, i) { return '<dt><i class="swatch" style="background:' + RC[i] + '"></i>' + n + '</dt><dd>' + RDEF[i] + '</dd>'; }).join('');
+  }
+  function drawRegions() {
+    var f = sel.fx[idx], k = regOf(f);
+    drawDiagram($('dgC'), D.diagrams.trough_baroclinic, 'Trough forcing and baroclinicity', $('capC'), true);
+    if (k < 0) { $('regNow').textContent = 'Not enough upper-air data at this fix to place it.'; $('regPath').textContent = ''; return; }
+    var r = D.regions.rows[k];
+    $('regNow').innerHTML = 'This fix: <span class="regpill" style="background:' + RC[k] + '">' + RN[k] + '</span> &mdash; ' + pct(r[3], 1) + ' of lows in this region deepened rapidly within 24 h, against ' + pct(D.meta.base_rd, 1) + ' overall.';
+    var seq = sel.fx.map(regOf), ch = 0, last = -2;
+    seq.forEach(function (v) { if (v >= 0) { if (last >= 0 && v !== last) ch++; last = v; } });
+    var cnt = [0, 0, 0, 0];
+    seq.forEach(function (v) { if (v >= 0) cnt[v]++; });
+    var n = cnt[0] + cnt[1] + cnt[2] + cnt[3];
+    $('regPath').textContent = 'Over this storm\u2019s ' + n + ' fixes it changed region ' + ch + ' time' + (ch === 1 ? '' : 's') + '; fixes in coupled: ' + cnt[3] + ', baroclinic only: ' + cnt[1] + ', forcing only: ' + cnt[2] + ', quiet: ' + cnt[0] + '.';
   }
 
   function verdict(d, f) {
@@ -357,7 +424,7 @@
 
   function drawTimeline() {
     var svg = $('tl'); svg.innerHTML = '';
-    var fx = sel.fx, n = fx.length, L = 46, R = 46, T = 14, B = 34, w = 860 - L - R, h = 250 - T - B;
+    var fx = sel.fx, n = fx.length, L = 46, R = 46, T = 14, B = 50, w = 860 - L - R, h = 266 - T - B;
     var bw = w / n;
     fx.forEach(function (f, i) {
       var y = T + h;
@@ -381,8 +448,13 @@
     fx.forEach(function (f, i) {
       if (i % step === 0) el('text', { x: L + (i + 0.5) * bw, y: T + h + 14, 'text-anchor': 'middle' }, svg, (function (x) { return x.replace(/ \d{4} /, ' ').replace(' UTC', 'Z'); })(fmtT(f.t)));
     });
-    el('text', { x: L + w / 2, y: 246, 'text-anchor': 'middle' }, svg, 'Fix time (00 and 12 UTC). Bars: outlook for the next 24 h (left scale). Line: gust index at the fix (right scale, kt).');
-    $('tlLegend').innerHTML = CL.map(function (c, i) { return '<span><i style="background:' + CC[i] + '"></i>' + c + '</span>'; }).join('') + '<span><i style="background:var(--ink)"></i>Gust index at the fix</span>';
+    fx.forEach(function (f, i) {
+      var k = regOf(f);
+      if (k >= 0) el('rect', { x: L + i * bw + 0.5, y: T + h + 20, width: Math.max(bw - 1, 1), height: 8, fill: RC[k] }, svg);
+    });
+    el('text', { x: L - 5, y: T + h + 28, 'text-anchor': 'end' }, svg, 'Region');
+    el('text', { x: L + w / 2, y: 262, 'text-anchor': 'middle' }, svg, 'Fix time (00 and 12 UTC). Bars: outlook for the next 24 h (left scale). Line: gust index at the fix (right scale, kt).');
+    $('tlLegend').innerHTML = CL.map(function (c, i) { return '<span><i style="background:' + CC[i] + '"></i>' + c + '</span>'; }).join('') + '<span><i style="background:var(--ink)"></i>Gust index at the fix</span>' + RN.map(function (n, i) { return '<span><i style="background:' + RC[i] + '"></i>' + n + '</span>'; }).join('');
   }
 
   function draw() {
@@ -409,6 +481,7 @@
     $('envText').innerHTML = parts.join('<br>');
     drawDiagram($('dgA'), D.diagrams.jet_trough, 'Jet strength and trough (vorticity advection)', $('capA'));
     drawDiagram($('dgB'), D.diagrams.jet_baroclinic, 'Jet strength and baroclinicity (Eady growth)', $('capB'));
+    drawRegions();
     drawTimeline();
   }
 
