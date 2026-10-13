@@ -2133,12 +2133,56 @@ window.HF = window.HF || {};
   function probStyle(c, n) {
     // weight and alpha per class; the low classes are a haze, the top ones read as lines
     var thin = n > 8000 ? 0 : 1;
+    if (n <= 1) return [null,   // one storm on its own (click-a-storm view): solid, heavier lines
+      { w: 3, a: 0.55, v: '--p2' }, { w: 3.4, a: 0.8, v: '--p2' }, { w: 3.8, a: 0.9, v: '--p3' },
+      { w: 4.2, a: 1, v: '--p4' }, { w: 4.6, a: 1, v: '--p5' }][c];
     return [null,
       { w: 0.5, a: thin ? 0.16 : 0.3, v: '--p2' },
       { w: 0.7, a: 0.4, v: '--p2' },
       { w: 0.8, a: 0.5, v: '--p3' },
       { w: 1.0, a: 0.7, v: '--p4' },
       { w: 1.3, a: 0.85, v: '--p5' }][c];
+  }
+
+  /** One OPC-analysed storm over the P(HF) edges (the click-a-storm view): a dashed
+      line through every archive fix, a small dot per fix and a ringed dot where the
+      archive category is HF. Drawn last so the probability colours stay readable. */
+  function drawProbOverlay(low) {
+    var fx = low.fixes || [], i, q, prev = null;
+    ctx.save();
+    ctx.lineCap = 'round';
+    ctx.setLineDash([5, 3]);
+    ctx.strokeStyle = HF.cssVar('--ink') || '#222';
+    ctx.globalAlpha = 0.75;
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    for (i = 0; i < fx.length; i++) {
+      q = project(fx[i].lon, fx[i].lat);
+      if (!q || !q.visible) { prev = null; continue; }
+      if (prev) { ctx.moveTo(prev.x, prev.y); ctx.lineTo(q.x, q.y); }
+      prev = q;
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.globalAlpha = 1;
+    for (i = 0; i < fx.length; i++) {
+      q = project(fx[i].lon, fx[i].lat);
+      if (!q || !q.visible) continue;
+      ctx.beginPath();
+      if (fx[i].cat === 'HF') {
+        ctx.arc(q.x, q.y, 4.6, 0, Math.PI * 2);
+        ctx.fillStyle = HF.cssVar('--surface') || '#fff';
+        ctx.fill();
+        ctx.strokeStyle = HF.cssVar('--ink') || '#222';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      } else {
+        ctx.arc(q.x, q.y, 2, 0, Math.PI * 2);
+        ctx.fillStyle = HF.cssVar('--ink') || '#222';
+        ctx.fill();
+      }
+    }
+    ctx.restore();
   }
 
   function drawProb() {
@@ -2181,6 +2225,7 @@ window.HF = window.HF || {};
     }
     ctx.globalAlpha = 1;
     ctx.lineCap = 'butt';
+    if (probModel.opc) drawProbOverlay(probModel.opc);
     if (hoveredProb) {
       var ht = hoveredProb.t, h0 = D.off[ht], h1 = D.off[ht + 1], hp = null;
       ctx.lineCap = 'round';

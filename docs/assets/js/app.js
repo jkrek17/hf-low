@@ -35,6 +35,7 @@
     probPre: true,     // HF probability layer: include 1979-2003 (catalog events and matched nulls only)
     era5pre: false,    // ... and before 2001-02 (within-era comparison only), off by default
     sort: { key: 'start', dir: -1 },
+    focusStorm: null,      // {lowKey, track, prevLayer, prevSel, pan}: one storm on the map, P(HF) track with OPC's fixes
     cmp: { view: 'opc', sort: { key: 'start', dir: -1 } },   // the model-vs-OPC block on the Events tab
     selectedKey: null
   };
@@ -617,6 +618,14 @@
   /* ---------------------------------------------------------------- table */
 
   var COLUMNS = [
+    { key: 'map', label: 'Map', get: function () { return null; },
+      title: 'Show this storm alone on the map: the ERA5 proxy track coloured by P(HF within 24 h) with OPC\u2019s fixes over it. Needs a matched proxy track.',
+      render: function (l) {
+        var b = HF.el('button', { type: 'button', class: 'link-btn' }, 'Show');
+        b.setAttribute('aria-label', 'Show event ' + l.id + ' on the map with its model probability');
+        b.addEventListener('click', function (e) { e.stopPropagation(); showStormOnMap(l.key, cmpTrackOf(l.key)); });
+        return b;
+      } },
     { key: 'id', label: 'Event', get: function (l) { return l.id; } },
     { key: 'basin', label: 'Basin', get: function (l) { return l.basin; },
       render: function (l) {
@@ -683,6 +692,70 @@
   function ymdLabel(n) {
     var y = Math.floor(n / 10000), m = Math.floor(n / 100) % 100, d = n % 100;
     return d + ' ' + MONTHS_SHORT[m - 1] + ' ' + y;
+  }
+
+  /** Track index of the one pipeline A track in the allp table, or empty. */
+  function focusIdx(D, track) {
+    var out = [];
+    if (track >= 0) for (var i = 0; i < D.n; i++) if (D.kind[i] === 0 && D.id[i] === track) { out.push(i); break; }
+    return Int32Array.from(out);
+  }
+
+  function focusLow() {
+    var fs = state.focusStorm;
+    if (!fs || !fs.lowKey) return null;
+    for (var i = 0; i < LOWS.length; i++) if (LOWS[i].key === fs.lowKey) return LOWS[i];
+    return null;
+  }
+
+  var focusClick = false;   // true while showStormOnMap clicks the layer button itself
+
+  /** Events tab row -> Map tab: that one storm only, its ERA5 proxy track coloured by P(HF),
+      OPC's fixes over it. lowKey is null for a proxy storm OPC never listed; track is -1
+      when no pipeline A track lies within 500 km of the OPC storm. */
+  function showStormOnMap(lowKey, track) {
+    var fs = state.focusStorm;
+    state.focusStorm = { lowKey: lowKey, track: track, pan: true,
+      prevLayer: fs ? fs.prevLayer : state.layer, prevSel: fs ? fs.prevSel : state.selectedKey };
+    state.selectedKey = null;
+    focusClick = true;
+    document.querySelector('.seg[data-layer="prob"]').click();
+    focusClick = false;
+    document.querySelector('.tab[data-panel="map"]').click();
+    var gw = document.getElementById('globeWrap');
+    if (gw && gw.scrollIntoView) gw.scrollIntoView({ block: 'start', behavior: 'auto' });
+  }
+
+  function clearFocusStorm() {
+    var fs = state.focusStorm;
+    if (!fs) return;
+    state.focusStorm = null;
+    state.selectedKey = fs.prevSel;
+    focusClick = true;
+    document.querySelector('.seg[data-layer="' + fs.prevLayer + '"]').click();
+    focusClick = false;
+  }
+
+  /** Frame the focused storm once its data are in. */
+  function panToFocusStorm() {
+    var fs = state.focusStorm;
+    if (!fs || !fs.pan || !ensureEra5('allp')) return;
+    fs.pan = false;
+    var fixes = [], low = focusLow(), D = era5Data.allp, a = focusIdx(D, fs.track);
+    if (low) fixes = fixes.concat(low.fixes);
+    if (a.length) for (var k = D.off[a[0]]; k < D.off[a[0] + 1]; k++) fixes.push({ lat: D.lat[k], lon: D.lon[k] });
+    if (fixes.length) HF.globe.fitTo([{ fixes: fixes }]);
+  }
+
+  function focusNote() {
+    var fs = state.focusStorm, low = focusLow(), D = era5Data.allp;
+    var what = low ? 'OPC storm of ' + HF.fmtDate(low.start) + ' (' + (low.basin === 'pac' ? 'Pacific' : 'Atlantic') + ', minimum ' + (low.minP != null ? low.minP + ' hPa' : 'pressure not analysed') + ')' : 'ERA5 proxy storm OPC never listed';
+    var t = what + '. ';
+    if (fs.track < 0) t += 'No ERA5 proxy track lies within 500 km of it, so only OPC\u2019s fixes are shown. ';
+    else if (D && !focusIdx(D, fs.track).length) t += 'The proxy track has no scored fix. ';
+    else t += 'The coloured line is the ERA5 proxy track (pipeline A, track ' + fs.track + '), each segment coloured by the model\u2019s P(HF within 24 h), a model output and not an observation. ';
+    if (low) t += 'Dashed line and dots are OPC\u2019s analysed fixes; ringed dots are hurricane-force fixes. ';
+    return t + 'Hover the track for P and time.';
   }
 
   function showOnMap(trackId) {
@@ -760,6 +833,15 @@
      other view lists high-P proxy storms that OPC never listed. Data:
      data/era5-compare.js (tools/build_era5_compare.py). Pipeline A proxy. */
 
+  /** Matched pipeline A track of an OPC storm, from the comparison data when it is
+      loaded (it is fetched with the Events tab), else -1. */
+  function cmpTrackOf(key) {
+    var D = window.HF_ERA5_CMP;
+    if (!D) return -1;
+    if (!D.byKey) { D.byKey = {}; D.opc.forEach(function (r) { D.byKey[r[0]] = r[1]; }); }
+    return D.byKey[key] == null ? -1 : D.byKey[key];
+  }
+
   function cmpCall(r) {
     if (r.track < 0) return 'No matching track';
     if (r.pPre < 0) return 'No scored fix before onset';
@@ -776,7 +858,7 @@
       note.textContent = era5Status.cmp === 'failed' ? 'The model comparison data could not be loaded.' : 'Loading…';
       return;
     }
-    var D = window.HF_ERA5_CMP, view = state.cmp.view, cols, rows;
+    var D = window.HF_ERA5_CMP, view = state.cmp.view, cols, rows, open;
     var basinOk = function (b) { return state.basin === 'both' || state.basin === b; };
     if (view === 'opc') {
       var byKey = {};
@@ -798,6 +880,7 @@
           get: function (r) { return r.lead < 0 ? null : r.lead; }, text: function (r) { return r.lead < 0 ? '--' : r.lead; } },
         { key: 'call', label: 'Model', get: cmpCall, text: cmpCall }
       ];
+      open = function (r) { showStormOnMap(r.low.key, r.track); };
       var rated = rows.filter(function (r) { return r.track >= 0 && r.pPre >= 0; });
       var hit = rated.filter(function (r) { return r.pPre >= 5000; });
       var leads = hit.map(function (r) { return r.lead; }).sort(function (a, b) { return a - b; });
@@ -820,6 +903,7 @@
         { key: 'margin', label: 'Over 71.7 kt', num: 1, get: function (r) { return r[9]; }, text: function (r) { return '+' + (r[9] / 10).toFixed(1); } },
         { key: 'p', label: 'Peak P(HF) before HF', num: 1, get: function (r) { return r[8]; }, text: function (r) { return (r[8] / 10000).toFixed(2); } }
       ];
+      open = function (r) { showStormOnMap(null, r[0]); };
       sum.textContent = rows.length + ' proxy storms with P of 0.5 or more before they reach the gust threshold that OPC never listed under either matching rule (2004-05 on); ' +
         rows.filter(function (r) { return r[9] >= 100; }).length + ' are 10 kt or more over the threshold. Most are threshold-edge proxy storms.';
       note.textContent = rows.length + ' storms.';
@@ -838,6 +922,7 @@
       });
       hr.appendChild(th);
     });
+    hr.appendChild(HF.el('th', { scope: 'col' }, 'Map'));
     thead.appendChild(hr);
     rows.slice().sort(function (a, b) {
       var av = c.get(a), bv = c.get(b);
@@ -848,6 +933,12 @@
     }).slice(0, TABLE_LIMIT).forEach(function (r) {
       var tr = HF.el('tr');
       cols.forEach(function (col) { tr.appendChild(HF.el('td', { class: col.num ? 'num' : '' }, String(col.text(r)))); });
+      var mc = HF.el('td');
+      var mb = HF.el('button', { type: 'button', class: 'link-btn' }, 'Show on map');
+      mb.addEventListener('click', function (e) { e.stopPropagation(); open(r); });
+      mc.appendChild(mb);
+      tr.appendChild(mc);
+      tr.addEventListener('click', function () { open(r); });
       tbody.appendChild(tr);
     });
     if (rows.length > TABLE_LIMIT) note.textContent += ' Showing the first ' + TABLE_LIMIT + ' by ' + c.label.toLowerCase() + '.';
@@ -875,7 +966,7 @@
     });
     thead.appendChild(headRow);
 
-    var col = COLUMNS.filter(function (c) { return c.key === state.sort.key; })[0] || COLUMNS[3];
+    var col = COLUMNS.filter(function (c) { return c.key === state.sort.key; })[0] || COLUMNS[4];
     var sorted = lows.slice().sort(function (a, b) {
       var av = col.get(a), bv = col.get(b);
       if (av == null && bv == null) return 0;
@@ -1467,8 +1558,8 @@
 
   function probModel() {
     if (state.layer !== 'prob' || !ensureEra5('allp')) return null;
-    var D = era5Data.allp;
-    var idx = HF.era5.filterAllP(D, {
+    var D = era5Data.allp, fs = state.focusStorm;
+    var idx = fs ? focusIdx(D, fs.track) : HF.era5.filterAllP(D, {
       basin: state.basin === 'both' ? 'all' : state.basin,
       season0: state.probPre || state.season0 == null ? 0 : state.season0,
       season1: state.season1 == null ? 9999 : state.season1,
@@ -1481,7 +1572,7 @@
     probShown = { tracks: idx.length, fixes: nf, hi: hi };
     var KIND = ['2004-2025 low', '1979-2003 catalog event', '1979-2003 matched null case'];
     return {
-      D: D, idx: idx, minC: state.probMin,
+      D: D, idx: idx, minC: fs ? 1 : state.probMin, opc: fs ? focusLow() : null,
       tip: function (t, k) {
         var pct = D.p[k] / 10, lat = D.lat[k], lon = D.lon[k];
         return 'P(HF within 24 h) ' + (pct < 1 ? pct.toFixed(1) : Math.round(pct)) + ' % | fix ' + HF.era5.fixTimeLabel(D, k) +
@@ -1511,6 +1602,10 @@
     }
     box.appendChild(HF.el('p', { class: 'legend-note' },
       'ERA5 proxy model output (pipeline A, model N, leave-one-season-out), not an observation. Scored at 00 and 12 UTC; each edge takes the larger of its two ends. Lines under 5 % are faint on purpose.'));
+    if (state.focusStorm && focusLow()) {
+      box.appendChild(HF.el('h3', {}, 'OPC analysis'));
+      box.appendChild(HF.el('p', { class: 'legend-note' }, 'Dashed line: OPC fixes. Ringed dot: hurricane-force fix. Small dot: other analysed fix.'));
+    }
   }
 
   function atlasNote() {
@@ -1750,10 +1845,14 @@
     setEra5OnGlobe();
     renderPlayback(lows);
     renderLegend(lows);
+    panToFocusStorm();
 
     var layer = mapLayer();
     var note = document.getElementById('mapNote');
-    if (layer === 'playback') {
+    document.getElementById('focusBack').hidden = !state.focusStorm;
+    if (state.focusStorm && layer === 'prob' && ensureEra5('allp')) {
+      note.textContent = focusNote();
+    } else if (layer === 'playback') {
       note.textContent = playbackNote(lows);
     } else if (layer === 'density') {
       note.textContent = 'Hurricane force fixes per ' + HF.globe.CELL_LAT + '° × ' +
@@ -1788,7 +1887,7 @@
     }
     renderExplain();
     document.getElementById('atlasTools').hidden = layer !== 'atlas';
-    document.getElementById('probTools').hidden = layer !== 'prob';
+    document.getElementById('probTools').hidden = layer !== 'prob' || !!state.focusStorm;
     document.getElementById('atlasSrc').disabled = state.atlas.view === 'historic' || state.atlas.view === 'gust';
     document.getElementById('atlasField').hidden = state.atlas.view !== 'gust';
     document.getElementById('atlasFieldLabel').hidden = state.atlas.view !== 'gust';
@@ -2338,7 +2437,7 @@
     var lows = filtered();
     renderActiveFilters();
     renderKpis(lows);
-    if (state.tab === 'map') renderMap(lows);
+    if (state.tab === 'map') renderMap(state.focusStorm ? (focusLow() ? [focusLow()] : []) : lows);
     if (state.tab === 'clim') renderCharts(lows);
     if (state.tab === 'events') renderTable(lows);
     if (state.tab === 'strong') renderStrong();
@@ -3338,6 +3437,7 @@
 
     Array.prototype.forEach.call(document.querySelectorAll('.seg'), function (seg) {
       seg.addEventListener('click', function () {
+        if (!focusClick) state.focusStorm = null;
         var prev = state.layer;
         state.layer = seg.dataset.layer;
         if (state.layer === 'bymonth' && prev !== 'bymonth') {
@@ -3390,6 +3490,7 @@
       state.era5prob = e.target.checked;
       render();
     });
+    document.getElementById('focusBack').addEventListener('click', clearFocusStorm);
     document.getElementById('era5FocusClear').addEventListener('click', function () {
       state.era5focus = null;
       state.era5focusPan = false;
