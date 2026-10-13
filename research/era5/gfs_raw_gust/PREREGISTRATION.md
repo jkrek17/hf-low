@@ -56,7 +56,7 @@ a well-powered null is reported as a full result.
 - S4 GFS minus ERA5 `g800` bias at matched fixes (existing: -0.5 kt, `gfs_test/README.md`).
 
 ## Deviations (post hoc)
-(empty)
+1. The plan fixed the criteria for R3 and R4 but not the p-value that feeds the BH step. First scoring run (same script, same data) used a two-sided p (diff != 0) for R3 and a wrong-direction p for R4. Corrected after seeing it, before any write-up: R3 uses a two one-sided tests p (max of P(diff <= -0.10) and P(diff >= +0.10) over the bootstrap), R4 a non-inferiority p (P(diff >= +0.05)). The two-sided R3 p stays in `raw_gust.json` as `p_diff_outside` (0.001 in both basins). The decision per test follows the registered interval criteria and did not change.
 
 ## What this cannot show
 Five seasons, one forecast model with undocumented version changes, a tracker that must first find the low, and an archive whose HF label is an analyst's
