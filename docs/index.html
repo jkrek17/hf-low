@@ -205,10 +205,13 @@
           <option value="boxes">HF-centre hours per season (boxes)</option>
           <option value="motion">Mean motion while HF (arrows)</option>
           <option value="historic">1979-2003 candidates (ERA5 proxy)</option>
-          <option value="gust">ERA5 gust climatology (proxy)</option>
+          <option value="gust">ERA5 gust climatology and gale / storm / HF hours (proxy)</option>
         </select>
         <label for="atlasField" id="atlasFieldLabel" hidden>Field</label>
         <select id="atlasField" hidden>
+          <option value="g38">Gale-class gust hours (≥ 38 kt), pick months</option>
+          <option value="g54">Storm-class gust hours (≥ 54 kt), pick months</option>
+          <option value="g717">Hurricane-force-class gust hours (≥ 71.7 kt), pick months</option>
           <option value="annmax">Mean annual maximum gust</option>
           <option value="f50">Share of times at or above 50 kt</option>
           <option value="f64">Share of times at or above 64 kt</option>
@@ -222,6 +225,7 @@
       </div>
       <script type="text/plain" id="atlasLoader" src="data/atlas.js"></script>
       <script type="text/plain" id="gustLoader" src="data/gust-climo.js"></script>
+      <script type="text/plain" id="gustClassLoader" src="data/gust-classes.js"></script>
       <p class="tool-note" id="mapNote"></p>
       <button type="button" class="btn" id="focusBack" hidden>Back to all tracks</button>
       <button type="button" class="btn" id="era5FocusClear" hidden>Clear highlighted storm</button>
