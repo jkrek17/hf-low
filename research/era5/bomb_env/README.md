@@ -53,4 +53,8 @@ the storm's own state, as in PR 12; the environment adds the +0.03.
 - Looks at these data: one scoring run for the pre-registered family. The old `../intensity` scores on the same fixes are PRs 7 and 12 (not independent of this).
 
 ## Verification
-(to be filled after the independent recompute)
+A fresh Sonnet agent, writing its own scoring code from the committed tables, recomputed: class frequencies
+(0.5157 / 0.3120 / 0.1479 / 0.0243), outlook RPSS state +0.3680 and full +0.3987, rapid-deepening n 100,025,
+base rate 0.0343 and BSS state +0.1612, full +0.2846. All match.
+Not independently checked: the A and B rows, the bootstrap intervals, p and q values, per-class and per-basin
+gains, reliability slopes, the confusion table, and the diagram cells.
