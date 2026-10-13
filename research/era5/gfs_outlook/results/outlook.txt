@@ -1,0 +1,51 @@
+GFS outlook test (S, A, B fed GFS forecast fixes). Truth = ERA5 pipeline A, a PROXY (not observation).
+GFS track rows (all, 2021-22..2025-26): 318612; atl/pac fixes at valid 00/12 UTC, leads 0/12/24/36/48: 90131
+Fixes by lead: 0: 15202, 12: 19291, 24: 21149, 36: 19255, 48: 15234
+Fixes by season: 2021: 17381, 2022: 18092, 2023: 19205, 2024: 17598, 2025: 17855
+ERA5 fixes in seasons 2021-2025 with gcls: 36325
+No pipeline A fix within 500 km at the same valid time (dropped): lead 0: 1211, lead 12: 2075, lead 24: 2982, lead 36: 2667, lead 48: 2156; total 11091 of 90131
+Matched: 79040; matched ERA5 fix in the other basin: 0; match distance median 82 km
+Matched truth class counts (below gale, gale, storm, HF) by lead: 0: [3119, 5966, 4087, 819]; 12: [5294, 6731, 4355, 836]; 24: [6220, 6745, 4366, 836]; 36: [5730, 6074, 4008, 776]; 48: [4638, 4739, 3089, 612]
+Matched ERA5 fixes whose track ends within 24 h (left24, class 0 by convention): 24839
+Environment table rows: 69174 (leads [0, 24])
+Lead 0: matched 13991; with all three environment terms 13991; no env row 0; eady NaN 0
+Lead 24: matched 18167; with all three environment terms 18167; no env row 0; eady NaN 0
+Share using the no-dp12 fallback, lead >= 12: 12: 0.178, 24: 0.157, 36: 0.098, 48: 0.000; speed missing: 0: 1.000, 12: 0.077, 24: 0.067, 36: 0.000, 48: 0.000
+ERA5-fed S: dp12 model used for 54357 of 65049 lead >= 12 fixes
+
+== Registered family G1-G5 (RPSS; 90 % season-block interval, 5 seasons, 2,000 draws; BH q within the 5)
+  G1 S fed GFS, lead 24, RPSS vs clim: +0.3147 [+0.3105, +0.3194]  n 18167  p 0.0005  q 0.0006  -> yes
+  G2 S lead 24, GFS-fed minus ERA5-fed RPSS (equivalence +-0.05): -0.0286 [-0.0311, -0.0264]  n 18167  p 0.0005  q 0.0006  -> equivalent
+  G3 A minus S, GFS-fed, lead 24, RPSS gain: +0.0157 [+0.0142, +0.0174]  n 18167  p 0.0005  q 0.0006  -> yes
+  G4 B minus S, GFS-fed, lead 24, RPSS gain: +0.0146 [+0.0129, +0.0163]  n 18167  p 0.0005  q 0.0006  -> yes
+  G5 S RPSS lead 0 minus lead 48 (paired): -0.0291 [-0.0424, -0.0152]  n 27069  p 1.0000  q 1.0000  -> reversed
+  S RPSS by lead (G5 detail): 0 +0.3024 [+0.2939, +0.3115]; 24 +0.3147 [+0.3105, +0.3194]; 48 +0.3315 [+0.3252, +0.3372]
+  Lead 24: S ERA5-fed RPSS +0.3433 [+0.3400, +0.3465]; S GFS-fed RPSS +0.3147 [+0.3105, +0.3194] (same 18167 matched fixes)
+
+== Secondary (labelled; not in the family; no multiplicity control)
+  S RPSS lead  0: GFS-fed +0.3024 [+0.2939, +0.3115]  ERA5-fed +0.3362 [+0.3282, +0.3433]  n 13991
+  S RPSS lead 12: GFS-fed +0.3168 [+0.3111, +0.3227]  ERA5-fed +0.3371 [+0.3323, +0.3413]  n 17216
+  S RPSS lead 24: GFS-fed +0.3147 [+0.3105, +0.3194]  ERA5-fed +0.3433 [+0.3400, +0.3465]  n 18167
+  S RPSS lead 36: GFS-fed +0.3250 [+0.3210, +0.3288]  ERA5-fed +0.3586 [+0.3554, +0.3616]  n 16588
+  S RPSS lead 48: GFS-fed +0.3315 [+0.3252, +0.3372]  ERA5-fed +0.3751 [+0.3718, +0.3784]  n 13078
+  S RPSS lead 24 atl: +0.2832 [+0.2638, +0.3025]  n 8607
+  A minus S lead 24 atl: +0.0117 [+0.0085, +0.0163]  n 8607
+  B minus S lead 24 atl: +0.0128 [+0.0093, +0.0163]  n 8607
+  S RPSS lead 24 pac: +0.3441 [+0.3278, +0.3618]  n 9560
+  A minus S lead 24 pac: +0.0193 [+0.0172, +0.0226]  n 9560
+  B minus S lead 24 pac: +0.0163 [+0.0152, +0.0174]  n 9560
+  A minus S lead 0: +0.0385 [+0.0363, +0.0413]  n 13991
+  B minus S lead 0: +0.0429 [+0.0409, +0.0452]  n 13991
+  Recalibrated S (offsets fitted on 2021-22 lead 24, n 3488: [0.0, 0.374, 0.55, 0.712]), applied 2022-2025 lead 24 n 14679: RPSS uncal +0.3128 [+0.3091, +0.3175], recal +0.3209 [+0.3171, +0.3250], gain +0.0081 [+0.0062, +0.0102] (4 seasons)
+  Reliability of the GFS-fed S hurricane-force probability, lead 24 (deciles of forecast), slope 0.96 (1 = perfect), base rate 0.0460, mean forecast 0.0427:
+    bin 0: n  1817  forecast 0.0000  observed 0.0000
+    bin 1: n  1817  forecast 0.0000  observed 0.0011
+    bin 2: n  1816  forecast 0.0001  observed 0.0006
+    bin 3: n  1817  forecast 0.0005  observed 0.0017
+    bin 4: n  1816  forecast 0.0013  observed 0.0039
+    bin 5: n  1817  forecast 0.0035  observed 0.0105
+    bin 6: n  1817  forecast 0.0087  observed 0.0154
+    bin 7: n  1816  forecast 0.0220  observed 0.0374
+    bin 8: n  1817  forecast 0.0663  observed 0.0765
+    bin 9: n  1817  forecast 0.3248  observed 0.3132
+  Lead 24 mean forecast class probability vs observed frequency (S GFS-fed): below gale 0.389 vs 0.342; gale 0.343 vs 0.371; storm 0.225 vs 0.240; hurricane force 0.043 vs 0.046
