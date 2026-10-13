@@ -1,0 +1,58 @@
+Fixes 159430, tracks 36598, seasons 2004-2025 (n = 22)
+Outlook class frequencies (next 24 h, 00/12 UTC samples): below gale 0.516, gale 0.312, storm 0.148, hurricane force 0.024
+
+== Outlook (4 ordered classes): LOSO RPSS vs basin-month climatology, season-bootstrap 90 % CI
+  clim         +0.000 [+0.000, +0.000]
+  state        +0.368 [+0.364, +0.372]
+  A            +0.380 [+0.376, +0.383]
+  B            +0.376 [+0.373, +0.380]
+  full         +0.399 [+0.395, +0.402]
+  full_nogust  +0.355 [+0.351, +0.359]
+
+== Rapid deepening (NDR >= 1 Bergeron in 24 h), n = 100025 fixes, base rate 0.034: LOSO BSS vs climatology
+  clim         +0.000 [+0.000, +0.000]
+  state        +0.161 [+0.152, +0.169]
+  A            +0.212 [+0.203, +0.220]
+  B            +0.234 [+0.224, +0.244]
+  full         +0.285 [+0.274, +0.295]
+  full_nogust  +0.283 [+0.273, +0.293]
+
+== Pre-registered family (gain over state; BH q within the 6)
+  outlook RPSS         A     - state: +0.0115 [+0.0106, +0.0123]  p 0.0005  q 0.0005  yes
+  outlook RPSS         B     - state: +0.0084 [+0.0079, +0.0089]  p 0.0005  q 0.0005  yes
+  outlook RPSS         full  - state: +0.0306 [+0.0295, +0.0318]  p 0.0005  q 0.0005  yes
+  rapid-deepening BSS  A     - state: +0.0504 [+0.0434, +0.0571]  p 0.0005  q 0.0005  yes
+  rapid-deepening BSS  B     - state: +0.0733 [+0.0667, +0.0798]  p 0.0005  q 0.0005  yes
+  rapid-deepening BSS  full  - state: +0.1234 [+0.1154, +0.1316]  p 0.0005  q 0.0005  yes
+
+== Secondary: full over A / B
+  outlook RPSS         full - A: +0.0191 [+0.0182, +0.0200]
+  outlook RPSS         full - B: +0.0222 [+0.0213, +0.0232]
+  rapid-deepening BSS  full - A: +0.0730 [+0.0658, +0.0802]
+  rapid-deepening BSS  full - B: +0.0502 [+0.0450, +0.0553]
+  full vs full_nogust (outlook): +0.0438
+
+== Per-class Brier skill, full vs clim (and gain over state)
+  below gale       base 0.5157  BSS full +0.378  gain over state +0.0234 [+0.0223, +0.0245]
+  gale             base 0.3120  BSS full +0.222  gain over state +0.0297 [+0.0284, +0.0310]
+  storm            base 0.1479  BSS full +0.323  gain over state +0.0358 [+0.0336, +0.0379]
+  hurricane force  base 0.0243  BSS full +0.336  gain over state +0.0668 [+0.0623, +0.0715]
+
+== Outlook RPSS gain full - state by basin and without left24 fixes
+  Atlantic               n  75026  +0.0308 [+0.0293, +0.0323]
+  Pacific                n  84404  +0.0305 [+0.0288, +0.0321]
+  track continues 24 h   n 100030  +0.0343 [+0.0331, +0.0356]
+
+== Reliability (full outlook, pooled held-out seasons): forecast decile bin -> observed frequency
+  below gale       reliability slope 1.01  (1 = perfect); forecast 0.013-0.970
+  gale             reliability slope 1.13  (1 = perfect); forecast 0.024-0.619
+  storm            reliability slope 1.02  (1 = perfect); forecast 0.000-0.653
+  hurricane force  reliability slope 1.00  (1 = perfect); forecast 0.000-0.218
+
+== Most-likely-class table (full), rows observed, columns forecast, counts
+col_0            below gale   gale  storm  hurricane force
+row_0                                                     
+below gale            68502  11625   2015               83
+gale                  16036  29949   3743               13
+storm                  1016   8675  13378              515
+hurricane force          23    243   2351             1263

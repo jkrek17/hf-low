@@ -1,0 +1,7 @@
+Rapid-deepening base rate 0.0343
+jet_trough: rd rate min 0.000, max 0.206; cells shown 36/36; min n 1149
+  highest cell: x 139.7..235.1 jet250, y 0.76..5.51 vadv500, rate 0.206 (n 7285)
+  lowest cell: rate 0.000 (n 3207)
+jet_baroclinic: rd rate min 0.000, max 0.248; cells shown 36/36; min n 1698
+  highest cell: x 139.7..235.1 jet250, y 0.95..2.50 eady, rate 0.248 (n 7486)
+  lowest cell: rate 0.000 (n 2958)
