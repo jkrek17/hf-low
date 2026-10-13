@@ -1220,7 +1220,8 @@
     cmp:   { varName: 'HF_ERA5_CMP',   loader: 'era5CmpLoader',   decode: function (r) { return r; } },
     atlas: { varName: 'HF_ATLAS',      loader: 'atlasLoader',     decode: function (r) { return r; } },
     allp:  { varName: 'HF_ERA5_ALLP',  loader: 'allpLoader',      decode: function (r) { return HF.era5.decodeAllP(r); } },
-    gust:  { varName: 'HF_GUST_CLIMO', loader: 'gustLoader',      decode: function (r) { return r; } }
+    gust:  { varName: 'HF_GUST_CLIMO', loader: 'gustLoader',      decode: function (r) { return r; } },
+    gustc: { varName: 'HF_GUST_CLASSES', loader: 'gustClassLoader', decode: function (r) { return r; } }
   };
   var era5Attached = {};                       // ev / nul: P(HF) already attached to the decoded tracks
   var era5Data = {}, era5Status = {};          // per set: decoded data; 'loading' | 'ready' | 'failed'
@@ -1346,8 +1347,24 @@
     annmax: { short: 'mean annual maximum gust', unit: ' kt', title: 'Mean annual maximum gust (kt)', bounds: [40, 50, 55, 60, 65, 70, 75], lab: function (b) { return '≥ ' + b + ' kt'; } },
     f50:    { short: 'share of times at or above 50 kt', unit: ' %', title: 'Share of times at or above 50 kt', bounds: [0.5, 1, 2, 4, 6, 9, 12], lab: function (b) { return '≥ ' + b + ' %'; } },
     f64:    { short: 'share of times at or above 64 kt', unit: ' %', title: 'Share of times at or above 64 kt', bounds: [0.05, 0.1, 0.2, 0.4, 0.8, 1.2, 2], lab: function (b) { return '≥ ' + b + ' %'; } },
-    f717:   { short: 'share of times at or above 71.7 kt', unit: ' %', title: 'Share of times at or above 71.7 kt', bounds: [0.01, 0.03, 0.06, 0.1, 0.2, 0.4, 0.8], lab: function (b) { return '≥ ' + b + ' %'; } }
+    f717:   { short: 'share of times at or above 71.7 kt', unit: ' %', title: 'Share of times at or above 71.7 kt', bounds: [0.01, 0.03, 0.06, 0.1, 0.2, 0.4, 0.8], lab: function (b) { return '≥ ' + b + ' %'; } },
+    /* Nominal proxy classes on the gust index, hours per season summed over the months ticked in the month filter
+       (all twelve when none are ticked). The class edges are for ONE month and are scaled by the number of months. */
+    g38:    { cls: true, name: 'Gale', kt: '38', short: 'gale-class gust (at or above 38 kt)', unit: ' h', title: 'Gale-class gust hours per season (≥ 38 kt)', bounds: [5, 15, 30, 60, 100, 150, 200], lab: function (b) { return '≥ ' + fmtHours(b) + ' h'; } },
+    g54:    { cls: true, name: 'Storm', kt: '54', short: 'storm-class gust (at or above 54 kt)', unit: ' h', title: 'Storm-class gust hours per season (≥ 54 kt)', bounds: [0.5, 2, 5, 10, 20, 40, 60], lab: function (b) { return '≥ ' + fmtHours(b) + ' h'; } },
+    g717:   { cls: true, name: 'Hurricane-force', kt: '71.7', short: 'hurricane-force-class gust (at or above 71.7 kt)', unit: ' h', title: 'Hurricane-force-class gust hours per season (≥ 71.7 kt)', bounds: [0.05, 0.2, 0.5, 1, 2, 4, 6], lab: function (b) { return '≥ ' + fmtHours(b) + ' h'; } }
   };
+  function fmtHours(h) { return h >= 10 ? String(Math.round(h)) : h >= 1 ? String(Math.round(h * 10) / 10) : String(Math.round(h * 100) / 100); }
+  function gustMonthsOn() {
+    var on = [], m;
+    for (m = 1; m <= 12; m++) if (state.months && state.months[m]) on.push(m);
+    if (!on.length) for (m = 1; m <= 12; m++) on.push(m);
+    return on;
+  }
+  function gustBounds(fld) {                    // class edges for the months on screen (cls fields only)
+    var F = GUST_FIELDS[fld], n = F.cls ? gustMonthsOn().length : 1;
+    return F.bounds.map(function (b) { return b * n; });
+  }
 
   function atlasModel() {
     if (state.layer !== 'atlas' || !ensureEra5('atlas')) return null;
@@ -1388,16 +1405,26 @@
       return out;
     }
     if (view === 'gust') {
-      if (!ensureEra5('gust')) return null;
-      var G = window.HF_GUST_CLIMO, fld = state.atlas.field, F = GUST_FIELDS[fld];
+      var fld = state.atlas.field, F = GUST_FIELDS[fld], isCls = !!F.cls, bnd = gustBounds(fld), mons = gustMonthsOn();
+      if (!ensureEra5(isCls ? 'gustc' : 'gust')) return null;
+      var G = isCls ? window.HF_GUST_CLASSES : window.HF_GUST_CLIMO;
       out = { kind: 'grid', wins: [], lookup: null };
       var wins = basins.map(function (b) {
-        var w = G.win[b], vals = w.f[fld], cls = new Uint8Array(vals.length), q, i;
+        var w = G.win[b], vals = w.f[fld], cls = new Uint8Array(isCls ? w.nlat * w.nlon : vals.length), q, i;
+        if (isCls) {                              // hours per season (0.1 h units) summed over the months on screen
+          var tot = new Array(cls.length);
+          for (i = 0; i < cls.length; i++) {
+            var sum = 0;
+            for (var mi = 0; mi < mons.length; mi++) sum += vals[mons[mi] - 1][i];
+            tot[i] = vals[mons[0] - 1][i] < 0 ? -1 : sum;
+          }
+          vals = tot;
+        }
         for (i = 0; i < vals.length; i++) {
           if (vals[i] < 0) continue;
-          var x = fld === 'annmax' ? vals[i] / 2 : vals[i] / 100;
+          var x = isCls ? vals[i] / 10 : fld === 'annmax' ? vals[i] / 2 : vals[i] / 100;
           q = 0;
-          while (q < F.bounds.length && x >= F.bounds[q]) q++;
+          while (q < bnd.length && x >= bnd[q]) q++;
           cls[i] = q;
         }
         return { lat0: w.lat0, lon0: w.lon0, dlat: w.dlat, dlon: w.dlon, nlat: w.nlat, nlon: w.nlon, cls: cls, vals: vals };
@@ -1409,7 +1436,13 @@
           if (dl >= w.nlon || lat < w.lat0 || lat >= w.lat0 + w.nlat) continue;
           var ii = Math.floor((lat - w.lat0) / w.dlat), jj = Math.floor(dl / w.dlon), v = w.vals[ii * w.nlon + jj];
           if (v < 0) return null;
-          var val = fld === 'annmax' ? v / 2 : v / 100, la0 = w.lat0 + ii * w.dlat, lo0 = w.lon0 + jj * w.dlon;
+          var val = isCls ? v / 10 : fld === 'annmax' ? v / 2 : v / 100, la0 = w.lat0 + ii * w.dlat, lo0 = w.lon0 + jj * w.dlon;
+          if (isCls) {
+            return '<b>' + fmtLat(la0) + '–' + fmtLat(la0 + w.dlat) + ', ' + fmtLon(lo0) + '–' + fmtLon(lo0 + w.dlon) + '</b><br>' +
+              F.name + '-class gust (≥ ' + F.kt + ' kt, nominal proxy class): ' + val.toFixed(val >= 10 ? 0 : 1) + ' h per season, ' + atlasMonthsLabel() +
+              '<br>ERA5 proxy, 1° block of ocean cells, 00 and 12 UTC, 2004-05 to 2025-26' +
+              '<br>ERA5 reads low in extreme storms; a lower bound on true gusts';
+          }
           return '<b>' + fmtLat(la0) + '–' + fmtLat(la0 + w.dlat) + ', ' + fmtLon(lo0) + '–' + fmtLon(lo0 + w.dlon) + '</b><br>' +
             F.short + ': ' + val.toFixed(fld === 'annmax' ? 1 : 2) + F.unit + '<br>ERA5 proxy, 1° block of ocean cells, 00 and 12 UTC, Oct–Apr 2004-05 to 2025-26' +
             '<br>ERA5 reads low in extreme storms; a lower bound on true gusts';
@@ -1621,7 +1654,14 @@
         (state.atlas.src === 'proxy' ? 'ERA5 proxy, not direct observation.' : 'OPC archive.') + ' Month filters do not apply to this view.' + ' Basin filter applies.';
     }
     if (v === 'gust') {
-      var Gm = window.HF_GUST_CLIMO;
+      var Gm = window.HF_GUST_CLIMO, Fn = GUST_FIELDS[state.atlas.field];
+      if (Fn.cls) {
+        return 'What this shows: how many hours per season the ERA5 gust reached the ' + Fn.name.toLowerCase() + ' class (' + Fn.kt + ' kt or more), ' + atlasMonthsLabel() +
+          ' (tick months in the month filter to pick one; unticked means the whole year, June to May). ERA5 PROXY, not direct observation. Instantaneous 10 m gust sampled at 00 and 12 UTC, 2004-05 to 2025-26 (22 seasons), ocean only, 1° blocks; each sample counts as 12 h. ' +
+          'Gale ≥ 38 kt, storm ≥ 54 kt and hurricane force ≥ 71.7 kt are NOMINAL proxy classes on the gust index; the archive lists only hurricane-force storms, so gale and storm are not calibrated on observed events. ' +
+          'The older ≥ 50 and ≥ 64 kt views are October to April shares of times, not hours, and sit between these classes. ERA5 reads low in extreme storms and sampling is 12-hourly, so every value is a lower bound. ' +
+          'The colour edges are for one month and scale with the number of months shown. Coastal and sea-ice cells (the Greenland coast, Chukotka) are the least reliable and there is no terrain mask. Basin filter applies; season filter does not.';
+      }
       return 'ERA5 gust climatology (' + GUST_FIELDS[state.atlas.field].title.toLowerCase() + '), ERA5 PROXY, not direct observation. Instantaneous 10 m gust sampled at 00 and 12 UTC, 1 October to 30 April, 2004-05 to 2025-26' +
         (Gm ? ' (' + Gm.meta.n_times.toLocaleString() + ' times)' : '') + ', ocean only, 1° blocks. ERA5 reads low in extreme storms and the samples are 12-hourly, so every value is a lower bound on the true gust; the late-summer tropical-cyclone season is not sampled. ' +
         'Coastal and sea-ice cells (the Greenland coast, Chukotka) are the least reliable and there is no terrain mask. Blocks below the lowest class are not drawn. Basin filter applies; season and month filters do not.';
@@ -1651,15 +1691,17 @@
       box.appendChild(HF.el('p', { class: 'legend-note' }, 'Boxes with at least 25 six-hour steps. ' + atlasSrcLabel() + '.'));
     } else if (v === 'gust') {
       var F2 = GUST_FIELDS[state.atlas.field];
-      box.appendChild(HF.el('h3', {}, F2.title));
-      F2.bounds.forEach(function (bd, qi) {
+      box.appendChild(HF.el('h3', {}, F2.title + (F2.cls ? ', ' + atlasMonthsLabel() : '')));
+      gustBounds(state.atlas.field).forEach(function (bd, qi) {
         var rr = HF.el('div', { class: 'legend-row' }), sw2 = HF.el('span', { class: 'legend-swatch' });
         sw2.style.background = HF.cssVar(ramp[qi]);
         rr.appendChild(sw2);
         rr.appendChild(document.createTextNode(F2.lab(bd)));
         box.appendChild(rr);
       });
-      box.appendChild(HF.el('p', { class: 'legend-note' }, 'ERA5 proxy: reads low in extreme storms; a lower bound on true gusts. Instantaneous, 12-hourly, October to April.'));
+      box.appendChild(HF.el('p', { class: 'legend-note' }, GUST_FIELDS[state.atlas.field].cls
+        ? 'ERA5 proxy, nominal classes: reads low in extreme storms; a lower bound on true gusts. Instantaneous, 12-hourly, June to May.'
+        : 'ERA5 proxy: reads low in extreme storms; a lower bound on true gusts. Instantaneous, 12-hourly, October to April.'));
     } else {
       box.appendChild(HF.el('h3', {}, 'ERA5 proxy candidates, 1979-2003'));
       var r = HF.el('div', { class: 'legend-row' }), sw = HF.el('span', { class: 'legend-swatch' });
