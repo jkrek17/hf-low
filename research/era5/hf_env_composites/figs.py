@@ -1,7 +1,7 @@
 """Figures from results/comp_{rot,north}.npz: one file per frame x basin x variable group.
 
 usage: figs.py     -> results/figs/{frame}_{basin}_{group}.png
-Rows: raw mean (colour, with contours or wind vectors) and mean anomaly (colour, stippled where the season-block
+Rows: raw mean (colour, with contours or wind vectors) and, except for the wind-speed groups, mean anomaly (colour, stippled where the season-block
 bootstrap passes BH q < 0.05; stippling is descriptive because pixels are correlated). Columns: 48, 24, 12 h before
 HF onset, onset, peak.
 """
@@ -11,8 +11,13 @@ import numpy as np
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from common import BX, BY
-from extract import FIELDS, BASE
+# Constants repeated from common.py (BOX_N, BOX_D) and extract.py (BASE, FIELDS) so this script needs only numpy and
+# matplotlib, not the data-pull dependencies those modules import.
+BOX_N, BOX_D = 81, 100.0
+_ax = (np.arange(BOX_N) - BOX_N // 2) * BOX_D
+BX, BY = np.meshgrid(_ax, _ax, indexing="xy")
+BASE = ["z500", "u250", "v250", "u500", "v500", "ws250", "ws500", "d250", "d500"]
+FIELDS = BASE + ["a_" + f for f in BASE]
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ANCH = ["m48", "m24", "m12", "onset", "peak"]
@@ -20,8 +25,11 @@ TITLE = {"m48": "48 h before onset", "m24": "24 h before onset", "m12": "12 h be
 BASIN = {"atl": "North Atlantic", "pac": "North Pacific"}
 GROUPS = {
     "z500": [("z500", "Z500 (m)", "raw", "contour"), ("z500", "Z500 anomaly (m)", "anom", None)],
-    "wind250": [("ws250", "250 hPa wind speed (m/s)", "raw", "vec250"), ("ws250", "250 hPa speed anomaly (m/s)", "anom", None)],
-    "wind500": [("ws500", "500 hPa wind speed (m/s)", "raw", "vec500"), ("ws500", "500 hPa speed anomaly (m/s)", "anom", None)],
+    # Speed anomaly rows removed: the stored a_ws fields compare the mean speed with the speed of the climatological MEAN
+    # vector, which is lower than the climatological mean speed, so they read too high (found after hf-low PR 146). The
+    # climatology used here (WeatherBench2) has no mean-speed field, so only the raw mean speed is drawn.
+    "wind250": [("ws250", "250 hPa wind speed (m/s)", "raw", "vec250")],
+    "wind500": [("ws500", "500 hPa wind speed (m/s)", "raw", "vec500")],
     "div": [("d250", "250 hPa divergence (1e-5/s)", "raw", None), ("d250", "250 hPa divergence anomaly (1e-5/s)", "anom", None),
             ("d500", "500 hPa divergence (1e-5/s)", "raw", None), ("d500", "500 hPa divergence anomaly (1e-5/s)", "anom", None)],
 }
