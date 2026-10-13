@@ -481,6 +481,11 @@ input[type="search"] { min-width: 170px; max-width: 240px; flex: 1 1 auto; }
 .tele-sum-found .tele-sumbtn { border-color: var(--critical); }
 .tele-sum-lowpower .tele-sumbtn { border-style: dashed; }
 
+.strong-bar { display: block; height: 4px; margin-top: 3px; margin-left: auto; background: var(--accent); border-radius: 2px; opacity: .55; max-width: 90px; }
+
+.prose .jump { margin: 0 0 var(--sp-3); font-size: var(--fs-sm); color: var(--ink-2); line-height: 1.7; }
+.prose .jump a { white-space: nowrap; }
+
 /* --------------------------------------------------------------- loading */
 
 .loading {
@@ -908,7 +913,8 @@ input.pb-scrub::-moz-range-thumb {
    seasons against a subset), so they step aside rather than look live. */
 .tele-active .filters, .tele-active .active-filters, .tele-active .kpis,
 .qc-active .filters, .qc-active .active-filters, .qc-active .kpis,
-.strong-active .filters, .strong-active .active-filters, .strong-active .kpis { display: none; }
+.strong-active .filters, .strong-active .active-filters, .strong-active .kpis,
+.method-active .filters, .method-active .active-filters, .method-active .kpis { display: none; }
 
 .tele-grid {
   display: grid; gap: var(--sp-4); align-items: start;

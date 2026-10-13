@@ -17,6 +17,7 @@
     maxPressure: 1010,
     bombOnly: false,
     search: '',
+    practiceAll: false,    // Climatology explosive-share chart: also draw the every-fix line
     moreCols: false,       // Events table: also show the 'recorded' and track-speed columns
     layer: 'density',      // 'tracks' | 'density' | 'genesis' | 'peak' | 'atlas' | 'prob' | 'bymonth' | 'playback'
     currents: false,   // ocean currents background layer - independent of `layer`, off by default
@@ -32,7 +33,7 @@
     monthHeatSrc: 'archive', // heat map source: 'archive' (2004-05 on) | 'era5' (1979-80 to 2003-04 proxy)
     monthTracks: false,     // By month: draw the event tracks over the shading (off with the heat map)
     monthEra5: true,   // By month: add the ERA5 proxy storms of earlier seasons (teal), on by default
-    probMin: 1,        // HF probability layer: draw edges at or above this P class (1 = all)
+    probMin: 3,        // HF probability layer: draw edges at or above this P class (1 = all, 3 = 20 % and above; the all-tracks view is unreadable with every edge)
     probPre: true,     // HF probability layer: include 1979-2003 (catalog events and matched nulls only)
     era5pre: false,    // ... and before 2001-02 (within-era comparison only), off by default
     sort: { key: 'start', dir: -1 },
@@ -477,7 +478,7 @@
     var slot = plotW / Math.max(1, rows.length);
     var maxPct = 20;
     rows.forEach(function (r) {
-      if (r.all != null) maxPct = Math.max(maxPct, r.all);
+      if (r.all != null && state.practiceAll) maxPct = Math.max(maxPct, r.all);
       if (r.hf != null) maxPct = Math.max(maxPct, r.hf);
     });
     var top = Math.ceil(maxPct / 20) * 20, step = top <= 40 ? 10 : 20;
@@ -526,7 +527,7 @@
     // Boundary rules first, so the lines draw over them. Each label sits on
     // its own row so two nearby onsets (Pacific 2013, Atlantic 2017) never
     // overprint, and flips to the left of its rule near the right edge.
-    practiceBoundaries().forEach(function (b, row) {
+    (state.practiceAll ? practiceBoundaries() : []).forEach(function (b, row) {
       var idx = -1;
       rows.forEach(function (r, i) { if (r.season === b.onset) idx = i; });
       if (idx < 0) return;
@@ -552,7 +553,7 @@
           : node('circle', { 'class': markCls, cx: p[0].toFixed(1), cy: p[1].toFixed(1), r: 3.6 }));
       });
     }
-    series('all', 'c-prac-all', 'c-prac-mk-all', 'square');
+    if (state.practiceAll) series('all', 'c-prac-all', 'c-prac-mk-all', 'square');
     series('hf', 'c-prac-hf', 'c-prac-mk-hf', 'circle');
 
     // Mouse-only detail; the table below carries the same numbers.
@@ -572,7 +573,9 @@
 
     var legend = HF.el('p', { 'class': 'chart-legend' });
     [['c-prac-key-all', 'Whole recorded track'], ['c-prac-key-hf', 'Hurricane-force fixes only'],
-     ['c-prac-key-edge', 'First season of the new logging practice']].forEach(function (k) {
+     ['c-prac-key-edge', 'First season of the new logging practice']].filter(function (k) {
+      return state.practiceAll || k[0] === 'c-prac-key-hf';
+    }).forEach(function (k) {
       var span = HF.el('span');
       span.appendChild(HF.el('i', { 'class': 'c-prac-key ' + k[0] }));
       span.appendChild(document.createTextNode(k[1]));
@@ -750,6 +753,10 @@
     document.querySelector('.tab[data-panel="map"]').click();
   }
 
+  /** Pipeline A track ids of the ten storms on the Storm reviews page
+      (tools/storm_review_storms.csv); their rows link to the review. */
+  var STORM_REVIEW_TRACKS = [72089, 128894, 388835, 99844, 100785, 397733, 24927, 339400, 349447, 301362];
+
   function renderStrong() {
     var table = document.getElementById('strongTable');
     var thead = HF.clear(table.tHead || table.createTHead());
@@ -795,11 +802,20 @@
       dc.appendChild(btn);
       tr.appendChild(dc);
       td(r[1] === 0 ? 'Atlantic' : 'Pacific', 0);
-      td((r[6] / 10).toFixed(1), 1);
+      var pc = HF.el('td', { class: 'num' }, (r[6] / 10).toFixed(1));
+      // a small bar so the ranking reads at a glance: longer = deeper
+      var bar = HF.el('span', { class: 'strong-bar', 'aria-hidden': 'true' });
+      bar.style.width = Math.max(4, Math.min(100, (960 - r[6] / 10) / 55 * 100)).toFixed(0) + '%';
+      pc.appendChild(bar);
+      tr.appendChild(pc);
       if (listKey === 'depth') td(r[7] == null ? '--' : (r[7] / 10).toFixed(1), 1);
       td((r[8] / 10).toFixed(1), 1);
       if (gust) td(r[10], 0);
-      td(notes.join('; '), 0);
+      var nc = HF.el('td', null, notes.join('; ') + (notes.length ? ' ' : ''));
+      if (STORM_REVIEW_TRACKS.indexOf(r[3]) >= 0) {
+        nc.appendChild(HF.el('a', { href: 'storm-reviews.html#storm-' + r[3] }, 'Storm review'));
+      }
+      tr.appendChild(nc);
       tbody.appendChild(tr);
     });
     note.textContent = rows.length + ' storms, ERA5 proxy, not direct observation. Select a date to show the storm on the map.';
@@ -2510,7 +2526,7 @@
   var PB_LIVE_DEBOUNCE_MS = 350; // settle time before speaking a user-driven change
 
   var play = {
-    mode: 'composite',           // 'composite' | 'season' | 'step'
+    mode: 'season',              // 'composite' | 'season' | 'step'; season replay is the useful one, the composite blurs 22 years together
     unit: 'month',               // step only: 'month' | 'season' | 'moy' (calendar month, all seasons)
     moy: 6,                      // month-of-year step position, 1-12
     moys: [],
@@ -3466,6 +3482,8 @@
       // QC lists the whole archive's flags, so the filters do not apply either.
       document.body.classList.toggle('qc-active', state.tab === 'qc');
       document.body.classList.toggle('strong-active', state.tab === 'strong');
+      // The Method tab is reference text; the filters and summary do not apply to it.
+      document.body.classList.toggle('method-active', state.tab === 'method');
       // Map and Events show the summary as one slim strip so the map and the
       // table start near the top; Climatology keeps the full cards.
       document.body.classList.toggle('kpis-slim', state.tab === 'map' || state.tab === 'events');
@@ -3486,7 +3504,7 @@
           play.mode = 'step'; play.unit = 'moy'; play.moy = 1; play.clock = null; play.tickKey = '';
           play.byMonthUsed = true;
         } else if (state.layer === 'playback' && prev !== 'playback' && play.byMonthUsed) {
-          play.mode = 'composite'; play.t = 0; play.clock = null; play.tickKey = '';
+          play.mode = 'season'; play.t = 0; play.clock = null; play.tickKey = '';
           play.byMonthUsed = false;
         }
         Array.prototype.forEach.call(document.querySelectorAll('.seg'), function (s) {
@@ -3495,6 +3513,7 @@
           // says the same thing to assistive technology.
           s.setAttribute('aria-pressed', s === seg ? 'true' : 'false');
         });
+        syncWhere();
         render();
         if (state.layer === 'playback' && prev !== 'playback') startPlaybackOnEntry();
         if (state.layer === 'bymonth' && prev !== 'bymonth') {
@@ -3506,6 +3525,10 @@
       });
     });
     buildPlaybackControls();
+    document.getElementById('whereView').addEventListener('change', function (e) {
+      document.querySelector('.seg[data-layer="' + e.target.value + '"]').click();
+    });
+    syncWhere();
 
     document.getElementById('fitBounds').addEventListener('click', function () {
       HF.globe.fitTo(filtered());
@@ -3549,6 +3572,10 @@
       render();
     });
     document.getElementById('exportCsv').addEventListener('click', exportCsv);
+    document.getElementById('practiceAll').addEventListener('change', function (e) {
+      state.practiceAll = e.target.checked;
+      renderPracticeChart(filtered());
+    });
     document.getElementById('moreCols').addEventListener('click', function () {
       state.moreCols = !state.moreCols;
       this.textContent = state.moreCols ? 'Fewer columns' : 'More columns';
@@ -4413,6 +4440,20 @@
   }
 
   /* --------------------------------------------------- controls & tab */
+
+  /** First fix and Peak intensity live behind the Where button as a menu: three
+      buttons for one question (where do HF lows happen). Their own buttons stay
+      in the DOM, hidden, so every layer switch still goes through the same
+      click handler. */
+  function syncWhere() {
+    var inGroup = state.layer === 'density' || state.layer === 'genesis' || state.layer === 'peak';
+    var seg = document.querySelector('.seg[data-layer="density"]');
+    seg.classList.toggle('is-active', inGroup);
+    seg.setAttribute('aria-pressed', inGroup ? 'true' : 'false');
+    var sel = document.getElementById('whereView');
+    sel.hidden = !inGroup;
+    if (inGroup) sel.value = state.layer;
+  }
 
   /* ----------------------------------------- at-a-glance grid
      One row per climate index, one column per state, each cell the verdict
