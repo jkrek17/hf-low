@@ -1,0 +1,12 @@
+footprints 1638 accepted 1546 mean cover 0.62
+cell pairs 3537929 pointwise corr gust vs wind 0.966
+                     test  estimate     lo95     hi95        p    n     q_BH
+               P1 rho atl  0.981853 0.976533 0.985289 0.000000  798 0.000000
+               P1 rho pac  0.976537 0.970343 0.981403 0.000000  748 0.000000
+         P2 AUC (>=45 kt)  0.997243 0.995767 0.998512 0.000000 1546 0.000000
+ P3 HF minus matched (kt)  2.804022 2.648914 2.970665 0.000999  871 0.001249
+P4 sensor heterogeneity F  0.000000      NaN      NaN 1.003322 1546 1.000000
+            mean  size
+sensor                
+synth  -0.377994  1083
+P3 se (kt) 0.08  MDE at 80% power, alpha .05 ~ 0.23 kt

@@ -85,4 +85,14 @@ and ask Jason; over 50 GB is his gate. Nothing is re-pulled from ERA5. A compact
 
 ## Deviations (post hoc)
 
-None yet. Log in order, each tagged "before any outcome" or "after the primary result".
+Logged in order, each tagged.
+
+1. **Before any outcome.** R0 on a random 300 of the 17,552 sample tracks (seed 0; ERA5 side only): 77 % of tracks
+   recover the stored index within 1 kt and 100 % are >= stored - 1 kt. The misses are two kinds: 20 % of tracks have
+   a stored index of 0 (no ocean cell of that low's own territory at >= 17 m/s at the stored peak fix), and among
+   tracks with a stored index > 0, 95.1 % recover within +-1 kt, the other 4.9 % are higher (a neighbouring low's cells in
+   the disc, median +3.3 kt). Resolution: the sample is restricted to tracks with stored `gust800_kt` > 0 (R0 passes at
+   95 % of those); the disc maximum ignoring ownership is what the footprint ERA5 value is, and is named so.
+2. **Before any outcome.** P3 classes the storm by pipeline A's **full-disc index** (`gust800_kt` >= 71.7), not by the
+   footprint ERA5 maximum, because the footprint maximum is partial by construction. Scatterometer response is still
+   measured on the footprint.
