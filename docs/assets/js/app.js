@@ -17,7 +17,9 @@
     maxPressure: 1010,
     bombOnly: false,
     search: '',
-    layer: 'tracks',       // 'tracks' | 'density' | 'genesis' | 'peak' | 'atlas' | 'prob' | 'bymonth' | 'playback'
+    practiceAll: false,    // Climatology explosive-share chart: also draw the every-fix line
+    moreCols: false,       // Events table: also show the 'recorded' and track-speed columns
+    layer: 'density',      // 'tracks' | 'density' | 'genesis' | 'peak' | 'atlas' | 'prob' | 'bymonth' | 'playback'
     currents: false,   // ocean currents background layer - independent of `layer`, off by default
     era5: false,       // ERA5 proxy tracks under the Tracks layer, off by default
     era5null: false,   // ... matched null-case tracks
@@ -31,7 +33,7 @@
     monthHeatSrc: 'archive', // heat map source: 'archive' (2004-05 on) | 'era5' (1979-80 to 2003-04 proxy)
     monthTracks: false,     // By month: draw the event tracks over the shading (off with the heat map)
     monthEra5: true,   // By month: add the ERA5 proxy storms of earlier seasons (teal), on by default
-    probMin: 1,        // HF probability layer: draw edges at or above this P class (1 = all)
+    probMin: 3,        // HF probability layer: draw edges at or above this P class (1 = all, 3 = 20 % and above; the all-tracks view is unreadable with every edge)
     probPre: true,     // HF probability layer: include 1979-2003 (catalog events and matched nulls only)
     era5pre: false,    // ... and before 2001-02 (within-era comparison only), off by default
     sort: { key: 'start', dir: -1 },
@@ -196,7 +198,6 @@
       if (l.minP != null && (!deepest || l.minP < deepest.minP)) deepest = l;
     });
     var hfShare = explosiveCount(lows, 'bomb', 'berg');
-    var allShare = explosiveCount(lows, 'bombAll', 'bergAll');
     var noCentre = lows.filter(function (l) { return l.cls !== 'low'; });
     var tipjets = lows.filter(function (l) { return l.cls === 'tipjet'; });
 
@@ -226,22 +227,7 @@
         value: pctText(hfShare.n, hfShare.of),
         note: lows.length
           ? hfShare.n + ' of ' + hfShare.of.toLocaleString() + ' events · deepening at hurricane-force fixes only'
-          : 'no events match the filters' },
-      // The figure this tile used to be. It covers the whole recorded track,
-      // so it steps up where the recording practice changed; kept so the
-      // earlier number can still be found and its inflation seen.
-      { label: 'Explosive, whole track',
-        value: allShare.measurable ? pctText(allShare.n, allShare.measurable) : '--',
-        note: allShare.measurable
-          ? 'Recorded track, of ' + allShare.measurable.toLocaleString() + ' events with 24 h of pressures (' +
-            pctText(allShare.n, allShare.of) + ' of all). Not comparable across years'
-          : 'no qualifying events',
-        link: true },
-      { label: 'No analyzed centre',
-        value: noCentre.length.toLocaleString(),
-        note: tipjets.length
-          ? tipjets.length + ' are Greenland tip jet candidates'
-          : 'events with no central pressure at any fix' }
+          : 'no events match the filters' }
     ];
 
     tiles.forEach(function (t) {
@@ -492,7 +478,7 @@
     var slot = plotW / Math.max(1, rows.length);
     var maxPct = 20;
     rows.forEach(function (r) {
-      if (r.all != null) maxPct = Math.max(maxPct, r.all);
+      if (r.all != null && state.practiceAll) maxPct = Math.max(maxPct, r.all);
       if (r.hf != null) maxPct = Math.max(maxPct, r.hf);
     });
     var top = Math.ceil(maxPct / 20) * 20, step = top <= 40 ? 10 : 20;
@@ -541,7 +527,7 @@
     // Boundary rules first, so the lines draw over them. Each label sits on
     // its own row so two nearby onsets (Pacific 2013, Atlantic 2017) never
     // overprint, and flips to the left of its rule near the right edge.
-    practiceBoundaries().forEach(function (b, row) {
+    (state.practiceAll ? practiceBoundaries() : []).forEach(function (b, row) {
       var idx = -1;
       rows.forEach(function (r, i) { if (r.season === b.onset) idx = i; });
       if (idx < 0) return;
@@ -567,7 +553,7 @@
           : node('circle', { 'class': markCls, cx: p[0].toFixed(1), cy: p[1].toFixed(1), r: 3.6 }));
       });
     }
-    series('all', 'c-prac-all', 'c-prac-mk-all', 'square');
+    if (state.practiceAll) series('all', 'c-prac-all', 'c-prac-mk-all', 'square');
     series('hf', 'c-prac-hf', 'c-prac-mk-hf', 'circle');
 
     // Mouse-only detail; the table below carries the same numbers.
@@ -587,7 +573,9 @@
 
     var legend = HF.el('p', { 'class': 'chart-legend' });
     [['c-prac-key-all', 'Whole recorded track'], ['c-prac-key-hf', 'Hurricane-force fixes only'],
-     ['c-prac-key-edge', 'First season of the new logging practice']].forEach(function (k) {
+     ['c-prac-key-edge', 'First season of the new logging practice']].filter(function (k) {
+      return state.practiceAll || k[0] === 'c-prac-key-hf';
+    }).forEach(function (k) {
       var span = HF.el('span');
       span.appendChild(HF.el('i', { 'class': 'c-prac-key ' + k[0] }));
       span.appendChild(document.createTextNode(k[1]));
@@ -647,9 +635,9 @@
     // when the archive began logging fixes around the HF period - see the
     // Method tab - so they are not comparable across 2013 (Pacific) / 2017
     // (Atlantic).
-    { key: 'durH', label: 'Recorded (h)', num: true, get: function (l) { return l.durH; },
+    { key: 'durH', more: true, label: 'Recorded (h)', num: true, get: function (l) { return l.durH; },
       title: 'Hours from the first to the last fix logged. Includes fixes logged before and after the hurricane-force period, so not comparable across years.' },
-    { key: 'hfDurH', label: 'HF span (h)', num: true, get: function (l) { return l.hfDurH; },
+    { key: 'hfDurH', more: true, label: 'HF span (h)', num: true, get: function (l) { return l.hfDurH; },
       title: 'Hours from the first to the last hurricane-force fix.' },
     { key: 'hfH', label: 'At HF (h)', num: true, get: function (l) { return l.hfH; },
       title: 'Hurricane-force fixes x 6 h.' },
@@ -665,7 +653,7 @@
         if (l.bomb) span.style.color = HF.cssVar('--critical');
         return span;
       } },
-    { key: 'bergAll', label: 'Max 24 h recorded (B)', num: true, get: function (l) { return l.bergAll; },
+    { key: 'bergAll', more: true, label: 'Max 24 h recorded (B)', num: true, get: function (l) { return l.bergAll; },
       title: 'The same, over every fix logged for the event. Inflated since the archive began logging developing-HF fixes (2013 Pacific, 2017 Atlantic); not comparable across years.',
       render: function (l) {
         if (l.bergAll == null) return document.createTextNode('--');
@@ -674,11 +662,11 @@
         if (l.bombAll) { span.style.color = HF.cssVar('--critical'); span.style.fontWeight = '700'; }
         return span;
       } },
-    { key: 'hfSpdKt', label: 'HF mean kt', num: true, get: function (l) { return l.hfSpdKt; },
+    { key: 'hfSpdKt', more: true, label: 'HF mean kt', num: true, get: function (l) { return l.hfSpdKt; },
       title: 'Mean translation speed between the first and last hurricane-force fix.' },
-    { key: 'hfDistNm', label: 'HF track nm', num: true, get: function (l) { return l.hfDistNm; },
+    { key: 'hfDistNm', more: true, label: 'HF track nm', num: true, get: function (l) { return l.hfDistNm; },
       title: 'Track length between the first and last hurricane-force fix.' },
-    { key: 'distNm', label: 'Recorded nm', num: true, get: function (l) { return l.distNm; },
+    { key: 'distNm', more: true, label: 'Recorded nm', num: true, get: function (l) { return l.distNm; },
       title: 'Track length over every fix logged. Not comparable across years.' }
   ];
 
@@ -765,6 +753,10 @@
     document.querySelector('.tab[data-panel="map"]').click();
   }
 
+  /** Pipeline A track ids of the ten storms on the Storm reviews page
+      (tools/storm_review_storms.csv); their rows link to the review. */
+  var STORM_REVIEW_TRACKS = [72089, 128894, 388835, 99844, 100785, 397733, 24927, 339400, 349447, 301362];
+
   function renderStrong() {
     var table = document.getElementById('strongTable');
     var thead = HF.clear(table.tHead || table.createTHead());
@@ -810,11 +802,20 @@
       dc.appendChild(btn);
       tr.appendChild(dc);
       td(r[1] === 0 ? 'Atlantic' : 'Pacific', 0);
-      td((r[6] / 10).toFixed(1), 1);
+      var pc = HF.el('td', { class: 'num' }, (r[6] / 10).toFixed(1));
+      // a small bar so the ranking reads at a glance: longer = deeper
+      var bar = HF.el('span', { class: 'strong-bar', 'aria-hidden': 'true' });
+      bar.style.width = Math.max(4, Math.min(100, (960 - r[6] / 10) / 55 * 100)).toFixed(0) + '%';
+      pc.appendChild(bar);
+      tr.appendChild(pc);
       if (listKey === 'depth') td(r[7] == null ? '--' : (r[7] / 10).toFixed(1), 1);
       td((r[8] / 10).toFixed(1), 1);
       if (gust) td(r[10], 0);
-      td(notes.join('; '), 0);
+      var nc = HF.el('td', null, notes.join('; ') + (notes.length ? ' ' : ''));
+      if (STORM_REVIEW_TRACKS.indexOf(r[3]) >= 0) {
+        nc.appendChild(HF.el('a', { href: 'storm-reviews.html#storm-' + r[3] }, 'Storm review'));
+      }
+      tr.appendChild(nc);
       tbody.appendChild(tr);
     });
     note.textContent = rows.length + ' storms, ERA5 proxy, not direct observation. Select a date to show the storm on the map.';
@@ -845,7 +846,7 @@
   function cmpCall(r) {
     if (r.track < 0) return 'No matching track';
     if (r.pPre < 0) return 'No scored fix before onset';
-    if (r.pPre < 5000) return 'Not rated HF-likely';
+    if (r.pPre < 5000) return 'P stayed under 0.5';
     return r.lead >= 12 ? 'Early (12 h or more)' : 'Late (under 12 h)';
   }
 
@@ -891,7 +892,7 @@
         hit.length.toLocaleString() + ' (' + Math.round(100 * hit.length / rated.length) + '%), median lead ' + med + ' h, ' +
         early.toLocaleString() + ' with 12 h or more.') : '';
       note.textContent = rows.length.toLocaleString() + ' OPC storms match the filters (2004-05 on).';
-      basis.textContent = 'ERA5 proxy model (pipeline A tracks, model N without the gust predictor, leave-one-season-out), not an observation. A storm is matched to the pipeline A track whose peak lies within 500 km of OPC’s peak. Peak P is read at 00/12 UTC fixes only. "Not rated" means P stayed under 0.5 up to OPC’s first HF fix; many are storms the proxy never took to hurricane force.';
+      basis.textContent = 'ERA5 proxy model (pipeline A tracks, model N without the gust predictor, leave-one-season-out), not an observation. A storm is matched to the pipeline A track whose peak lies within 500 km of OPC’s peak. Peak P is read at 00/12 UTC fixes only. "P stayed under 0.5" means the model never rated the storm HF-likely before OPC’s first HF fix; many are storms the proxy never took to hurricane force.';
     } else {
       rows = D.unl.filter(function (r) { return basinOk(r[1] === 0 ? 'atl' : 'pac'); });
       cols = [
@@ -949,8 +950,9 @@
     var thead = HF.clear(table.tHead || table.createTHead());
     var tbody = HF.clear(table.tBodies[0]);
 
+    var shown = COLUMNS.filter(function (c) { return !c.more || state.moreCols; });
     var headRow = HF.el('tr');
-    COLUMNS.forEach(function (col) {
+    shown.forEach(function (col) {
       var th = HF.el('th', { class: col.num ? 'num' : '' }, col.label);
       th.setAttribute('scope', 'col');
       if (col.title) th.setAttribute('title', col.title);
@@ -980,7 +982,7 @@
     sorted.slice(0, TABLE_LIMIT).forEach(function (low) {
       var tr = HF.el('tr');
       if (low.key === state.selectedKey) tr.className = 'is-selected';
-      COLUMNS.forEach(function (c) {
+      shown.forEach(function (c) {
         var td = HF.el('td', { class: c.num ? 'num' : '' });
         if (c.render) td.appendChild(c.render(low));
         else td.textContent = c.get(low) == null ? '--' : c.get(low);
@@ -2524,7 +2526,7 @@
   var PB_LIVE_DEBOUNCE_MS = 350; // settle time before speaking a user-driven change
 
   var play = {
-    mode: 'composite',           // 'composite' | 'season' | 'step'
+    mode: 'season',              // 'composite' | 'season' | 'step'; season replay is the useful one, the composite blurs 22 years together
     unit: 'month',               // step only: 'month' | 'season' | 'moy' (calendar month, all seasons)
     moy: 6,                      // month-of-year step position, 1-12
     moys: [],
@@ -3337,6 +3339,7 @@
     document.getElementById('fEra5Pre').disabled = !era5Wanted();
     document.getElementById('fEra5Prob').checked = state.era5prob;
     document.getElementById('fEra5Prob').disabled = !state.era5;
+    if (state.era5 || state.era5null || state.era5peaks) document.querySelector('.adv-layers').open = true;
     document.getElementById('fSearch').value = state.search;
     Array.prototype.forEach.call(document.querySelectorAll('#fMonths .chip'), function (chip) {
       var on = !!state.months[chip.dataset.month];
@@ -3479,6 +3482,11 @@
       // QC lists the whole archive's flags, so the filters do not apply either.
       document.body.classList.toggle('qc-active', state.tab === 'qc');
       document.body.classList.toggle('strong-active', state.tab === 'strong');
+      // The Method tab is reference text; the filters and summary do not apply to it.
+      document.body.classList.toggle('method-active', state.tab === 'method');
+      // Map and Events show the summary as one slim strip so the map and the
+      // table start near the top; Climatology keeps the full cards.
+      document.body.classList.toggle('kpis-slim', state.tab === 'map' || state.tab === 'events');
       if (state.tab !== 'map') setPlaying(false, true);   // nothing to watch; do not run unseen
       placeGlobe();
       syncMapMode();
@@ -3496,7 +3504,7 @@
           play.mode = 'step'; play.unit = 'moy'; play.moy = 1; play.clock = null; play.tickKey = '';
           play.byMonthUsed = true;
         } else if (state.layer === 'playback' && prev !== 'playback' && play.byMonthUsed) {
-          play.mode = 'composite'; play.t = 0; play.clock = null; play.tickKey = '';
+          play.mode = 'season'; play.t = 0; play.clock = null; play.tickKey = '';
           play.byMonthUsed = false;
         }
         Array.prototype.forEach.call(document.querySelectorAll('.seg'), function (s) {
@@ -3505,6 +3513,7 @@
           // says the same thing to assistive technology.
           s.setAttribute('aria-pressed', s === seg ? 'true' : 'false');
         });
+        syncWhere();
         render();
         if (state.layer === 'playback' && prev !== 'playback') startPlaybackOnEntry();
         if (state.layer === 'bymonth' && prev !== 'bymonth') {
@@ -3516,6 +3525,10 @@
       });
     });
     buildPlaybackControls();
+    document.getElementById('whereView').addEventListener('change', function (e) {
+      document.querySelector('.seg[data-layer="' + e.target.value + '"]').click();
+    });
+    syncWhere();
 
     document.getElementById('fitBounds').addEventListener('click', function () {
       HF.globe.fitTo(filtered());
@@ -3559,6 +3572,16 @@
       render();
     });
     document.getElementById('exportCsv').addEventListener('click', exportCsv);
+    document.getElementById('practiceAll').addEventListener('change', function (e) {
+      state.practiceAll = e.target.checked;
+      renderPracticeChart(filtered());
+    });
+    document.getElementById('moreCols').addEventListener('click', function () {
+      state.moreCols = !state.moreCols;
+      this.textContent = state.moreCols ? 'Fewer columns' : 'More columns';
+      this.setAttribute('aria-pressed', state.moreCols ? 'true' : 'false');
+      render();
+    });
     ['practiceLink', 'tableBasisLink'].forEach(function (id) {
       document.getElementById(id).addEventListener('click', gotoPractice);
     });
@@ -4418,6 +4441,133 @@
 
   /* --------------------------------------------------- controls & tab */
 
+  /** First fix and Peak intensity live behind the Where button as a menu: three
+      buttons for one question (where do HF lows happen). Their own buttons stay
+      in the DOM, hidden, so every layer switch still goes through the same
+      click handler. */
+  function syncWhere() {
+    var inGroup = state.layer === 'density' || state.layer === 'genesis' || state.layer === 'peak';
+    var seg = document.querySelector('.seg[data-layer="density"]');
+    seg.classList.toggle('is-active', inGroup);
+    seg.setAttribute('aria-pressed', inGroup ? 'true' : 'false');
+    var sel = document.getElementById('whereView');
+    sel.hidden = !inGroup;
+    if (inGroup) sel.value = state.layer;
+  }
+
+  /* ----------------------------------------- at-a-glance grid
+     One row per climate index, one column per state, each cell the verdict
+     of the same composite test the card below runs (same function, same
+     seed, same cache), so a cell and the card can never disagree. The 15
+     comparisons are computed one at a time while the tab is open, never in
+     an event handler. Each is corrected for its own ~150 map cells; the
+     grid itself is not corrected across the 15, and says so. */
+
+  var TELE_SUM_ROWS = [
+    { label: 'ENSO (winter ONI)', cols: [['El Niño', { type: 'enso', phase: 'E' }], ['Neutral', { type: 'enso', phase: 'N' }], ['La Niña', { type: 'enso', phase: 'L' }]] },
+    { label: 'NAO', cols: [['Upper third', { type: 'tercile', index: 'nao', group: 'upper' }], ['Middle', { type: 'tercile', index: 'nao', group: 'middle' }], ['Lower third', { type: 'tercile', index: 'nao', group: 'lower' }]] },
+    { label: 'PNA', cols: [['Upper third', { type: 'tercile', index: 'pna', group: 'upper' }], ['Middle', { type: 'tercile', index: 'pna', group: 'middle' }], ['Lower third', { type: 'tercile', index: 'pna', group: 'lower' }]] },
+    { label: 'AO', cols: [['Upper third', { type: 'tercile', index: 'ao', group: 'upper' }], ['Middle', { type: 'tercile', index: 'ao', group: 'middle' }], ['Lower third', { type: 'tercile', index: 'ao', group: 'lower' }]] },
+    { label: 'MJO (120°W, lag 2 pentads)', mjo: true, cols: [['Enhanced', 'enhanced'], ['Neutral', 'neutral'], ['Suppressed', 'suppressed']] }
+  ];
+
+  function teleSumSpec(row, c) {
+    if (!row.mjo) return c[1];
+    var lon = tele.engine.longitudes.indexOf('120W') >= 0 ? '120W' : tele.engine.longitudes[0];
+    return { type: 'mjo', lon: lon, state: c[1], lag: 2 };
+  }
+
+  function teleSumFill(cell, b) {
+    var td = cell.td, out = HF.clear(cell.out);
+    ['null', 'lowpower', 'found', 'untested'].forEach(function (k) { td.classList.remove('tele-sum-' + k); });
+    if (!b || b.error || !b.result) { out.textContent = '--'; return; }
+    var r = b.result, S = r.summary;
+    var ran = r.status === 'ok' && r.inference && !r.identical && S.rate.nTested > 0;
+    var seasons = r.n && r.n.seasons != null ? r.n.seasons : null;
+    var size = seasons != null ? seasons + ' seasons' : b.subset.length + ' events';
+    var line1, tone;
+    if (!ran) { line1 = 'Not tested'; tone = 'untested'; }
+    else if (S.rate.nSigFDR + S.shape.nSigFDR === 0) { line1 = 'No cell differs'; tone = r.reliability === 'low' ? 'lowpower' : 'null'; }
+    else { line1 = (S.rate.nSigFDR + S.shape.nSigFDR) + ' cells differ'; tone = 'found'; }
+    td.classList.add('tele-sum-' + tone);
+    out.appendChild(HF.el('strong', null, line1));
+    out.appendChild(document.createTextNode(' · ' + size + (tone === 'lowpower' ? ', low power' : '')));
+  }
+
+  var teleSum = { built: false, cells: [], running: false };
+
+  function teleSumRender() {
+    if (!teleEngine()) { tEl('teleSummary').hidden = true; return; }
+    if (!teleSum.built) {
+      teleSum.built = true;
+      var thead = tEl('teleSumTable').createTHead(), hr = HF.el('tr');
+      hr.appendChild(HF.el('th', { scope: 'col' }, 'Index'));
+      hr.appendChild(HF.el('th', { scope: 'col', colspan: '3' }, 'Storms in each climate state, compared with the whole archive (click one to open it)'));
+      thead.appendChild(hr);
+      var body = tEl('teleSumTable').tBodies[0];
+      TELE_SUM_ROWS.forEach(function (row) {
+        var tr = HF.el('tr');
+        tr.appendChild(HF.el('th', { scope: 'row' }, row.label));
+        row.cols.forEach(function (c) {
+          var spec = teleSumSpec(row, c);
+          var td = HF.el('td', { 'class': 'tele-sumcell' });
+          var btn = HF.el('button', { type: 'button', 'class': 'tele-sumbtn' });
+          btn.appendChild(HF.el('span', { 'class': 'tele-sum-name' }, c[0]));
+          var out = HF.el('span', { 'class': 'tele-sum-out' }, '...');
+          btn.appendChild(out);
+          btn.addEventListener('click', function () {
+            tele.index = spec.type === 'enso' ? 'enso' : spec.type === 'mjo' ? 'mjo' : spec.index;
+            if (spec.type === 'enso') tele.enso = spec.phase;
+            else if (spec.type === 'tercile') tele.terc = spec.group;
+            else { tele.lon = spec.lon; tele.mjoState = spec.state; tele.lag = spec.lag; tEl('teleLon').value = spec.lon; tEl('teleLag').value = String(spec.lag); }
+            Array.prototype.forEach.call(document.querySelectorAll('input[name="teleIndex"]'), function (r) { r.checked = r.value === tele.index; });
+            [['teleEnso', tele.enso], ['teleTerc', tele.terc], ['teleMjoState', tele.mjoState]].forEach(function (g) {
+              Array.prototype.forEach.call(document.querySelectorAll('input[name="' + g[0] + '"]'), function (r) { r.checked = r.value === g[1]; });
+            });
+            teleRequest(true);
+            tEl('teleStats').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
+          td.appendChild(btn);
+          tr.appendChild(td);
+          teleSum.cells.push({ spec: spec, td: td, out: out, done: false });
+        });
+        body.appendChild(tr);
+      });
+      tEl('teleSumBasis').textContent = 'Each cell is the same test as the card below (click one to open it): the storm-track map of that group against the whole archive, 2004-05 on, corrected for its own map cells. The 15 comparisons are not corrected against each other: at the 10% false-discovery level, 1 or 2 flagged comparisons out of 15 is what chance alone can produce. "Low power" means few seasons define the group: a null there is not evidence of no effect.';
+    }
+    teleSumRun();
+  }
+
+  function teleSumRun() {
+    if (teleSum.running) return;
+    var next = teleSum.cells.filter(function (c) { return !c.done; })[0];
+    if (!next) {
+      var found = teleSum.cells.filter(function (c) { return c.td.classList.contains('tele-sum-found'); }).length;
+      tEl('teleSummaryNote').textContent = found === 0
+        ? 'None of the 15 standard comparisons shows a part of the storm track that differs from the archive by more than chance. That is a result with its limits: groups with few seasons could only have found a large shift (marked low power).'
+        : found + ' of the 15 standard comparisons show cells that differ beyond chance. With 15 looks that is about what chance alone can give, so read them as leads, not findings.';
+      return;
+    }
+    teleSum.running = true;
+    setTimeout(function () {
+      teleSum.running = false;
+      if (state.tab !== 'tele') return;               // resume when the tab is next opened
+      var key = teleKey(next.spec), b = tele.cache[key];
+      if (!b) {
+        b = teleCompute(next.spec);
+        if (!b.error) {
+          tele.cache[key] = b; tele.order.push(key);
+          while (tele.order.length > TELE_CACHE_MAX) delete tele.cache[tele.order.shift()];
+        }
+      }
+      next.done = true;
+      teleSumFill(next, b);
+      var done = teleSum.cells.filter(function (c) { return c.done; }).length;
+      tEl('teleSummaryNote').textContent = 'Computing the standard comparisons: ' + done + ' of ' + teleSum.cells.length + '...';
+      teleSumRun();
+    }, 60);
+  }
+
   function syncTeleControls() {
     tEl('teleEnsoWrap').hidden = tele.index !== 'enso';
     tEl('teleTercWrap').hidden = tele.index !== 'nao' && tele.index !== 'pna' && tele.index !== 'ao';
@@ -4495,6 +4645,7 @@
     buildTele();
     if (tele.view === 'regress') { renderRegress(); return; }
     syncTeleControls();
+    teleSumRender();
     var key = tele.engine ? teleKey(teleSpec()) : null;
     if (!tele.engine) {
       renderTeleFailure('The teleconnection data or scripts did not load (' + (tele.failed || 'unknown error') + '), so nothing can be tested here.');

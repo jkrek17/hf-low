@@ -39,7 +39,7 @@
   }
 </style>
 </head>
-<body class="map-active">
+<body class="map-active kpis-slim">
 <!-- map-active starts set because the Map tab is the default view above
      (see .tab.is-active / #panel-map); app.js keeps this class in sync with
      the active tab so the footer CSS rule can hide the footer only there. -->
@@ -51,9 +51,7 @@
     <p class="sub">North Atlantic &amp; North Pacific &middot; <span id="vintage">loading&hellip;</span></p>
   </div>
   <div class="topbar-actions">
-    <a class="badge badge-link" href="composites.html" title="ERA5 proxy composites of HF lows against storm-force-only lows">Composites</a>
-    <a class="badge badge-link" href="composites.html#basin-pattern" title="ERA5 proxy average weather maps of each basin at HF onset">Typical pattern</a>
-    <a class="badge badge-link" href="composites.html#upper-air" title="ERA5 proxy maps of the upper-level pattern averaged around every HF low">Storm-centred maps</a>
+    <a class="badge badge-link" href="composites.html" title="ERA5 proxy composites: the typical pattern around an HF low, basin maps and storm-centred upper-air maps">Composites</a>
     <a class="badge badge-link" href="storm-reviews.html" title="ERA5 proxy case studies of the ten deepest lows: track, development, weather maps every 12 hours, gust swath">Storm reviews</a>
     <a class="badge badge-link" href="environment-model.html" title="ERA5 proxy model of the chance a low reaches hurricane force within 24 hours">Storm model</a>
     <span class="badge badge-warn" title="Not an official product. Derived from a hand-maintained archive.">Experimental</span>
@@ -140,15 +138,20 @@
   <section class="panel is-active" id="panel-map" role="tabpanel">
     <div class="panel-tools">
       <div class="segmented" role="group" aria-label="Map layer">
-        <button type="button" class="seg is-active" data-layer="tracks" aria-pressed="true">Tracks</button>
-        <button type="button" class="seg" data-layer="density" aria-pressed="false">Fix density</button>
-        <button type="button" class="seg" data-layer="genesis" aria-pressed="false">First fix</button>
-        <button type="button" class="seg" data-layer="peak" aria-pressed="false">Peak intensity</button>
+        <button type="button" class="seg is-active" data-layer="density" aria-pressed="true" title="Where hurricane-force lows happen: fix density, first fix or peak intensity">Where</button>
+        <button type="button" class="seg" data-layer="tracks" aria-pressed="false">Tracks</button>
+        <button type="button" class="seg" data-layer="genesis" aria-pressed="false" hidden>First fix</button>
+        <button type="button" class="seg" data-layer="peak" aria-pressed="false" hidden>Peak intensity</button>
         <button type="button" class="seg" data-layer="prob" aria-pressed="false" title="Every scored ERA5 proxy track, each edge coloured by the model's probability of a hurricane-force-equivalent gust within 24 h">HF probability</button>
         <button type="button" class="seg" data-layer="atlas" aria-pressed="false">Atlas</button>
         <button type="button" class="seg" data-layer="bymonth" aria-pressed="false" title="All events of one calendar month, all seasons together; step through the months">By month</button>
         <button type="button" class="seg" data-layer="playback" aria-pressed="false">Playback</button>
       </div>
+      <select id="whereView" class="where-view" aria-label="Which view of where hurricane-force lows happen" hidden>
+        <option value="density">Fix density (where they spend time)</option>
+        <option value="genesis">First fix (where they first reach HF)</option>
+        <option value="peak">Peak intensity (where they are deepest)</option>
+      </select>
       <!-- Independent of the layer switch above: a background context layer
            that can sit under Tracks, Fix density, or either point layer, so
            a forecaster can put it under Fix density and compare directly
@@ -162,21 +165,26 @@
            type="text/plain": never run or loaded by the browser, only read
            for its src). Before 2001-02 the gust index drifts, so the earlier
            seasons are a second, explicit opt-in. -->
-      <label class="check" title="ERA5 reanalysis cyclones whose gust index is hurricane-force equivalent (pipeline A, a proxy), drawn under the archive's tracks on the Tracks layer">
-        <input type="checkbox" id="fEra5"> ERA5 proxy tracks
-      </label>
-      <label class="check" title="Matched null cases: ERA5 cyclones that stayed below the hurricane-force-equivalent threshold (4,154 tracks)">
-        <input type="checkbox" id="fEra5Null"> null-case tracks
-      </label>
-      <label class="check" title="Every ERA5 cyclone in the pipeline A population (75,087) as one dot at its peak position; the full tracks were never stored">
-        <input type="checkbox" id="fEra5Peaks"> all cyclones (peak positions)
-      </label>
-      <label class="check" title="Colour the ERA5 proxy tracks by the model's probability of a hurricane-force-equivalent gust within 24 h of each fix, instead of one flat colour (research/era5/hf_probability_tracks, a proxy)">
-        <input type="checkbox" id="fEra5Prob" disabled> colour tracks by P(HF within 24 h)
-      </label>
-      <label class="check" title="Seasons before 2001-02 are for comparison within that era only: the gust index drifts upward there">
-        <input type="checkbox" id="fEra5Pre" disabled> ERA5 before 2001-02 (within-era only)
-      </label>
+      <details class="adv-layers">
+        <summary title="ERA5 proxy layers: a different dataset from the archive">Research layers (ERA5 proxy)</summary>
+        <div class="adv-body">
+        <label class="check" title="ERA5 reanalysis cyclones whose gust index is hurricane-force equivalent (pipeline A, a proxy), drawn under the archive's tracks on the Tracks layer">
+          <input type="checkbox" id="fEra5"> ERA5 proxy tracks
+        </label>
+        <label class="check" title="Matched null cases: ERA5 cyclones that stayed below the hurricane-force-equivalent threshold (4,154 tracks)">
+          <input type="checkbox" id="fEra5Null"> null-case tracks
+        </label>
+        <label class="check" title="Every ERA5 cyclone in the pipeline A population (75,087) as one dot at its peak position; the full tracks were never stored">
+          <input type="checkbox" id="fEra5Peaks"> all cyclones (peak positions)
+        </label>
+        <label class="check" title="Colour the ERA5 proxy tracks by the model's probability of a hurricane-force-equivalent gust within 24 h of each fix, instead of one flat colour (research/era5/hf_probability_tracks, a proxy)">
+          <input type="checkbox" id="fEra5Prob" disabled> colour tracks by P(HF within 24 h)
+        </label>
+        <label class="check" title="Seasons before 2001-02 are for comparison within that era only: the gust index drifts upward there">
+          <input type="checkbox" id="fEra5Pre" disabled> ERA5 before 2001-02 (within-era only)
+        </label>
+        </div>
+      </details>
       <script type="text/plain" id="era5NullLoader" src="data/era5-null.js"></script>
       <script type="text/plain" id="era5PeaksLoader" src="data/era5-peaks.js"></script>
       <script type="text/plain" id="era5Loader" src="data/era5-tracks.js"></script>
@@ -193,7 +201,7 @@
           <select id="probMin">
             <option value="1">All (including under 5 %)</option>
             <option value="2">5 % and above</option>
-            <option value="3">20 % and above</option>
+            <option value="3" selected>20 % and above</option>
             <option value="4">50 % and above</option>
           </select>
         </div>
@@ -258,8 +266,8 @@
         <fieldset class="filter pb-modes" id="pbModeWrap">
           <legend>Mode</legend>
           <div class="pb-mode-set">
-            <label class="pb-mode"><input type="radio" name="pbMode" value="composite" checked><span>Composite</span></label>
-            <label class="pb-mode"><input type="radio" name="pbMode" value="season"><span>Season replay</span></label>
+            <label class="pb-mode"><input type="radio" name="pbMode" value="composite"><span>Composite</span></label>
+            <label class="pb-mode"><input type="radio" name="pbMode" value="season" checked><span>Season replay</span></label>
             <label class="pb-mode"><input type="radio" name="pbMode" value="step"><span>Step</span></label>
           </div>
         </fieldset>
@@ -362,13 +370,13 @@
           <h2>Explosive share by season</h2>
           <p>
             The share of events that deepen by at least 1&nbsp;Bergeron in 24&nbsp;h,
-            measured two ways. The solid line uses pressures at hurricane-force
-            fixes only and is comparable across the record. The dashed line uses
-            every fix logged, and steps up where analysts began logging fixes
-            around the hurricane-force period (marked). The step is the recording,
-            not the weather.
+            measured at hurricane-force fixes only, which is comparable across the
+            whole record. Tick the box to add the line that uses every fix logged:
+            it steps up where analysts began logging fixes around the
+            hurricane-force period, so that step is the recording, not the weather.
             <button type="button" class="link-btn" id="practiceLink">How the recording changed</button>
           </p>
+          <label class="check"><input type="checkbox" id="practiceAll"> Also show the every-fix line and the logging changes</label>
         </figcaption>
         <div class="chart" id="chartPractice"></div>
         <details class="tele-table" id="practiceDetails">
@@ -468,6 +476,7 @@
     <h2 class="sr-only">All archive events</h2>
     <div class="panel-tools">
       <p class="tool-note" id="tableNote"></p>
+      <button type="button" class="btn" id="moreCols" aria-pressed="false">More columns</button>
       <button type="button" class="btn" id="exportCsv">Download filtered CSV</button>
     </div>
     <div class="table-wrap">
@@ -478,7 +487,7 @@
     </div>
     <p class="table-more" id="tableMore"></p>
     <p class="table-basis" id="tableBasis">
-      <strong>HF</strong> columns cover the hurricane-force period and compare across seasons.
+      Red numbers are explosive deepening (1 Bergeron or more in 24 h). <strong>HF</strong> columns cover the hurricane-force period and compare across seasons.
       <strong>Recorded</strong> columns cover every fix logged, which grew when the archive began
       logging fixes around that period (2013&ndash;14 Pacific, 2017&ndash;18 Atlantic), so they
       are not comparable across it.
@@ -552,6 +561,18 @@
     </section>
 
     <div id="teleCompView">
+    <section class="card tele-card tele-summary" id="teleSummary" aria-labelledby="teleSummaryH">
+      <h2 id="teleSummaryH">At a glance: does any climate state change where HF lows go?</h2>
+      <p class="tele-note" id="teleSummaryNote">Computing the 15 standard comparisons&hellip;</p>
+      <div class="table-wrap">
+        <table class="data-table tele-sumtable" id="teleSumTable">
+          <caption class="sr-only">Composite test result for every climate index and state, tested one at a time</caption>
+          <thead></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="tele-hint" id="teleSumBasis"></p>
+    </section>
     <div class="tele-grid">
       <div class="tele-side">
         <section class="card tele-card tele-controls" aria-labelledby="teleSelH">
@@ -774,7 +795,8 @@
 
   <section class="panel" id="panel-method" role="tabpanel">
     <div class="card prose">
-      <h2>What is in the archive</h2>
+      <p class="jump"><strong>Jump to:</strong> <a href="#method-archive">What is in the archive</a> &middot; <a href="#practiceH">A change in recording practice</a> &middot; <a href="#method-codes">Category codes</a> &middot; <a href="#method-nocentre">Events with no analyzed central pressure</a> &middot; <a href="#method-derived">Derived quantities</a> &middot; <a href="#method-limits">Known limitations</a> &middot; <a href="#method-currents">Ocean currents layer</a> &middot; <a href="#method-rebuild">Rebuilding</a> &middot; <a href="#method-credits">Credits</a></p>
+      <h2 id="method-archive">What is in the archive</h2>
       <p>
         Each event is an extratropical low tracked at 6-hourly synoptic times
         while it was at, or developing toward, hurricane force. Tracking
@@ -798,10 +820,10 @@
       </p>
       <div id="practiceNote"></div>
 
-      <h2>Category codes</h2>
+      <h2 id="method-codes">Category codes</h2>
       <dl class="defs" id="catDefs"></dl>
 
-      <h2>Events with no analyzed central pressure</h2>
+      <h2 id="method-nocentre">Events with no analyzed central pressure</h2>
       <p>
         A little over 2&nbsp;% of Atlantic fixes carry
         <code>NOPRES</code> instead of a pressure, and their median position is
@@ -835,7 +857,7 @@
         filter to isolate either one.
       </p>
 
-      <h2>Derived quantities</h2>
+      <h2 id="method-derived">Derived quantities</h2>
       <dl class="defs">
         <dt>Minimum central pressure</dt>
         <dd>
@@ -879,7 +901,7 @@
         </dd>
       </dl>
 
-      <h2>Known limitations</h2>
+      <h2 id="method-limits">Known limitations</h2>
       <ul>
         <li>
           The default view starts at the 2004&ndash;05 season. Pacific entries
@@ -894,7 +916,7 @@
         <li>Pressures outside 880&ndash;1060&nbsp;hPa and non-numeric sentinels (<code>NOPRES</code>, <code>XXX</code>, <code>NA</code>) are treated as &ldquo;not analyzed&rdquo;, not as zero.</li>
       </ul>
 
-      <h2>Ocean currents layer</h2>
+      <h2 id="method-currents">Ocean currents layer</h2>
       <p>
         This archive&rsquo;s fix-density and pressure-ramp maxima sit almost
         exactly over the Gulf Stream and the Kuroshio. That is not
@@ -911,7 +933,7 @@
         any specific event.
       </p>
 
-      <h2>Rebuilding</h2>
+      <h2 id="method-rebuild">Rebuilding</h2>
       <p>
         Export each basin tab of the source workbook to
         <code>data/hf_lows/</code> and run
@@ -925,7 +947,7 @@
       <p class="muted" id="sourceLine"></p>
       <p class="muted" id="buildProvenance"></p>
 
-      <h2>Credits</h2>
+      <h2 id="method-credits">Credits</h2>
       <dl class="defs">
         <dt>Coastlines</dt>
         <dd>Natural Earth, public domain. Drawn on a hand-rolled orthographic globe (Canvas 2D, no mapping library or basemap tiles) &mdash; the page makes no network requests once loaded.</dd>
