@@ -1709,6 +1709,13 @@
       data: ARCHIVE_DATA,
       caution: 'Events with no analyzed centre (some tip jets) have no pressure and are marked differently. The lowest value is an analyst estimate, to the nearest hPa.'
     },
+    storm: {
+      view: 'One storm: the model’s probability along a single storm, next to what OPC analysed.',
+      proxy: true,
+      read: 'The coloured line is the ERA5 proxy track of this storm, each segment coloured by the model’s probability (under 5 % up to 80 % or more) of hurricane force within 24 hours. The dashed line and dots are OPC’s own analysed fixes; ringed dots are fixes OPC analysed as hurricane force. Hover the track for the probability and time. “Back to all tracks” returns to the previous map.',
+      data: 'OPC archive fixes plus the ERA5 proxy track (pipeline A) that lies within 500 km of the storm. If none does, only OPC’s fixes are drawn.',
+      caution: 'The probability is a model output on a proxy, not an observation or a forecast, and the proxy track and OPC’s fixes are matched by position and time, not identical.'
+    },
     prob: {
       view: 'HF probability: a model’s chance that each low reaches hurricane force within 24 hours.',
       proxy: true,
@@ -1796,6 +1803,7 @@
       if (state.monthShade === 'heat') return state.monthHeatSrc === 'era5' ? 'bymonth-heat-era5' : 'bymonth-heat-archive';
       return state.monthShade === 'all' ? 'bymonth-all' : 'bymonth-off';
     }
+    if (state.focusStorm && state.layer === 'prob') return 'storm';
     if (state.layer === 'atlas') return 'atlas-' + (state.atlas.view || 'boxes');
     if (state.layer === 'playback') return 'playback-' + play.mode;
     return state.layer;
