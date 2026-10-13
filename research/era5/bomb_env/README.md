@@ -66,3 +66,6 @@ fixes, deepens rapidly in 10.6 % (base 3.4 %) and holds 72 % of the rapid-deepen
 baroclinic only 14 % at 4.6 %; forcing only 14 % at 1.2 %. P(HF next 24 h): 8.5 / 2.1 / 1.3 / 0.6 %. The cuts are
 empirical, not physical thresholds; fixes are not independent (a storm changes region within a day). Descriptive, in-sample.
 Third diagram `trough_baroclinic` added to `results/diagram_cells.csv`. Not independently checked until the verifier note below is added.
+
+## Pairing the regions with the models (post hoc)
+`pair_regions.py` (output `results/pair_regions.txt`): adding the three region dummies changes the full model's outlook RPSS by 0.0000 [-0.0002, +0.0001] and rapid-deepening BSS by +0.0011 [+0.0004, +0.0018]; state+Hart by +0.0047 and +0.0012; state alone by +0.0098 and +0.0366. The regions are a coarse copy of variables the full model already uses. A fresh agent recomputed the model scores and gains (not the intervals).
