@@ -89,6 +89,7 @@
     <li><strong>What does it do?</strong> For every low at 00 and 12 UTC it gives a probability that the storm reaches hurricane-force gusts (in ERA5) within the next 24 hours, and a probability for how fast its central pressure will fall or fill.</li>
     <li><strong>Does it work?</strong> Yes, on ERA5 itself, and most of the skill comes from the storm&rsquo;s own state (how deep it is, how fast it is already deepening). Against a basin-and-month climatology, the full model scores a Brier skill score of 0.42 for hurricane force within 24 hours, tested one season at a time over 22 seasons. The storm-state-only model scores 0.37; the cyclone-structure (Hart) terms add 0.015 and the rest of the environment 0.038.</li>
     <li><strong>Does it hold on real forecasts?</strong> Partly tested. A reduced, storm-state-only version fed GFS forecast tracks keeps most of its skill (Brier skill score +0.33 Atlantic, +0.32 Pacific at +24 h, 0.04 to 0.06 below the same model fed ERA5). The environment terms have not been tried on GFS.</li>
+    <li><strong>Want it for one storm?</strong> The <a href="bomb-environment.html">environment check</a> shows a storm&rsquo;s upper-level setting on two diagrams and a 24-hour gale, storm and hurricane-force outlook.</li>
     <li><strong>Where do you see it?</strong> The HF probability layer on the <a href="index.html">map</a> colours every scored track by this model&rsquo;s probability, with one difference: the map uses the version without the gust predictor (see below).</li>
   </ul>
 </div>

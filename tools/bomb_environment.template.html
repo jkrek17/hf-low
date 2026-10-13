@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Environment check - Hurricane Force Extratropical Low Archive</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="description" content="Upper-level environment check for an extratropical low: where the storm sits on a jet-and-trough diagram and a jet-and-baroclinicity diagram, and the model's 24-hour outlook for gale, storm and hurricane-force gusts (ERA5 proxy).">
+<style>
+  /* Self-contained on purpose: the flat/ copy of the site is a single folder and only
+     index.html gets its paths rewritten, so this page uses no files from assets/ and
+     refers to its figures by bare file name. Tokens mirror assets/app.css. */
+  :root {
+    color-scheme: light;
+    --page: #f9f9f7; --surface: #fcfcfb; --surface-sunk: #f2f2ee; --border: #e1e0d9; --border-strong: #c3c2b7;
+    --ink: #0b0b0b; --ink-2: #52514e; --ink-muted: #6d6b66;
+    --atl: #2a78d6; --pac: #eb6834;
+    --navy: #0a3161; --navy-ink: #ffffff; --navy-soft: #cfe0f3; --accent: #0a3f73; --accent-soft: #e4edf8;
+    --badge-ink: #8a5a00; --badge-bg: #fdf3dd; --badge-border: #f4dfae;
+    --font: system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --page: #0d0d0d; --surface: #1a1a19; --surface-sunk: #141413; --border: #2c2c2a; --border-strong: #383835;
+      --ink: #ffffff; --ink-2: #c3c2b7; --ink-muted: #a09e97; --atl: #3987e5; --pac: #d95926;
+      --navy: #123a63; --accent: #93b8e6; --accent-soft: #16263a;
+      --badge-ink: #f1c76b; --badge-bg: #2b2210; --badge-border: #4d3d17;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --surface-sunk: #141413; --border: #2c2c2a; --border-strong: #383835;
+    --ink: #ffffff; --ink-2: #c3c2b7; --ink-muted: #a09e97; --atl: #3987e5; --pac: #d95926;
+    --navy: #123a63; --accent: #93b8e6; --accent-soft: #16263a;
+    --badge-ink: #f1c76b; --badge-bg: #2b2210; --badge-border: #4d3d17;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--ink); font: 15px/1.55 var(--font); }
+  a { color: var(--accent); }
+  .masthead { background: var(--navy); color: var(--navy-ink); padding: 14px 16px; }
+  .masthead-in { max-width: 1180px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; justify-content: space-between; }
+  .masthead h1 { margin: 0; font-size: 18px; font-weight: 650; }
+  .masthead a { color: var(--navy-soft); }
+  main { max-width: 1180px; margin: 0 auto; padding: 20px 16px 56px; display: flex; flex-direction: column; gap: 28px; min-width: 0; }
+  h2 { font-size: 22px; line-height: 1.25; margin: 0 0 6px; text-wrap: balance; }
+  h3 { font-size: 16px; margin: 0 0 4px; }
+  p { margin: 0 0 10px; max-width: 74ch; }
+  section { border-top: 1px solid var(--border); padding-top: 20px; min-width: 0; }
+  .note { background: var(--badge-bg); color: var(--ink); border: 1px solid var(--badge-border); border-left: 4px solid var(--badge-ink); border-radius: 6px; padding: 12px 14px; }
+  .note strong { color: var(--badge-ink); }
+  .answers { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px; }
+  .answers ul { margin: 6px 0 0; padding-left: 20px; } .answers li { margin-bottom: 6px; max-width: 80ch; }
+  .tag { font-size: 12px; font-weight: 650; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2); }
+  .muted { color: var(--ink-2); font-size: 13px; }
+  .limit { border-left: 3px solid var(--border-strong); padding-left: 10px; color: var(--ink-2); }
+  .fig { margin: 12px 0 18px; min-width: 0; }
+  .fig figcaption { font-size: 14px; margin-top: 6px; max-width: 80ch; }
+  .fig img { display: block; width: 100%; height: auto; background: #fff; border: 1px solid var(--border); border-radius: 4px; }
+  .scroll { overflow-x: auto; }
+  .scroll img { min-width: 720px; }
+  .pair { display: grid; grid-template-columns: 1fr; gap: 12px 16px; min-width: 0; }
+  .pair .scroll img { min-width: 0; }
+  @media (min-width: 900px) { .pair { grid-template-columns: 1fr 1fr; } }
+  .basin-atl { color: var(--atl); font-weight: 650; } .basin-pac { color: var(--pac); font-weight: 650; }
+  table { border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+  th, td { text-align: left; padding: 5px 10px; border-bottom: 1px solid var(--border); }
+  .tablewrap { overflow-x: auto; }
+  footer { border-top: 1px solid var(--border); padding-top: 14px; }
+
+  .tablewrap table { min-width: 560px; }
+  td.num, th.num { text-align: right; }
+  .grid2 { display: grid; grid-template-columns: 1fr; gap: 12px 24px; }
+  @media (min-width: 900px) { .grid2 { grid-template-columns: 1fr 1fr; } }
+  dl.preds { margin: 6px 0 0; } dl.preds dt { font-weight: 650; margin-top: 8px; } dl.preds dd { margin: 0; max-width: 80ch; color: var(--ink-2); }
+
+  .ctl { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: end; }
+  .ctl label { display: flex; flex-direction: column; font-size: 13px; color: var(--ink-2); gap: 3px; min-width: 0; }
+  .ctl select, .ctl button, .stepper button { font: inherit; padding: 6px 8px; background: var(--surface); color: var(--ink); border: 1px solid var(--border-strong); border-radius: 5px; max-width: 100%; }
+  .stepper button { cursor: pointer; } .stepper button:disabled { opacity: .45; cursor: default; }
+  #stormSel { min-width: min(100%, 320px); }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px; min-width: 0; }
+  .bars { display: flex; flex-direction: column; gap: 5px; margin: 8px 0; }
+  .bar { display: grid; grid-template-columns: 112px 1fr 48px; gap: 8px; align-items: center; font-size: 14px; }
+  .bar .track { background: var(--surface-sunk); border: 1px solid var(--border); border-radius: 3px; height: 14px; overflow: hidden; }
+  .bar .fill { height: 100%; }
+  .bar b { text-align: right; font-variant-numeric: tabular-nums; }
+  .verdict { font-weight: 650; }
+  svg.chart { width: 100%; height: auto; display: block; max-width: 100%; }
+  svg.chart text { fill: var(--ink-2); font: 11px var(--font); }
+  svg.chart .ttl { fill: var(--ink); font-weight: 650; font-size: 12px; }
+  .gap-top { margin-top: 12px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13px; color: var(--ink-2); margin: 4px 0; }
+  .legend i { display: inline-block; width: 11px; height: 11px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+  .stepper { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .stepper input[type=range] { flex: 1 1 200px; min-width: 0; }
+</style>
+</head>
+<body>
+<header class="masthead"><div class="masthead-in">
+  <h1>Environment check: is this low set up for rapid growth?</h1>
+  <a href="index.html">&larr; Back to the archive</a>
+</div></header>
+<main>
+<div class="note"><strong>ERA5 proxy, not direct observation.</strong> Everything here is built on ERA5 reanalysis and cyclone tracks found in ERA5 itself (pipeline A), seasons 2004-05 to 2025-26. The &ldquo;gale&rdquo;, &ldquo;storm&rdquo; and &ldquo;hurricane force&rdquo; classes are cut points on ERA5&rsquo;s 800 km ocean gust index (38, 54 and 71.7 kt). Only the 71.7 kt cut is tied to the archive; the other two are nominal and not calibrated on observed storms. The probabilities are leave-one-season-out model output, not observations. Research, not a forecast product.</div>
+
+<div class="answers">
+  <div class="tag">In plain words</div>
+  <ul>
+    <li><strong>What is it?</strong> For one storm at a time: where its upper-level setting sits on two diagrams (jet strength against vorticity advection, and jet strength against low-level baroclinicity), and the model&rsquo;s chance that its strongest gust over the next 24 hours is below gale, gale, storm or hurricane force.</li>
+    <li><strong>How to read the diagrams.</strong> Each box is a slice of all 159,430 lows in 2004-05 to 2025-26 at 00 and 12 UTC. Darker means a larger share of lows in that slice deepened rapidly over the next 24 hours (at least 1 Bergeron: 24 hPa in 24 h at 60&deg;N, the classic &ldquo;bomb&rdquo;). The storm&rsquo;s path runs through the boxes as it evolves.</li>
+    <li><strong>Does it work?</strong> <span id="skillLine"></span></li>
+  </ul>
+</div>
+
+<section id="pick">
+  <div class="tag">Pick a storm</div>
+  <h2>Storm, then step through time</h2>
+  <div class="ctl">
+    <label>Basin <select id="basinSel"><option value="">Both</option><option value="0">Atlantic</option><option value="1">Pacific</option></select></label>
+    <label>Season (starts 1 June) <select id="seasonSel"></select></label>
+    <label>Storm (deepest first) <select id="stormSel"></select></label>
+  </div>
+  <p class="muted" id="pickNote"></p>
+</section>
+
+<section id="now" hidden>
+  <div class="tag">Selected fix</div>
+  <h2 id="fixTitle">Selected storm</h2>
+  <div class="stepper"><button type="button" id="prevB" class="btn">&larr; 12 h earlier</button><input type="range" id="fixRange" min="0" max="0" value="0" aria-label="Fix in time"><button type="button" id="nextB" class="btn">12 h later &rarr;</button></div>
+  <div class="grid2 gap-top">
+    <div class="card">
+      <h3>Outlook for the next 24 hours</h3>
+      <p class="muted" id="fixFacts"></p>
+      <div class="bars" id="bars"></div>
+      <p id="mostLikely" class="verdict"></p>
+    </div>
+    <div class="card">
+      <h3>Upper-level environment</h3>
+      <p id="envText"></p>
+      <p class="muted">Share of all lows in the same box that deepened rapidly within 24 h, against 3.4 % overall: high is 10 % or more, raised is 5 to 10 %.</p>
+    </div>
+  </div>
+</section>
+
+<section id="diagrams" hidden>
+  <div class="tag">Diagrams</div>
+  <h2>Where the storm sits, and the path it took</h2>
+  <div class="grid2">
+    <figure class="fig"><svg class="chart" id="dgA" viewBox="0 0 420 360" role="img" aria-label="Jet and trough diagram"></svg><figcaption id="capA"></figcaption></figure>
+    <figure class="fig"><svg class="chart" id="dgB" viewBox="0 0 420 360" role="img" aria-label="Jet and baroclinicity diagram"></svg><figcaption id="capB"></figcaption></figure>
+  </div>
+  <p class="muted">Box size is equal in <em>rank</em>, not in units: each axis is cut at its sixth-percentiles over all lows, so the boxes hold about the same number of fixes. Numbers in the boxes are the rapid-deepening share (%). Dot = a 00 or 12 UTC fix; the ringed dot is the selected one; the line runs from the first fix to the last. A line that climbs toward the dark corner is a storm entering a favourable setting.</p>
+  <h3>Outlook through the storm&rsquo;s life</h3>
+  <svg class="chart" id="tl" viewBox="0 0 860 250" role="img" aria-label="Outlook through time"></svg>
+  <div class="legend" id="tlLegend"></div>
+  <p class="muted">Each column is the outlook made at that fix for the following 24 hours. The line is the gust index ERA5 actually reached at that fix (kt, right scale), with dashed lines at 38, 54 and 71.7 kt. The outlook at one fix is compared with the line 12 and 24 hours later.</p>
+</section>
+
+<section id="skill">
+  <div class="tag">Does it work</div>
+  <h2>Skill, tested one season at a time</h2>
+  <p>Scores are against a basin-and-month climatology, leave-one-season-out over 22 seasons (2004-05 to 2025-26), ERA5 proxy, pipeline A. RPSS scores the four-class outlook; BSS is the Brier skill score for rapid deepening. &ldquo;State only&rdquo; knows the storm&rsquo;s own depth, deepening so far, speed, current gust index, latitude and season. The other columns add environment terms.</p>
+  <div class="tablewrap"><table id="skillTab"></table></div>
+  <p id="skillNote"></p>
+  <div class="tablewrap"><table id="famTab"></table></div>
+  <p class="limit">Gains are statistically clear but small beside the storm&rsquo;s own state, which carries most of the skill. The two diagrams show the part of the environment that matters most visibly; the full model uses 13 environment terms plus the Hart cyclone-phase terms and does better than either diagram alone. The shading in a box is a share across all lows in that box, mixing storms that were already deep with ones that were not; it is a guide, not a forecast for one storm.</p>
+</section>
+
+<section id="limits">
+  <div class="tag">Limits</div>
+  <h2>What this does not show</h2>
+  <ul>
+    <li>ERA5 is a reanalysis. Its gusts read low in the strongest storms and have not been checked against independent observations here.</li>
+    <li>Gale (38 kt) and storm (54 kt) are nominal cuts on the gust index. The archive lists hurricane-force lows only, so they cannot be calibrated on observed events.</li>
+    <li>The outcome is sampled at the next two 00 and 12 UTC fixes, so a gust peak between samples is missed.</li>
+    <li>A track that ends within 24 hours (filled or merged) is scored on the fixes it has, so such storms are counted as below gale.</li>
+    <li>Perfect-prognosis setup: predictors and outcomes both come from ERA5. It has not been tried on GFS or other forecast fields.</li>
+    <li>Storms listed here are the ones the Events tab can show on the map: OPC&rsquo;s hurricane-force storms with a matched pipeline A track, and the proxy storms OPC never listed.</li>
+  </ul>
+</section>
+
+<footer>
+  <p class="muted" id="src"></p>
+  <p class="muted"><a href="index.html">Back to the archive</a> &middot; <a href="environment-model.html">Storm model</a> &middot; <a href="composites.html">Composites</a></p>
+</footer>
+</main>
+<script>
+  /* Follow the theme chosen on the archive page, if one was saved. */
+  (function () {
+    try {
+      var saved = localStorage.getItem('hf-theme');
+      if (saved) document.documentElement.setAttribute('data-theme', saved);
+    } catch (err) { /* private mode: follow the system theme */ }
+  })();
+</script>
+<script>
+/*@@DATA@@*/
+</script>
+<script>
+(function () {
+  var D = window.HF_OUTLOOK, CL = ['Below gale', 'Gale', 'Storm', 'Hurricane force'];
+  var CC = ['#9aa7b4', '#d9a520', '#e8742c', '#b8232b'];
+  var NAMES = { jet250: ['250 hPa jet maximum within 1000 km (kt)', 1], vadv500: ['500 hPa vorticity advection (1e-9 s-2)', 1], eady: ['850-500 hPa Eady growth rate (per day)', 1] };
+  var $ = function (id) { return document.getElementById(id); };
+  var NS = 'http://www.w3.org/2000/svg';
+  function el(tag, attrs, parent, text) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function fmtT(t) {
+    var s = String(t);
+    return parseInt(s.substr(6, 2), 10) + ' ' + MON[parseInt(s.substr(4, 2), 10) - 1] + ' ' + s.substr(0, 4) + ' ' + s.substr(8, 2) + ' UTC';
+  }
+  function pct(x, d) { return (100 * x).toFixed(d == null ? 0 : d) + ' %'; }
+
+  /* ---- data ---- */
+  var storms = [];
+  Object.keys(D.tracks).forEach(function (id) {
+    var r = D.tracks[id], f = r[2], fx = [];
+    for (var i = 0; i < f.length; i += 12) {
+      var p1 = f[i + 8] / 1000, p2 = f[i + 9] / 1000, p3 = f[i + 10] / 1000;
+      fx.push({ t: f[i], lat: f[i + 1] / 10, lon: f[i + 2] / 10, msl: f[i + 3] / 10, g: f[i + 4] / 10,
+        jet: f[i + 5] < 0 ? null : f[i + 5] / 10, vadv: f[i + 6] / 100, eady: f[i + 7] < 0 ? null : f[i + 7] / 1000,
+        p: [Math.max(0, 1 - p1 - p2 - p3), p1, p2, p3] });
+    }
+    var minp = Math.min.apply(null, fx.map(function (x) { return x.msl; }));
+    storms.push({ id: id, basin: r[0], season: r[1], fx: fx, minp: minp });
+  });
+  var byId = {}; storms.forEach(function (s) { byId[s.id] = s; });
+
+  /* ---- skill text ---- */
+  (function () {
+    var S = D.skill, fam = D.family;
+    function num(k, i) { return S[k] ? parseFloat(S[k][i]) : NaN; }
+    var t = $('skillTab');
+    var rows = [['Outlook RPSS', 0], ['Rapid-deepening BSS', 1]];
+    var h = '<tr><th></th><th class="num">State only</th><th class="num">+ jet and trough</th><th class="num">+ jet and baroclinicity</th><th class="num">Full (Storm model terms)</th></tr>';
+    rows.forEach(function (r) {
+      h += '<tr><td>' + r[0] + '</td>' + ['state', 'A', 'B', 'full'].map(function (k) { return '<td class="num">' + (S[k] ? S[k][r[1]] : '') + '</td>'; }).join('') + '</tr>';
+    });
+    t.innerHTML = h;
+    var g = {};
+    fam.forEach(function (f) { g[f.target + '|' + f.model] = f; });
+    var ft = '<tr><th>Gain over state only</th><th class="num">+ jet and trough</th><th class="num">+ jet and baroclinicity</th><th class="num">Full</th></tr>';
+    ['outlook RPSS', 'rapid-deepening BSS'].forEach(function (tg) {
+      ft += '<tr><td>' + tg + '</td>' + ['A', 'B', 'full'].map(function (m) {
+        var f = g[tg + '|' + m];
+        return '<td class="num">' + (f ? (f.gain >= 0 ? '+' : '') + f.gain.toFixed(4) + ' [' + f.lo90.toFixed(4) + ', ' + f.hi90.toFixed(4) + ']' : '') + '</td>';
+      }).join('') + '</tr>';
+    });
+    $('famTab').innerHTML = ft;
+    var ok = fam.filter(function (f) { return f.verdict === 'yes'; }).length;
+    $('skillNote').textContent = 'Bracketed values are 90 % intervals from resampling whole seasons. All ' + ok + ' of ' + fam.length + ' pre-registered gains over the storm-state-only model pass a false-discovery-rate correction (q below 0.05). Dropping the storm\u2019s current gust index from the full model lowers the outlook score by about 0.04.';
+    $('skillLine').textContent = 'Yes, modestly. On ERA5 itself the four-class outlook scores ' + S.full[0] + ' against climatology, of which ' + S.state[0] + ' comes from the storm\u2019s own state; the upper-level environment adds the rest. For rapid deepening, the jet-and-baroclinicity diagram\u2019s terms lift the Brier skill score from ' + S.state[1] + ' to ' + S.B[1] + ', and the full environment to ' + S.full[1] + '.';
+    $('src').textContent = 'Pipeline A (ERA5 proxy), seasons 1 June to 31 May, 2004-05 to 2025-26. ' + D.meta.tracks + ' storm tracks, ' + D.meta.fixes + ' fixes. Source: ' + D.meta.source + '. Code and the pre-registered plan: research/era5/bomb_env.';
+  })();
+
+  /* ---- pickers ---- */
+  var seasons = {};
+  storms.forEach(function (s) { seasons[s.season] = 1; });
+  var ss = $('seasonSel');
+  ss.innerHTML = '<option value="">All</option>' + Object.keys(seasons).sort().map(function (y) { return '<option value="' + y + '">' + y + '-' + String(+y + 1).slice(2) + '</option>'; }).join('');
+  var sel = null, idx = 0;
+
+  function fillStorms(keep) {
+    var b = $('basinSel').value, y = ss.value;
+    var list = storms.filter(function (s) { return (b === '' || s.basin === +b) && (y === '' || s.season === +y); });
+    list.sort(function (a, c) { return a.minp - c.minp; });
+    $('stormSel').innerHTML = list.map(function (s) {
+      return '<option value="' + s.id + '">' + (s.basin ? 'Pac ' : 'Atl ') + fmtT(s.fx[0].t).slice(0, -7) + ' \u00b7 min ' + s.minp.toFixed(0) + ' hPa</option>';
+    }).join('');
+    $('pickNote').textContent = list.length + ' storms. The list is every proxy storm with a matched OPC hurricane-force storm, plus proxy storms OPC never listed.';
+    if (keep && byId[keep] && list.indexOf(byId[keep]) >= 0) $('stormSel').value = keep;
+    choose($('stormSel').value);
+  }
+
+  function choose(id) {
+    sel = byId[id] || null;
+    $('now').hidden = $('diagrams').hidden = !sel;
+    if (!sel) return;
+    var r = $('fixRange');
+    r.max = sel.fx.length - 1;
+    var pk = 0, best = -1;
+    sel.fx.forEach(function (f, i) { if (f.g > best) { best = f.g; pk = i; } });
+    idx = Math.max(0, pk - 2);
+    r.value = idx;
+    draw();
+  }
+
+  /* ---- diagrams ---- */
+  var W = 420, H = 360, ML = 52, MB = 52, MT = 24, MR = 12, NB = 6;
+  var GEOM = {};
+  function binPos(v, edges) {
+    if (v == null) return null;
+    for (var i = 0; i < NB; i++) {
+      if (v <= edges[i + 1] || i === NB - 1) {
+        var lo = edges[i], hi = edges[i + 1];
+        var fr = hi > lo ? (v - lo) / (hi - lo) : 0.5;
+        return i + Math.max(0, Math.min(1, fr));
+      }
+    }
+    return null;
+  }
+  function cellOf(d, f) {
+    var bx = binPos(f[d.x === 'jet250' ? 'jet' : 'eady'], d.xe), by = binPos(f[d.y === 'vadv500' ? 'vadv' : 'eady'], d.ye);
+    if (bx == null || by == null) return null;
+    return { bx: Math.min(NB - 1, Math.floor(bx)), by: Math.min(NB - 1, Math.floor(by)), fx: bx, fy: by };
+  }
+  function drawDiagram(svg, d, title, cap) {
+    svg.innerHTML = '';
+    var pw = W - ML - MR, ph = H - MT - MB, cw = pw / NB, ch = ph / NB;
+    var maxr = 0;
+    d.cells.forEach(function (c) { if (c[1] > maxr) maxr = c[1]; });
+    maxr /= 10000;
+    el('text', { x: ML, y: 14, class: 'ttl' }, svg, title);
+    for (var i = 0; i < NB; i++) for (var j = 0; j < NB; j++) {
+      var c = d.cells[i * NB + j], r = c[1] < 0 ? 0 : c[1] / 10000;
+      var a = Math.sqrt(r / maxr) * 0.85;
+      var x = ML + i * cw, y = MT + (NB - 1 - j) * ch;
+      el('rect', { x: x, y: y, width: cw, height: ch, fill: 'var(--accent)', 'fill-opacity': a.toFixed(3), stroke: 'var(--border)', 'stroke-width': 0.5 }, svg);
+      var tx = el('text', { x: x + cw / 2, y: y + ch / 2 + 4, 'text-anchor': 'middle' }, svg, c[1] < 0 ? '' : (r * 100 < 10 ? (r * 100).toFixed(1) : (r * 100).toFixed(0)));
+      tx.setAttribute('style', a > 0.45 ? 'fill:var(--navy-ink)' : '');
+    }
+    for (var k = 0; k <= NB; k++) {
+      el('text', { x: ML + k * cw, y: H - MB + 14, 'text-anchor': 'middle' }, svg, (+d.xe[k]).toFixed(d.x === 'eady' ? 2 : 0));
+      el('text', { x: ML - 5, y: MT + (NB - k) * ch + 4, 'text-anchor': 'end' }, svg, (+d.ye[k]).toFixed(d.y === 'eady' ? 2 : 1));
+    }
+    el('text', { x: ML + pw / 2, y: H - 6, 'text-anchor': 'middle' }, svg, NAMES[d.x][0]);
+    var yl = el('text', { x: 12, y: MT + ph / 2, 'text-anchor': 'middle', transform: 'rotate(-90 12 ' + (MT + ph / 2) + ')' }, svg, NAMES[d.y][0].length > 40 ? NAMES[d.y][0].replace(' (', '\n(').split('\n')[0] : NAMES[d.y][0]);
+    var pts = [];
+    sel.fx.forEach(function (f, n) {
+      var c = cellOf(d, f);
+      pts.push(c ? { x: ML + c.fx * cw, y: MT + (NB - c.fy) * ch, n: n } : null);
+    });
+    var path = pts.filter(Boolean).map(function (p, n) { return (n ? 'L' : 'M') + p.x.toFixed(1) + ' ' + p.y.toFixed(1); }).join(' ');
+    el('path', { d: path, fill: 'none', stroke: 'var(--ink)', 'stroke-width': 1.4, 'stroke-opacity': 0.75 }, svg);
+    pts.forEach(function (p) {
+      if (!p) return;
+      el('circle', { cx: p.x, cy: p.y, r: p.n === idx ? 6.5 : 2.6, fill: p.n === idx ? 'var(--page)' : 'var(--ink)', stroke: 'var(--ink)', 'stroke-width': p.n === idx ? 2.4 : 0 }, svg);
+    });
+    cap.textContent = title + '. Box shading: share of lows that deepened rapidly within 24 h.';
+  }
+
+  function verdict(d, f) {
+    var c = cellOf(d, f);
+    if (!c) return null;
+    var cell = d.cells[c.bx * NB + c.by], r = cell[1] < 0 ? null : cell[1] / 10000;
+    if (r == null) return null;
+    return { r: r, n: cell[0], lab: r >= 0.10 ? 'high' : (r >= 0.05 ? 'raised' : 'background or lower') };
+  }
+
+  function drawTimeline() {
+    var svg = $('tl'); svg.innerHTML = '';
+    var fx = sel.fx, n = fx.length, L = 46, R = 46, T = 14, B = 34, w = 860 - L - R, h = 250 - T - B;
+    var bw = w / n;
+    fx.forEach(function (f, i) {
+      var y = T + h;
+      for (var c = 0; c < 4; c++) {
+        var hh = f.p[c] * h; y -= hh;
+        el('rect', { x: L + i * bw + 0.5, y: y, width: Math.max(bw - 1, 1), height: hh, fill: CC[c], 'fill-opacity': i === idx ? 1 : 0.62 }, svg);
+      }
+      if (i === idx) el('rect', { x: L + i * bw, y: T - 2, width: bw, height: h + 4, fill: 'none', stroke: 'var(--ink)', 'stroke-width': 1.5 }, svg);
+      var hit = el('rect', { x: L + i * bw, y: T, width: bw, height: h, fill: 'transparent', style: 'cursor:pointer' }, svg);
+      hit.addEventListener('click', function () { idx = i; $('fixRange').value = i; draw(); });
+    });
+    var gmax = Math.max(80, Math.max.apply(null, fx.map(function (f) { return f.g; })) + 5);
+    function gy(v) { return T + h - (v / gmax) * h; }
+    [38, 54, 71.7].forEach(function (v) {
+      el('line', { x1: L, x2: L + w, y1: gy(v), y2: gy(v), stroke: 'var(--ink)', 'stroke-dasharray': '4 3', 'stroke-opacity': 0.55 }, svg);
+      el('text', { x: L + w + 4, y: gy(v) + 4 }, svg, v + '');
+    });
+    el('path', { d: fx.map(function (f, i) { return (i ? 'L' : 'M') + (L + (i + 0.5) * bw).toFixed(1) + ' ' + gy(f.g).toFixed(1); }).join(' '), fill: 'none', stroke: 'var(--ink)', 'stroke-width': 2 }, svg);
+    for (var q = 0; q <= 4; q++) el('text', { x: L - 5, y: T + h - q * h / 4 + 4, 'text-anchor': 'end' }, svg, (q * 25) + ' %');
+    var step = Math.max(1, Math.ceil(n / 9));
+    fx.forEach(function (f, i) {
+      if (i % step === 0) el('text', { x: L + (i + 0.5) * bw, y: T + h + 14, 'text-anchor': 'middle' }, svg, (function (x) { return x.replace(/ \d{4} /, ' ').replace(' UTC', 'Z'); })(fmtT(f.t)));
+    });
+    el('text', { x: L + w / 2, y: 246, 'text-anchor': 'middle' }, svg, 'Fix time (00 and 12 UTC). Bars: outlook for the next 24 h (left scale). Line: gust index at the fix (right scale, kt).');
+    $('tlLegend').innerHTML = CL.map(function (c, i) { return '<span><i style="background:' + CC[i] + '"></i>' + c + '</span>'; }).join('') + '<span><i style="background:var(--ink)"></i>Gust index at the fix</span>';
+  }
+
+  function draw() {
+    var f = sel.fx[idx];
+    $('fixTitle').textContent = (sel.basin ? 'North Pacific' : 'North Atlantic') + ' low, ' + fmtT(f.t);
+    $('fixRange').value = idx;
+    $('prevB').disabled = idx === 0; $('nextB').disabled = idx === sel.fx.length - 1;
+    $('fixFacts').textContent = 'Position ' + Math.abs(f.lat).toFixed(1) + '\u00b0N ' + Math.abs(f.lon > 180 ? 360 - f.lon : f.lon).toFixed(1) + '\u00b0' + (f.lon > 180 ? 'W' : 'E') + ' \u00b7 central pressure ' + f.msl.toFixed(1) + ' hPa \u00b7 gust index now ' + f.g.toFixed(0) + ' kt \u00b7 fix ' + (idx + 1) + ' of ' + sel.fx.length;
+    var b = $('bars'); b.innerHTML = '';
+    var best = 0;
+    f.p.forEach(function (p, i) { if (p > f.p[best]) best = i; });
+    f.p.forEach(function (p, i) {
+      var row = document.createElement('div'); row.className = 'bar';
+      row.innerHTML = '<span>' + CL[i] + '</span><span class="track"><span class="fill" style="display:block;width:' + (p * 100).toFixed(1) + '%;background:' + CC[i] + '"></span></span><b>' + (p < 0.001 ? '<0.1' : (p * 100).toFixed(p < 0.1 ? 1 : 0)) + ' %</b>';
+      b.appendChild(row);
+    });
+    var atLeast = f.p[2] + f.p[3];
+    $('mostLikely').textContent = 'Most likely: ' + CL[best].toLowerCase() + ' (' + pct(f.p[best]) + '). Storm force or stronger: ' + pct(atLeast, atLeast < 0.1 ? 1 : 0) + '.' + (f.p[3] >= 0.5 ? ' Hurricane force is the more likely outcome.' : '');
+    var a = verdict(D.diagrams.jet_trough, f), c = verdict(D.diagrams.jet_baroclinic, f);
+    var parts = [];
+    parts.push('Jet maximum ' + (f.jet == null ? 'not available' : f.jet.toFixed(0) + ' kt') + ', vorticity advection ' + f.vadv.toFixed(1) + ' (1e-9 s-2), Eady growth ' + (f.eady == null ? 'n/a' : f.eady.toFixed(2) + ' per day') + '.');
+    if (a) parts.push('<strong>Jet and trough:</strong> ' + a.lab + ' (' + pct(a.r, 1) + ' of ' + a.n.toLocaleString('en-US') + ' lows in this box deepened rapidly).');
+    if (c) parts.push('<strong>Jet and baroclinicity:</strong> ' + c.lab + ' (' + pct(c.r, 1) + ' of ' + c.n.toLocaleString('en-US') + ' lows).');
+    $('envText').innerHTML = parts.join('<br>');
+    drawDiagram($('dgA'), D.diagrams.jet_trough, 'Jet strength and trough (vorticity advection)', $('capA'));
+    drawDiagram($('dgB'), D.diagrams.jet_baroclinic, 'Jet strength and baroclinicity (Eady growth)', $('capB'));
+    drawTimeline();
+  }
+
+  $('basinSel').addEventListener('change', function () { fillStorms(); });
+  ss.addEventListener('change', function () { fillStorms(); });
+  $('stormSel').addEventListener('change', function () { choose(this.value); });
+  $('fixRange').addEventListener('input', function () { idx = +this.value; draw(); });
+  $('prevB').addEventListener('click', function () { if (idx > 0) { idx--; draw(); } });
+  $('nextB').addEventListener('click', function () { if (idx < sel.fx.length - 1) { idx++; draw(); } });
+
+  var q = /[?&]track=(\d+)/.exec(location.search), want = q && q[1];
+  if (want && byId[want]) { $('basinSel').value = ''; fillStorms(want); }
+  else {
+    fillStorms();
+    if (want) $('pickNote').textContent = 'No environment record for track ' + want + ' (it may be before 2004-05 or have no scored fix). Showing the deepest storm instead. ' + $('pickNote').textContent;
+  }
+})();
+</script>
+</body>
+</html>
