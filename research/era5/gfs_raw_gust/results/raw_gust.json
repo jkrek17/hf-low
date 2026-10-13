@@ -939,19 +939,19 @@
   }
  },
  "S3": {
-  "n_events": 234,
-  "covered": 234,
-  "tracked": 228,
-  "hit_lead0": 105,
-  "any_exceed": 145,
+  "n_events": 428,
+  "covered": 428,
+  "tracked": 409,
+  "hit_lead0": 191,
+  "any_exceed": 270,
   "max_lead_exceed_median": 48.0,
   "lead_dist": {
-   "-1": 83,
-   "0": 7,
-   "12": 4,
-   "24": 17,
-   "36": 22,
-   "48": 95
+   "-1": 139,
+   "0": 8,
+   "12": 16,
+   "24": 28,
+   "36": 50,
+   "48": 168
   }
  }
 }

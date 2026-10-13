@@ -184,7 +184,7 @@ def main():
 
 def event_level(F, A, T0):
     H = A[A.Category == "HF"].copy(); H = H.sort_values("t")
-    first = H.groupby("ID").first().reset_index()
+    first = H.groupby(["file", "ID"]).first().reset_index()   # IDs repeat across the Atl and Pac files
     first["m"] = first.t.dt.month
     first["season"] = np.where(first.m >= 6, first.t.dt.year, first.t.dt.year - 1)
     ev = first[first.season.isin(SEAS) & first.m.isin([10, 11, 12, 1, 2, 3, 4])].copy()
@@ -199,7 +199,7 @@ def event_level(F, A, T0):
         b = near.basin.iloc[0] if len(near) else None
         if len(near) == 0:
             rows.append(dict(ID=e.ID, covered=True, tracked=False)); continue
-        bas = "atl" if e.ID and A[A.ID == e.ID].file.iloc[0] == "Atl" else "pac"
+        bas = "atl" if e.file == "Atl" else "pac"
         Ts = T0[(bas, int(e.season))]
         r0 = near[near.lead == 0]
         hit0 = bool(len(r0) and (r0.G > Ts).any())
