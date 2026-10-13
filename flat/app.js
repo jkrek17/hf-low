@@ -1902,6 +1902,9 @@
     var layer = mapLayer();
     var note = document.getElementById('mapNote');
     document.getElementById('focusBack').hidden = !state.focusStorm;
+    var fenv = document.getElementById('focusEnv');
+    fenv.hidden = !(state.focusStorm && state.focusStorm.track >= 0);
+    if (!fenv.hidden) fenv.href = 'bomb-environment.html?track=' + state.focusStorm.track;
     if (state.focusStorm && layer === 'prob' && ensureEra5('allp')) {
       note.textContent = focusNote();
     } else if (layer === 'playback') {
