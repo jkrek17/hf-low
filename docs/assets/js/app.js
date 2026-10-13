@@ -1598,7 +1598,7 @@
     },
     density: {
       view: 'Fix density: how much hurricane-force time each patch of ocean sees.',
-      read: 'Each cell is 2° of latitude by 5° of longitude, shaded by the number of six-hourly hurricane-force fixes in it, on a square-root scale (pale few, dark many). It counts fixes, not storms: a slow storm leaves more fixes than a fast one.',
+      read: 'Each cell is 2° of latitude by 5° of longitude, shaded by the number of hurricane-force fixes in it, on a square-root scale (pale few, dark many). It counts fixes, not storms: a slow storm leaves more fixes than a fast one.',
       data: ARCHIVE_DATA,
       caution: PRACTICE_CAUTION
     },
@@ -1618,7 +1618,7 @@
       view: 'HF probability: a model’s chance that each low reaches hurricane force within 24 hours.',
       proxy: true,
       read: 'Each short edge of a track is coloured by the model’s probability (under 5 % up to 80 % or more) that the low reaches a hurricane-force-equivalent gust, 71.7 kt in ERA5, within 24 hours of the later end. Scored at 00 and 12 UTC. Faint lines are low probability on purpose.',
-      data: 'ERA5 proxy tracks (pipeline A) with a model fitted to them, scored out of sample season by season. 2004-2025 shows every scored low. 1979-2003 (a tick box) shows only the catalog events and their matched non-events, within that era only.',
+      data: 'ERA5 proxy tracks (pipeline A) with a model fitted to them, scored out of sample season by season. 2004-2025 covers every scored low, subject to the basin, month and season filters. 1979-2003 (a tick box) shows only the catalog events and their matched non-events, within that era only.',
       caution: 'A model output on a proxy, not an observation or a forecast. Busy maps are hard to read; to compare the model storm by storm with the storms OPC actually analysed as hurricane force, use the table at the top of the ',
       cautionLink: { go: 'events', t: 'Events tab' },
       more: [PROXY_PRE + ' Probabilities are read as shapes and rankings across a track, not as rates.']
