@@ -49,7 +49,7 @@ the storm's own state, as in PR 12; the environment adds the +0.03.
 - Gale and storm cutoffs are not calibrated on observations. The 12-hourly outcome samples miss peaks between samples.
 - Passing FDR at this n says the gains are not zero, not that they are large; RPSS gain over state is +0.01 to +0.03.
 - Interval widths treat seasons as independent; fixes within a storm are not independent (the interval is the season-level one).
-- Perfect-prognosis setup (ERA5 predictors and outcomes); not tested on GFS.
+- Perfect-prognosis setup (ERA5 predictors and outcomes). A later GFS test of models S, A and B is in `../gfs_outlook` (state-only RPSS +0.315 at 24 h lead on GFS; the Hart terms and full model were not tested on GFS).
 - Looks at these data: one scoring run for the pre-registered family. The old `../intensity` scores on the same fixes are PRs 7 and 12 (not independent of this).
 
 ## Verification
