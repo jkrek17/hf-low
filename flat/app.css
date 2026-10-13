@@ -1150,3 +1150,28 @@ fieldset.tele-field, .tele-field { margin: 0 0 var(--sp-3); }
 
 /* Events tab: model-against-OPC block, shorter than the main table so both show */
 .cmp-wrap { max-height: 24rem; }
+
+/* ------------------------------------------------- map "What this shows"
+   The note at the top of the Map tab (index.html #mapExplain, app.js
+   renderExplain). Tokens only, so both themes follow. A grid of label and
+   text on wide screens, stacked on phones. */
+.explain {
+  margin: 0 0 var(--sp-3); padding: var(--sp-3) var(--sp-4);
+  background: var(--surface); border: 1px solid var(--border);
+  border-left: 3px solid var(--border-strong); border-radius: var(--radius);
+  font-size: var(--fs-base); color: var(--ink-2); line-height: 1.45;
+}
+.explain-title { margin: 0 0 2px; font-size: var(--fs-base); font-weight: 650; color: var(--ink); }
+.explain-view { margin: 0 0 var(--sp-2); font-weight: 600; color: var(--ink); }
+.explain-list { margin: 0; display: grid; gap: 6px; }
+.explain-list > div { display: grid; grid-template-columns: 84px 1fr; gap: var(--sp-3); }
+.explain-list dt { font-size: var(--fs-sm); font-weight: 650; color: var(--ink); text-transform: uppercase; letter-spacing: .03em; padding-top: 1px; }
+.explain-list dd { margin: 0; }
+.explain-more { margin-top: var(--sp-2); }
+.explain-more summary { cursor: pointer; font-weight: 600; color: var(--ink); }
+.explain-more > div { margin-top: var(--sp-2); }
+.explain-more p { margin: 0 0 var(--sp-2); }
+@media (max-width: 600px) {
+  .explain { padding: var(--sp-3); }
+  .explain-list > div { grid-template-columns: 1fr; gap: 0; }
+}

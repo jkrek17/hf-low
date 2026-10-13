@@ -231,6 +231,24 @@
       <button type="button" class="btn" id="era5FocusClear" hidden>Clear highlighted storm</button>
     </div>
 
+    <!-- "What this shows": a plain-language note for the layer or view on
+         screen, written by app.js (renderExplain) from the EXPLAIN table, so
+         it sits at the top of the Map tab and follows every layer, atlas
+         view, playback mode and By month shading. -->
+    <aside class="explain" id="mapExplain" aria-labelledby="explainTitle">
+      <h2 class="explain-title" id="explainTitle">What this shows</h2>
+      <p class="explain-view" id="explainView"></p>
+      <dl class="explain-list">
+        <div><dt>Reading it</dt><dd id="explainRead"></dd></div>
+        <div><dt>Data</dt><dd id="explainData"></dd></div>
+        <div><dt>Caution</dt><dd id="explainCaution"></dd></div>
+      </dl>
+      <details class="explain-more" id="explainMoreWrap" hidden>
+        <summary>More</summary>
+        <div id="explainMore"></div>
+      </details>
+    </aside>
+
     <!-- Playback transport. Shown only while the Playback layer is active
          (app.js toggles [hidden]). Every control is a native element - radio
          inputs, selects, a button and a range input - so keyboard and
