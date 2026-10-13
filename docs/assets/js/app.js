@@ -1576,6 +1576,170 @@
     }
   }
 
+  /* --------------------------------------------------- "What this shows"
+     The plain-language note at the top of the Map tab. One entry per layer
+     or view; renderExplain() picks the entry from the current state and
+     fills #mapExplain. Text that depends on a changeable number (counts,
+     peaks) stays in the one-line note and legend; this table holds only
+     what is true of the view whatever the filters. A part is a string, or
+     { go: 'events' | 'method', t: text } for a link to another tab. A
+     "proxy" entry is headed with the ERA5-proxy warning. */
+  var ARCHIVE_DATA = 'OPC archive of hurricane-force lows: hand-maintained, 2004-05 to the latest season by default (earlier seasons are partial and marked provisional). Filters above (basin, seasons, months, pressure) choose which events are drawn.';
+  var PRACTICE_CAUTION = ['Counts and track lengths mix weather with analysis practice: analysts began logging developing-stage fixes in 2013-14 (Pacific) and 2017-18 (Atlantic). See ', { go: 'practice', t: 'the Method tab' }, '.'];
+  var PROXY_PRE = 'Before 2001-02 the ERA5 gust index drifts upward, so the 1979-2003 storms are for comparing where and when within that era, not how many, and not against the archive.';
+
+  var EXPLAIN = {
+    tracks: {
+      view: 'Tracks: each hurricane-force event along its path.',
+      read: 'One line per event, coloured by the analyzed central pressure at each point (key at the bottom right of the map). Dashed lines are events with no analyzed centre. Click a track for its fixes.',
+      data: ARCHIVE_DATA + ' Tick “ERA5 proxy tracks” to add reanalysis storms in teal underneath.',
+      caution: PRACTICE_CAUTION,
+      more: ['The teal ERA5 tracks come from pipeline A, a reanalysis proxy: cyclones whose ERA5 fields look like the ones the OPC warned for as hurricane force. They are not observations. ' + PROXY_PRE + ' The null-case and all-cyclone options show proxy cyclones that stayed below the threshold.']
+    },
+    density: {
+      view: 'Fix density: how much hurricane-force time each patch of ocean sees.',
+      read: 'Each cell is 2° of latitude by 5° of longitude, shaded by the number of six-hourly hurricane-force fixes in it, on a square-root scale (pale few, dark many). It counts fixes, not storms: a slow storm leaves more fixes than a fast one.',
+      data: ARCHIVE_DATA,
+      caution: PRACTICE_CAUTION
+    },
+    genesis: {
+      view: 'First fix: where each event first appears in the archive.',
+      read: 'One dot per event at its first tracked fix, coloured by basin.',
+      data: ARCHIVE_DATA,
+      caution: ['This is where the analysts picked the low up, not where it formed. That point moved earlier when developing-stage fixes started being logged (2013-14 Pacific, 2017-18 Atlantic; see ', { go: 'practice', t: 'Method' }, '), so compare across that change with care.']
+    },
+    peak: {
+      view: 'Peak intensity: where each storm was deepest.',
+      read: 'One dot per event at its lowest analyzed central pressure; the dot grows and changes colour as the pressure falls.',
+      data: ARCHIVE_DATA,
+      caution: 'Events with no analyzed centre (some tip jets) have no pressure and are marked differently. The lowest value is an analyst estimate, to the nearest hPa.'
+    },
+    prob: {
+      view: 'HF probability: a model’s chance that each low reaches hurricane force within 24 hours.',
+      proxy: true,
+      read: 'Each short edge of a track is coloured by the model’s probability (under 5 % up to 80 % or more) that the low reaches a hurricane-force-equivalent gust, 71.7 kt in ERA5, within 24 hours of the later end. Scored at 00 and 12 UTC. Faint lines are low probability on purpose.',
+      data: 'ERA5 proxy tracks (pipeline A) with a model fitted to them, scored out of sample season by season. 2004-2025 shows every scored low. 1979-2003 (a tick box) shows only the catalog events and their matched non-events, within that era only.',
+      caution: 'A model output on a proxy, not an observation or a forecast. Busy maps are hard to read; to compare the model storm by storm with the storms OPC actually analysed as hurricane force, use the table at the top of the ',
+      cautionLink: { go: 'events', t: 'Events tab' },
+      more: [PROXY_PRE + ' Probabilities are read as shapes and rankings across a track, not as rates.']
+    },
+    'atlas-boxes': {
+      view: 'Atlas, boxes: where the time at hurricane force is spent.',
+      read: 'Each 5° × 10° box shows hurricane-force centre-hours per season (6 hours per fix), on a square-root scale. Source selector: the archive, or the ERA5 proxy over the same seasons.',
+      data: 'Fixed at 2004-05 to 2025-26 in both sources. Basin and month filters apply; season and other filters do not.',
+      caution: 'The proxy source is reanalysis, not observation. Boxes with little time are noisy.'
+    },
+    'atlas-motion': {
+      view: 'Atlas, arrows: how fast and which way HF lows move.',
+      read: 'One arrow per 5° × 10° box that has at least 25 six-hour steps: the mean motion while hurricane force. The arrow points the way the lows go; its length is the mean speed.',
+      data: 'Archive or ERA5 proxy as selected, 2004-05 to 2025-26. Basin filter applies; month filter does not.',
+      caution: 'A mean motion hides the spread: boxes crossed by storms going different ways average to a slow arrow.'
+    },
+    'atlas-historic': {
+      view: 'Atlas, 1979-2003 candidates: the strongest storms before the archive.',
+      proxy: true,
+      read: 'The deepest and highest-gust storms of 1979-80 to 2003-04 in ERA5, drawn on their tracks with a ring at the peak-gust position (dashed ring: linked to a tropical cyclone).',
+      data: 'ERA5 reanalysis, pipeline A. Ranked within the pre-2004 sample only.',
+      caution: 'Nothing here is confirmed. ERA5 pressure in the 1980s rests on fewer observations, the archive is incomplete before 2004-05 so a missing storm is not evidence, and the gust index drifts upward before 2001.'
+    },
+    'atlas-gust': {
+      view: 'Atlas, gust climatology: how often the sea surface sees strong gusts.',
+      proxy: true,
+      read: 'Each 1° block shows either the mean annual maximum gust or the share of 12-hourly times at or above a gust level (selector). Darker is windier. Blocks below the lowest class are not drawn.',
+      data: 'ERA5 10 m gust at 00 and 12 UTC, 1 October to 30 April, 2004-05 to 2025-26, ocean only. Basin filter applies.',
+      caution: 'ERA5 reads low in extreme storms, so every value is a lower bound. Coastal and sea-ice blocks (Greenland coast, Chukotka) are the least reliable and there is no terrain mask. The tropical-cyclone season is not sampled.'
+    },
+    'bymonth-heat-archive': {
+      view: 'By month, heat map: where hurricane-force storms sit in each month of the year.',
+      read: 'Step through January to December. The shading is where the track points of the archive’s hurricane-force events fall in that month, all seasons pooled, smoothed over about 3.5°. The colour scale is the same for every month, so a pale month really is quieter.',
+      data: 'OPC archive, 2004-05 onward (the season range follows the filter above). A switch gives the ERA5 proxy for 1979-2003 instead; the two are never pooled.',
+      caution: 'The shading counts six-hourly track points, not storms, and stays on events’ recorded tracks. Compare where the pattern sits from month to month more than the exact shade. The month’s densest point is named in the note above the map.',
+      more: ['Heat is track points per season, so it is comparable between months but not a storm count. Recording practice changed over the period (see Method), which lengthens recorded tracks in later seasons.']
+    },
+    'bymonth-heat-era5': {
+      view: 'By month, heat map (ERA5 proxy): where reanalysis storms sat in each month, 1979-2003.',
+      proxy: true,
+      read: 'Step through January to December. The shading is where the track points of the proxy hurricane-force-equivalent storms fall in that month, all seasons from 1979-80 to 2003-04 pooled, smoothed over about 3.5°. One colour scale for all months.',
+      data: 'ERA5 reanalysis, pipeline A (the same storms as the teal tracks). Separate from the archive heat map; the two are never combined.',
+      caution: PROXY_PRE + ' Read the month-to-month movement of the track, not the number of storms.'
+    },
+    'bymonth-all': {
+      view: 'By month, all lows: where every low pressure system sits, hurricane force or not.',
+      proxy: true,
+      read: 'Step through the months. Shading is the density of all tracked lows in each 5° × 10° cell (12-hourly fixes per season), one colour scale for all months. Event tracks are drawn on top.',
+      data: 'ERA5 proxy tracks, pipeline A, 2004-05 to 2025-26 only; earlier lows have no stored per-fix tracks, so earlier seasons are not shaded.',
+      caution: 'Lows are tracked only to about 67°N, so the northern edge is where tracks leave the domain, not where storms stop.'
+    },
+    'bymonth-off': {
+      view: 'By month, tracks only: the archive’s events in each calendar month.',
+      read: 'Step through the months. Each event is drawn whole, in the month its first fix falls; circles mark the lowest analyzed pressure and grow as it falls.',
+      data: ARCHIVE_DATA + ' Optional teal tracks are the ERA5 proxy for earlier seasons.',
+      caution: PRACTICE_CAUTION
+    },
+    'playback-composite': {
+      view: 'Playback, composite: every season stacked onto one year.',
+      read: 'All seasons replay on a single June-to-May calendar so you see where the storm track sits through the year. Circles are storms now (larger = deeper); tails fade with age.',
+      data: ARCHIVE_DATA,
+      caution: 'Overlaying seasons shows the typical pattern, not any one year.'
+    },
+    'playback-season': {
+      view: 'Playback, season replay: one season on its own calendar.',
+      read: 'Pick a season and watch its storms move through it. Circles are storms now (larger = deeper); tails fade with age.',
+      data: ARCHIVE_DATA,
+      caution: PRACTICE_CAUTION
+    },
+    'playback-step': {
+      view: 'Playback, step: whole tracks, one month or season at a time.',
+      read: 'Each step shows complete tracks for one month or one season (choose with “Step by”); circles mark each event’s lowest analyzed pressure. Steps cross-fade.',
+      data: ARCHIVE_DATA,
+      caution: PRACTICE_CAUTION
+    }
+  };
+
+  function explainKey() {
+    if (state.layer === 'bymonth') {
+      if (state.monthShade === 'heat') return state.monthHeatSrc === 'era5' ? 'bymonth-heat-era5' : 'bymonth-heat-archive';
+      return state.monthShade === 'all' ? 'bymonth-all' : 'bymonth-off';
+    }
+    if (state.layer === 'atlas') return 'atlas-' + (state.atlas.view || 'boxes');
+    if (state.layer === 'playback') return 'playback-' + play.mode;
+    return state.layer;
+  }
+
+  function fillExplain(node, parts) {
+    HF.clear(node);
+    (Array.isArray(parts) ? parts : [parts]).forEach(function (p) {
+      if (typeof p === 'string') { node.appendChild(document.createTextNode(p)); return; }
+      var b = HF.el('button', { type: 'button', class: 'link-btn' }, p.t);
+      b.addEventListener('click', function () {
+        if (p.go === 'practice') { gotoPractice(); return; }
+        var tab = document.querySelector('.tab[data-panel="' + p.go + '"]');
+        if (tab) tab.click();
+      });
+      node.appendChild(b);
+    });
+  }
+
+  function renderExplain() {
+    var e = EXPLAIN[explainKey()];
+    var box = document.getElementById('mapExplain');
+    if (!e || !box) { if (box) box.hidden = true; return; }
+    box.hidden = false;
+    var view = document.getElementById('explainView');
+    HF.clear(view);
+    view.appendChild(document.createTextNode(e.view));
+    if (e.proxy) view.appendChild(HF.el('span', { class: 'explain-proxy' }, ' ERA5 proxy, not direct observation.'));
+    document.getElementById('explainRead').textContent = e.read;
+    document.getElementById('explainData').textContent = e.data;
+    var caut = Array.isArray(e.caution) ? e.caution.slice() : [e.caution];
+    if (e.cautionLink) caut.push(e.cautionLink, '.');
+    fillExplain(document.getElementById('explainCaution'), caut);
+    var more = document.getElementById('explainMore'), wrap = document.getElementById('explainMoreWrap');
+    HF.clear(more);
+    (e.more || []).forEach(function (t) { more.appendChild(HF.el('p', {}, t)); });
+    wrap.hidden = !(e.more && e.more.length);
+  }
+
   /** The globe's own layer name. "By month" is the Playback machinery in its
       calendar-month step, so the globe, note and legend treat it as playback. */
   function mapLayer() { return state.layer === 'bymonth' ? 'playback' : state.layer; }
@@ -1622,6 +1786,7 @@
     } else if (era5Wanted()) {
       note.textContent += ' ERA5 proxy layers are drawn on the Tracks layer only.';
     }
+    renderExplain();
     document.getElementById('atlasTools').hidden = layer !== 'atlas';
     document.getElementById('probTools').hidden = layer !== 'prob';
     document.getElementById('atlasSrc').disabled = state.atlas.view === 'historic' || state.atlas.view === 'gust';
@@ -2351,7 +2516,7 @@
       HF.globe.setPlaybackFrame(moyly() ? play.engine.stepMoy(play.moy) : monthly() ? play.engine.stepMonth(play.ym) : play.engine.step(play.season), { kind: 'step' });
       if (state.layer === 'bymonth') {
         setEra5OnGlobe();
-        setText(pbEl('mapNote'), playbackNote(play.lows));      // the densest-point sentence follows the month
+        setText(pbEl('mapNote'), playbackNote(play.lows)); renderExplain();      // the densest-point sentence follows the month
         if (monthHeatShown !== monthHeatLegend) { monthHeatLegend = monthHeatShown; renderLegend(play.lows); }
       }
       return;
@@ -2864,13 +3029,13 @@
     pbEl('pbPlay').addEventListener('click', function () { setPlaying(!play.playing); });
     pbEl('pbEra5').addEventListener('change', function (e) {
       state.monthEra5 = e.target.checked;
-      pbEl('mapNote').textContent = playbackNote(play.lows);
+      pbEl('mapNote').textContent = playbackNote(play.lows); renderExplain();
       renderLegend(play.lows);
       onTimeChanged(true);
       if (!state.monthEra5) setEra5OnGlobe();
     });
     function monthViewChanged() {
-      pbEl('mapNote').textContent = playbackNote(play.lows);
+      pbEl('mapNote').textContent = playbackNote(play.lows); renderExplain();
       renderLegend(play.lows);
       syncTransport();
       onTimeChanged(true);
@@ -2964,7 +3129,7 @@
     else if (mode === 'season') play.t = currentClock().domain.start;
     syncTransport();
     // The note and legend describe the mode (heads and tails vs whole tracks).
-    pbEl('mapNote').textContent = playbackNote(play.lows);
+    pbEl('mapNote').textContent = playbackNote(play.lows); renderExplain();
     renderLegend(play.lows);
     onTimeChanged(true);
     var names = { composite: 'Composite', season: 'Season replay', step: stepNoun() === 'season' ? 'Season step' : 'Month step' };
@@ -2991,7 +3156,7 @@
     play.unit = unit;
     play.tickKey = '';
     syncTransport();
-    pbEl('mapNote').textContent = playbackNote(play.lows);
+    pbEl('mapNote').textContent = playbackNote(play.lows); renderExplain();
     renderLegend(play.lows);
     onTimeChanged(true);
     announcePlayback((stepNoun() === 'season' ? 'Season step. ' : 'Month step. ') + stateText(), PB_LIVE_DEBOUNCE_MS, 0);
