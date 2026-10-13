@@ -5,3 +5,11 @@ jet_trough: rd rate min 0.000, max 0.206; cells shown 36/36; min n 1149
 jet_baroclinic: rd rate min 0.000, max 0.248; cells shown 36/36; min n 1698
   highest cell: x 139.7..235.1 jet250, y 0.95..2.50 eady, rate 0.248 (n 7486)
   lowest cell: rate 0.000 (n 2958)
+trough_baroclinic: rd rate min 0.000, max 0.174; cells shown 36/36; min n 174
+  highest cell: x 0.8..5.5 vadv500, y 0.95..2.50 eady, rate 0.174 (n 9902)
+  lowest cell: rate 0.000 (n 138)
+Regions, cut at upper third: vadv500 >= 0.372, eady >= 0.760
+  quiet: share of fixes 0.523, rapid-deepening rate 0.0038 [0.0034, 0.0043] (n 47545), share of all rapid-deepening fixes 0.053, P(HF next 24 h) 0.0063
+  baroclinic only: share of fixes 0.144, rapid-deepening rate 0.0462 [0.0432, 0.0494] (n 12343), share of all rapid-deepening fixes 0.166, P(HF next 24 h) 0.0209
+  forcing only: share of fixes 0.143, rapid-deepening rate 0.0118 [0.0105, 0.0132] (n 16792), share of all rapid-deepening fixes 0.058, P(HF next 24 h) 0.0134
+  coupled: share of fixes 0.191, rapid-deepening rate 0.1065 [0.1032, 0.1098] (n 23345), share of all rapid-deepening fixes 0.724, P(HF next 24 h) 0.0846

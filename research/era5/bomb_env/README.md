@@ -58,3 +58,11 @@ A fresh Sonnet agent, writing its own scoring code from the committed tables, re
 base rate 0.0343 and BSS state +0.1612, full +0.2846. All match.
 Not independently checked: the A and B rows, the bootstrap intervals, p and q values, per-class and per-basin
 gains, reliability slopes, the confusion table, and the diagram cells.
+
+## Four regions of the vorticity-advection x Eady plane (added after the first run, not pre-registered)
+`diagrams.py` also writes `results/regions.csv`: all fixes split at the upper third of 500 hPa vorticity advection
+(0.372) and of Eady growth (0.760 per day) into quiet, baroclinic only, forcing only and coupled. Coupled is 19 % of
+fixes, deepens rapidly in 10.6 % (base 3.4 %) and holds 72 % of the rapid-deepening fixes; quiet is 52 % of fixes at 0.4 %;
+baroclinic only 14 % at 4.6 %; forcing only 14 % at 1.2 %. P(HF next 24 h): 8.5 / 2.1 / 1.3 / 0.6 %. The cuts are
+empirical, not physical thresholds; fixes are not independent (a storm changes region within a day). Descriptive, in-sample.
+Third diagram `trough_baroclinic` added to `results/diagram_cells.csv`. Not independently checked until the verifier note below is added.

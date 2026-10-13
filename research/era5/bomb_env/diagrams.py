@@ -1,4 +1,4 @@
-"""Observed rates in the two upper-level diagrams (6 x 6 quantile bins, all 2004-05..2025-26 fixes pooled).
+"""Observed rates in the three upper-level diagrams (6 x 6 quantile bins, all 2004-05..2025-26 fixes pooled).
 Display only: skill is scored by score.py (models A and B). ERA5 proxy, pipeline A.
 usage: diagrams.py [OUTDIR]
 """
@@ -9,7 +9,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import score as S
 
-PAIRS = {"jet_trough": ("jet250", "vadv500"), "jet_baroclinic": ("jet250", "eady")}
+PAIRS = {"jet_trough": ("jet250", "vadv500"), "jet_baroclinic": ("jet250", "eady"), "trough_baroclinic": ("vadv500", "eady")}
 NB, MINN = 6, 30
 
 
@@ -51,6 +51,29 @@ def main():
         lines.append(f"  highest cell: x {top.x_lo:.1f}..{top.x_hi:.1f} {top.xvar}, y {top.y_lo:.2f}..{top.y_hi:.2f} {top.yvar}, rate {top.rd_rate:.3f} (n {int(top.n_scored)})")
         bot = c.sort_values("rd_rate").iloc[0]
         lines.append(f"  lowest cell: rate {bot.rd_rate:.3f} (n {int(bot.n_scored)})")
+    # Four regions of the vorticity-advection x Eady plane: each axis cut at its upper third over all fixes
+    # (an empirical cut, not a physical threshold). Description added after the first run, not pre-registered.
+    hv, he = np.nanquantile(D["vadv500"], 2 / 3), np.nanquantile(D["eady"], 2 / 3)
+    D["reg"] = (D.vadv500 >= hv).astype(int) * 2 + (D.eady >= he).astype(int)
+    names = ["quiet", "baroclinic only", "forcing only", "coupled"]
+    sc = D[D.cls >= 0]
+    nrd = int((sc.cls == 4).sum())
+    rr = []
+    for k, nm in enumerate(names):
+        g, r = D[D.reg == k], sc[sc.reg == k]
+        kk = int((r.cls == 4).sum())
+        lo, hi = wilson(kk, len(r))
+        sh = np.bincount(g.gcls, minlength=4) / len(g)
+        rr.append(dict(region=nm, n=len(g), n_scored=len(r), rd_rate=kk / len(r), rd_lo90=lo, rd_hi90=hi,
+                       share_of_rd=kk / nrd, share_of_fixes=len(g) / len(D), p_hf=sh[3], p_storm=sh[2],
+                       p_gale=sh[1], p_below_gale=sh[0]))
+    R = pd.DataFrame(rr).round(5)
+    R.to_csv(os.path.join(out, "regions.csv"), index=False)
+    lines.append(f"Regions, cut at upper third: vadv500 >= {hv:.3f}, eady >= {he:.3f}")
+    for r in R.itertuples():
+        lines.append(f"  {r.region}: share of fixes {r.share_of_fixes:.3f}, rapid-deepening rate {r.rd_rate:.4f} "
+                     f"[{r.rd_lo90:.4f}, {r.rd_hi90:.4f}] (n {r.n_scored}), share of all rapid-deepening fixes {r.share_of_rd:.3f}, "
+                     f"P(HF next 24 h) {r.p_hf:.4f}")
     open(os.path.join(out, "diagrams.txt"), "w").write("\n".join(lines) + "\n")
     print("\n".join(lines))
 
