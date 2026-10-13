@@ -1,0 +1,79 @@
+GFS FULL-model outlook test (part 2). Truth = ERA5 pipeline A, a PROXY (not observation); ERA5-fed side = pipeline A proxy tables.
+GFS track rows (all, 2021-22..2025-26): 318612; atl/pac fixes at valid 00/12 UTC, leads 0/12/24/36/48: 90131
+No pipeline A fix within 500 km at the same valid time (dropped): total 11091 of 90131
+Matched: 79040; lead 0: 13991; lead 24: 18167
+Part 1 environment table rows 69174; part 2 table rows 69174 (leads [0, 24])
+
+== Counts at each filter step (matched fixes)
+ lead  matched  part1 env  part2 row  GFS terms ok  ERA5 terms ok  both = scored sample
+    0    13991      13991      13991         13991          13991                 13991
+   24    18167      18167      18167         18167          18167                 18167
+Scored sample by season, lead 24: 2021: 3488, 2022: 3685, 2023: 3849, 2024: 3562, 2025: 3583
+Matched lead 24 fixes without a part 2 row (missing file or no fix pulled), by season: 2021: 0, 2022: 0, 2023: 0, 2024: 0, 2025: 0
+Truth classes, scored sample lead 24 (below gale, gale, storm, HF): [6220, 6745, 4366, 836]
+nosst (no ocean cell within 500 km): GFS 0.071, ERA5 0.042
+Descriptive means on the scored sample, lead 24 (GFS-fed fix vs matched ERA5 fix; NOT a validation): B 27.447/28.652; VTL -93.880/-102.244; VTU -164.653/-161.333; jet250 117.361/116.214; div300 0.414/0.408; vadv500 0.357/0.362; eady 0.744/0.747; sst 7.834/7.715; sstgrad 1.387/1.547; sst_t500 34.609/34.708; flux 96.829/94.126; tcwv 12.577/12.465
+ERA5-fed dp12 model used for 14453 of 18167 scored fixes; GFS-fed 15322
+
+== Registered family F1-F4F (RPSS or ratio; 90 % season-block interval, 5 seasons, 2,000 draws; BH q within the 6)
+   (p for F4: one-sided bootstrap p for 'ratio <= 0.5'; the F4 verdict uses the registered interval rule, not q)
+  F1 FULL fed GFS, lead 24, RPSS vs clim: +0.3509 [+0.3450, +0.3576]  n 18167  p 0.0005  q 0.0005  -> yes
+  F2 FULL minus S, GFS-fed, lead 24, RPSS gain: +0.0362 [+0.0332, +0.0396]  n 18167  p 0.0005  q 0.0005  -> yes
+  F3 FULL lead 24, GFS-fed minus ERA5-fed RPSS (equivalence +-0.05): -0.0352 [-0.0381, -0.0319]  n 18167  p 0.0005  q 0.0005  -> equivalent
+  F4A gain retention A: (gain over S, GFS-fed) / (gain over S, ERA5-fed), lead 24: 0.765 [0.723, 0.805]  n 18167  p 0.0005  q 0.0005  -> survives (draws with non-positive ERA5-fed gain: 0)
+  F4B gain retention B: (gain over S, GFS-fed) / (gain over S, ERA5-fed), lead 24: 0.934 [0.866, 1.018]  n 18167  p 0.0005  q 0.0005  -> survives (draws with non-positive ERA5-fed gain: 0)
+  F4F gain retention FULL: (gain over S, GFS-fed) / (gain over S, ERA5-fed), lead 24: 0.845 [0.802, 0.890]  n 18167  p 0.0005  q 0.0005  -> survives (draws with non-positive ERA5-fed gain: 0)
+
+== Secondary (labelled; not in the family; no multiplicity control). Lead 24, scored sample, same fixes for every number
+  RPSS vs basin-month climatology, GFS-fed | ERA5-fed | GFS minus ERA5:
+    S          +0.3147 [+0.3105, +0.3194] | +0.3433 [+0.3400, +0.3465] | -0.0286 [-0.0311, -0.0264]
+    A          +0.3304 [+0.3256, +0.3356] | +0.3638 [+0.3598, +0.3674] | -0.0334 [-0.0362, -0.0308]
+    B          +0.3293 [+0.3247, +0.3344] | +0.3590 [+0.3554, +0.3631] | -0.0296 [-0.0309, -0.0284]
+    FULL       +0.3509 [+0.3450, +0.3576] | +0.3861 [+0.3832, +0.3897] | -0.0352 [-0.0381, -0.0319]
+    FULL_NOSF  +0.3391 [+0.3321, +0.3473] | +0.3770 [+0.3721, +0.3827] | -0.0378 [-0.0402, -0.0353]
+  Gain over S (RPSS difference), GFS-fed | ERA5-fed | retention ratio (verdict by the F4 rule):
+    A          +0.0157 [+0.0142, +0.0174] | +0.0205 [+0.0192, +0.0218] | ratio 0.765 [0.723, 0.805] -> survives
+    B          +0.0146 [+0.0129, +0.0163] | +0.0157 [+0.0132, +0.0179] | ratio 0.934 [0.866, 1.018] -> survives
+    FULL       +0.0362 [+0.0332, +0.0396] | +0.0428 [+0.0402, +0.0458] | ratio 0.845 [0.802, 0.890] -> survives
+    FULL_NOSF  +0.0244 [+0.0200, +0.0291] | +0.0337 [+0.0295, +0.0378] | ratio 0.725 [0.672, 0.776] -> survives
+  FULL_NOSF: does dropping sst, sstgrad, sst_t500, flux, nosst cost anything?  (FULL minus FULL_NOSF RPSS)
+    GFS-fed: +0.0118 [+0.0099, +0.0138]
+    ERA5-fed: +0.0092 [+0.0071, +0.0111]
+  atl (n 8607): FULL GFS-fed RPSS +0.3146 [+0.2909, +0.3370]; FULL minus S GFS-fed +0.0314 [+0.0258, +0.0383], ERA5-fed +0.0387 [+0.0343, +0.0437], retention 0.810 [0.732, 0.887] -> survives
+  pac (n 9560): FULL GFS-fed RPSS +0.3848 [+0.3690, +0.4021]; FULL minus S GFS-fed +0.0406 [+0.0391, +0.0420], ERA5-fed +0.0467 [+0.0428, +0.0507], retention 0.871 [0.813, 0.935] -> survives
+
+  Lead 0 (n 13991; GFS-fed FULL has flux = ERA5 training median, no GFS flux exists at lead 0; ERA5-fed FULL uses the ERA5 flux of the matched fix; no-dp12 fallback throughout):
+    S          RPSS GFS-fed +0.3024 [+0.2939, +0.3115] | ERA5-fed +0.3362 [+0.3282, +0.3433]
+    A          RPSS GFS-fed +0.3409 [+0.3322, +0.3494] | ERA5-fed +0.3675 [+0.3578, +0.3758]
+    B          RPSS GFS-fed +0.3453 [+0.3360, +0.3548] | ERA5-fed +0.3703 [+0.3620, +0.3764]
+    FULL       RPSS GFS-fed +0.3552 [+0.3467, +0.3633] | ERA5-fed +0.4045 [+0.3967, +0.4098]
+    FULL_NOSF  RPSS GFS-fed +0.3566 [+0.3473, +0.3669] | ERA5-fed +0.3906 [+0.3819, +0.3987]
+    A          gain over S GFS-fed +0.0385 [+0.0363, +0.0413] | ERA5-fed +0.0313 [+0.0282, +0.0347] | ratio 1.229 [1.138, 1.311] -> survives
+    B          gain over S GFS-fed +0.0429 [+0.0409, +0.0452] | ERA5-fed +0.0341 [+0.0311, +0.0372] | ratio 1.257 [1.206, 1.323] -> survives
+    FULL       gain over S GFS-fed +0.0528 [+0.0499, +0.0558] | ERA5-fed +0.0683 [+0.0660, +0.0701] | ratio 0.774 [0.732, 0.820] -> survives
+    FULL_NOSF  gain over S GFS-fed +0.0542 [+0.0533, +0.0552] | ERA5-fed +0.0544 [+0.0511, +0.0574] | ratio 0.997 [0.948, 1.061] -> survives
+
+  Reference (part 1 sample rule, lead 24 fixes with jet250/vadv500/eady, n 18167): A minus S GFS-fed +0.0157 [+0.0142, +0.0174]; B minus S +0.0146 [+0.0129, +0.0163]
+  Reliability of the GFS-fed FULL hurricane-force probability, lead 24 (deciles of forecast), slope 0.99, base rate 0.0460, mean forecast 0.0449:
+    bin 0: n  1817  forecast 0.0000  observed 0.0000
+    bin 1: n  1817  forecast 0.0000  observed 0.0006
+    bin 2: n  1816  forecast 0.0000  observed 0.0006
+    bin 3: n  1817  forecast 0.0002  observed 0.0017
+    bin 4: n  1816  forecast 0.0007  observed 0.0006
+    bin 5: n  1817  forecast 0.0022  observed 0.0039
+    bin 6: n  1817  forecast 0.0064  observed 0.0121
+    bin 7: n  1816  forecast 0.0192  observed 0.0204
+    bin 8: n  1817  forecast 0.0661  observed 0.0693
+    bin 9: n  1817  forecast 0.3546  observed 0.3511
+  Reliability of the ERA5-fed FULL hurricane-force probability, lead 24 (deciles of forecast), slope 1.09, base rate 0.0460, mean forecast 0.0418:
+    bin 0: n  1817  forecast 0.0000  observed 0.0000
+    bin 1: n  1817  forecast 0.0000  observed 0.0006
+    bin 2: n  1816  forecast 0.0001  observed 0.0000
+    bin 3: n  1817  forecast 0.0002  observed 0.0006
+    bin 4: n  1815  forecast 0.0007  observed 0.0017
+    bin 5: n  1818  forecast 0.0020  observed 0.0011
+    bin 6: n  1817  forecast 0.0056  observed 0.0066
+    bin 7: n  1816  forecast 0.0164  observed 0.0248
+    bin 8: n  1817  forecast 0.0588  observed 0.0583
+    bin 9: n  1817  forecast 0.3343  observed 0.3665
+  Lead 24 mean forecast class probability vs observed frequency (FULL GFS-fed): below gale 0.382 vs 0.342; gale 0.336 vs 0.371; storm 0.237 vs 0.240; hurricane force 0.045 vs 0.046
