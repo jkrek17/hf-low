@@ -40,3 +40,6 @@ See the dated notes in `PREREGISTRATION.md`: scoring rules the plan left open (m
 ## Not independently checked
 Every number above comes from `results/outlook.txt` and `results/outlook.json` produced by one run of `score_outlook.py` and has not been recomputed by an agent that did not produce it (the plan asks for a fresh agent to recompute counts, S/A/B RPSS and the G1-G4 point estimates; intervals and the pull are not part of that check). The environment terms were not compared against an independent implementation.
 Reproduce: `python3 fit_models.py` (needs `results/` ERA5 tables), `GFS_WORK=... python3 fetch_env.py`, `python3 score_outlook.py`.
+
+## Independent check (added after the first scoring)
+A fresh Sonnet agent, writing its own code from the committed tables and the frozen coefficients, recomputed the counts (318,612 track rows; 90,131 fixes in basins; 11,091 dropped; 79,040 matched; lead-24 classes 6,220 / 6,745 / 4,366 / 836), G1 to G4 point estimates (+0.3147, -0.0286, +0.0157, +0.0146), the GFS-fed S RPSS at leads 0, 12, 24, 36 and 48, and the ERA5-fed S values by lead. All match to the digits shown. Not independently checked: bootstrap intervals, q values, per-basin, recalibration and reliability results, the G5 interval, and the GFS environment terms against a second implementation.
