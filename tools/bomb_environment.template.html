@@ -194,7 +194,7 @@
     <li>Gale (38 kt) and storm (54 kt) are nominal cuts on the gust index. The archive lists hurricane-force lows only, so they cannot be calibrated on observed events.</li>
     <li>The outcome is sampled at the next two 00 and 12 UTC fixes, so a gust peak between samples is missed.</li>
     <li>A track that ends within 24 hours (filled or merged) is scored on the fixes it has, so such storms are counted as below gale.</li>
-    <li>Perfect-prognosis setup: predictors and outcomes both come from ERA5. It has not been tried on GFS or other forecast fields.</li>
+    <li>Perfect-prognosis setup: the model was fitted on ERA5 and every score above uses ERA5 predictors and outcomes. A separate test fed the state-only, jet-and-trough and jet-and-baroclinicity versions GFS forecasts for five seasons (2021-22 to 2025-26): at 24 h lead the state-only outlook scored +0.315 against climatology (+0.343 when fed ERA5, so GFS costs about 0.03) and the two environment terms each still added about +0.015. The Hart terms and the full model were not tested on GFS, and ERA5 is still the truth there.</li>
     <li>Storms listed here are the ones the Events tab can show on the map: OPC&rsquo;s hurricane-force storms with a matched pipeline A track, and the proxy storms OPC never listed.</li>
   </ul>
 </section>
