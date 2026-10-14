@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Outlook live - Hurricane Force Extratropical Low Archive</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<meta name="description" content="Experimental: the latest GFS run shaded by how often OPC agreed a hurricane-force or storm-force low was near, for forecast days 1 to 4. Not a warning.">
+<meta name="description" content="Experimental: the latest GFS run shaded by how often OPC agreed a hurricane-force or storm-force low was near, plus a GFS, ECMWF and AIFS blended 10 m wind layer, for forecast days 1 to 4. Not a warning.">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap">
 <style>
   /* Layout after the private mock-up (Hazard Outlook Mockup): map first, reading key and one lookup card on the right.
@@ -81,18 +81,20 @@
   .card { border: 1px solid var(--line); border-radius: 6px; padding: 10px; background: var(--bg); min-height: 8.5em; }
   .big { font-size: 26px; font-weight: 600; font-variant-numeric: tabular-nums; }
   .mono { font-family: var(--mono); font-size: 12.5px; }
+  .off { display: none !important; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="nav"><a href="index.html">&larr; Back to the archive</a> &middot; <a href="outlook-replay.html">Outlook replay</a> &middot; <a href="what-we-learned.html">What we learned</a></div>
   <h1>Outlook (live, experimental): where hurricane-force and storm-force lows may occur</h1>
-  <div class="mock"><strong>Experimental. Not a warning and not an OPC product.</strong> Rebuilt once a day from the newest 00 UTC GFS run. GFS gust is a model forecast and a proxy for the sustained wind OPC warns on, and OPC&rsquo;s hurricane-force call is an analyst&rsquo;s judgement, so &ldquo;OPC agreed&rdquo; is not the same as &ldquo;the wind will be there&rdquo;. For warnings use OPC&rsquo;s own products.</div>
+  <div class="mock"><strong>Experimental. Not a warning and not an OPC product.</strong> Rebuilt once a day from the newest 00 UTC GFS run. GFS gust is a model forecast and a proxy for the sustained wind OPC warns on, and OPC&rsquo;s hurricane-force call is an analyst&rsquo;s judgement, so &ldquo;OPC agreed&rdquo; is not the same as &ldquo;the wind will be there&rdquo;. The second layer, the blended 10 m wind, is sustained wind from GFS, ECMWF and AIFS and has no OPC rates behind it. For warnings use OPC&rsquo;s own products.</div>
   <div class="status" id="runline" aria-live="polite">Loading the latest run&hellip;</div>
 
   <div class="grid">
     <div class="panel">
       <div class="bar">
+        <div class="seg" role="group" aria-label="Layer" id="laySeg"><button type="button" data-lay="gust" aria-pressed="true">GFS gust, OPC agreed</button><button type="button" data-lay="blend" aria-pressed="false">Blended 10 m wind (GFE)</button></div>
         <div class="seg" role="group" aria-label="Forecast day" id="daySeg"></div>
         <div class="seg" role="group" aria-label="Hazard" id="tgtSeg"><button type="button" data-t="hf" aria-pressed="true">Hurricane force</button><button type="button" data-t="st" aria-pressed="false">Storm force or stronger</button></div>
         <div class="seg" role="group" aria-label="Basin" id="basinSeg"><button type="button" data-b="atl" aria-pressed="true">Atlantic</button><button type="button" data-b="pac" aria-pressed="false">Pacific</button></div>
@@ -103,19 +105,25 @@
         <label class="chk"><input type="checkbox" id="o_jet" checked> 250 hPa jet core</label>
         <label class="chk"><input type="checkbox" id="o_coup" checked> Coupled hatch</label>
       </div>
-      <canvas id="map" role="img" aria-label="Map of the chosen basin shaded in three categories by how often OPC agreed a low was near, from the latest GFS run, with lows, trough axis, jet core and coupled hatch"></canvas>
+      <canvas id="map" role="img" aria-label="Map of the chosen basin shaded from the latest model run, by how often OPC agreed a low was near (GFS gust layer) or by blended 10 m wind (blend layer), with lows, trough axis, jet core and coupled hatch"></canvas>
+      <p class="small off" id="blNote"></p>
       <div class="legend" id="legend"></div>
       <p class="small capline" id="cap"></p>
     </div>
     <div class="col">
-      <div class="panel">
+      <div class="panel" id="readGust">
         <h2>How to read it</h2>
         <p>Each shaded area is the chance that OPC had a hurricane-force (or storm-force) low within 324 nautical miles of a point on that forecast day, given the strongest forecast GFS gust near the point. &ldquo;Near&rdquo; is a set distance that grows with lead: 60 nautical miles on Day 1, 120 on Day 2, 270 on Days 3 and 4 (the smallest that caught at least 80% of hurricane-force gust area when the model low was out of place, ERA5 proxy, position error only). Areas are drawn from the model&rsquo;s own wind field, not from tracking a low, so a storm the tracker misses still shows.</p>
         <p>No shading is not &ldquo;safe&rdquo;: it means GFS gust stayed in a band where OPC agreed under 10% of the time, a lower chance, not a guarantee.</p>
       </div>
+      <div class="panel off" id="readBlend">
+        <h2>How to read it</h2>
+        <p>Each shaded area is where the blended 10 m <strong>sustained wind</strong> reaches 34 kt (gale), 48 kt (storm) or 64 kt (hurricane force) at some time on that day. The blend takes GFS, ECMWF and AIFS wind, weights each by how many of the roughly 80 GEFS and ECMWF ensemble members are close to it, and adds a quarter of the member spread (0.15 on Day 1), up to 5 kt, which puts back the strong winds that averaging flattens. It is the recipe behind the GFE wind page.</p>
+        <p>The lookup card gives the chance that each wind occurs, from about 130 ensemble members (GEFS, ECMWF ensemble and the AIFS ensemble), calibrated on the GFE page against buoys and ships. They say the wind occurs. They are not the OPC-agreed rates of the gust layer, and no OPC rates have been measured for this layer. No shading means the blend stayed under 34 kt, not that nothing can happen.</p>
+      </div>
       <div class="panel">
-        <h2>Lookup card (real rates)</h2>
-        <p class="small">Hover or tap the map. Shows how often OPC agreed, by the strongest GFS gust near that point.</p>
+        <h2 id="cardH">Lookup card (real rates)</h2>
+        <p class="small" id="cardP">Hover or tap the map. Shows how often OPC agreed, by the strongest GFS gust near that point.</p>
         <div class="card" id="card" aria-live="polite"></div>
         <div class="tw" id="tab"></div>
         <p class="small" id="tabNote"></p>
@@ -125,7 +133,8 @@
         <h2>What is real, what is not</h2>
         <p><strong>Wind measure.</strong> OPC warns on sustained wind. Our line is a GFS gust, a proxy, and OPC&rsquo;s hurricane-force call is an analyst&rsquo;s judgement, so &ldquo;OPC agreed&rdquo; is not &ldquo;the wind will be there&rdquo;.</p>
         <p><strong>Lows, trough, jet, hatch.</strong> Context only, no probability, drawn from the same GFS run at the end of the day shown (hours 24, 48, 72, 96). Lows are GFS pressure minima of 992 hPa or lower, for display; the shading never uses them. The trough axis is a simple finder and is often the west side of a storm&rsquo;s own upper low, not a separate trough. The jet core is 250 hPa wind of 110 kt or more. The hatch (about 500 km round a low) marks a low whose surroundings have both strong 500 hPa vorticity advection and strong low-level baroclinicity: cut points are the upper thirds of ERA5 proxy fixes of 2004&ndash;2026 (pipeline A, chosen after looking), applied here to GFS, which was not tested for this display. Among all those ERA5 cyclone fixes, the next 24 h reached storm force or stronger 41% of the time with coupled surroundings against 8% with quiet ones; that is a different population and horizon from the lows drawn here, so read it as a hint, not a rate for this map. Lows over high ground (Greenland, big mountains) are left out because their sea-level pressure is not real.</p>
-        <p><strong>Not on this page.</strong> No gale shading, because there is no OPC truth for gale. Nothing past Day 4, because the rates stop at 96 h.</p>
+        <p><strong>Blended wind layer.</strong> Sustained 10 m wind, graded on the 34, 48 and 64 kt lines, not on OPC calls. The recipe and its chances come from the GFE wind page (tuned and tested on hindcast cases from March 2025 to March 2026 against analyses, buoys and ships); this display of it has not been scored against OPC, so there are no OPC-agreed rates for it. Each day shows the higher of its two 12-hourly forecast times (+12 and +24 h for Day 1), a little more area than the single-time test the recipe was tuned on, and the highest value in each 1 degree cell. GFS holds far more gale area than ECMWF or AIFS (on the one run checked, 14 October 00 UTC, North Atlantic, +48 h, GFS had about four times ECMWF&rsquo;s number of cells at 34 kt or more), and the blend sits between them. The blend is built from the same 00 UTC run as the gust layer but is added later (the ECMWF ensemble is out about 8 hours after the run); until it is ready the layer says so.</p>
+        <p><strong>Not on this page.</strong> No gale shading on the gust layer, because there is no OPC truth for gale. Nothing past Day 4, because the rates stop at 96 h.</p>
       </div>
     </div>
   </div>
@@ -135,11 +144,12 @@
     <p class="small">Method, calibration and how past runs lined up with OPC: <a href="outlook-replay.html">Outlook replay</a>. Code: <code>tools/outlook_live.py</code> (daily job) and <code>research/era5/outlook_replay/</code> in the repository.</p></div>
 </div>
 <script src="outlook-live-data.js"></script>
+<script src="outlook-live-blend.js"></script>
 <script>
 window.HF_LIVE_STATIC = /*@@DATA@@*/;
 (function () {
   var D = window.HF_LIVE_STATIC, L = window.HF_LIVE || null, G = D.grid;
-  var st = { b: 'atl', d: 1, t: 'hf', hover: -1 };
+  var st = { b: 'atl', d: 1, t: 'hf', hover: -1, lay: 'gust', bh: null };
 
   var N = G.lat.length, RD = D.radius_nm, B = D.bands_kt;
   var MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -158,8 +168,8 @@ window.HF_LIVE_STATIC = /*@@DATA@@*/;
   function setPressed(seg, attr, val) { Array.prototype.forEach.call(seg.querySelectorAll('button'), function (b) { b.setAttribute('aria-pressed', String(b.dataset[attr]) === String(val)); }); }
   var legend = document.getElementById('legend');
   function paintLegend(extra) {
-    var labs = ['10\u201330%', '30\u201350%', '50% or more'];
-    legend.innerHTML = labs.map(function (t, k) { return '<span><i class="sw" data-c="' + k + '"></i>' + t + '</span>'; }).join('') + '<span>Below 10%: no shading</span>' + '<span><i class="swl"></i>500 hPa trough axis</span><span><i class="sw jet"></i>250 hPa jet core (110 kt or more)</span><span><i class="sw hatch"></i>Coupled setup (context, not a probability)</span>' + (extra || '');
+    var labs = st.lay === 'blend' ? ['34\u201347 kt', '48\u201363 kt', '64 kt or more'] : ['10\u201330%', '30\u201350%', '50% or more'];
+    legend.innerHTML = labs.map(function (t, k) { return '<span><i class="sw" data-c="' + k + '"></i>' + t + '</span>'; }).join('') + '<span>' + (st.lay === 'blend' ? 'Below 34 kt: no shading' : 'Below 10%: no shading') + '</span>' + '<span><i class="swl"></i>500 hPa trough axis</span><span><i class="sw jet"></i>250 hPa jet core (110 kt or more)</span><span><i class="sw hatch"></i>Coupled setup (context, not a probability)</span>' + (extra || '');
     Array.prototype.forEach.call(legend.querySelectorAll('i[data-c]'), function (e) { e.style.background = 'var(' + COLS[+e.dataset.c] + ')'; });
   }
   var cv = document.getElementById('map'), ctx = cv.getContext('2d'), geo;
@@ -253,6 +263,86 @@ window.HF_LIVE_STATIC = /*@@DATA@@*/;
       });
     }
   }
+
+  // ---- Blended 10 m wind layer (window.HF_BLEND, outlook-live-blend.js, written by tools/outlook_blend_live.py) ----
+  var HB = window.HF_BLEND || null, BL = null, BF = ['wind', 'gfs', 'ecmwf', 'aifs', 'sigma', 'p34', 'p48', 'p64'];
+  function inflate(b64) {
+    var t = atob(b64), a = new Uint8Array(t.length), q;
+    for (q = 0; q < t.length; q++) a[q] = t.charCodeAt(q);
+    return new Response(new Blob([a]).stream().pipeThrough(new DecompressionStream('deflate'))).arrayBuffer().then(function (ab) { return new Uint8Array(ab); });
+  }
+  function loadBlend() {
+    if (!HB || !L || HB.run !== L.run || typeof DecompressionStream === 'undefined') return Promise.resolve();
+    var jobs = [];
+    ['atl', 'pac'].forEach(function (k) {
+      var o = HB.basins[k]; if (!o) return;
+      var n = o.ny * o.nx, g = { lon0: o.lon0, ny: o.ny, nx: o.nx, days: [] };
+      o.days.forEach(function (b, di) {
+        if (!b) { g.days[di] = null; return; }
+        jobs.push(inflate(b).then(function (u) { var r = {}; BF.forEach(function (f, fi) { r[f] = u.subarray(fi * n, (fi + 1) * n); }); g.days[di] = r; }));
+      });
+      (BL = BL || {})[k] = g;
+    });
+    return Promise.all(jobs);
+  }
+  function blDay() { var g = BL && BL[st.b], d = g && g.days[st.d - 1]; return d ? { g: g, d: d } : null; }
+  function blCls(w) { return w >= 128 ? 3 : w >= 96 ? 2 : w >= 68 ? 1 : 0; }
+  function blX(g, i) { return g.lon0 + i + 0.375; }
+  function blY(j) { return HB.lat0 - j - 0.375; }
+  function drawBlend() {
+    var o = blDay(); if (!o) return;
+    var g = o.g, w = o.d.wind, cols = COLS.map(css), cw = geo.sx + 0.6, ch = geo.sy + 0.6, c = [], j, i, l;
+    for (j = 0; j < g.ny; j++) for (i = 0; i < g.nx; i++) {
+      l = blCls(w[j * g.nx + i]); c[j * g.nx + i] = l; if (!l) continue;
+      ctx.fillStyle = cols[l - 1]; ctx.fillRect(px(blX(g, i)) - cw / 2, py(blY(j)) - ch / 2, cw, ch);
+    }
+    ctx.strokeStyle = css('--panel'); ctx.lineWidth = 1.2; ctx.lineCap = 'round'; ctx.beginPath();
+    for (j = 0; j < g.ny; j++) for (i = 0; i < g.nx; i++) {
+      l = c[j * g.nx + i]; if (!l) continue;
+      var x = px(blX(g, i)), y = py(blY(j)), a = cw / 2, b = ch / 2;
+      if (j + 1 < g.ny && c[(j + 1) * g.nx + i] < l) { ctx.moveTo(x - a, y + b); ctx.lineTo(x + a, y + b); }
+      if (j > 0 && c[(j - 1) * g.nx + i] < l) { ctx.moveTo(x - a, y - b); ctx.lineTo(x + a, y - b); }
+      if (i > 0 && c[j * g.nx + i - 1] < l) { ctx.moveTo(x - a, y - b); ctx.lineTo(x - a, y + b); }
+      if (i + 1 < g.nx && c[j * g.nx + i + 1] < l) { ctx.moveTo(x + a, y - b); ctx.lineTo(x + a, y + b); }
+    }
+    ctx.stroke();
+    if (st.bh) { ctx.strokeStyle = css('--ink'); ctx.lineWidth = 2.2; ctx.strokeRect(px(blX(g, st.bh.i)) - cw / 2, py(blY(st.bh.j)) - ch / 2, cw, ch); }
+  }
+  function blStrongest(o) {
+    var g = o.g, w = o.d.wind, bj = 0, bi = 0, bw = -1, j, i;
+    for (j = 0; j < g.ny; j++) for (i = 0; i < g.nx; i++) { var lat = blY(j); if (lat < 22 || lat > 64) continue; if (w[j * g.nx + i] > bw) { bw = w[j * g.nx + i]; bj = j; bi = i; } }
+    return { j: bj, i: bi };
+  }
+  function blNote() {
+    var el = document.getElementById('blNote'), m = '';
+    if (st.lay === 'blend' && !blDay()) {
+      if (!L) m = 'No run is available yet.';
+      else if (!HB) m = 'No blend has been built yet. It is added after the gust layer, once the ECMWF ensemble is out (about 8 hours after the run).';
+      else if (HB.run !== L.run) m = 'The blend for this run (' + fmtRun() + ') is not ready yet: it is added once the ECMWF ensemble is out, about 8 hours after the run. The latest blend built is for the run of ' + HB.run.slice(6, 8) + ' ' + MON[+HB.run.slice(4, 6) - 1] + ' ' + HB.run.slice(8, 10) + ' UTC.';
+      else m = 'The blend for this run could not be read in this browser, so the layer is not shown.';
+    }
+    el.textContent = m; el.className = m ? 'small' : 'small off';
+  }
+  function sideBlend() {
+    var o = blDay(), card = document.getElementById('card'), v0 = 24 * (st.d - 1);
+    if (!o) { card.innerHTML = '<div class="small">The blend is not available for day ' + st.d + ' of this run.</div>'; document.getElementById('tab').innerHTML = ''; document.getElementById('tabNote').textContent = ''; document.getElementById('daybox').innerHTML = ''; return; }
+    var g = o.g, h = st.bh || blStrongest(o), n = h.j * g.nx + h.i, d = o.d, lat = blY(h.j), lon = blX(g, h.i);
+    var ll = Math.abs(lat).toFixed(1) + 'N ' + Math.abs(lon > 180 ? 360 - lon : lon).toFixed(1) + (lon > 180 || lon < 0 ? 'W' : 'E');
+    var p = [d.p34[n], d.p48[n], d.p64[n]];
+    card.innerHTML = '<div class="small">' + (st.bh ? 'Point ' : 'Strongest point in view · ') + ll + ' · day ' + st.d + ' · blended 10 m wind</div><div class="big">' + (d.wind[n] / 2).toFixed(0) + ' kt</div>' +
+      '<div class="small">Chance of 34 kt or more: ' + inTen(p[0]) + ' (' + p[0] + '%). 48 kt or more: ' + inTen(p[1]) + ' (' + p[1] + '%). 64 kt or more: ' + inTen(p[2]) + ' (' + p[2] + '%). These are the GFE wind page’s chances that this wind occurs, from about 130 ensemble members. They are not the OPC-agreed rates of the gust layer.</div>';
+    document.getElementById('tab').innerHTML = '<table><thead><tr><th>At this point</th><th class="n">10 m wind</th></tr></thead><tbody><tr><td>GFS</td><td class="n">' + (d.gfs[n] / 2).toFixed(0) + ' kt</td></tr><tr><td>ECMWF (IFS)</td><td class="n">' + (d.ecmwf[n] / 2).toFixed(0) + ' kt</td></tr><tr><td>AIFS</td><td class="n">' + (d.aifs[n] / 2).toFixed(0) + ' kt</td></tr><tr class="cur"><td>Blend (3 models + spread)</td><td class="n">' + (d.wind[n] / 2).toFixed(0) + ' kt</td></tr><tr><td>Member spread (1 sd)</td><td class="n">' + (d.sigma[n] / 4).toFixed(1) + ' kt</td></tr></tbody></table>';
+    document.getElementById('tabNote').textContent = (st.b === 'atl' ? 'Atlantic' : 'Pacific') + ', day ' + st.d + '. Highest value in each 1 degree cell, higher of the two 12-hourly forecast times.';
+    document.getElementById('daybox').innerHTML = '<h2>' + fmtRun() + ' run, day ' + st.d + '</h2><p>Valid ' + fmtValid(v0 + 12) + ' and ' + fmtValid(v0 + 24) + ' (' + (v0 + 12) + ' and ' + (v0 + 24) + ' hours after the run); each cell shows the higher of the two. Sustained wind, not gust.</p>';
+  }
+  function swapLayer() {
+    var blend = st.lay === 'blend';
+    document.getElementById('tgtSeg').className = blend ? 'seg off' : 'seg';
+    document.getElementById('readGust').className = blend ? 'panel off' : 'panel';
+    document.getElementById('readBlend').className = blend ? 'panel' : 'panel off';
+    document.getElementById('cardH').textContent = blend ? 'Lookup card (GFE chances)' : 'Lookup card (real rates)';
+    document.getElementById('cardP').textContent = blend ? 'Hover or tap the map. Shows the blend, each model and the chance of each wind at that point.' : 'Hover or tap the map. Shows how often OPC agreed, by the strongest GFS gust near that point.';
+  }
   function drawSel() {
     var k = shown(); if (k < 0) return;
     ctx.strokeStyle = css('--ink'); ctx.lineWidth = 2.2; ctx.strokeRect(px(X[k]) - geo.sx / 2, py(G.lat[k]) - geo.sy / 2, geo.sx, geo.sy);
@@ -297,10 +387,11 @@ window.HF_LIVE_STATIC = /*@@DATA@@*/;
   function shown() { var band = bands[st.d - 1]; if (!band) return -1; return st.hover >= 0 ? st.hover : strongest(band); }
   function draw() {
     var band = bands[st.d - 1]; drawBase();
-    if (band) drawShade(band, table(st.b, st.d));
-    drawLand(); drawOverlays(L && L.ov ? L.ov[st.d - 1] : null); if (band) drawSel();
+    if (st.lay === 'blend') drawBlend(); else if (band) drawShade(band, table(st.b, st.d));
+    drawLand(); drawOverlays(L && L.ov ? L.ov[st.d - 1] : null); if (st.lay === 'gust' && band) drawSel();
   }
   function side() {
+    if (st.lay === 'blend') { sideBlend(); return; }
     var band = bands[st.d - 1], card = document.getElementById('card'), tb = table(st.b, st.d), k = shown();
     if (!band) { card.innerHTML = '<div class="small">Day ' + st.d + ' is not available for this run.</div>'; }
     else card.innerHTML = cardHtml(k, band[k], tb, 'five past seasons');
@@ -311,18 +402,22 @@ window.HF_LIVE_STATIC = /*@@DATA@@*/;
   }
   function render() {
     document.getElementById('cap').textContent = (L ? 'GFS run of ' + fmtRun() + ', day ' + st.d + '. ' : '') + 'Shading: chance OPC had a ' + (st.t === 'hf' ? 'hurricane-force' : 'storm-force or stronger') + ' low within ' + D.truth_nm.toFixed(0) + ' nm, from the strongest GFS gust within ' + RD[st.d - 1] + ' nm of each point, using the table from the five past seasons. Ocean only.';
-    layout(); paintLegend(); draw(); side();
+    if (st.lay === 'blend') document.getElementById('cap').textContent = (blDay() ? 'Blended 10 m wind, GFS, ECMWF and AIFS run of ' + fmtRun() + ', day ' + st.d + '. ' : '') + 'Shading: sustained wind of 34 kt or more, 48 kt or more and 64 kt or more (higher of the day\u2019s two 12-hourly times). Not OPC-agreed rates.';
+    swapLayer(); blNote(); layout(); paintLegend(); draw(); side();
   }
   [['basinSeg', 'b'], ['daySeg', 'd'], ['tgtSeg', 't']].forEach(function (a) {
     document.getElementById(a[0]).addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; st[a[1]] = a[1] === 'd' ? +b.dataset.d : b.dataset[a[1]]; if (a[1] === 'b') st.hover = -1; setPressed(this, a[1], st[a[1]]); render(); });
   });
   function onPtr(e) {
     var r = cv.getBoundingClientRect(), x = (e.clientX - r.left) * geo.w / r.width, y = (e.clientY - r.top) * geo.h / r.height;
+    if (st.lay === 'blend') { var o = blDay(); if (!o) return; var ii = Math.floor(geo.v.lo0 + x / geo.sx - o.g.lon0 + 0.125), jj = Math.floor(HB.lat0 + 0.125 - (geo.v.la1 - y / geo.sy)); st.bh = ii >= 0 && jj >= 0 && ii < o.g.nx && jj < o.g.ny ? { i: ii, j: jj } : null; draw(); side(); return; }
     var k = pointIdx(geo.v.lo0 + x / geo.sx, geo.v.la1 - y / geo.sy); if (k !== st.hover) { st.hover = k; draw(); side(); }
   }
   cv.addEventListener('pointermove', onPtr); cv.addEventListener('pointerdown', onPtr);
   window.addEventListener('resize', function () { layout(); draw(); });
+  document.getElementById('laySeg').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; st.lay = b.dataset.lay; st.bh = null; setPressed(this, 'lay', st.lay); render(); });
   statusLine(); render();
+  loadBlend().then(function () { render(); }, function () { BL = null; render(); });
 })();
 </script>
 </body>
