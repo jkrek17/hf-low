@@ -65,3 +65,6 @@ research/era5/enso_kuroshio/work/
 research/era5/nao_share_barrier/work/
 research/era5/sustained_hf/work/
 research/era5/threshold_axis/work/
+
+# research/era5/storm_patch_analogs/gfs/ keeps its GFS pull in work/ (regenerable)
+research/era5/storm_patch_analogs/gfs/work/

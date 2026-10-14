@@ -16,7 +16,7 @@ import fit_models_full as FF
 from sklearn.decomposition import PCA
 from frozen import Frozen, PR, NP
 BS, M = FM.BS, FM.M
-SD = "/mnt/project-files/storm-patches"
+SD = os.environ.get("STORM_PATCH_DIR", "/mnt/project-files/storm-patches")
 RES = os.path.join(HERE, "results")
 
 

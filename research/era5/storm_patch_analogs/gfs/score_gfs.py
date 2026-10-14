@@ -1,9 +1,9 @@
 """Registered tests of PREREGISTRATION_GFS.md. ERA5 pipeline A is a PROXY (training record and truth).
-usage: GFS_WORK=DIR score_gfs.py      -> results/gfs_skill.txt, gfs_tests.csv
+usage: [GFS_WORK=DIR] [STORM_PATCH_DIR=DIR] score_gfs.py   (defaults: gfs/work/ and /mnt/project-files/storm-patches)      -> results/gfs_skill.txt, gfs_tests.csv
 """
 import os, sys, json, glob
 HERE = os.path.dirname(os.path.abspath(__file__)); RE = os.path.join(HERE, "..", "..")
-WORK = os.environ.get("GFS_WORK", "/tmp/claude-0/gfs_work")
+WORK = os.environ.get("GFS_WORK") or os.path.join(HERE, "work")
 for p in ("gfs_outlook", "gfs_test", "intensity"):
     sys.path.insert(0, os.path.join(RE, p))
 sys.path.insert(0, HERE)
@@ -105,7 +105,7 @@ def main():
     t = GN("FULLPC7", "FULL7", k_); out(f"  T1 gain on fixes with no other GFS track within 800 km (kept {int(k_.sum())}, flagged {nb.mean():.3f}): {t[0]:+.4f} [{t[1]:+.4f}, {t[2]:+.4f}]")
     # ERA5-fed comparison, overlap season 2021-22
     D = BS.load(); E = D[D.season.isin(SEAS)].copy().reset_index(drop=True); E["time_i"] = E.time.astype(int)
-    z = np.load("/mnt/project-files/storm-patches/patches_2021_22.npz", allow_pickle=True)
+    z = np.load(os.path.join(os.environ.get("STORM_PATCH_DIR", "/mnt/project-files/storm-patches"), "patches_2021_22.npz"), allow_pickle=True)
     EP = {str(k): x for k, x in zip(z["keys"], z["x"])}
     ek = (S.era_track.astype(int).astype(str) + "|" + S.era_time.astype(int).astype(str)).values
     ov = (seas == 2021) & np.array([k in EP for k in ek])

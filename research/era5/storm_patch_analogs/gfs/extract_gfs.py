@@ -3,7 +3,7 @@ usage: GFS_WORK=DIR extract_gfs.py [NPROC]     per cycle one npz in DIR/gfs_patc
 Same patch recipe as the ERA5 patches (north-up, 13 x 13, 154.33 km) after env.coarsen to 1.5 degrees; anomalies vs clim_patch_0012.npz."""
 import os, sys, glob, types
 HERE = os.path.dirname(os.path.abspath(__file__)); RE = os.path.join(HERE, "..", "..")
-WORK = os.environ.get("GFS_WORK", "/tmp/claude-0/gfs_work"); os.environ["GFS_WORK"] = WORK; os.makedirs(WORK, exist_ok=True)
+WORK = os.environ.get("GFS_WORK") or os.path.join(HERE, "work"); os.environ["GFS_WORK"] = WORK; os.makedirs(WORK, exist_ok=True)
 sys.path.insert(0, os.path.join(RE, "gfs_test")); sys.path.insert(0, os.path.join(RE, "intensity")); sys.path.insert(0, os.path.join(HERE, ".."))
 import numpy as np, pandas as pd
 from multiprocessing import Pool
@@ -19,7 +19,7 @@ _C = None
 def clim():
     global _C
     if _C is None:
-        z = np.load("/mnt/project-files/storm-patches/clim_patch_0012.npz"); _C = {k: z[k] for k in z.files}
+        z = np.load(os.path.join(os.environ.get("STORM_PATCH_DIR", "/mnt/project-files/storm-patches"), "clim_patch_0012.npz")); _C = {k: z[k] for k in z.files}
     return _C
 
 
