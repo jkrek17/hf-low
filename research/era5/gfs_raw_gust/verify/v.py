@@ -1,6 +1,7 @@
 import pandas as pd, numpy as np
 from sklearn.metrics import roc_auc_score
-R='/home/claude/hf-low/'
+import os
+R=os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','..','..','..'))+'/'  # repo root
 def hav(la1,lo1,la2,lo2):
     la1,lo1,la2,lo2=map(np.radians,(la1,lo1,la2,lo2))
     a=np.sin((la2-la1)/2)**2+np.cos(la1)*np.cos(la2)*np.sin((lo2-lo1)/2)**2

@@ -1,6 +1,6 @@
 """Stage A GFS pull: PRMSL + GUST:surface by .idx byte ranges (method of wind-particles/server.py), processed on the fly.
 
-Per cycle (00/12 UTC, f000..f048 step 6, 1 Oct .. 30 Apr, seasons 2021..2025) writes, in GFS_WORK (/home/claude/gfs_work):
+Per cycle (00/12 UTC, f000..f048 step 6, 1 Oct .. 30 Apr, seasons 2021..2025) writes, in GFS_WORK (default: gfs_work under the system temp dir):
   lows/<YYYYMMDDCC>.csv   cycle,lead,lat,lon,msl,g500,g800,g1200      (a_tracks.lows_in, kt)
   gust/<YYYYMMDDCC>.csv   cycle,lead,basin,gmax_kt,g999_kt           (ocean points in the basin box)
   missing/<YYYYMMDDCC>.txt  leads whose files are absent (404 on the .idx or the message)
