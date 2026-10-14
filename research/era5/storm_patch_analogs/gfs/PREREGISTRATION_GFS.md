@@ -27,4 +27,6 @@ ERA5 proxy truth; five GFS seasons all inside the block that calibrated the 71.7
 
 ## Deviations log
 
-(empty; any change after the first GFS field is read goes here)
+- Before the full pull, one cycle (2021100100) was fetched to test `extract_gfs.py`; I read the min and max of its six patch channels (a plausibility check), nothing about outcomes or skill.
+- `score_gfs.py` first flagged 0 fixes in the neighbour-track descriptive (a pandas groupby key bug); fixed before reading that number as a result (flagged 22.0 % after the fix). No registered test changed.
+- Descriptive placebo: the frozen coefficients applied to permuted patches give a score far below FULL7 (see results); it measures how much the frozen pattern terms hurt when the pattern is wrong, not the over-fit cost used in PR 199's placebo.
