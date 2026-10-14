@@ -31,3 +31,12 @@ git diff --cached --name-only --diff-filter=ACMR -z | {
     exit 1
   fi
 }
+
+# Project invariants (tests/invariants/run.py, 0.2 s): a NEW violation, for example a script that opens /tmp/ or /home/ paths,
+# blocks the commit instead of waiting for the CI check. See failures/2026-10-14-session-paths-in-gfs-test.md.
+if [ -f tests/invariants/run.py ]; then
+  python3 tests/invariants/run.py >&2 || {
+    echo "pre-commit: tests/invariants/run.py failed; fix the NEW violation (do not add it to known_violations.json)." >&2
+    exit 1
+  }
+fi
