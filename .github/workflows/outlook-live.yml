@@ -1,10 +1,75 @@
-name: Outlook live (stub)
+# Daily job for the experimental live outlook page (docs/outlook-live.html).
+#
+# Pulls the newest GFS 00 UTC run (NOAA open-data bucket, about 8 MB), shades it with tools/outlook_live.py, and when a new run is found commits only
+# docs/outlook-live-data.js and flat/outlook-live-data.js (about 8 KB each) straight to main, then starts the two publish workflows by hand.
+#
+# Why the explicit dispatches: a push made with GITHUB_TOKEN does not start other workflows, so pages.yml and publish-site.yml would never see this
+# commit. workflow_dispatch is the exception GitHub allows, hence `actions: write` and the two `gh workflow run` calls.
+#
+# Safe to run twice a day: the script writes nothing when the newest complete run is already in the data file, so the second cron is a retry for a
+# late GFS run. Outside October-April it does nothing (the percentages were measured in those months only). A failed pull fails the job (red run, no
+# commit); the page itself warns when its run is older than 36 hours.
+#
+# Jason approved this unattended publish on 2026-10-14 ("build it with A"). To pause it: disable this workflow in the Actions tab.
+
+name: Outlook live (daily)
+
 on:
+  schedule:
+    - cron: '10 6 * * *'
+    - cron: '40 8 * * *'
   workflow_dispatch:
+    inputs:
+      force:
+        description: 'Rebuild even if this run is already in the data file'
+        type: boolean
+        default: false
+
 permissions:
-  contents: read
+  contents: write
+  actions: write
+
+concurrency:
+  group: outlook-live
+  cancel-in-progress: false
+
 jobs:
-  stub:
+  build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      - run: echo stub
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install numpy
+        run: python3 -m pip install numpy==1.26.4
+      - name: Pull the newest GFS run and shade it
+        env:
+          FORCE: ${{ inputs.force }}
+        run: |
+          if [ "$FORCE" = "true" ]; then python3 tools/outlook_live.py --force; else python3 tools/outlook_live.py; fi
+      - name: Commit to main and start the publish workflows
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git add docs/outlook-live-data.js flat/outlook-live-data.js
+          if git diff --cached --quiet; then
+            echo "No new run; nothing to commit."
+            exit 0
+          fi
+          run=$(grep -o '"run":"[0-9]*"' docs/outlook-live-data.js | grep -o '[0-9]\{10\}')
+          git -c user.name="outlook-live-bot" -c user.email="outlook-live-bot@users.noreply.github.com" \
+            commit -q -m "Outlook live: GFS run ${run} UTC" -m "Written by .github/workflows/outlook-live.yml (tools/outlook_live.py)."
+          for attempt in 1 2 3 4; do
+            if git push -q origin HEAD:main; then pushed=1; break; fi
+            echo "Push rejected (main moved); rebasing and retrying."
+            git pull -q --rebase origin main
+            sleep $((attempt * 5))
+          done
+          [ "${pushed:-0}" = "1" ] || { echo "::error::Could not push to main."; exit 1; }
+          gh workflow run pages.yml --ref main
+          gh workflow run publish-site.yml --ref main
+          echo "Pushed run ${run} and started pages.yml and publish-site.yml."

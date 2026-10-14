@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Outlook live (experimental) - Hurricane Force Extratropical Low Archive</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="description" content="Experimental: the latest GFS run shaded by how often OPC agreed a hurricane-force or storm-force low was near, for forecast days 1 to 4. Not a warning.">
+<style>
+  /* Self-contained on purpose (see tools/build_outlook_live.py): the flat/ copy of the site is a single folder. */
+  :root {
+    color-scheme: light;
+    --page: #f9f9f7; --surface: #fcfcfb; --surface-sunk: #f2f2ee; --border: #e1e0d9; --border-strong: #c3c2b7;
+    --ink: #0b0b0b; --ink-2: #52514e; --ink-muted: #6d6b66;
+    --navy: #0a3161; --navy-ink: #ffffff; --navy-soft: #cfe0f3; --accent: #0a3f73; --accent-soft: #e4edf8;
+    --badge-ink: #8a5a00; --badge-bg: #fdf3dd; --badge-border: #f4dfae;
+    --sea: #e8eef4; --land: #d9d8cf; --grid: #c9d3dd;
+    --l1: #fde68a; --l2: #fdba74; --l3: #f97316; --l4: #dc2626; --l5: #7f1d1d;
+    --font: system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --page: #0d0d0d; --surface: #1a1a19; --surface-sunk: #141413; --border: #2c2c2a; --border-strong: #383835;
+      --ink: #ffffff; --ink-2: #c3c2b7; --ink-muted: #a09e97; --navy: #123a63; --accent: #93b8e6; --accent-soft: #16263a;
+      --badge-ink: #f1c76b; --badge-bg: #2b2210; --badge-border: #4d3d17;
+      --sea: #162331; --land: #34332d; --grid: #25394d;
+      --l1: #a8892a; --l2: #c4752c; --l3: #e0661a; --l4: #e24b4b; --l5: #ffb3b3;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --surface-sunk: #141413; --border: #2c2c2a; --border-strong: #383835;
+    --ink: #ffffff; --ink-2: #c3c2b7; --ink-muted: #a09e97; --navy: #123a63; --accent: #93b8e6; --accent-soft: #16263a;
+    --badge-ink: #f1c76b; --badge-bg: #2b2210; --badge-border: #4d3d17;
+    --sea: #162331; --land: #34332d; --grid: #25394d;
+    --l1: #a8892a; --l2: #c4752c; --l3: #e0661a; --l4: #e24b4b; --l5: #ffb3b3;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--ink); font: 15px/1.55 var(--font); }
+  a { color: var(--accent); }
+  .masthead { background: var(--navy); color: var(--navy-ink); padding: 14px 16px; }
+  .masthead-in { max-width: 1180px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; justify-content: space-between; }
+  .masthead h1 { margin: 0; font-size: 18px; font-weight: 650; }
+  .masthead a { color: var(--navy-soft); }
+  main { max-width: 1180px; margin: 0 auto; padding: 20px 16px 56px; display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+  h2 { font-size: 20px; line-height: 1.25; margin: 0 0 6px; text-wrap: balance; }
+  p { margin: 0 0 10px; max-width: 76ch; }
+  .note { background: var(--badge-bg); border: 1px solid var(--badge-border); border-left: 4px solid var(--badge-ink); border-radius: 6px; padding: 12px 14px; }
+  .note strong { color: var(--badge-ink); }
+  .answers { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px; }
+  .answers ul { margin: 6px 0 0; padding-left: 20px; } .answers li { margin-bottom: 6px; max-width: 80ch; }
+  .tag { font-size: 12px; font-weight: 650; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2); }
+  .muted { color: var(--ink-2); font-size: 13px; }
+  .controls { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: end; }
+  .controls > div { min-width: 0; max-width: 100%; }
+  .controls label { display: block; font-size: 12px; font-weight: 650; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2); margin-bottom: 3px; }
+  select { width: 100%; font: inherit; padding: 6px 8px; border: 1px solid var(--border-strong); border-radius: 6px; background: var(--surface); color: var(--ink); max-width: 100%; }
+  .stepper { display: flex; gap: 4px; align-items: stretch; }
+  .stepper button { font: inherit; padding: 4px 11px; border: 1px solid var(--border-strong); border-radius: 6px; background: var(--surface); color: var(--ink); cursor: pointer; }
+  .stepper button:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
+  .stepper select { min-width: 0; }
+  th.grp { text-align: left; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-2); background: var(--surface-2, transparent); }
+  .seg { display: inline-flex; border: 1px solid var(--border-strong); border-radius: 6px; overflow: hidden; }
+  .seg button { font: inherit; padding: 6px 12px; border: 0; border-right: 1px solid var(--border); background: var(--surface); color: var(--ink); cursor: pointer; }
+  .seg button:last-child { border-right: 0; }
+  .seg button[aria-pressed="true"] { background: var(--navy); color: var(--navy-ink); }
+  .seg button:focus-visible, select:focus-visible, input:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
+  .layout { display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+  @media (max-width: 900px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 12px; min-width: 0; }
+  canvas { display: block; width: 100%; height: auto; border-radius: 4px; background: var(--sea); touch-action: manipulation; }
+  .legend { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 8px; font-size: 13px; align-items: center; }
+  .legend i { display: inline-block; width: 16px; height: 12px; border: 1px solid var(--border-strong); vertical-align: -1px; margin-right: 4px; }
+  .tablewrap { overflow-x: auto; }
+  table { border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+  th, td { text-align: left; padding: 4px 8px; border-bottom: 1px solid var(--border); }
+  td.num, th.num { text-align: right; }
+  tr.cur td { background: var(--accent-soft); font-weight: 650; }
+  .few { color: var(--ink-muted); font-style: italic; }
+  .readout { min-height: 6.5em; }
+  .capline { margin-top: 8px; }
+  .side { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+  .limit { border-left: 3px solid var(--border-strong); padding-left: 10px; color: var(--ink-2); }
+  .chk { display: inline-flex; gap: 6px; align-items: center; font-size: 14px; }
+  .status { border: 1px solid var(--border-strong); border-radius: 6px; padding: 10px 14px; background: var(--surface); }
+  .status.warn { border-color: var(--badge-ink); background: var(--badge-bg); }
+</style>
+</head>
+<body>
+<header class="masthead"><div class="masthead-in">
+  <h1>Outlook (live, experimental): the latest GFS run, shaded by how often OPC agreed</h1>
+  <span><a href="outlook-replay.html">Outlook replay</a> &middot; <a href="what-we-learned.html">What we learned</a> &middot; <a href="index.html">&larr; Back to the archive</a></span>
+</div></header>
+<main>
+<div class="note"><strong>Experimental. Not a warning and not an OPC product.</strong> This map is rebuilt once a day from the newest 00 UTC GFS run. GFS gust is a model forecast and a proxy for the sustained wind OPC warns on, and OPC&rsquo;s hurricane-force call is an analyst&rsquo;s judgement, so &ldquo;OPC agreed&rdquo; is not the same as &ldquo;the wind will be there&rdquo;. For warnings use OPC&rsquo;s own products.</div>
+
+<div class="status" id="runline" aria-live="polite">Loading the latest run&hellip;</div>
+
+<div class="answers">
+  <div class="tag">In plain words</div>
+  <ul>
+    <li><strong>What the colours mean.</strong> Pick a point. Look at the strongest forecast GFS gust within a set distance of it during that forecast day (60 nautical miles on day 1, 120 on day 2, 270 on days 3 and 4). In five past seasons (October&ndash;April, 2021&ndash;22 to 2025&ndash;26), when the gust was in the same band, OPC had a hurricane-force low within 324 nautical miles of the point on the percentage the colour shows.</li>
+    <li><strong>It is a neighbourhood, not one storm.</strong> The colours come straight from the GFS wind field, not from tracking a low, so a storm the tracker would have lost still shows.</li>
+    <li><strong>No colour is not &ldquo;safe&rdquo;.</strong> Uncoloured ocean means gust stayed in a band where OPC agreed under 1% of the time. It is a lower chance, not a guarantee, and the model can miss a storm.</li>
+    <li><strong>Even the strongest gusts are not a sure thing.</strong> Where the GFS gust was 80 kt or more, OPC had a hurricane-force low nearby on about 58% of past point-days on day 1 and about 39% by day 4. Chances fall with lead time.</li>
+  </ul>
+</div>
+
+<div class="controls">
+  <div><label>Basin</label><div class="seg" id="basinSeg"><button type="button" data-b="atl" aria-pressed="true">Atlantic</button><button type="button" data-b="pac" aria-pressed="false">Pacific</button></div></div>
+  <div><label>Forecast day</label><div class="seg" id="daySeg"></div></div>
+  <div><label>OPC agreed there was a</label><div class="seg" id="tgtSeg"><button type="button" data-t="hf" aria-pressed="true">hurricane-force low</button><button type="button" data-t="st" aria-pressed="false">storm-force or stronger low</button></div></div>
+</div>
+
+<div class="layout">
+  <div class="panel">
+    <canvas id="map" role="img" aria-label="Map of the chosen basin shaded by how often OPC agreed a low was near, from the latest GFS run"></canvas>
+    <div class="legend" id="legend"></div>
+    <p class="muted capline" id="cap"></p>
+  </div>
+  <div class="side">
+    <div class="panel readout" aria-live="polite" id="readout"><span class="muted">Hover or tap the map for a point.</span></div>
+    <div class="panel" id="daybox"></div>
+    <div class="panel"><div class="tag" id="tabTag"></div><div class="tablewrap" id="tab"></div></div>
+  </div>
+</div>
+
+<div class="limit"><p><strong>Limits.</strong> The percentages come from five past seasons (October&ndash;April 2021&ndash;22 to 2025&ndash;26) of 00 UTC runs of one model that changed version inside the window, and hold only for that sample, so read them as rates, not precise odds. Gust is sampled every 6 hours, so a short peak can be missed. Points are 1 degree apart and in the same run they are not independent: the real sample is runs and seasons. The tables here use all five seasons, so unlike the replay page they were not built without the run being shaded. The shading radii come from a position-error test on the ERA5 proxy. Land and coasts are not scored. Nothing beyond day 4, nothing from May to September, and the map is rebuilt once a day, so it can be up to a day behind the latest GFS run.</p>
+<p class="muted">Method, calibration and how past runs lined up with OPC: <a href="outlook-replay.html">Outlook replay</a>. Code: <code>tools/outlook_live.py</code> (daily job) and <code>research/era5/outlook_replay/</code> in the repository.</p></div>
+</main>
+<script src="outlook-live-data.js"></script>
+<script>
+window.HF_LIVE_STATIC = /*@@DATA@@*/;
+(function () {
+  var D = window.HF_LIVE_STATIC, L = window.HF_LIVE || null, G = D.grid, N = G.lat.length, RD = D.radius_nm, B = D.bands_kt;
+  var MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var LV = [1, 5, 15, 30, 50], COLS = ['--l1','--l2','--l3','--l4','--l5'];
+  var st = { b: 'atl', d: 1, t: 'hf', hover: -1 };
+  var LON = [], i;
+  for (i = 0; i < N; i++) { var lo = G.lon[i]; if (lo > 180) lo -= 360; LON.push(lo); }
+  var BASIN = G.basin.map(function (v) { return v === 1 ? 'atl' : 'pac'; });
+  var X = []; for (i = 0; i < N; i++) X.push(BASIN[i] === 'pac' ? G.lon[i] : LON[i]);
+  var VIEW = { atl: { lo0: -100, lo1: 10.5, la0: 20, la1: 75 }, pac: { lo0: 120, lo1: 240.5, la0: 20, la1: 75 } };
+  function decode(s) { var out = [], re = /(\d)(\d+),/g, m; while ((m = re.exec(s))) { var n = +m[2], v = +m[1]; for (var k = 0; k < n; k++) out.push(v); } return out; }
+  var bands = L ? L.days.map(function (s) { return s ? decode(s) : null; }) : [null, null, null, null];
+  function table(b, d) { return D.tables_all[b + d]; }
+  function lev(p) { var l = 0; for (var k = 0; k < LV.length; k++) if (p >= LV[k]) l = k + 1; return l; }
+  function pct(v) { return v < 10 ? v.toFixed(1) : v.toFixed(0); }
+  function runTime() { return L ? Date.UTC(+L.run.slice(0, 4), +L.run.slice(4, 6) - 1, +L.run.slice(6, 8), +L.run.slice(8, 10)) : null; }
+  function fmtRun() { return (+L.run.slice(6, 8)) + ' ' + MON[+L.run.slice(4, 6) - 1] + ' ' + L.run.slice(0, 4) + ' ' + L.run.slice(8, 10) + ' UTC'; }
+  function fmtValid(h) { var t = new Date(runTime() + h * 3600000); return t.getUTCDate() + ' ' + MON[t.getUTCMonth()] + ' ' + ('0' + t.getUTCHours()).slice(-2) + ' UTC'; }
+
+  function statusLine() {
+    var el = document.getElementById('runline'), now = new Date(), m = now.getUTCMonth() + 1, inSeason = m >= 10 || m <= 4, warn = false, h = '';
+    if (!L) { el.className = 'status warn'; el.textContent = 'No run is available yet, so there is no map. The daily job only runs October to April.'; return; }
+    var age = (now.getTime() - runTime()) / 3600000;
+    h = '<strong>Latest GFS run shown: ' + fmtRun() + '.</strong> Rebuilt ' + L.made.replace('T', ' ').replace('Z', ' UTC') + '.';
+    if (!inSeason) { warn = true; h += ' <strong>It is outside October to April, the months the percentages were measured in, so this map is old and not calibrated for now.</strong>'; }
+    else if (age > 36) { warn = true; h += ' <strong>This run is ' + Math.round(age) + ' hours old: the daily update may have stopped, so do not treat this map as current.</strong>'; }
+    else h += ' It is ' + Math.round(age) + ' hours old.';
+    el.className = warn ? 'status warn' : 'status'; el.innerHTML = h;
+  }
+  var dseg = document.getElementById('daySeg');
+  [1, 2, 3, 4].forEach(function (d) { var b = document.createElement('button'); b.type = 'button'; b.dataset.d = d; b.textContent = 'Day ' + d; b.setAttribute('aria-pressed', d === 1); dseg.appendChild(b); });
+  var lg = document.getElementById('legend');
+  lg.innerHTML = '<span><i data-c="sea"></i>under 1%</span>' + LV.map(function (v, k) { return '<span><i data-c="' + k + '"></i>' + v + '%' + (k === 4 ? ' or more' : '+') + '</span>'; }).join('');
+  function paintLegend() { Array.prototype.forEach.call(lg.querySelectorAll('i'), function (e) { var c = e.dataset.c; e.style.background = 'var(' + (c === 'sea' ? '--sea' : COLS[+c]) + ')'; }); }
+
+  var cv = document.getElementById('map'), ctx = cv.getContext('2d');
+  function css(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+  var geo;
+  function layout() {
+    var v = VIEW[st.b], w = cv.parentNode.clientWidth - 24; if (w < 200) w = 200;
+    var h = Math.round((v.la1 - v.la0) * (w / ((v.lo1 - v.lo0) * 0.68)));
+    var dpr = window.devicePixelRatio || 1;
+    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); cv.style.height = h + 'px';
+    geo = { v: v, w: w, h: h, dpr: dpr, sx: w / (v.lo1 - v.lo0), sy: h / (v.la1 - v.la0) };
+  }
+  function px(lon) { return (lon - geo.v.lo0) * geo.sx; }
+  function py(lat) { return (geo.v.la1 - lat) * geo.sy; }
+  function draw() {
+    var band = bands[st.d - 1], tb = table(st.b, st.d), v = geo.v;
+    ctx.setTransform(geo.dpr, 0, 0, geo.dpr, 0, 0); ctx.clearRect(0, 0, geo.w, geo.h);
+    ctx.fillStyle = css('--sea'); ctx.fillRect(0, 0, geo.w, geo.h);
+    var cols = COLS.map(css), cw = geo.sx + 0.6, ch = geo.sy + 0.6, k, p;
+    if (band) for (k = 0; k < N; k++) {
+      if (BASIN[k] !== st.b) continue;
+      p = tb[st.t][band[k]]; var l = lev(p); if (!l) continue;
+      ctx.fillStyle = cols[l - 1]; ctx.fillRect(px(X[k]) - cw / 2, py(G.lat[k]) - ch / 2, cw, ch);
+    }
+    ctx.fillStyle = css('--land'); ctx.strokeStyle = css('--border-strong'); ctx.lineWidth = 0.6;
+    D.coast.forEach(function (poly) {
+      [-360, 0, 360].forEach(function (off) {
+        ctx.beginPath();
+        for (var j = 0; j < poly.length; j++) { var x = px(poly[j][0] + off), y = py(poly[j][1]); if (j) ctx.lineTo(x, y); else ctx.moveTo(x, y); }
+        ctx.closePath(); ctx.fill(); ctx.stroke();
+      });
+    });
+    ctx.strokeStyle = css('--grid'); ctx.lineWidth = 0.5; ctx.fillStyle = css('--ink-muted'); ctx.font = '11px system-ui, sans-serif';
+    for (var la = 30; la <= 70; la += 10) { ctx.beginPath(); ctx.moveTo(0, py(la)); ctx.lineTo(geo.w, py(la)); ctx.stroke(); ctx.fillText(la + 'N', 3, py(la) - 2); }
+    var lstep = 20;
+    for (var lo = Math.ceil(v.lo0 / lstep) * lstep; lo < v.lo1; lo += lstep) { ctx.beginPath(); ctx.moveTo(px(lo), 0); ctx.lineTo(px(lo), geo.h); ctx.stroke(); var lab = lo > 180 ? (360 - lo) + 'W' : lo < 0 ? (-lo) + 'W' : lo > 0 && lo < 180 ? lo + 'E' : '0'; ctx.fillText(lab, px(lo) + 2, geo.h - 3); }
+    if (st.hover >= 0) { ctx.strokeStyle = css('--accent'); ctx.lineWidth = 2; ctx.strokeRect(px(X[st.hover]) - cw / 2, py(G.lat[st.hover]) - ch / 2, cw, ch); }
+  }
+  function pointIdx(lon, lat) {
+    var best = -1, bd = 1e9, k;
+    for (k = 0; k < N; k++) { if (BASIN[k] !== st.b) continue; var dx = (X[k] - lon) * 0.7, dy = G.lat[k] - lat, d2 = dx * dx + dy * dy; if (d2 < bd) { bd = d2; best = k; } }
+    return bd <= 1.2 ? best : -1;
+  }
+  function readout() {
+    var el = document.getElementById('readout'), band = bands[st.d - 1];
+    if (!band) { el.innerHTML = '<span class="muted">Day ' + st.d + ' is not available for this run.</span>'; return; }
+    if (st.hover < 0) { el.innerHTML = '<span class="muted">Hover or tap the map for a point.</span>'; return; }
+    var k = st.hover, b = band[k], tb = table(st.b, st.d), lat = G.lat[k], lon = LON[k];
+    el.innerHTML = '<div class="tag">Point ' + Math.abs(lat).toFixed(0) + 'N ' + Math.abs(lon).toFixed(0) + (lon < 0 ? 'W' : 'E') + ', day ' + st.d + '</div>' +
+      '<p>Strongest forecast GFS gust within ' + RD[st.d - 1] + ' nm that day: <strong>' + B[b] + ' kt</strong>.</p>' +
+      '<p>In the five past seasons, with gust in that band, OPC had a <strong>hurricane-force</strong> low within ' + D.truth_nm.toFixed(0) + ' nm on <strong>' + pct(tb.hf[b]) + '%</strong> of point-days, a <strong>storm-force or stronger</strong> one on ' + pct(tb.st[b]) + '%.</p>';
+  }
+  function dayBox() {
+    var el = document.getElementById('daybox'), v0 = 24 * (st.d - 1);
+    if (!L) { el.innerHTML = ''; return; }
+    el.innerHTML = '<div class="tag">' + fmtRun() + ' run, day ' + st.d + '</div>' +
+      '<p>Valid ' + fmtValid(v0 + 6) + ' to ' + fmtValid(v0 + 24) + ' (' + (v0 + 6) + ' to ' + (v0 + 24) + ' hours after the run). Shading radius ' + RD[st.d - 1] + ' nm.</p>';
+  }
+  function tabs() {
+    var tb = table(st.b, st.d), band = st.hover >= 0 && bands[st.d - 1] ? bands[st.d - 1][st.hover] : -1, h = '<table><thead><tr><th>GFS gust within ' + RD[st.d - 1] + ' nm</th><th class="num">HF agreed</th><th class="num">Storm agreed</th><th class="num">Point-days</th></tr></thead><tbody>';
+    for (var b = 0; b < 7; b++) { var few = tb.n[b] < 100 || tb.c[b] < 5; h += '<tr' + (b === band ? ' class="cur"' : '') + '><td>' + B[b] + ' kt</td><td class="num' + (few ? ' few' : '') + '">' + (few ? 'too few' : pct(tb.hf[b]) + '%') + '</td><td class="num' + (few ? ' few' : '') + '">' + (few ? 'too few' : pct(tb.st[b]) + '%') + '</td><td class="num">' + tb.n[b].toLocaleString('en-US') + '</td></tr>'; }
+    document.getElementById('tab').innerHTML = h + '</tbody></table>';
+    document.getElementById('tabTag').textContent = (st.b === 'atl' ? 'Atlantic' : 'Pacific') + ', day ' + st.d + ' table (five past seasons)';
+  }
+  function render() {
+    document.getElementById('cap').textContent = (L ? 'GFS run of ' + fmtRun() + ', day ' + st.d + '. ' : '') + 'Shading: chance OPC had a ' + (st.t === 'hf' ? 'hurricane-force' : 'storm-force or stronger') + ' low within ' + D.truth_nm.toFixed(0) + ' nm, from the strongest GFS gust within ' + RD[st.d - 1] + ' nm of each point, using the table from the five past seasons. Ocean only.';
+    layout(); paintLegend(); draw(); readout(); dayBox(); tabs();
+  }
+  function setPressed(seg, attr, val) { Array.prototype.forEach.call(seg.querySelectorAll('button'), function (b) { b.setAttribute('aria-pressed', String(b.dataset[attr]) === String(val)); }); }
+  [['basinSeg', 'b'], ['daySeg', 'd'], ['tgtSeg', 't']].forEach(function (a) {
+    document.getElementById(a[0]).addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; st[a[1]] = a[1] === 'd' ? +b.dataset.d : b.dataset[a[1]]; if (a[1] === 'b') st.hover = -1; setPressed(this, a[1], st[a[1]]); render(); });
+  });
+  function onPtr(e) {
+    var r = cv.getBoundingClientRect(), x = (e.clientX - r.left) * geo.w / r.width, y = (e.clientY - r.top) * geo.h / r.height;
+    var k = pointIdx(geo.v.lo0 + x / geo.sx, geo.v.la1 - y / geo.sy); if (k !== st.hover) { st.hover = k; draw(); readout(); tabs(); }
+  }
+  cv.addEventListener('pointermove', onPtr); cv.addEventListener('pointerdown', onPtr);
+  window.addEventListener('resize', function () { layout(); draw(); });
+  statusLine(); render();
+})();
+</script>
+</body>
+</html>
