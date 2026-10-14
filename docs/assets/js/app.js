@@ -33,8 +33,8 @@
     monthHeatSrc: 'archive', // heat map source: 'archive' (2004-05 on) | 'era5' (1979-80 to 2003-04 proxy)
     monthTracks: false,     // By month: draw the event tracks over the shading (off with the heat map)
     monthEra5: true,   // By month: add the ERA5 proxy storms of earlier seasons (teal), on by default
-    probMin: 3,        // HF probability layer: draw edges at or above this P class (1 = all, 3 = 20 % and above; the all-tracks view is unreadable with every edge)
-    probPre: true,     // HF probability layer: include 1979-2003 (catalog events and matched nulls only)
+    probMin: 4,        // HF probability layer: draw edges at or above this P class (1 = all, 4 = 50 % and above; every edge of 40,000 tracks is unreadable)
+    probSeason: null,  // HF probability layer: a season start year, 'all' (2004-2025) or 'pre' (1979-2003 catalog events and matched nulls); null until set to the latest season
     era5pre: false,    // ... and before 2001-02 (within-era comparison only), off by default
     sort: { key: 'start', dir: -1 },
     focusStorm: null,      // {lowKey, track, prevLayer, prevSel, pan}: one storm on the map, P(HF) track with OPC's fixes
@@ -1609,17 +1609,22 @@
   function probModel() {
     if (state.layer !== 'prob' || !ensureEra5('allp')) return null;
     var D = era5Data.allp, fs = state.focusStorm;
+    var PT = window.HF_ERA5_PROBTABLE, ps = state.probSeason;
+    if (ps == null && PT) ps = state.probSeason = PT.seasons[1];
+    var s0, s1;
+    if (ps === 'pre') { s0 = 0; s1 = 2003; }
+    else if (ps === 'all' || ps == null) { s0 = state.season0 == null ? 2004 : Math.max(2004, state.season0); s1 = state.season1 == null ? 9999 : state.season1; }
+    else { s0 = s1 = ps; }
     var idx = fs ? focusIdx(D, fs.track) : HF.era5.filterAllP(D, {
       basin: state.basin === 'both' ? 'all' : state.basin,
-      season0: state.probPre || state.season0 == null ? 0 : state.season0,
-      season1: state.season1 == null ? 9999 : state.season1,
+      season0: s0, season1: s1,
       months: state.months
     });
     var nf = 0, hi = 0;
     for (var a = 0; a < idx.length; a++) {
       for (var k = D.off[idx[a]]; k < D.off[idx[a] + 1]; k++) { nf++; if (D.cls[k] >= 4) hi++; }
     }
-    probShown = { tracks: idx.length, fixes: nf, hi: hi };
+    probShown = { tracks: idx.length, fixes: nf, hi: hi, top: fs ? [] : probTopStorms(D, idx) };
     var KIND = ['2004-2025 low', '1979-2003 catalog event', '1979-2003 matched null case'];
     return {
       D: D, idx: idx, minC: fs ? 1 : state.probMin, opc: fs ? focusLow() : null,
@@ -1636,10 +1641,91 @@
   function probNote() {
     if (era5Status.allp === 'failed') return ' The probability data could not be loaded.';
     if (era5Status.allp !== 'ready') return ' Loading the probability tracks…';
-    return probShown.tracks.toLocaleString() + ' ERA5 proxy tracks, ' + probShown.fixes.toLocaleString() + ' scored fixes (00 and 12 UTC), each edge coloured by the model’s probability of a hurricane-force-equivalent gust (pipeline A, 71.7 kt) within 24 h of its later fix. ' +
-      'A model output on an ERA5 proxy, not an observation. 2004-2025 is every scored low' +
-      (state.probPre ? '; 1979-2003 is only the catalog events and their matched null cases (the other lows have no committed fixes), within-era only: the gust index drifts before 2001-02, so read those as shape, not rates' : '; the 1979-2003 sample is switched off') +
-      '. ' + probShown.hi.toLocaleString() + ' fixes are at 50 % or more.' + (state.probMin > 1 ? ' Edges under ' + ['', '', '5 %', '20 %', '50 %'][state.probMin] + ' are hidden.' : '') + ' Basin, months and the season end apply, and the season start too unless the 1979-2003 tick is on. Hover a fix for its probability and time; drag to rotate, scroll to zoom.';
+    var ps = state.probSeason;
+    var which = ps === 'pre' ? '1979-2003: only the catalog events and their matched non-events (the other lows have no committed fixes), within that era only, so read them as shape, not rates'
+      : ps === 'all' || ps == null ? 'seasons 2004-05 to 2025-26' : 'season ' + HF.seasonLabel(ps);
+    return probShown.tracks.toLocaleString() + ' ERA5 proxy tracks (' + which + '), ' + probShown.fixes.toLocaleString() + ' scored fixes (00 and 12 UTC), each edge coloured by the model’s probability of a hurricane-force-equivalent gust (pipeline A, 71.7 kt) within 24 h of its later fix. ' +
+      'A model output on an ERA5 proxy, not an observation. ' + probShown.hi.toLocaleString() + ' fixes are at 50 % or more.' +
+      (state.probMin > 1 ? ' Edges under ' + ['', '', '5 %', '20 %', '50 %'][state.probMin] + ' are hidden.' : '') +
+      ' Hover a fix for its probability and time; drag to rotate, scroll to zoom.';
+  }
+
+  /** The strongest lows in the current selection: highest P at any scored fix. */
+  function probTopStorms(D, idx) {
+    var rows = [];
+    for (var a = 0; a < idx.length; a++) {
+      var t = idx[a], best = -1, bk = -1;
+      for (var k = D.off[t]; k < D.off[t + 1]; k++) if (D.p[k] > best) { best = D.p[k]; bk = k; }
+      if (bk >= 0) rows.push({ t: t, p: best, k: bk });
+    }
+    rows.sort(function (x, y) { return y.p - x.p || x.t - y.t; });
+    return rows.slice(0, 10);
+  }
+
+  function probPct(x) { return (x < 0.1 ? (x * 100).toFixed(1) : Math.round(x * 100)) + ' %'; }
+
+  /** Table above the globe: how often HF followed each probability band, from
+      docs/data/era5-probtable.js (leave-one-season-out, 2004-2025), and the strongest lows
+      of the selected season. ERA5 proxy throughout. */
+  function renderProbPanel() {
+    var box = document.getElementById('probPanel'), PT = window.HF_ERA5_PROBTABLE;
+    var on = mapLayer() === 'prob' && !state.focusStorm && PT;
+    box.hidden = !on;
+    if (!on) return;
+    HF.clear(box);
+    var B = PT.b[state.basin === 'both' ? 'all' : state.basin];
+    var names = ['under 5 %', '5 to 20 %', '20 to 50 %', '50 to 80 %', '80 % or more'];
+    var pre = state.probSeason === 'pre';
+    var basinName = state.basin === 'both' ? 'both basins' : state.basin === 'atl' ? 'the Atlantic' : 'the Pacific';
+    box.appendChild(HF.el('h3', {}, pre ? 'Catalog events against matched non-events, 1979-2003 (' + basinName + ')'
+      : 'When the model says this, how often did hurricane force follow? 2004-05 to 2025-26, ' + basinName));
+    var tbl = HF.el('table', { class: 'data-table prob-table' });
+    var hr = HF.el('tr');
+    (pre ? ['Model chance', 'Fixes of catalog events', 'Fixes of matched non-events', 'Event share of fixes']
+      : ['Model chance', 'Scored fixes', 'HF within 24 h followed', 'Lows peaking in this band', 'Of those, reached HF']).forEach(function (h, i) {
+      hr.appendChild(HF.el('th', i ? { class: 'num' } : {}, h));
+    });
+    tbl.appendChild(HF.el('thead')).appendChild(hr);
+    var tb = HF.el('tbody');
+    for (var c = 4; c >= 0; c--) {
+      var tr = HF.el('tr', { style: 'cursor:default' }), sw = HF.el('span', { class: 'legend-swatch' });
+      sw.style.background = HF.cssVar('--p' + (c + 1)); sw.style.marginRight = '8px'; sw.style.display = 'inline-block'; sw.style.verticalAlign = 'middle';
+      var td0 = HF.el('td'); td0.appendChild(sw); td0.appendChild(document.createTextNode(names[c])); tr.appendChild(td0);
+      var cells;
+      if (pre) {
+        var e = B.pre[c][0], nn = B.pre[c][1];
+        cells = [e.toLocaleString(), nn.toLocaleString(), (e + nn ? Math.round(100 * e / (e + nn)) + ' %' : '-')];
+      } else {
+        var f = B.fix[c], st = B.storm[c];
+        cells = [f[0].toLocaleString(), f[0] ? probPct(f[1] / f[0]) : '-', st[0].toLocaleString(), st[0] ? probPct(st[1] / st[0]) : '-'];
+      }
+      cells.forEach(function (v) { tr.appendChild(HF.el('td', { class: 'num' }, v)); });
+      tb.appendChild(tr);
+    }
+    tbl.appendChild(tb);
+    var wrap = HF.el('div', { class: 'table-wrap' }); wrap.appendChild(tbl); box.appendChild(wrap);
+    var f4 = B.fix[3], f3 = B.fix[2], f5 = B.fix[4];
+    box.appendChild(HF.el('p', { class: 'tool-note' }, pre
+      ? 'In words: the 1979-2003 sample is every catalog event plus matched non-events, so it has far more events than the real population. It cannot give rates, only how well the bands separate the two groups: at 50 % or more nearly all the fixes are from events, below 5 % about half. The gust index drifts before 2001-02, so keep this within that era. ERA5 proxy, not observation.'
+      : 'In words: in ' + basinName + ', fixes the model put at 20 to 50 % were followed by hurricane force within 24 h ' + probPct(f3[1] / f3[0]) + ' of the time, 50 to 80 % ' + probPct(f4[1] / f4[0]) + ', and 80 % or more ' + probPct(f5[1] / f5[0]) +
+        '. Each probability was scored with its own season left out, so these are out-of-sample rates. “HF” here is the ERA5 proxy’s gust index at 71.7 kt (pipeline A), not OPC’s call. A low can have many fixes in the same band, so the lows columns are the cleaner count of storms.'));
+    var top = probShown.top || [];
+    if (top.length) {
+      var D = era5Data.allp;
+      box.appendChild(HF.el('h3', {}, 'Strongest lows in this selection (highest probability at any scored fix)'));
+      var ul = HF.el('ul', { class: 'prob-top' });
+      top.forEach(function (r) {
+        var li = HF.el('li'), txt = probPct(r.p / 1000) + ' | ' + (D.basin[r.t] ? 'Pacific' : 'Atlantic') + ' | ' + HF.era5.fixTimeLabel(D, r.k) + ' | ' + HF.seasonLabel(D.season[r.t]);
+        if (D.kind[r.t] === 0) {
+          var bt = HF.el('button', { type: 'button', class: 'btn' }, txt);
+          bt.title = 'Show this low alone, with its probability along the track';
+          bt.addEventListener('click', function () { showStormOnMap(null, D.id[r.t]); });
+          li.appendChild(bt);
+        } else li.appendChild(document.createTextNode(txt));
+        ul.appendChild(li);
+      });
+      box.appendChild(ul);
+    }
   }
 
   function appendProbLegend(box) {
@@ -1780,11 +1866,11 @@
     prob: {
       view: 'HF probability: a model’s chance that each low reaches hurricane force within 24 hours.',
       proxy: true,
-      read: 'Each short edge of a track is coloured by the model’s probability (under 5 % up to 80 % or more) that the low reaches a hurricane-force-equivalent gust, 71.7 kt in ERA5, within 24 hours of the later end. Scored at 00 and 12 UTC. Faint lines are low probability on purpose.',
-      data: 'ERA5 proxy tracks (pipeline A) with a model fitted to them, scored out of sample season by season. 2004-2025 covers every scored low, subject to the basin, month and season filters. 1979-2003 (a tick box) shows only the catalog events and their matched non-events, within that era only.',
+      read: 'Each short edge of a track is coloured by the model’s probability (under 5 % up to 80 % or more) that the low reaches a hurricane-force-equivalent gust, 71.7 kt in ERA5, within 24 hours of the later end. Scored at 00 and 12 UTC. One season is drawn at a time, with only the edges at 50 % or more by default, so the storms the model is worried about stand out; the table above the globe says how often hurricane force actually followed each band.',
+      data: 'ERA5 proxy tracks (pipeline A) with a model fitted to them, scored out of sample season by season. 2004-2025 covers every scored low, one season at a time (or all, which is crowded). 1979-2003 is a menu choice that shows only the catalog events and their matched non-events, within that era only.',
       caution: 'A model output on a proxy, not an observation or a forecast. Busy maps are hard to read; to compare the model storm by storm with the storms OPC actually analysed as hurricane force, use the table at the top of the ',
       cautionLink: { go: 'events', t: 'Events tab' },
-      more: [PROXY_PRE + ' Probabilities are read as shapes and rankings across a track, not as rates.']
+      more: [PROXY_PRE + ' For 2004-05 to 2025-26 the probabilities are out-of-sample (each season scored without itself), so the table gives real rates against the proxy’s own label; for 1979-2003 the sample is enriched in events and the bands are shape only.']
     },
     'atlas-boxes': {
       view: 'Atlas, boxes: where the time at hurricane force is spent.',
@@ -1967,6 +2053,7 @@
     renderExplain();
     document.getElementById('atlasTools').hidden = layer !== 'atlas';
     document.getElementById('probTools').hidden = layer !== 'prob' || !!state.focusStorm;
+    renderProbPanel();
     document.getElementById('atlasSrc').disabled = state.atlas.view === 'historic' || state.atlas.view === 'gust';
     document.getElementById('atlasField').hidden = state.atlas.view !== 'gust';
     document.getElementById('atlasFieldLabel').hidden = state.atlas.view !== 'gust';
@@ -3591,7 +3678,15 @@
       render();
     });
     document.getElementById('probMin').addEventListener('change', function (e) { state.probMin = Number(e.target.value); render(); });
-    document.getElementById('probPre').addEventListener('change', function (e) { state.probPre = e.target.checked; render(); });
+    var psel = document.getElementById('probSeason'), PT = window.HF_ERA5_PROBTABLE;
+    if (PT) {
+      for (var y = PT.seasons[1]; y >= PT.seasons[0]; y--) psel.appendChild(HF.el('option', { value: String(y) }, HF.seasonLabel(y)));
+      psel.appendChild(HF.el('option', { value: 'all' }, 'All 2004-05 to 2025-26 (busy)'));
+      psel.appendChild(HF.el('option', { value: 'pre' }, '1979-2003 (catalog events and matched non-events)'));
+      state.probSeason = PT.seasons[1];
+      psel.value = String(state.probSeason);
+    }
+    psel.addEventListener('change', function (e) { var v = e.target.value; state.probSeason = v === 'all' || v === 'pre' ? v : Number(v); render(); });
     document.getElementById('atlasView').addEventListener('change', function (e) { state.atlas.view = e.target.value; render(); });
     document.getElementById('atlasField').addEventListener('change', function (e) { state.atlas.field = e.target.value; render(); });
     document.getElementById('atlasPeriod').addEventListener('change', function (e) { state.atlas.period = e.target.value; render(); });

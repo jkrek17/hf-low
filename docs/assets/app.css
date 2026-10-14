@@ -1206,3 +1206,9 @@ fieldset.tele-field, .tele-field { margin: 0 0 var(--sp-3); }
   .explain { padding: var(--sp-3); }
   .explain-list > div { grid-template-columns: 1fr; gap: 0; }
 }
+
+/* HF probability panel (Map > HF probability): band table and strongest lows */
+.prob-panel { margin: var(--sp-3) 0; }
+.prob-panel h3 { font-size: var(--fs-base); margin: var(--sp-2) 0; }
+.prob-table tbody tr { cursor: default; }
+.prob-top { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--sp-2); }
