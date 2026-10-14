@@ -1,6 +1,6 @@
 # Storm-centred pattern score and analogs: pre-registration
 
-Status: **plan only. No field has been pulled and no patch has been read.** Written 2026-10-14 for Jason's question
+Status: **run 2026-10-14; results in README.md.** Plan text below was committed before any field was pulled. Written 2026-10-14 for Jason's question
 "take a 500 nm square around the storm, match it against previous HF lows, and score the comparison". ERA5 proxy,
 pipeline A, WeatherBench2 1.5 degree fields. Every score here is against the proxy's own gust index, not the archive.
 
@@ -99,9 +99,7 @@ outlook, RPSS against basin-month climatology.
 
 ## Deviations log
 
-(empty; any change after the first field is read goes here with the reason)
-
-## Status at commit
-
-Blocked before the pull: this session's network policy denies `storage.googleapis.com` (WeatherBench2) and `pypi.org`,
-and scipy, scikit-learn, joblib, gcsfs, numcodecs and matplotlib are not installed. Nothing has been run.
+- Climatology pull was 1.2 GB, not 0.5 GB (it holds three 30-day-chunked 3-level arrays); total pull 24.8 GB + 1.2 GB = 26.0 GB, still under the gate.
+- gcsfs does not work through the container proxy, so `common_patch.py` reads the same public bucket over plain HTTPS. Same bytes, same decoder.
+- Clarifications made before any outcome was read: (a) S2 training-row feature uses a leave-own-season-out composite (the test-row feature uses all training seasons), so the coefficient is not inflated by in-sample fitting; (b) "standardised patch" = each channel divided by its training standard deviation, then centred on the training mean; (c) S3 features are the neighbour fractions of gale, storm and hurricane force.
+- Post hoc, descriptive only (added after T1 came out above the prior): per-season gain, a position control (lat/lon harmonics added to BASE), and pattern-beyond-position. Not part of the FDR family and not used for the verdict.

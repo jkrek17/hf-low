@@ -1,0 +1,45 @@
+Fixes 32288, tracks 7379, seasons [np.int64(2014), np.int64(2015), np.int64(2016), np.int64(2017), np.int64(2018), np.int64(2019), np.int64(2020), np.int64(2021)] (n = 8); HF outcomes 1330 on 513 tracks
+Outlook class frequencies: below gale 0.381, gale 0.352, storm 0.225, hurricane force 0.041
+
+== Outlook RPSS vs basin-month climatology (LOSO, 8 seasons), 90% season-bootstrap CI
+  base         +0.3949  [+0.3840, +0.4061]
+  state        +0.3618  [+0.3511, +0.3717]
+  pc15         +0.4188  [+0.4074, +0.4293]
+  state_pc15   +0.3986  [+0.3886, +0.4085]
+  s1_env       +0.4187  [+0.4075, +0.4295]
+  s2_comp      +0.3982  [+0.3870, +0.4090]
+  s3_analog    +0.4027  [+0.3924, +0.4132]
+  s4_placebo   +0.3943  [+0.3834, +0.4051]
+  (reference) full model, 22-season fit, same fixes: +0.3951  (not like-for-like: more training seasons)
+
+== PRIMARY T1: BASE + PC15 minus BASE: +0.0239 [+0.0220, +0.0258]  verdict (pre-registered rule): pattern adds skill
+
+== Secondary (gain over BASE; BH-FDR over S1-S3)
+  S1 environment only (r >= 300 km)    +0.0239 [+0.0217, +0.0259]  p 0.001  q 0.001
+  S2 composite projection              +0.0033 [+0.0024, +0.0043]  p 0.001  q 0.001
+  S3 analog features                   +0.0078 [+0.0065, +0.0093]  p 0.001  q 0.001
+  S4 placebo (permuted patches)       -0.0005 [-0.0009, -0.0002]  (over-fit cost of 15 extra columns)
+
+== Descriptive: state-only + PC15 over state-only +0.0368 [+0.0342, +0.0393]
+
+== Gain of BASE+PC15 over BASE by class (Brier skill gain) and by subset
+  below gale       base BSS +0.353  pc15 BSS +0.381  gain +0.0278 [+0.0259, +0.0295]
+  gale             base BSS +0.186  pc15 BSS +0.203  gain +0.0163 [+0.0140, +0.0185]
+  storm            base BSS +0.326  pc15 BSS +0.344  gain +0.0173 [+0.0137, +0.0211]
+  hurricane force  base BSS +0.318  pc15 BSS +0.351  gain +0.0328 [+0.0280, +0.0386]
+  RPSS gain Atlantic               n  15412  +0.0260 [+0.0221, +0.0303]
+  RPSS gain Pacific                n  16876  +0.0219 [+0.0202, +0.0233]
+  RPSS gain track continues 24 h   n  20229  +0.0218 [+0.0189, +0.0251]
+
+== Analog calibration (k = 30, stand-alone P(hurricane force next 24 h) = share of the 30 nearest past fixes that reached it)
+  Brier skill vs basin-month climatology: analog alone +0.107 [+0.092, +0.122]; BASE logistic +0.318
+      bin     n  n_hf  forecast  observed
+0.00-0.00 18161   152     0.000     0.008
+0.00-0.03  6348   191     0.033     0.030
+0.03-0.07  3107   159     0.067     0.051
+0.10-0.17  3523   449     0.124     0.127
+0.17-0.27   839   247     0.224     0.294
+0.27-0.40   241    92     0.321     0.382
+0.40-1.01    69    40     0.436     0.580
+  reliability slope 1.12 (1 = perfect)
+  'about 6 in 20' check: fixes where 25-35% of neighbours reached HF: n 364, observed HF rate 0.341

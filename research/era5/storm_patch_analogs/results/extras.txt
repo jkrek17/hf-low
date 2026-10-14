@@ -1,0 +1,24 @@
+== Per-season RPSS gain of BASE+PC15 over BASE (post hoc, descriptive)
+  2014-15  n  3967  base +0.373  pc15 +0.393  gain +0.0196
+  2015-16  n  4159  base +0.410  pc15 +0.437  gain +0.0268
+  2016-17  n  4141  base +0.386  pc15 +0.410  gain +0.0245
+  2017-18  n  3987  base +0.368  pc15 +0.396  gain +0.0281
+  2018-19  n  4123  base +0.422  pc15 +0.441  gain +0.0191
+  2019-20  n  4038  base +0.387  pc15 +0.414  gain +0.0269
+  2020-21  n  3878  base +0.419  pc15 +0.444  gain +0.0250
+  2021-22  n  3995  base +0.391  pc15 +0.413  gain +0.0212
+  position control: BASE + position terms minus BASE +0.0125 [+0.0113, +0.0135]
+  position control: BASE + PC15 minus BASE +0.0239 [+0.0220, +0.0258]
+  pattern beyond position: BASE + position + PC15 minus BASE + position +0.0208 [+0.0184, +0.0229]
+  BASE + position + PC15 minus BASE +0.0332 [+0.0314, +0.0348]
+
+== Analog display: 1330 hurricane-force-outcome fixes, five other-season analogs each
+  outcome class of all analogs: below gale 0.159, gale 0.259, storm 0.418, hurricane force 0.164
+
+== Case storms (lowest minimum pressure at a 00/12 UTC fix)
+  track 388835 2020021600 atl 920.5 hPa, next-24 h class storm; analog outcomes: gale, storm, below gale, storm, storm
+  track 397733 2020123112 pac 923.7 hPa, next-24 h class hurricane force; analog outcomes: storm, storm, storm, storm, storm
+  track 339400 2014110800 pac 926.7 hPa, next-24 h class storm; analog outcomes: hurricane force, hurricane force, hurricane force, hurricane force, hurricane force
+  track 388706 2020020800 atl 929.9 hPa, next-24 h class storm; analog outcomes: hurricane force, storm, storm, storm, below gale
+  track 408685 2022031400 atl 930.4 hPa, next-24 h class hurricane force; analog outcomes: storm, storm, storm, storm, storm
+  track 408074 2022020712 atl 930.6 hPa, next-24 h class hurricane force; analog outcomes: storm, storm, storm, gale, gale
