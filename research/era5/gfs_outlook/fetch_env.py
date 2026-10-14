@@ -8,7 +8,7 @@ the 0.25 degree ARCO store), then env.derived() gives ws250, vadv500, eady, and 
   jet250  max 250 hPa wind speed within 1000 km (kt)       vadv500  mean 500 hPa absolute vorticity advection within 500 km (1e-9 s-2)
   eady    mean 850-500 hPa Eady growth rate within 500 km (day-1)
 (env.py is imported with gcsfs and numcodecs stubbed: its zarr readers are not used here; GFS HGT in gpm is the ERA5 z/g of env.py.)
-Work area GFS_WORK (default /home/claude/gfs_work): env/<cycle>.csv (written last = cycle done, resumable), env_missing/<cycle>.txt,
+Work area GFS_WORK (default: gfs_work in the system temp folder): env/<cycle>.csv (written last = cycle done, resumable), env_missing/<cycle>.txt,
 env_bytes.log (one line per file: cycle fLLL bytes). Grids are never stored. Hard stop when cumulative env_bytes.log exceeds 40 GB.
 usage: fetch_env.py [--workers N<=4] [--limit N] [--cycle YYYYMMDDCC]
 """
@@ -27,7 +27,7 @@ import env as E                         # intensity/env.py
 import hart
 from eccodes import codes_get, codes_get_values, codes_new_from_message, codes_release
 
-WORK = os.environ.get("GFS_WORK", "/home/claude/gfs_work")
+WORK = os.environ.get("GFS_WORK", os.path.join(__import__("tempfile").gettempdir(), "gfs_work"))
 LEADS = (0, 24)
 HARD_STOP = 40e9
 RECS = [("UGRD", "250 mb", "u250"), ("VGRD", "250 mb", "v250"), ("UGRD", "500 mb", "u500"), ("VGRD", "500 mb", "v500"),

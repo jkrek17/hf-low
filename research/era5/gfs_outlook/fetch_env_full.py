@@ -8,7 +8,7 @@ Per file (byte-range records, method of gfs_test/a_fetch.py; stale .idx -> messa
 Fields -> env.coarsen (1.5 degree) -> env.derived / env.features:
   B VTL VTU div300 sst sstgrad sst_t500 flux tcwv at each fix (heading from the previous 6 h of the track). SST = TMP surface over ocean (LAND == 0, ICEC < 0.15), NaN elsewhere.
   flux = LHTFL + SHTFL, upward-positive (no flux at lead 0: NaN). jet250 / vadv500 / eady come from part 1's table (their inputs are zero stand-ins here and discarded).
-Work area GFS_WORK (default /home/claude/gfs_work): envfull/<cycle>.csv (written last = done, resumable), envfull_missing/<cycle>.txt, envfull_bytes.log (cycle fLLL bytes; .idx included).
+Work area GFS_WORK (default: gfs_work in the system temp folder): envfull/<cycle>.csv (written last = done, resumable), envfull_missing/<cycle>.txt, envfull_bytes.log (cycle fLLL bytes; .idx included).
 Grids are never stored. HARD STOP when cumulative envfull_bytes.log exceeds 46 GB (Deviations 1).
 usage: fetch_env_full.py [--workers N<=4] [--limit N] [--cycle YYYYMMDDCC]    ;    fetch_env_full.py --assemble OUT.csv.gz
 """
@@ -26,7 +26,7 @@ import a_fetch as AF
 import env as E
 from eccodes import codes_get, codes_get_values, codes_new_from_message, codes_release
 
-WORK = os.environ.get("GFS_WORK", "/home/claude/gfs_work")
+WORK = os.environ.get("GFS_WORK", os.path.join(__import__("tempfile").gettempdir(), "gfs_work"))
 AF.WORK = WORK
 LEADS = (0, 24)
 HARD_STOP = 46e9
