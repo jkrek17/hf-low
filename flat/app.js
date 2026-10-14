@@ -27,7 +27,7 @@
     era5prob: false,   // ... coloured by P(HF within 24 h) instead of one flat colour
     era5focus: null,
     era5focusPan: false,   // rotate the globe to the focused track once it has loaded
-    atlas: { view: 'boxes', src: 'archive', field: 'annmax' },   // the Atlas layer
+    atlas: { view: 'boxes', src: 'archive', field: 'annmax', period: 'now' },   // the Atlas layer
     strong: { list: 'minp', basin: 'all' },   // the Strongest storms tab   // key of the ERA5 track picked from the Strongest list, drawn whatever the filters say
     monthShade: 'heat',     // By month shading: 'heat' (HF event track points) | 'all' (all lows, 2004-05 on) | 'off'
     monthHeatSrc: 'archive', // heat map source: 'archive' (2004-05 on) | 'era5' (1979-80 to 2003-04 proxy)
@@ -1223,7 +1223,8 @@
     atlas: { varName: 'HF_ATLAS',      loader: 'atlasLoader',     decode: function (r) { return r; } },
     allp:  { varName: 'HF_ERA5_ALLP',  loader: 'allpLoader',      decode: function (r) { return HF.era5.decodeAllP(r); } },
     gust:  { varName: 'HF_GUST_CLIMO', loader: 'gustLoader',      decode: function (r) { return r; } },
-    gustc: { varName: 'HF_GUST_CLASSES', loader: 'gustClassLoader', decode: function (r) { return r; } }
+    gustc: { varName: 'HF_GUST_CLASSES', loader: 'gustClassLoader', decode: function (r) { return r; } },
+    gustc79: { varName: 'HF_GUST_CLASSES_1979', loader: 'gustClass1979Loader', decode: function (r) { return r; } }
   };
   var era5Attached = {};                       // ev / nul: P(HF) already attached to the decoded tracks
   var era5Data = {}, era5Status = {};          // per set: decoded data; 'loading' | 'ready' | 'failed'
@@ -1335,7 +1336,15 @@
 
   function fmtLat(v) { return Math.abs(v) + '°' + (v < 0 ? 'S' : 'N'); }
   function fmtLon(v) { var x = v > 180 ? v - 360 : v; return Math.abs(x) + '°' + (x < 0 ? 'W' : 'E'); }
+  /** The 1979-80 to 2003-04 gust-class set (Period menu, class fields only): October to April, a separate within-era proxy view. */
+  var OLD_MONTHS = [1, 2, 3, 4, 10, 11, 12];
+  function gustOld() { return state.atlas.view === 'gust' && !!GUST_FIELDS[state.atlas.field].cls && state.atlas.period === 'old'; }
   function atlasMonthsLabel() {
+    if (gustOld()) {
+      var po = gustMonthsOn();
+      return !po.length ? 'no sampled month ticked (the 1979-2003 set has October to April only)' :
+        po.length === OLD_MONTHS.length ? 'October to April' : po.map(function (m) { return MONTHS_SHORT[m - 1]; }).join(', ');
+    }
     var on = Object.keys(state.months || {}).filter(function (k) { return state.months[k]; }).map(Number).sort(function (a, b) { return a - b; });
     return on.length ? on.map(function (m) { return MONTHS_SHORT[m - 1]; }).join(', ') : 'all months';
   }
@@ -1360,6 +1369,10 @@
   function gustMonthsOn() {
     var on = [], m;
     for (m = 1; m <= 12; m++) if (state.months && state.months[m]) on.push(m);
+    if (gustOld()) {                              // October to April only; none ticked = all seven; ticked but none sampled = empty
+      if (!on.length) return OLD_MONTHS.slice();
+      return on.filter(function (x) { return OLD_MONTHS.indexOf(x) >= 0; });
+    }
     if (!on.length) for (m = 1; m <= 12; m++) on.push(m);
     return on;
   }
@@ -1408,9 +1421,11 @@
     }
     if (view === 'gust') {
       var fld = state.atlas.field, F = GUST_FIELDS[fld], isCls = !!F.cls, bnd = gustBounds(fld), mons = gustMonthsOn();
-      if (!ensureEra5(isCls ? 'gustc' : 'gust')) return null;
-      var G = isCls ? window.HF_GUST_CLASSES : window.HF_GUST_CLIMO;
+      var old = gustOld();
+      if (!ensureEra5(isCls ? (old ? 'gustc79' : 'gustc') : 'gust')) return null;
+      var G = isCls ? (old ? window.HF_GUST_CLASSES_1979 : window.HF_GUST_CLASSES) : window.HF_GUST_CLIMO;
       out = { kind: 'grid', wins: [], lookup: null };
+      if (isCls && !mons.length) { out.lookup = function () { return null; }; return out; }   // 1979-2003 set with only May-Sep ticked
       var wins = basins.map(function (b) {
         var w = G.win[b], vals = w.f[fld], cls = new Uint8Array(isCls ? w.nlat * w.nlon : vals.length), q, i;
         if (isCls) {                              // hours per season (0.1 h units) summed over the months on screen
@@ -1442,7 +1457,7 @@
           if (isCls) {
             return '<b>' + fmtLat(la0) + '–' + fmtLat(la0 + w.dlat) + ', ' + fmtLon(lo0) + '–' + fmtLon(lo0 + w.dlon) + '</b><br>' +
               F.name + '-class gust (≥ ' + F.kt + ' kt, nominal proxy class): ' + val.toFixed(val >= 10 ? 0 : 1) + ' h per season, ' + atlasMonthsLabel() +
-              '<br>ERA5 proxy, 1° block of ocean cells, 00 and 12 UTC, 2004-05 to 2025-26' +
+              '<br>ERA5 proxy, 1° block of ocean cells, 00 and 12 UTC, ' + (old ? '1979-80 to 2003-04 (October to April; within-era only, not comparable in level with 2004-05 on)' : '2004-05 to 2025-26') +
               '<br>ERA5 reads low in extreme storms; a lower bound on true gusts';
           }
           return '<b>' + fmtLat(la0) + '–' + fmtLat(la0 + w.dlat) + ', ' + fmtLon(lo0) + '–' + fmtLon(lo0 + w.dlon) + '</b><br>' +
@@ -1659,7 +1674,8 @@
       var Gm = window.HF_GUST_CLIMO, Fn = GUST_FIELDS[state.atlas.field];
       if (Fn.cls) {
         return 'What this shows: how many hours per season the ERA5 gust reached the ' + Fn.name.toLowerCase() + ' class (' + Fn.kt + ' kt or more), ' + atlasMonthsLabel() +
-          ' (tick months in the month filter to pick one; unticked means the whole year, June to May). ERA5 PROXY, not direct observation. Instantaneous 10 m gust sampled at 00 and 12 UTC, 2004-05 to 2025-26 (22 seasons), ocean only, 1° blocks; each sample counts as 12 h. ' +
+          (gustOld() ? ' (tick months in the month filter to pick some; unticked means all of October to April). 1979-80 TO 2003-04 SET: ERA5 PROXY, not direct observation, and WITHIN-ERA ONLY. ERA5 gusts drift upward before 2001, so compare where the windy places are, not how many hours; never read a difference from the 2004-05 to 2025-26 maps as a change in climate. Instantaneous 10 m gust at 00 and 12 UTC, 25 seasons, October to April only, ocean only, 1° blocks; each sample counts as 12 h. ' :
+            ' (tick months in the month filter to pick one; unticked means the whole year, June to May). ERA5 PROXY, not direct observation. Instantaneous 10 m gust sampled at 00 and 12 UTC, 2004-05 to 2025-26 (22 seasons), ocean only, 1° blocks; each sample counts as 12 h. ') +
           'Gale ≥ 38 kt, storm ≥ 54 kt and hurricane force ≥ 71.7 kt are NOMINAL proxy classes on the gust index; the archive lists only hurricane-force storms, so gale and storm are not calibrated on observed events. ' +
           'The older ≥ 50 and ≥ 64 kt views are October to April shares of times, not hours, and sit between these classes. ERA5 reads low in extreme storms and sampling is 12-hourly, so every value is a lower bound. ' +
           'The colour edges are for one month and scale with the number of months shown. Coastal and sea-ice cells (the Greenland coast, Chukotka) are the least reliable and there is no terrain mask. Basin filter applies; season filter does not.';
@@ -1702,7 +1718,8 @@
         box.appendChild(rr);
       });
       box.appendChild(HF.el('p', { class: 'legend-note' }, GUST_FIELDS[state.atlas.field].cls
-        ? 'ERA5 proxy, nominal classes: reads low in extreme storms; a lower bound on true gusts. Instantaneous, 12-hourly, June to May.'
+        ? (gustOld() ? 'ERA5 proxy, 1979-80 to 2003-04, October to April, within-era only (levels drift upward before 2001; compare patterns, not amounts). Nominal classes; a lower bound on true gusts. Instantaneous, 12-hourly.'
+          : 'ERA5 proxy, nominal classes: reads low in extreme storms; a lower bound on true gusts. Instantaneous, 12-hourly, June to May.')
         : 'ERA5 proxy: reads low in extreme storms; a lower bound on true gusts. Instantaneous, 12-hourly, October to April.'));
     } else {
       box.appendChild(HF.el('h3', {}, 'ERA5 proxy candidates, 1979-2003'));
@@ -1795,6 +1812,13 @@
       data: 'ERA5 10 m gust at 00 and 12 UTC, 1 October to 30 April, 2004-05 to 2025-26, ocean only. Basin filter applies.',
       caution: 'ERA5 reads low in extreme storms, so every value is a lower bound. Coastal and sea-ice blocks (Greenland coast, Chukotka) are the least reliable and there is no terrain mask. The tropical-cyclone season is not sampled.'
     },
+    'atlas-gust-old': {
+      view: 'Atlas, 1979-2003 gust classes: where the sea surface saw gale, storm and hurricane-force gusts before the archive.',
+      proxy: true,
+      read: 'Same map as the 2004-05 to 2025-26 gust classes, built from the earlier 25 seasons: each 1° block shows hours per season at or above the gale, storm or hurricane-force class, October to April only. Compare where the windy places are, not how much.',
+      data: 'ERA5 10 m gust at 00 and 12 UTC, 1979-80 to 2003-04, October to April, ocean only. Basin filter applies; month filter picks months within October to April.',
+      caution: 'Within-era only: ERA5 gusts drift upward before 2001 and fewer observations went into ERA5 in the 1980s, so hours here are not comparable with the 2004-05 to 2025-26 map and a difference between the two is not a climate change. Gale and storm classes are nominal, ERA5 reads low in extreme storms, and the archive does not cover these seasons, so nothing here is confirmed by OPC.'
+    },
     'bymonth-heat-archive': {
       view: 'By month, heat map: where hurricane-force storms sit in each month of the year.',
       read: 'Step through January to December. The shading is where the track points of the archive’s hurricane-force events fall in that month, all seasons pooled, smoothed over about 3.5°. The colour scale is the same for every month, so a pale month really is quieter.',
@@ -1848,7 +1872,7 @@
       return state.monthShade === 'all' ? 'bymonth-all' : 'bymonth-off';
     }
     if (state.focusStorm && state.layer === 'prob') return 'storm';
-    if (state.layer === 'atlas') return 'atlas-' + (state.atlas.view || 'boxes');
+    if (state.layer === 'atlas') return 'atlas-' + (state.atlas.view || 'boxes') + (gustOld() ? '-old' : '');
     if (state.layer === 'playback') return 'playback-' + play.mode;
     return state.layer;
   }
@@ -1946,6 +1970,10 @@
     document.getElementById('atlasSrc').disabled = state.atlas.view === 'historic' || state.atlas.view === 'gust';
     document.getElementById('atlasField').hidden = state.atlas.view !== 'gust';
     document.getElementById('atlasFieldLabel').hidden = state.atlas.view !== 'gust';
+    var perOn = state.atlas.view === 'gust' && !!GUST_FIELDS[state.atlas.field].cls;
+    document.getElementById('atlasPeriod').hidden = !perOn;
+    document.getElementById('atlasPeriodLabel').hidden = !perOn;
+    document.getElementById('atlasPeriod').value = state.atlas.period;
     var fclear = document.getElementById('era5FocusClear');
     fclear.hidden = !(state.era5focus && layer === 'tracks');
     if (state.era5focus && layer === 'tracks') {
@@ -3566,6 +3594,7 @@
     document.getElementById('probPre').addEventListener('change', function (e) { state.probPre = e.target.checked; render(); });
     document.getElementById('atlasView').addEventListener('change', function (e) { state.atlas.view = e.target.value; render(); });
     document.getElementById('atlasField').addEventListener('change', function (e) { state.atlas.field = e.target.value; render(); });
+    document.getElementById('atlasPeriod').addEventListener('change', function (e) { state.atlas.period = e.target.value; render(); });
     document.getElementById('atlasSrc').addEventListener('change', function (e) { state.atlas.src = e.target.value; render(); });
     document.getElementById('cmpView').addEventListener('change', function (e) { state.cmp.view = e.target.value; state.cmp.sort = { key: e.target.value === 'opc' ? 'start' : 'when', dir: -1 }; render(); });
     document.getElementById('strongList').addEventListener('change', function (e) { state.strong.list = e.target.value; renderStrong(); });
