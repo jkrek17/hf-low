@@ -96,3 +96,22 @@ Logged in order, each tagged.
 2. **Before any outcome.** P3 classes the storm by pipeline A's **full-disc index** (`gust800_kt` >= 71.7), not by the
    footprint ERA5 maximum, because the footprint maximum is partial by construction. Scatterometer response is still
    measured on the footprint.
+3. **Before any outcome (2026-10-14, source fixed once scatterometer hosts became reachable).** Source is RSS ASCAT v02.1
+   daily 0.25 degree bytemaps (`data.remss.com/ascat`), one file per satellite per UTC day, each cell carrying its own
+   observation time (6 min steps), so the +-1.5 h rule is applied per cell. Metop-A (2007-03 to 2021-11), Metop-B
+   (2012-12 on), Metop-C (2019-07 on). Metop-A uses the `bmaps_v02.1` folder (the reprocessed `v02.1.1` folder holds no files
+   before 2016), so all three are on the same product version. Seasons 2004-05 to 2006-07 therefore have no scatterometer
+   pass (the registered QuikSCAT part is **not run**: it was optional, "if kept", and ASCAT-A/B/C already give three sensors
+   for P4); the sample is storms from 2007-03 on, and the season bootstrap resamples the seasons that have data. Inventory
+   13,059 daily files, 20.0 GB; 11,974 were opened (days with no sample fix in a window were skipped). Only cells within
+   800 km and +-1.5 h of a sample fix were kept (15.26 million cell rows).
+4. **Before any outcome.** Quality rule for "the product's own rain flag": cells with the **scatterometer rain flag** (bit 0 of
+   the product's rain byte) raised are dropped; the product carries no ambiguity flag. The radiometer-collocated rain code
+   and the sum-of-squares residual are **not** used as filters (no registered threshold, and radiometer rain would remove the
+   heaviest-rain storm sectors preferentially). A descriptive sensitivity with radiometer rain > 0 also dropped is reported
+   and enters no verdict. Wind is the product's 10 m speed (0.2 m/s steps) x 1.9438 kt per m/s; codes above 250 (land, ice,
+   no data) are not winds.
+5. **Before any outcome.** The shared cache decoder needed `numcodecs`, which cannot be installed here (no PyPI). `blosc_nolib.py`
+   decodes it with the system libzstd; R0 on the same 300 tracks reproduces `results/r0_recovery_300.csv` exactly (max
+   absolute difference 0.0 kt). Looked at before running: file counts and sizes, one day of one satellite to check the layout
+   (cell count only), nothing about wind values against ERA5.
