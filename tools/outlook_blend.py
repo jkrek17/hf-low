@@ -1,4 +1,4 @@
-"""GFE-style blend of 10 m sustained wind for the Outlook (second layer, not wired into the live page yet).
+"""GFE-style blend of 10 m sustained wind for the Outlook (second layer of the live page, built by tools/outlook_blend_live.py).
 
 Recipe, ported from jkrek17/awips-tools marine_wind/pipeline/build.py (read-only reference):
     base   GFS, IFS (ECMWF) and AIFS 10 m speeds, weighted at each point by member support: the share of the
@@ -11,9 +11,9 @@ Grids are the GFE page's: natl 18-67N 95W-10E, npac 18-67N 135E-115W, 0.25 degre
 Decoding uses tools/grib2_t53.py (GFS, GEFS) and tools/grib2_ccsds.py (ECMWF, through the system libaec), because
 eccodes cannot be installed here.
 
-    python3 tools/outlook_blend.py --cycle 2026101400 --steps 24 --out OUTDIR
+    python3 tools/outlook_blend.py --cycle 2026101400 --steps 24 --out OUTDIR    (keeps the 0.25 degree steps; the daily job is tools/outlook_blend_live.py)
 """
-import argparse, datetime as dt, json, os, random, sys, time
+import argparse, base64, json, os, random, sys, time, zlib
 from concurrent.futures import ThreadPoolExecutor
 import numpy as np, requests
 
@@ -26,6 +26,7 @@ GEFS = "https://noaa-gefs-pds.s3.amazonaws.com"
 EC = "https://ecmwf-forecasts.s3.eu-central-1.amazonaws.com"
 GEFS_MEMBERS = ["c00"] + ["p%02d" % i for i in range(1, 31)]
 CAP_KT, SUPPORT_KT, MIN_MEMBERS = 5.0, 5.0, 20
+BLEND_FIELDS = ("wind", "mean", "sigma", "boost", "gfs", "ecmwf", "aifs", "p34", "p48", "p64", "p48raw", "p64raw")
 STEPS = list(range(12, 97, 12))
 BASINS = {"natl": dict(north=67.0, south=18.0, west=-95.0, east=10.0),
           "npac": dict(north=67.0, south=18.0, west=135.0, east=245.0)}
@@ -162,47 +163,89 @@ def blend_step(ymd, hh, step):
 
 DAY_STEPS = {1: (12, 24), 2: (36, 48), 3: (60, 72), 4: (84, 96)}
 DAY_FIELDS = ("wind", "gfs", "ecmwf", "aifs", "sigma", "p34", "p48", "p64")
+SCALE = {"wind": 2, "gfs": 2, "ecmwf": 2, "aifs": 2, "sigma": 4, "p34": 1, "p48": 1, "p64": 1}   # stored = round(value x scale), uint8
+CELL = 4            # 0.25 degree cells per page cell (1 degree)
+LAT_MIN = 20.0      # the page's map shows 20N and north
 
 
-def pool2(a):
-    """0.25 degree grid -> 0.5 degree, max of each 2 x 2 block (edges padded)."""
-    a = np.pad(a, ((0, a.shape[0] % 2), (0, a.shape[1] % 2)), mode="edge")
-    return a.reshape(a.shape[0] // 2, 2, a.shape[1] // 2, 2).max(axis=(1, 3))
+def run_cycle(ymd, hh, steps=STEPS, cache=None, log=print):
+    """{step: {basin: {field: 0.25 degree array}}}. With cache (a folder) each step is saved as fNNN.npz and reused."""
+    res = {}
+    for step in steps:
+        f = os.path.join(cache, "f%03d.npz" % step) if cache else None
+        if f and os.path.exists(f):
+            z = np.load(f); res[step] = {b: {k: z["%s_%s" % (b, k)].astype(np.float32) for k in BLEND_FIELDS} for b in BASINS}; continue
+        t = time.time(); out, n = blend_step(ymd, hh, step)
+        log("+%dh %s in %.0fs; max wind natl %.1f npac %.1f kt" % (step, n, time.time() - t, out["natl"]["wind"].max(), out["npac"]["wind"].max()))
+        res[step] = out
+        if f:
+            os.makedirs(cache, exist_ok=True)
+            np.savez_compressed(f, **{"%s_%s" % (b, k): v.astype(np.float16 if k.startswith("p") else np.float32) for b, d in out.items() for k, v in d.items()})
+            json.dump(n, open(os.path.join(cache, "f%03d.json" % step), "w"))
+    return res
 
 
-def day_grids(outdir):
-    """Per basin and forecast day 1-4, the higher of the day's two 12-hourly valid times at 0.5 degrees, packed:
-    wind, gfs, ecmwf, aifs in 0.5 kt steps; sigma in 0.25 kt steps; p34, p48, p64 in whole percent (all uint8).
-    Returns {basin: {'lat0','lon0','res','ny','nx','days': {day: {field: uint8 array}}}} for the days whose steps exist."""
+def pool(a, n=CELL):
+    """Max of each n x n block (edges padded by repeating the last row/column)."""
+    a = np.pad(a, ((0, -a.shape[0] % n), (0, -a.shape[1] % n)), mode="edge")
+    return a.reshape(a.shape[0] // n, n, a.shape[1] // n, n).max(axis=(1, 3))
+
+
+def day_grids(results):
+    """Per basin and forecast day 1-4 the higher of the day's two 12-hourly valid times, as the highest value in each 1 degree cell, packed to uint8
+    (see SCALE). Returns {basin: {'lat0','lon0','res','ny','nx','days': {day: {field: uint8 array [ny, nx]}}}}; a day is left out when one of its steps is missing."""
     out = {}
     for b, B in BASINS.items():
-        days = {}
+        ny = int((B["north"] - LAT_MIN) * 4 // CELL); days = {}
         for d, steps in DAY_STEPS.items():
-            fs = [os.path.join(outdir, "f%03d.npz" % s) for s in steps]
-            if not all(os.path.exists(f) for f in fs): continue
-            Z = [np.load(f) for f in fs]
+            if not all(s in results for s in steps): continue
             rec = {}
             for k in DAY_FIELDS:
-                a = pool2(np.max([z["%s_%s" % (b, k)].astype(np.float32) for z in Z], axis=0))
-                rec[k] = np.clip(np.rint(a * (4 if k == "sigma" else 1 if k.startswith("p") else 2)), 0, 255).astype(np.uint8)
+                a = pool(np.max([results[s][b][k].astype(np.float32) for s in steps], axis=0))[:ny]
+                rec[k] = np.clip(np.rint(a * SCALE[k]), 0, 255).astype(np.uint8)
             days[d] = rec
         if days:
-            ny, nx = next(iter(days.values()))["wind"].shape
-            out[b] = dict(lat0=B["north"], lon0=B["west"], res=0.5, ny=ny, nx=nx, days=days)
+            out[b] = dict(lat0=B["north"], lon0=B["west"], res=1.0, ny=ny, nx=next(iter(days.values()))["wind"].shape[1], days=days)
     return out
 
 
+def pack_live(results, run, made):
+    """The page's data object: per basin (atl = natl, pac = npac) and day, one base64 deflate blob of the eight fields back to back (field-major)."""
+    g = day_grids(results); P = {"run": run, "made": made, "res": 1.0, "lat0": 67.0, "fields": list(DAY_FIELDS), "scale": [SCALE[k] for k in DAY_FIELDS], "basins": {}}
+    for b, key in (("natl", "atl"), ("npac", "pac")):
+        v = g.get(b)
+        if v is None: continue
+        P["basins"][key] = dict(lon0=v["lon0"], ny=v["ny"], nx=v["nx"],
+            days=[(base64.b64encode(zlib.compress(b"".join(v["days"][d][k].tobytes() for k in DAY_FIELDS), 9)).decode() if d in v["days"] else None) for d in (1, 2, 3, 4)])
+    return P
+
+
+def ready(ymd, hh, step=max(STEPS)):
+    """True when every source has its last step posted (HEAD on the index of each; GEFS control stands for the members)."""
+    urls = [GFS + "/gfs.%s/%s/atmos/gfs.t%sz.pgrb2.0p25.f%03d.idx" % (ymd, hh, hh, step),
+            GEFS + "/gefs.%s/%s/atmos/pgrb2sp25/gep30.t%sz.pgrb2s.0p25.f%03d.idx" % (ymd, hh, hh, step),
+            ec_base("ifs", "oper", "fc", ymd, hh, step) + ".index", ec_base("aifs-single", "oper", "fc", ymd, hh, step) + ".index",
+            ec_base("ifs", "enfo", "ef", ymd, hh, step) + ".index", ec_base("aifs-ens", "enfo", "cf", ymd, hh, step) + ".index",
+            ec_base("aifs-ens", "enfo", "pf", ymd, hh, step) + ".index"]
+    for u in urls:
+        for _ in range(6):
+            try:
+                r = _S.head(u, timeout=60)
+            except requests.RequestException:
+                time.sleep(2); continue
+            if r.status_code == 200: break
+            if r.status_code in (403, 404): return False
+            time.sleep(1)
+        else:
+            return False
+    return True
+
+
 def main():
-    ap = argparse.ArgumentParser(); ap.add_argument("--cycle", required=True); ap.add_argument("--out", required=True)
+    ap = argparse.ArgumentParser(description="Pull one cycle and keep the 0.25 degree steps (testing); the daily job uses tools/outlook_blend_live.py")
+    ap.add_argument("--cycle", required=True); ap.add_argument("--out", required=True)
     ap.add_argument("--steps", default=",".join(map(str, STEPS)))
-    a = ap.parse_args(); ymd, hh = a.cycle[:8], a.cycle[8:]; os.makedirs(a.out, exist_ok=True)
-    for step in [int(s) for s in a.steps.split(",")]:
-        f = os.path.join(a.out, "f%03d.npz" % step)
-        if os.path.exists(f): continue
-        t = time.time(); out, n = blend_step(ymd, hh, step)
-        np.savez_compressed(f, **{"%s_%s" % (b, k): v.astype(np.float16 if k.startswith("p") else np.float32) for b, d in out.items() for k, v in d.items()})
-        json.dump(n, open(os.path.join(a.out, "f%03d.json" % step), "w"))
-        print("+%dh %s in %.0fs; max wind natl %.1f npac %.1f kt" % (step, n, time.time() - t, out["natl"]["wind"].max(), out["npac"]["wind"].max()), flush=True)
+    a = ap.parse_args(); run_cycle(a.cycle[:8], a.cycle[8:], [int(s) for s in a.steps.split(",")], cache=a.out)
 
 
 if __name__ == "__main__":

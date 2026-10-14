@@ -1,7 +1,7 @@
 # Daily job for the experimental live outlook page (docs/outlook-live.html).
 #
 # Pulls the newest GFS 00 UTC run (NOAA open-data bucket, about 8 MB), shades it with tools/outlook_live.py, and when a new run is found commits only
-# docs/outlook-live-data.js and flat/outlook-live-data.js (about 8 KB each) straight to main, then starts the two publish workflows by hand.
+# docs/outlook-live-data.js and flat/outlook-live-data.js (about 15 KB each; plus the blend files below) straight to main, then starts the two publish workflows by hand.
 #
 # Why the explicit dispatches: a push made with GITHUB_TOKEN does not start other workflows, so pages.yml and publish-site.yml would never see this
 # commit. workflow_dispatch is the exception GitHub allows, hence `actions: write` and the two `gh workflow run` calls.
@@ -10,7 +10,12 @@
 # late GFS run. Outside October-April it does nothing (the percentages were measured in those months only). A failed pull fails the job (red run, no
 # commit); the page itself warns when its run is older than 36 hours.
 #
-# Jason approved this unattended publish on 2026-10-14 ("build it with A"). To pause it: disable this workflow in the Actions tab.
+# Second layer (added 2026-10-14 on Jason's "yes"): after the gust shading, tools/outlook_blend_live.py pulls the same run's GFS, ECMWF, AIFS, GEFS, ENS and AIFS ENS
+# 10 m wind (about 1.8 GB streamed, about 12 minutes), blends them the way the GFE wind page does and writes docs/outlook-live-blend.js and
+# flat/outlook-live-blend.js (about 190 KB each). It waits (exit 0) until every source has its +96 h posted, which for the ECMWF ensembles is usually after the 06:10
+# job, so the 08:40 job normally fills it. The page uses the blend only when its run equals the gust run, so cycles never mix.
+#
+# Jason approved this unattended publish on 2026-10-14 ("build it with A") and the blend layer the same day ("yes"). To pause it: disable this workflow in the Actions tab.
 
 name: Outlook live (daily)
 
@@ -36,7 +41,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
         with:
@@ -44,25 +49,32 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install numpy
-        run: python3 -m pip install numpy==1.26.4
+      - name: Install numpy, requests and libaec
+        run: |
+          python3 -m pip install numpy==1.26.4 requests
+          sudo apt-get update -qq && sudo apt-get install -y -qq libaec0
       - name: Pull the newest GFS run and shade it
         env:
           FORCE: ${{ inputs.force }}
         run: |
           if [ "$FORCE" = "true" ]; then python3 tools/outlook_live.py --force; else python3 tools/outlook_live.py; fi
+      - name: Blend GFS, ECMWF and AIFS 10 m wind for the same run
+        env:
+          FORCE: ${{ inputs.force }}
+        run: |
+          if [ "$FORCE" = "true" ]; then python3 tools/outlook_blend_live.py --force; else python3 tools/outlook_blend_live.py; fi
       - name: Commit to main and start the publish workflows
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          git add docs/outlook-live-data.js flat/outlook-live-data.js
+          git add docs/outlook-live-data.js flat/outlook-live-data.js docs/outlook-live-blend.js flat/outlook-live-blend.js
           if git diff --cached --quiet; then
             echo "No new run; nothing to commit."
             exit 0
           fi
           run=$(grep -o '"run":"[0-9]*"' docs/outlook-live-data.js | grep -o '[0-9]\{10\}')
           git -c user.name="outlook-live-bot" -c user.email="outlook-live-bot@users.noreply.github.com" \
-            commit -q -m "Outlook live: GFS run ${run} UTC" -m "Written by .github/workflows/outlook-live.yml (tools/outlook_live.py)."
+            commit -q -m "Outlook live: GFS run ${run} UTC" -m "Written by .github/workflows/outlook-live.yml (tools/outlook_live.py, tools/outlook_blend_live.py)."
           for attempt in 1 2 3 4; do
             if git push -q origin HEAD:main; then pushed=1; break; fi
             echo "Push rejected (main moved); rebasing and retrying."
