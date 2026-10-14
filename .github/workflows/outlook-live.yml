@@ -1,0 +1,10 @@
+name: Outlook live (stub)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  stub:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo stub
