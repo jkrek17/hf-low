@@ -1,0 +1,57 @@
+== analysis set (one best-coverage pass per storm, cover >= 0.40)
+       storms  seasons  cover_mean  hf_index
+basin                                       
+atl      2352       20    0.527213       265
+pac      1900       20    0.518991       165
+sensor of chosen pass: {'A': 1886, 'B': 1632, 'C': 734}  first/last season: 2006 2025
+
+== footprint maxima (kt): ERA5 vs scatterometer, by ERA5 index class
+            n  era5_fp_med  scat_med  scat_p90  share_scat_ge45  share_scat_ge50
+cls                                                                             
+<54      2424        41.12     31.88     40.82             0.04             0.01
+54-64     937        55.00     44.32     54.04             0.48             0.25
+64-71.7   461        63.88     52.87     62.20             0.80             0.61
+>=71.7    430        73.62     62.79     76.20             0.91             0.84
+
+== matched-quantile conversion (descriptive): scatterometer max at the quantile where ERA5 footprint max = x kt
+atl  ERA5 fp max  54.0 kt = quantile 0.634 -> scat 44.3 kt (ratio 0.82), n=2352
+atl  ERA5 fp max  64.0 kt = quantile 0.844 -> scat 54.8 kt (ratio 0.86), n=2352
+atl  ERA5 fp max  71.7 kt = quantile 0.929 -> scat 63.0 kt (ratio 0.88), n=2352
+pac  ERA5 fp max  54.0 kt = quantile 0.715 -> scat 42.8 kt (ratio 0.79), n=1900
+pac  ERA5 fp max  64.0 kt = quantile 0.876 -> scat 54.4 kt (ratio 0.85), n=1900
+pac  ERA5 fp max  71.7 kt = quantile 0.942 -> scat 61.4 kt (ratio 0.86), n=1900
+both ERA5 fp max  54.0 kt = quantile 0.670 -> scat 43.5 kt (ratio 0.81), n=4252
+both ERA5 fp max  64.0 kt = quantile 0.858 -> scat 54.8 kt (ratio 0.86), n=4252
+both ERA5 fp max  71.7 kt = quantile 0.934 -> scat 62.2 kt (ratio 0.87), n=4252
+
+== P4 effect sizes: ratio scat/ERA5 footprint max, ERA5 fp max >= 54 kt, all accepted passes, season-block 95% CI
+A: n=797 ratio 0.831 [0.822, 0.839]  seasons 2006-2021
+B: n=758 ratio 0.838 [0.831, 0.845]  seasons 2012-2025
+C: n=357 ratio 0.824 [0.816, 0.835]  seasons 2019-2025
+ratio by season (all sensors): {2006: 0.835, 2007: 0.821, 2008: 0.835, 2009: 0.814, 2010: 0.851, 2011: 0.809, 2012: 0.81, 2013: 0.841, 2014: 0.83, 2015: 0.831, 2016: 0.827, 2017: 0.853, 2018: 0.853, 2019: 0.83, 2020: 0.843, 2021: 0.832, 2022: 0.825, 2023: 0.826, 2024: 0.813, 2025: 0.855}
+slope of ratio on season (per decade): 0.0058 log units  (descriptive)
+
+== pointwise (cell pair) comparison on the analysis set
+cell pairs 8197048 pearson 0.941 slope wind on gust 0.769 mean wind/gust 0.784
+                  n  ratio  bias_kt
+latband                            
+(0, 40]   1220594.0  0.760   -6.512
+(40, 50]  2074424.0  0.776   -6.337
+(50, 60]  3045606.0  0.792   -5.646
+(60, 90]  1856424.0  0.798   -5.235
+                    n  ratio  bias_kt
+dband                                
+(0, 200]     590718.0  0.812   -5.200
+(200, 400]  1705110.0  0.790   -6.058
+(400, 600]  2630255.0  0.781   -5.996
+(600, 800]  3270965.0  0.778   -5.759
+
+== rain-flag losses (cells within 800 km and +-1.5 h of a sample fix)
+scatterometer rain flag: dropped 0.0089  Atlantic-side 0.0082  Pacific-side 0.01 (basin by cell longitude, approximate)
+scatterometer + radiometer rain: dropped 0.1033
+
+== POST HOC (not registered): robustness of P1 to footprint size
+atl rho within n_cells terciles: [0.935, 0.946, 0.957]
+atl partial rho given n_cells: 0.945
+pac rho within n_cells terciles: [0.899, 0.922, 0.941]
+pac partial rho given n_cells: 0.921
