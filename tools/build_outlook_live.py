@@ -13,6 +13,8 @@ Wire format of window.HF_LIVE (outlook-live-data.js, append-only):
   run 'YYYYMMDDHH' (GFS cycle), made (UTC time the file was written), days = four run-length strings of band indices (digit, count, comma) over grid order;
   an empty string means that forecast day could not be built;
   ov (added later) = four context overlays for forecast days 1..4, null where missing, same shape as ov in build_outlook_replay.py (tools/outlook_overlays.py).
+Second data file, docs/outlook-live-blend.js (window.HF_BLEND, about 190 KB, written by tools/outlook_blend_live.py from the same 00 UTC run, usually a few hours later): the blended 10 m wind layer;
+its wire format is in the docstring of tools/outlook_blend_live.py. The page uses it only when its run equals HF_LIVE.run.
 """
 import argparse
 import json
