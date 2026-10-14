@@ -23,6 +23,7 @@ Truth classes (below gale, gale, storm, HF): [6220, 6745, 4366, 836]; by season:
 
 == ERA5-fed comparison, overlap season 2021-22 (one season; illustration only): GFS fixes with an ERA5 patch for the matched ERA5 fix: 3473 of 3488
   gain of the pattern terms, ERA5-fed +0.0201, GFS-fed +0.0259 on the same 3473 fixes (ratio 1.29); no interval (one season)
+  RPSS on the same fixes: FULL7 ERA5-fed +0.3934, GFS-fed +0.3702; FULLPC7 ERA5-fed +0.4136, GFS-fed +0.3961
   Bias diagnostic (GFS minus ERA5 patch, matched fixes of 2021-22), per channel: mean difference, SD of ERA5 patch values, centre pixel mean difference
     a_z500 (m)    mean diff -2.49, ERA5 SD 120.31, centre diff -3.83, corr 0.984
     a_msl (hPa)   mean diff +0.43, ERA5 SD 10.01, centre diff +0.11, corr 0.973

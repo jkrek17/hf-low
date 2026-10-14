@@ -124,6 +124,8 @@ def main():
         ge = (BS.rps(Pe["FULL7"], yo, 4).sum() - BS.rps(Pe["FULLPC7"], yo, 4).sum()) / cl_o.sum()
         gg = (BS.rps(Pg["FULL7"], yo, 4).sum() - BS.rps(Pg["FULLPC7"], yo, 4).sum()) / cl_o.sum()
         out(f"  gain of the pattern terms, ERA5-fed {ge:+.4f}, GFS-fed {gg:+.4f} on the same {len(So)} fixes (ratio {gg / ge:.2f}); no interval (one season)")
+        rp = lambda Pm_: 1 - BS.rps(Pm_, yo, 4).sum() / cl_o.sum()
+        out("  RPSS on the same fixes: FULL7 ERA5-fed %+.4f, GFS-fed %+.4f; FULLPC7 ERA5-fed %+.4f, GFS-fed %+.4f" % (rp(Pe["FULL7"]), rp(Pg["FULL7"]), rp(Pe["FULLPC7"]), rp(Pg["FULLPC7"])))
         rows.append(dict(test="overlap_2021_22", gain=gg, lo90=np.nan, hi90=np.nan, note=f"ERA5-fed {ge:.4f}"))
         out("  Bias diagnostic (GFS minus ERA5 patch, matched fixes of 2021-22), per channel: mean difference, SD of ERA5 patch values, centre pixel mean difference")
         for i, nme in enumerate(["a_z500 (m)", "a_msl (hPa)", "a_u250 (m/s)", "a_v250 (m/s)"]):
