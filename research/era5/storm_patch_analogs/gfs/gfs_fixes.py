@@ -34,7 +34,6 @@ def main():
     S = Fm[(Fm.lead == 24) & Fm.ok].copy().reset_index(drop=True)
     print("matched lead 24 scored sample:", len(S), "(PR 185: 18167); cycles", S.cycle.nunique(), "seasons", S.season.value_counts().sort_index().to_dict())
     S.to_csv(os.path.join(HERE, "results", "gfs_fixes_lead24.csv.gz"), index=False)
-    Fm.to_pickle("/tmp/claude-0/work/Fm_all.pkl")
 
 
 if __name__ == "__main__":
