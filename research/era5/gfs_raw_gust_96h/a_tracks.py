@@ -17,7 +17,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "hf_history"))
 import track as T            # pipeline A linker; importing it has no side effects
 
-WORK = os.environ.get("GFS_WORK", "/home/claude/gfs_work")
+WORK = os.environ.get("GFS_WORK", os.path.join(__import__("tempfile").gettempdir(), "gfs_work"))
 R0, R1 = 60, 281
 LAT = 90 - 0.25 * np.arange(R0, R1)
 LON = 0.25 * np.arange(1440)
