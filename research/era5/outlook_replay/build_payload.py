@@ -3,7 +3,8 @@ the OPC HF/S fixes of the 96 h, and the leave-one-season-out band tables (built 
 GFS gust is a model forecast (PROXY for sustained wind); OPC's call is an analyst judgement. usage: build_payload.py DMAX_DIR"""
 import os, sys, json
 import numpy as np, pandas as pd
-sys.argv = [sys.argv[0], sys.argv[1], "/home/user/hf-low/data/hf_lows", "/dev/null"]
+REPO = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", ".."))
+sys.argv = [sys.argv[0], sys.argv[1], os.path.join(REPO, "data", "hf_lows"), "/dev/null"]
 import tabulate as T                                                       # reuses the grid, mask and max-within-radius
 HERE = os.path.dirname(os.path.abspath(__file__)); RES = os.path.join(HERE, "results"); dm = sys.argv[1]
 cases = pd.read_csv(os.path.join(RES, "replay_cases.csv"), dtype={"cycle": str})
