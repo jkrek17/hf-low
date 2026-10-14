@@ -71,8 +71,8 @@ def opc_match(fx, basin):
     if m.empty:
         return None
     best = m.groupby("ID").size().idxmax()
-    o = d[d.ID == best].sort_values("t")
     mm = m[m.ID == best]
+    o = d[(d.ID == best) & d.t.isin(mm.t)].sort_values("t")        # only the OPC fixes that sit on this low (within 200 nm of the track)
     hf = o[o.Category == "HF"]
     era_hf = fx[fx.gust >= HF]
     both = set(hf.t) & set(era_hf.t)
@@ -174,6 +174,11 @@ def fig_series2(fx, d24, t0, st, title, path):
                fontsize=8, loc="lower center", ncol=5, bbox_to_anchor=(0.5, 0.045), handlelength=1.2, columnspacing=1.2)
     fig.suptitle(title, fontsize=12, fontweight="semibold", x=0.01, ha="left", y=0.915)
     fig.savefig(path, dpi=100, bbox_inches="tight"); plt.close(fig)
+
+
+def quarter_shares(cells):
+    hf = cells[cells.g >= HF]
+    return [((np.sign(hf.x) == sx) & (np.sign(hf.y) == sy)).mean() * 100 if len(hf) else np.nan for _, sx, sy in QUAD]
 
 
 def fig_structure(fx, t0, st, cells, title, path):
@@ -330,7 +335,7 @@ def meteo(f, fx, d24, st, cells, shares, opc, basin):
     out["rank_n"] = len(hfx)
     # opc
     if opc:
-        s = (f"OPC's archive carries this low as event {opc['id']}: {opc['n_fix']} fixes, {opc['n_hf']} of them at hurricane force"
+        s = (f"OPC's archive carries this low as event {opc['id']}: {opc['n_fix']} of its fixes sit on this low (within 200 nm of the track), {opc['n_hf']} of them at hurricane force"
              + (f" ({hhmm(opc['hf_first'])} to {hhmm(opc['hf_last'])})" if opc["n_hf"] else "")
              + f". Its lowest analysed pressure was {opc['minp']:.0f} hPa at {hhmm(opc['t_minp'])}, against {f['minp']:.1f} hPa from ERA5 at {hhmm(f['t_minp'])}. "
              f"At the {opc['era_hf_in_opc']} of the proxy's {opc['n_era_hf']} hurricane-force-index fixes that OPC also has a fix for, OPC carried hurricane force on {opc['n_both']}. "
@@ -384,7 +389,7 @@ def page(f, fx, tx, opc, meteo_, shares, style, base):
 <header class="masthead"><div class="masthead-in"><h1>Storm review: {esc(lab)}</h1><a href="storm-reviews.html">&larr; All storm reviews</a></div></header>
 <main>
 <div class="note"><strong>ERA5 proxy, not direct observation.</strong> Tracks are pipeline A (found in ERA5 itself). The gust index is the highest ERA5 10 m gust over ocean within 800 km, a proxy for the sustained wind OPC warns on. Structure and forcing numbers are ERA5 at 1.5&deg; (WeatherBench2); maps and the wind field are ERA5 at 0.25&deg;. Distances are nautical miles.</div>
-<section id="storm" class="storm {cls}" style="margin-top:0">
+<section id="storm" class="storm {cls}">
   <h3><span class="rank">{b.replace("North ", "")} #{f["rank"]}</span><span class="basin-{cls}">{esc(lab)}</span>{nm}</h3>
   <div class="meta">Rank {f["rank"]} by lowest ERA5 central pressure in the {b}. Pipeline A track {f["track"]}.</div>
   {tiles}
@@ -392,8 +397,8 @@ def page(f, fx, tx, opc, meteo_, shares, style, base):
   <div class="sum"><div class="tag">1. The storm in plain words</div><p>{old.summary(f)}</p></div>
 </section>
 <section><div class="tag">2. Track and wind field</div>
-<figure class="fig"><div class="scroll"><a href="{base}-track.png"><img src="{base}-track.png" alt="Track and gust swath" loading="lazy"></a>
-<figcaption>Left: 6-hourly fixes coloured by central pressure, red rings where the gust index reached 71.7 kt. Right: highest ERA5 10 m gust at each point from 48 h before to 24 h after the lowest pressure (land included; black contour 71.7 kt).</figcaption></div></figure></section>
+<figure class="fig"><div class="scroll"><a href="{base}-track.png"><img src="{base}-track.png" alt="Track and gust swath" loading="lazy"></a></div>
+<figcaption>Left: 6-hourly fixes coloured by central pressure, red rings where the gust index reached 71.7 kt. Right: highest ERA5 10 m gust at each point from 48 h before to 24 h after the lowest pressure (land included; black contour 71.7 kt).</figcaption></figure></section>
 <section><div class="tag">3. How it developed</div>
 <p>{meteo_["phase"]}</p>
 <figure class="fig"><div class="scroll"><a href="{base}-series.png"><img src="{base}-series.png" alt="Six-panel development series" loading="lazy"></a></div>
@@ -477,7 +482,7 @@ def write_index(rows, outdir):
   <div class="tablewrap"><table class="idx">
   <thead><tr><th>Storm</th><th class="num">Lowest pressure (hPa)</th><th class="num">Fastest 24 h fall (hPa)</th><th class="num">Peak gust index (kt)</th><th class="num">Hours at HF strength</th><th>Source</th></tr></thead>
   <tbody id="rows">{"".join(tr)}</tbody></table></div>
-  <p class="muted">Hours at HF strength is the number of 6-hourly fixes with a gust index of at least 71.7 kt times six, counted from the first to the last such fix. Peak gust index is the highest ERA5 gust within 800 km over the ocean, one number per fix.</p>
+  <p class="muted">Hours at HF strength is the number of 6-hourly fixes with a gust index of at least 71.7 kt times six. Peak gust index is the highest ERA5 gust within 800 km over the ocean, one number per fix.</p>
 </div>
 {INDEX_METHOD}
 <footer><p class="muted">Seasons run 1 June to 31 May. Fields: WeatherBench2 ERA5 and ARCO-ERA5 (Google Cloud public data). <a href="index.html">Back to the archive</a></p></footer>
@@ -531,11 +536,14 @@ def build(work, fixes_csv, outdir, tracks):
         base = os.path.join(outdir, f"storm-review-{row.track}")
         b, lab = old.label(f); head = f"{lab} (ERA5 proxy, pipeline A)"
         slon = np.degrees(np.unwrap(np.radians(z["sw_lons"]))); slon = slon + 360 * np.round((fx.lonu.mean() - slon.mean()) / 360)
-        old.fig_track(fx, z["sw_gust"], z["sw_lats"], slon, polys, head, base + "-track.png")
-        fig_series2(fx, d24, t0, st, head, base + "-series.png")
-        old.fig_maps(z, polys, head + ": every 12 hours, 48 h before to 24 h after the lowest pressure", base + "-maps.png", fx, t0)
-        fig_maps_low(z, polys, head + ": 850 hPa temperature and 925 hPa wind", base + "-lower.png", fx, t0, oro)
-        shares = fig_structure(fx, t0, st, cells, head, base + "-structure.png")
+        if os.environ.get("HF_HTML_ONLY"):                  # text only: figures already drawn
+            shares = quarter_shares(cells)
+        else:
+            old.fig_track(fx, z["sw_gust"], z["sw_lats"], slon, polys, head, base + "-track.png")
+            fig_series2(fx, d24, t0, st, head, base + "-series.png")
+            old.fig_maps(z, polys, head + ": every 12 hours, 48 h before to 24 h after the lowest pressure", base + "-maps.png", fx, t0)
+            fig_maps_low(z, polys, head + ": 850 hPa temperature and 925 hPa wind", base + "-lower.png", fx, t0, oro)
+            shares = fig_structure(fx, t0, st, cells, head, base + "-structure.png")
         opc = opc_match(fx, f["basin"]) if t0.year >= 2004 else None
         m = meteo(f, fx, d24, st, cells, shares, opc, f["basin"])
         tx = dict(area=float(st.area72_nm2.max()))
@@ -550,6 +558,8 @@ if __name__ == "__main__":
         tracks = [str(t) for t in pd.read_csv(os.path.join(HERE, "storm_review_storms.csv")).track]
         rows = build(sys.argv[1], sys.argv[2], sys.argv[3], tracks)
         pd.DataFrame(rows).to_csv(os.path.join(HERE, "storm_review_facts.csv"), index=False)
-        quantize(sys.argv[3], rows); write_index(rows, sys.argv[3])
+        if not os.environ.get("HF_HTML_ONLY"):
+            quantize(sys.argv[3], rows)
+        write_index(rows, sys.argv[3])
     else:
         build(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4:])

@@ -206,7 +206,7 @@ def summary(f):
     if fh is not None:
         dur = (pd.Timestamp(f["last_hf"]) - fh) / pd.Timedelta(hours=1) + 6
         s += f"It first reached hurricane-force-equivalent gusts (index at least 71.7 kt) on {dt(f['first_hf'])} near {f['hf_lat']:.1f}&deg;N {abs(f['hf_lon']):.1f}&deg;{'W' if f['hf_lon'] < 0 else 'E'}, " \
-             f"was at that strength in {f['n_hf']} of its 6-hourly fixes (about {dur:.0f} h from first to last), and peaked at a gust index of {f['gust_idx']:.0f} kt on {dt(f['t_gust'])}. "
+             f"was at that strength in {f['n_hf']} of its 6-hourly fixes (about {dur:.0f} h, counting each 6-hourly fix as 6 h), and peaked at a gust index of {f['gust_idx']:.0f} kt on {dt(f['t_gust'])}. "
     pre_h = (t0 - pd.Timestamp(f["first_fix"])) / pd.Timedelta(hours=1)
     if pre_h < 48:
         s += f"The tracker only picks it up {pre_h:.0f} h before the lowest pressure, so its early development, and the 24 h fall above, are only partly captured. "
