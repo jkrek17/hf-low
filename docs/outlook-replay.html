@@ -74,6 +74,8 @@
   tr.cur td { background: var(--accent-soft); font-weight: 650; }
   .few { color: var(--ink-muted); font-style: italic; }
   .readout { min-height: 6.5em; }
+  .capline { margin-top: 8px; }
+  .side { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
   .limit { border-left: 3px solid var(--border-strong); padding-left: 10px; color: var(--ink-2); }
   .chk { display: inline-flex; gap: 6px; align-items: center; font-size: 14px; }
 </style>
@@ -108,9 +110,9 @@
   <div class="panel">
     <canvas id="map" role="img" aria-label="Map of the chosen basin shaded by how often OPC agreed a low was near, with OPC fixes marked"></canvas>
     <div class="legend" id="legend"></div>
-    <p class="muted" id="cap" style="margin-top:8px"></p>
+    <p class="muted capline" id="cap"></p>
   </div>
-  <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+  <div class="side">
     <div class="panel readout" aria-live="polite" id="readout"><span class="muted">Hover or tap the map for a point.</span></div>
     <div class="panel" id="daybox"></div>
     <div class="panel"><div class="tag" id="tabTag"></div><div class="tablewrap" id="tab"></div></div>
