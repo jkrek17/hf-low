@@ -352,6 +352,17 @@
 
   <!-- Climatology ------------------------------------------------------ -->
   <section class="panel" id="panel-clim" role="tabpanel">
+    <!-- "What this shows" for this tab: same component and styling as the Map
+         tab's #mapExplain, but fixed text (nothing here depends on a filter). -->
+    <aside class="explain" aria-label="What the Climatology tab shows">
+      <h2 class="explain-title">What this shows</h2>
+      <p class="explain-view">Climatology: how the archive&rsquo;s hurricane-force lows are spread over seasons, months, depth and latitude.</p>
+      <dl class="explain-list">
+        <div><dt>Reading it</dt><dd>Each card is one chart of the events the filters above select: events per season, the share that deepen explosively, the calendar-month cycle, lowest central pressure, time at hurricane force, fastest 24-hour deepening, events with no analyzed centre, and peak intensity by latitude. The cards are independent of each other.</dd></div>
+        <div><dt>Data</dt><dd>The OPC archive of hurricane-force lows, hand-maintained, in June&ndash;May seasons. The basin, season, month and pressure filters above apply.</dd></div>
+        <div><dt>Caution</dt><dd>These count archive events, not all storms. The first seasons are short-counted, not quiet, and analysts began logging developing-stage fixes in 2013&ndash;14 (Pacific) and 2017&ndash;18 (Atlantic), which lengthens tracks without changing the weather: see <button type="button" class="link-btn" data-goto-practice>the Method tab</button>. Season-to-season changes rest on fewer than about a hundred events a year, so read them as rough.</dd></div>
+      </dl>
+    </aside>
     <div class="chart-grid">
       <figure class="card chart-card chart-wide">
         <figcaption>
@@ -455,6 +466,17 @@
 
   <!-- Events ----------------------------------------------------------- -->
   <section class="panel" id="panel-events" role="tabpanel">
+    <!-- "What this shows" for this tab: same component and styling as the Map
+         tab's #mapExplain, but fixed text (nothing here depends on a filter). -->
+    <aside class="explain" aria-label="What the Events tab shows">
+      <h2 class="explain-title">What this shows</h2>
+      <p class="explain-view">Events: how the ERA5 model rated each OPC hurricane-force storm, then the full list of archive events. <span class="explain-proxy">ERA5 proxy, not direct observation.</span></p>
+      <dl class="explain-list">
+        <div><dt>Reading it</dt><dd>The top table, switched by the menu, shows either each OPC storm with the highest model probability of hurricane force (within 24 hours) before OPC&rsquo;s first hurricane-force fix and how many hours ahead it first reached 0.5, or high-probability proxy storms OPC never listed. Each row has a link to show that storm on the map. The lower table lists every archive event the filters select; the button downloads it as CSV.</dd></div>
+        <div><dt>Data</dt><dd>OPC archive events from 2004&ndash;05 on for the model comparison, matched to ERA5 proxy tracks (pipeline A) within 500 km of OPC&rsquo;s peak; storms with no matching track are counted but not scored.</dd></div>
+        <div><dt>Caution</dt><dd>The comparison is descriptive, not a forecast verification, and the model is run on a proxy. A storm the model never rated is often one the proxy never took to hurricane force. A proxy storm absent from OPC&rsquo;s list is not evidence that OPC missed it: that would need scatterometer, ship or buoy winds. &ldquo;Recorded&rdquo; columns in the lower table change with logging practice; &ldquo;HF&rdquo; columns compare across seasons.</dd></div>
+      </dl>
+    </aside>
     <!-- Model against the OPC storms (ERA5 proxy P(HF), see app.js renderCompare) -->
     <div class="panel-tools">
       <div class="filter">
@@ -505,6 +527,17 @@
        track on the map link to it. The data file is fetched when the tab is
        first opened. -->
   <section class="panel" id="panel-strong" role="tabpanel">
+    <!-- "What this shows" for this tab: same component and styling as the Map
+         tab's #mapExplain, but fixed text (nothing here depends on a filter). -->
+    <aside class="explain" aria-label="What the Strongest storms tab shows">
+      <h2 class="explain-title">What this shows</h2>
+      <p class="explain-view">Strongest storms: the most extreme ERA5 lows, ranked three ways. <span class="explain-proxy">ERA5 proxy, not direct observation.</span></p>
+      <dl class="explain-list">
+        <div><dt>Reading it</dt><dd>Pick a ranking: lowest central pressure, depth against the month&rsquo;s normal pressure, or the gust index. Pressure and depth show the top 25 per basin; the gust list shows the top 25 in each era. Select a date to show that storm on the map; storms with a written review link to it. The filters bar does not apply here.</dd></div>
+        <div><dt>Data</dt><dd>ERA5 reanalysis, pipeline A cyclone tracks, 1979&ndash;2025. The pressure and depth lists run across the whole period; the gust list is ranked within 1979&ndash;2000 and within 2004&ndash;2025 only.</dd></div>
+        <div><dt>Caution</dt><dd>ERA5 reads low in the most intense storms and fewer observations went into it in the 1980s, so a 1980s storm and a 2010s storm are not directly comparable, and the gust ranks never cross 2001. Tropical-cyclone-linked storms are included and flagged. Storm names are inferred from date and position, not recorded in the data.</dd></div>
+      </dl>
+    </aside>
     <div class="panel-tools">
       <div class="filter">
         <label for="strongList">Ranked by</label>
@@ -543,6 +576,17 @@
        control is a native element; the statistics card is a polite live
        region by way of #teleLive (see app.js, announceTele). -->
   <section class="panel" id="panel-tele" role="tabpanel">
+    <!-- "What this shows" for this tab: same component and styling as the Map
+         tab's #mapExplain, but fixed text (nothing here depends on a filter). -->
+    <aside class="explain" aria-label="What the Teleconnections tab shows">
+      <h2 class="explain-title">What this shows</h2>
+      <p class="explain-view">Teleconnections: whether a climate state (ENSO, NAO, PNA, AO, MJO) goes with a different pattern of hurricane-force lows.</p>
+      <dl class="explain-list">
+        <div><dt>Reading it</dt><dd>Start with the table of standard comparisons: a marked cell means part of the storm track differs from the archive by more than chance. The composite map shows where storm density differs; the regression keeps the index as a number and asks whether it shifts the whole distribution, and how large an effect this archive could have seen. A null result is a result, not a missing one.</dd></div>
+        <div><dt>Data</dt><dd>The OPC archive&rsquo;s complete seasons, against the climate indices on the page. The filters bar does not apply: the samples shown are the real ones.</dd></div>
+        <div><dt>Caution</dt><dd>A climate index changes slowly, so the independent sample is seasons, not storms, and with roughly 20 seasons only large shifts can be found (low power is marked). With many looks some cells pass by chance: treat an isolated hit as a lead, not a finding.</dd></div>
+      </dl>
+    </aside>
     <!-- Two ways of asking one question of the same events. The composite
          bins an index into thirds and tests ~150 map cells ("where does the
          density differ?"); the regression keeps the index continuous and
