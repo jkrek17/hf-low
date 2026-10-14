@@ -7,7 +7,8 @@ What it does (same method as research/era5/outlook_replay/, calibrated on five p
   * GFS 0.25 degree GUST:surface at f006..f096 every 6 h (NOAA open-data bucket, .idx byte ranges, our own GRIB2 reader tools/grib2_t53.py).
   * Day d (1..4) maximum = the four valid times 24(d-1)+6 .. 24d h, on a 0.5 degree ocean grid (land zeroed, 2x2 maximum), kept in 0.5 kt steps.
   * Maximum within R_d = 60/120/270/270 nm of each 1-degree ocean point, then the gust band (<40, 40-48, 48-56, 56-64, 64-72, 72-80, >=80 kt).
-  * Writes docs/outlook-live-data.js and flat/outlook-live-data.js (identical): run time, when it was made, four run-length band strings.
+  * Writes docs/outlook-live-data.js and flat/outlook-live-data.js (identical): run time, when it was made, four run-length band strings, and the
+    context overlays of tools/outlook_overlays.py (lows, trough axes, jet cores, Coupled flags) for forecast hours 24/48/72/96 (null where a lead failed).
     The percentages come from the page (tables from data/outlook_replay/replay_payload.json), not from this file.
 Does nothing (exit 0) outside October-April, or when the newest complete run is already in the data file; exits 1 if a pull fails.
 GFS gust is a model forecast and a proxy for the sustained wind OPC warns on; the page's percentages are shares of past point-days where OPC had an
@@ -182,7 +183,10 @@ def main():
         ok = [x == y for x, y in zip(days, c["days"])]; print("band strings equal to the replay payload, days 1-4:", ok)
         return 0 if all(ok) else 3
     made = now.strftime("%Y-%m-%dT%H:%MZ")
-    text = "window.HF_LIVE=" + json.dumps({"run": run, "made": made, "days": days}, separators=(",", ":")) + ";\n"
+    import outlook_overlays as V                                          # context overlays; a failure here leaves a day without them, never without shading
+    ov = V.for_cycle(day)
+    print(f"overlays for days 1-4: {[None if x is None else (len(x['lows']), len(x['jet']), len(x['trough'])) for x in ov]} (lows, jet runs, trough lines)")
+    text = "window.HF_LIVE=" + json.dumps({"run": run, "made": made, "days": days, "ov": ov}, separators=(",", ":")) + ";\n"
     for folder in (a.docs, a.flat):
         os.makedirs(folder, exist_ok=True)
         with open(os.path.join(folder, DATA_NAME), "w", encoding="utf-8") as f: f.write(text)

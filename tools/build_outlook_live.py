@@ -11,7 +11,8 @@ Wire format of window.HF_LIVE_STATIC (append-only; same names as window.HF_REPLA
   grid {lat, lon, basin}, radius_nm, truth_nm, bands_kt, tables_all[basin+day] = {hf, st, n, c}, coast.
 Wire format of window.HF_LIVE (outlook-live-data.js, append-only):
   run 'YYYYMMDDHH' (GFS cycle), made (UTC time the file was written), days = four run-length strings of band indices (digit, count, comma) over grid order;
-  an empty string means that forecast day could not be built.
+  an empty string means that forecast day could not be built;
+  ov (added later) = four context overlays for forecast days 1..4, null where missing, same shape as ov in build_outlook_replay.py (tools/outlook_overlays.py).
 """
 import argparse
 import json

@@ -15,6 +15,7 @@
     --bg: #f4f6f8; --panel: #ffffff; --ink: #14202b; --ink2: #4c5a67; --line: #d3dae0;
     --sea: #e6eef5; --land: #cfd5d1; --grat: #c3cfda; --accent: #0b4f8a; --accent-ink: #ffffff;
     --b1: #bfd9ee; --b2: #6fa8d8; --b3: #1f5fa6; --warn-bg: #fff3d6; --warn-ink: #6b4a00; --warn-line: #e6c36a;
+    --jet: #7a3fa0; --trough: #b2441f;
     --font: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif; --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
   }
   @media (prefers-color-scheme: dark) {
@@ -23,6 +24,7 @@
       --bg: #0e151c; --panel: #16202a; --ink: #e6edf3; --ink2: #9fb0bf; --line: #2a3744;
       --sea: #13202c; --land: #2b3632; --grat: #223140; --accent: #7db6ec; --accent-ink: #0e151c;
       --b1: #2a4d6e; --b2: #3f7fb8; --b3: #8fc4f2; --warn-bg: #2b2410; --warn-ink: #f0cf7a; --warn-line: #5a4a1c;
+      --jet: #c08ae6; --trough: #f08a5f;
     }
   }
   :root[data-theme="dark"] {
@@ -30,6 +32,7 @@
     --bg: #0e151c; --panel: #16202a; --ink: #e6edf3; --ink2: #9fb0bf; --line: #2a3744;
     --sea: #13202c; --land: #2b3632; --grat: #223140; --accent: #7db6ec; --accent-ink: #0e151c;
     --b1: #2a4d6e; --b2: #3f7fb8; --b3: #8fc4f2; --warn-bg: #2b2410; --warn-ink: #f0cf7a; --warn-line: #5a4a1c;
+    --jet: #c08ae6; --trough: #f08a5f;
   }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 var(--font);
@@ -62,6 +65,9 @@
   .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; margin-top: 8px; }
   .legend span { display: inline-flex; align-items: center; gap: 6px; }
   .sw { width: 18px; height: 12px; border: 1px solid var(--line); display: inline-block; }
+  .sw.hatch { background: repeating-linear-gradient(135deg, transparent 0 3px, var(--ink) 3px 4px); }
+  .sw.jet { background: color-mix(in srgb, var(--jet) 35%, transparent); }
+  .swl { width: 22px; border-top: 3px dashed var(--trough); display: inline-block; }
   .lmark { width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid var(--ink); background: var(--panel); display: inline-block; text-align: center; font: 700 10px/13px var(--font); }
   .lmark.hf { border-width: 3px; border-color: var(--accent); line-height: 10px; }
   .tw { overflow-x: auto; }
@@ -91,14 +97,20 @@
         <div class="seg" role="group" aria-label="Hazard" id="tgtSeg"><button type="button" data-t="hf" aria-pressed="true">Hurricane force</button><button type="button" data-t="st" aria-pressed="false">Storm force or stronger</button></div>
         <div class="seg" role="group" aria-label="Basin" id="basinSeg"><button type="button" data-b="atl" aria-pressed="true">Atlantic</button><button type="button" data-b="pac" aria-pressed="false">Pacific</button></div>
       </div>
-      <canvas id="map" role="img" aria-label="Map of the chosen basin shaded in three categories by how often OPC agreed a low was near, from the latest GFS run"></canvas>
+      <div class="bar">
+        <label class="chk"><input type="checkbox" id="o_lows" checked> Lows (GFS pressure minima)</label>
+        <label class="chk"><input type="checkbox" id="o_trough" checked> 500 hPa trough axis</label>
+        <label class="chk"><input type="checkbox" id="o_jet" checked> 250 hPa jet core</label>
+        <label class="chk"><input type="checkbox" id="o_coup" checked> Coupled hatch</label>
+      </div>
+      <canvas id="map" role="img" aria-label="Map of the chosen basin shaded in three categories by how often OPC agreed a low was near, from the latest GFS run, with lows, trough axis, jet core and coupled hatch"></canvas>
       <div class="legend" id="legend" aria-label="Probability bins"></div>
       <p class="small capline" id="cap"></p>
     </div>
     <div class="col">
       <div class="panel">
         <h2>How to read it</h2>
-        <p>Each shaded area is the chance that OPC had a hurricane-force (or storm-force) low within 324 nautical miles of a point on that forecast day, given the strongest forecast GFS gust near the point. &ldquo;Near&rdquo; is a set distance that grows with lead: 60 nautical miles on Day 1, 120 on Day 2, 270 on Days 3 and 4 (the smallest that caught at least 80% of hurricane-force gust area when the model low was out of place, ERA5 proxy, position error only). Areas are drawn from the model&rsquo;s own wind field, so a storm the tracker misses still shows.</p>
+        <p>Each shaded area is the chance that OPC had a hurricane-force (or storm-force) low within 324 nautical miles of a point on that forecast day, given the strongest forecast GFS gust near the point. &ldquo;Near&rdquo; is a set distance that grows with lead: 60 nautical miles on Day 1, 120 on Day 2, 270 on Days 3 and 4 (the smallest that caught at least 80% of hurricane-force gust area when the model low was out of place, ERA5 proxy, position error only). Areas are drawn from the model&rsquo;s own wind field, not from tracking a low, so a storm the tracker misses still shows.</p>
         <p>No shading is not &ldquo;safe&rdquo;: it means GFS gust stayed in a band where OPC agreed under 10% of the time, a lower chance, not a guarantee.</p>
       </div>
       <div class="panel">
@@ -112,7 +124,8 @@
       <div class="panel">
         <h2>What is real, what is not</h2>
         <p><strong>Wind measure.</strong> OPC warns on sustained wind. Our line is a GFS gust, a proxy, and OPC&rsquo;s hurricane-force call is an analyst&rsquo;s judgement, so &ldquo;OPC agreed&rdquo; is not &ldquo;the wind will be there&rdquo;.</p>
-        <p><strong>Not on this page.</strong> No storm centres or pressures, because the shading is tracker-free. No 500 hPa trough, 250 hPa jet or coupled hatch, because those need extra GFS fields this page does not pull. No gale shading, because there is no OPC truth for gale. Nothing past Day 4, because the rates stop at 96 h.</p>
+        <p><strong>Lows, trough, jet, hatch.</strong> Context only, no probability, drawn from the same GFS run at the end of the day shown (hours 24, 48, 72, 96). Lows are GFS pressure minima of 992 hPa or lower, for display; the shading never uses them. The trough axis is a simple finder and is often the west side of a storm&rsquo;s own upper low, not a separate trough. The jet core is 250 hPa wind of 110 kt or more. The hatch (about 500 km round a low) marks a low whose surroundings have both strong 500 hPa vorticity advection and strong low-level baroclinicity: cut points are the upper thirds of ERA5 proxy fixes of 2004&ndash;2026 (pipeline A, chosen after looking), applied here to GFS, which was not tested for this display. Among all those ERA5 cyclone fixes, the next 24 h reached storm force or stronger 41% of the time with coupled surroundings against 8% with quiet ones; that is a different population and horizon from the lows drawn here, so read it as a hint, not a rate for this map. Lows over high ground (Greenland, big mountains) are left out because their sea-level pressure is not real.</p>
+        <p><strong>Not on this page.</strong> No gale shading, because there is no OPC truth for gale. Nothing past Day 4, because the rates stop at 96 h.</p>
       </div>
     </div>
   </div>
@@ -146,7 +159,7 @@ window.HF_LIVE_STATIC = {"grid":{"lat":[74.75,74.75,74.75,74.75,74.75,74.75,74.7
   var legend = document.getElementById('legend');
   function paintLegend(extra) {
     var labs = ['10\u201330%', '30\u201350%', '50% or more'];
-    legend.innerHTML = labs.map(function (t, k) { return '<span><i class="sw" data-c="' + k + '"></i>' + t + '</span>'; }).join('') + '<span>Below 10%: no shading</span>' + (extra || '');
+    legend.innerHTML = labs.map(function (t, k) { return '<span><i class="sw" data-c="' + k + '"></i>' + t + '</span>'; }).join('') + '<span>Below 10%: no shading</span>' + '<span><i class="swl"></i>500 hPa trough axis</span><span><i class="sw jet"></i>250 hPa jet core (110 kt or more)</span><span><i class="sw hatch"></i>Coupled setup (context, not a probability)</span>' + (extra || '');
     Array.prototype.forEach.call(legend.querySelectorAll('i[data-c]'), function (e) { e.style.background = 'var(' + COLS[+e.dataset.c] + ')'; });
   }
   var cv = document.getElementById('map'), ctx = cv.getContext('2d'), geo;
@@ -197,6 +210,49 @@ window.HF_LIVE_STATIC = {"grid":{"lat":[74.75,74.75,74.75,74.75,74.75,74.75,74.7
     for (var la = 30; la <= 70; la += 10) { ctx.beginPath(); ctx.moveTo(0, py(la)); ctx.lineTo(geo.w, py(la)); ctx.stroke(); ctx.fillText(la + 'N', 3, py(la) - 2); }
     for (var lo = Math.ceil(v.lo0 / 20) * 20; lo < v.lo1; lo += 20) { ctx.beginPath(); ctx.moveTo(px(lo), 0); ctx.lineTo(px(lo), geo.h); ctx.stroke(); var lab = lo > 180 ? (360 - lo) + 'W' : lo < 0 ? (-lo) + 'W' : lo > 0 && lo < 180 ? lo + 'E' : '0'; ctx.fillText(lab, px(lo) + 2, geo.h - 3); }
   }
+  var OVK = { lows: true, trough: true, jet: true, coup: true };
+  function lonX(lon) { return st.b === 'pac' ? lon : (lon > 180 ? lon - 360 : lon); }
+  function drawOverlays(ov) {
+    if (!ov) return;
+    var v = geo.v, hp = document.createElement('canvas'); hp.width = hp.height = 8;
+    var hg = hp.getContext('2d'); hg.strokeStyle = css('--ink'); hg.globalAlpha = 0.55; hg.lineWidth = 1.4; hg.beginPath(); hg.moveTo(0, 8); hg.lineTo(8, 0); hg.stroke();
+    if (OVK.jet) {
+      ctx.fillStyle = css('--jet'); ctx.globalAlpha = 0.3;
+      (ov.jet || []).forEach(function (r) { for (var k = 0; k < r[2]; k++) { var lo = lonX(r[1] + 1.5 * k); if (lo < v.lo0 || lo > v.lo1) continue; ctx.fillRect(px(lo - 0.75), py(r[0] + 0.75), 1.5 * geo.sx + 0.5, 1.5 * geo.sy + 0.5); } });
+      ctx.globalAlpha = 1;
+    }
+    if (OVK.coup) {
+      ctx.fillStyle = ctx.createPattern(hp, 'repeat'); ctx.strokeStyle = css('--ink'); ctx.globalAlpha = 0.9; ctx.lineWidth = 0.8;
+      (ov.lows || []).forEach(function (l) {
+        if (!l[3]) return; var lo = lonX(l[1]); if (lo < v.lo0 || lo > v.lo1) return;
+        var ry = 500 / 111 * geo.sy, rx = 500 / (111 * Math.max(0.2, Math.cos(l[0] * Math.PI / 180))) * geo.sx;
+        ctx.beginPath(); ctx.ellipse(px(lo), py(l[0]), rx, ry, 0, 0, 7); ctx.fill(); ctx.stroke();
+      });
+      ctx.globalAlpha = 1;
+    }
+    if (OVK.trough) {
+      ctx.strokeStyle = css('--trough'); ctx.lineWidth = 2.4; ctx.setLineDash([7, 5]); ctx.lineJoin = 'round';
+      (ov.trough || []).forEach(function (ln) {
+        ctx.beginPath(); var on = false, prev = null;
+        ln.forEach(function (p) {
+          var lo = lonX(p[1]), ok = lo >= v.lo0 && lo <= v.lo1 && (prev === null || Math.abs(lo - prev) < 20);
+          if (ok) { if (on) ctx.lineTo(px(lo), py(p[0])); else ctx.moveTo(px(lo), py(p[0])); on = true; } else on = false; prev = lo;
+        });
+        ctx.stroke();
+      });
+      ctx.setLineDash([]);
+    }
+    if (OVK.lows) {
+      ctx.font = '11px "IBM Plex Mono", ui-monospace, monospace';
+      (ov.lows || []).forEach(function (l) {
+        var lo = lonX(l[1]); if (lo < v.lo0 || lo > v.lo1) return;
+        var x = px(lo), y = py(l[0]);
+        ctx.beginPath(); ctx.arc(x, y, 11, 0, 7); ctx.fillStyle = css('--panel'); ctx.fill(); ctx.lineWidth = 1.6; ctx.strokeStyle = css('--ink'); ctx.stroke();
+        ctx.fillStyle = css('--ink'); ctx.font = '700 13px "IBM Plex Sans", system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.fillText('L', x, y + 4.5);
+        ctx.font = '11px "IBM Plex Mono", ui-monospace, monospace'; ctx.textAlign = 'start'; ctx.fillText(l[2] + ' hPa', x + 14, y - 7);
+      });
+    }
+  }
   function drawSel() {
     var k = shown(); if (k < 0) return;
     ctx.strokeStyle = css('--ink'); ctx.lineWidth = 2.2; ctx.strokeRect(px(X[k]) - geo.sx / 2, py(G.lat[k]) - geo.sy / 2, geo.sx, geo.sy);
@@ -213,6 +269,7 @@ window.HF_LIVE_STATIC = {"grid":{"lat":[74.75,74.75,74.75,74.75,74.75,74.75,74.7
     for (var b = 0; b < 7; b++) { var few = tb.n[b] < 100 || tb.c[b] < 5; h += '<tr' + (b === band ? ' class="cur"' : '') + '><td>' + B[b] + ' kt</td><td class="n' + (few ? ' few' : '') + '">' + (few ? 'too few' : pct(tb.hf[b]) + '%') + '</td><td class="n' + (few ? ' few' : '') + '">' + (few ? 'too few' : pct(tb.st[b]) + '%') + '</td><td class="n">' + tb.n[b].toLocaleString('en-US') + '</td></tr>'; }
     return h + '</tbody></table>';
   }
+  ['lows', 'trough', 'jet', 'coup'].forEach(function (k) { document.getElementById('o_' + k).addEventListener('change', function () { OVK[k] = this.checked; draw(); }); });
   function cardHtml(k, b, tb, seasonsWords) {
     var p = tb[st.t][b], what = st.t === 'hf' ? 'hurricane-force' : 'storm-force or stronger';
     return '<div class="small">' + (st.hover >= 0 ? 'Point ' : 'Strongest point in view · ') + pointText(k) + ' · day ' + st.d + ' · peak GFS gust within ' + RD[st.d - 1] + ' nm: ' + B[b] + ' kt</div>' +
@@ -241,7 +298,7 @@ window.HF_LIVE_STATIC = {"grid":{"lat":[74.75,74.75,74.75,74.75,74.75,74.75,74.7
   function draw() {
     var band = bands[st.d - 1]; drawBase();
     if (band) drawShade(band, table(st.b, st.d));
-    drawLand(); if (band) drawSel();
+    drawLand(); drawOverlays(L && L.ov ? L.ov[st.d - 1] : null); if (band) drawSel();
   }
   function side() {
     var band = bands[st.d - 1], card = document.getElementById('card'), tb = table(st.b, st.d), k = shown();
