@@ -119,9 +119,9 @@ def gust_field(day, lead):
 def available(day):
     """A run is usable once its last lead (f096) has been written."""
     try:
-        get(f"{BUCKET}/gfs.{day}/00/atmos/gfs.t00z.pgrb2.0p25.f096.idx", tries=2); return True
-    except (Missing, RuntimeError):
-        return False
+        get(f"{BUCKET}/gfs.{day}/00/atmos/gfs.t00z.pgrb2.0p25.f096.idx", tries=3); return True
+    except Missing:
+        return False                    # not written yet; any other error propagates and fails the job
 
 def day_maxima(day, workers=4):
     """(4,110,720) uint8, 0.5 kt steps, 255 where a sample of that day is missing; plus the list of missing leads."""
@@ -174,8 +174,8 @@ def main():
         print(f"run {run} is already in {path}; nothing new"); return 0
     t0 = time.time(); d, miss = day_maxima(day); days = bands_from(d)
     print(f"run {run}: pulled and shaded in {time.time() - t0:.0f}s; missing leads {miss}; days available {[bool(x) for x in days]}")
-    if not any(days):
-        print("::error::no forecast day could be built"); return 1
+    if miss or not all(days):
+        print(f"::error::run {run} is incomplete (missing leads {miss}); nothing written, the page keeps the previous run"); return 1
     if a.check_against:
         P = json.load(open(a.check_against)); c = next((x for x in P["cases"] if x["cycle"] == day), None)
         if c is None: print("cycle not in payload"); return 2
