@@ -245,7 +245,7 @@ def fall(f):
     return f"{f['dp24_max']:.0f}" if f["dp24_max"] > 0 else "n/a"
 
 
-def write_page(rows, outdir):
+def page_style():
     with open(os.path.join(HERE, "..", "docs", "composites.html")) as f:
         c = f.read()
     style = c[c.index("<style>"):c.index("</style>") + 8]
@@ -282,7 +282,14 @@ def write_page(rows, outdir):
   .storm .fig { margin: 8px 0 10px; }
   .storm .fig img { border-radius: 6px; }
   .count { color: var(--ink-2); font-size: 13px; }
+  .blk { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; }
+  section .tag { margin-bottom: 4px; }
 </style>""")
+    return style
+
+
+def write_page(rows, outdir):
+    style = page_style()
     esc = html.escape
     secs = []
     tr = []
