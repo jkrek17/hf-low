@@ -1,0 +1,33 @@
+== A. Fold hygiene
+  Fitted inside each fold on the 7 training seasons only (checked in score_patch.py): channel scaling, patch mean, PCA, composite, analog library, M.Prep (median/clip/standardise), basin-month climatology baseline.
+  NOT fold-internal: the WeatherBench2 1990-2019 climatology used to form anomalies (an external, smooth 30-year mean that includes 2014-2019, six of the eight test seasons).
+  Raw z500 + msl patches only (no climatology, PCA per fold): gain over BASE +0.0227 [+0.0209, +0.0244]  (anomaly version: +0.0239)
+
+== B. Neighbour-low contamination
+  Fixes with another tracked low within 800 km at t: 0.206; at t+24 h: 0.250; either (asked-for rule): 0.378 (12196 fixes); HF outcomes among kept: 1100 of 1330
+  Gain of PC15 over BASE, evaluated on the kept fixes only (models trained on all): +0.0240 [+0.0220, +0.0260]
+  Retrained and scored on the kept fixes only (n 20092, HF outcomes 1100): BASE +0.436, PC15 +0.459, gain +0.0226 [+0.0210, +0.0246]
+  Same, outer-pattern-only (r >= 300 km): gain +0.0230 [+0.0211, +0.0250]
+  For reference, gain on the excluded fixes (neighbour present): +0.0238 [+0.0192, +0.0280]
+  Also excluding a neighbour at t+12: kept 18355 fixes; gain (evaluated on kept) +0.0236
+
+== C. Label radius (gust cache, ERA5 proxy)
+  Replication of the stored label from the cache at 800 km: agreement of the 4-class outcome 0.952; correlation of the peak gust 0.943 (stored label from the 0.25 degree tracker table)
+  300 km label class frequencies: below gale 0.483, gale 0.316, storm 0.170, hurricane force 0.031; HF outcomes 985
+  Label = peak gust within 300 km (retrained, same fixes): BASE +0.408, PC15 +0.436, gain +0.0277 [+0.0262, +0.0292]
+    outer pattern only (r >= 300 km): gain +0.0278 [+0.0262, +0.0296]
+    300 km label and no neighbour low (evaluated on kept): gain +0.0268 [+0.0247, +0.0286]
+
+== D. Where the RPSS gain sits (RPS = sum of Brier scores of the three cumulative events; gain / sum RPS_clim)
+  threshold 1 below gale | at least gale (P(class>=1)) share of RPSS gain +0.0140  (Brier skill vs clim: base +0.353 -> pc15 +0.381)
+  threshold 2 gale-or-less | storm or more (class>=2)  share of RPSS gain +0.0071  (Brier skill vs clim: base +0.461 -> pc15 +0.479)
+  threshold 3 storm-or-less | HF (class>=3)            share of RPSS gain +0.0028  (Brier skill vs clim: base +0.318 -> pc15 +0.351)
+  (the three shares add to the total RPSS gain; the RPSS gain is relative to the whole climatology RPS, so thresholds with more variance weigh more)
+
+== E. Per-season gains and interval methods
+  per-season gain: 2014-15 +0.0196, 2015-16 +0.0268, 2016-17 +0.0245, 2017-18 +0.0281, 2018-19 +0.0191, 2019-20 +0.0269, 2020-21 +0.0250, 2021-22 +0.0212
+  pooled +0.0239; across seasons mean +0.0239, SD 0.0035, range +0.0191..+0.0281
+  leave-one-season-out pooled gain: +0.0233 .. +0.0246
+  90% interval, method 1 (as reported): resample 8 seasons with replacement 2000 times, pool the per-season loss sums, 5-95 percentile: +0.0219 .. +0.0258
+  90% interval, method 2: t interval on the 8 per-season gains (t7 = 1.89): +0.0216 .. +0.0262
+  Both treat seasons as independent and fixed the model (15 PCs, k = 30, C = 1) before the data were read; neither includes uncertainty from the ERA5 proxy or from choices not tried. Within a season the 4,000 fixes are strongly autocorrelated, which is why seasons, not fixes, are resampled.

@@ -30,6 +30,17 @@ Population: 32,288 fixes (00/12 UTC) on 7,379 tracks, Oct-Apr of 2014-15 to 2021
 - The pattern similarity is about structure more than outcome: across the 1,330 HF-outcome fixes the five closest other-season analogs reached HF 16%, storm 42%, gale 26%, below gale 16% of the time (base rate for HF is 4%).
 - `results/analogs_hf_fixes.csv.gz`: five closest other-season analogs for every HF-outcome fix. `results/case_*.png`: six lowest-pressure storms (chosen by pressure before looking at analogs) beside their five analogs.
 
+## Audit (post hoc, requested after the result; `audit.py`, `results/audit.txt`)
+
+The gain survives every check. Existing patches and the local gust cache only; no pull.
+
+- **Fold hygiene:** scaling, PCA, composite, analog library, imputation and the climatology baseline are all fitted on the 7 training seasons inside each fold. The one external piece is the WeatherBench2 1990-2019 climatology behind the anomalies (it includes six of the eight test seasons). Using raw z500 and sea-level pressure (no climatology) with the PCA refit per fold gives +0.0227 [+0.0209, +0.0244] vs +0.0239.
+- **Neighbour lows:** 37.8% of fixes have another tracked low within 800 km at t or t+24 h (own position at that time). Excluding them (20,092 fixes, 1,100 HF outcomes), retrained: +0.0226 [+0.0210, +0.0246]; outer pattern only +0.0230. On the excluded fixes alone +0.0238. Not tested: a tight gradient against a high with no tracked low.
+- **Label radius (gust cache; the 800 km label replicates at 95% class agreement):** peak gust within 300 km (HF outcomes 985): +0.0277 [+0.0262, +0.0292], and +0.0268 with neighbour lows excluded. The gain does not come from far-away winds.
+- **Where the RPSS gain sits:** 59% (+0.0140) at the gale / below-gale boundary, 30% (+0.0071) at storm vs gale, 12% (+0.0028) at hurricane force vs storm. Most of the score gain is at the gale boundary, not HF. Hurricane-force Brier skill still goes +0.318 to +0.351.
+- **Intervals:** per-season gains +0.019 to +0.028 (SD 0.0035); leave-one-season-out pooled +0.0233 to +0.0246. The reported interval resamples the 8 seasons 2000 times; a t interval on the 8 season gains gives [+0.0216, +0.0262]. The interval is tight because the gain is nearly the same every season; it treats seasons as independent, takes the 15-PC / k = 30 design as fixed, and says nothing about the ERA5 proxy or a different 8 seasons.
+- Fresh agent recomputed the per-threshold split, the neighbour flags and gains, and the season table; not independently checked: raw-patch variant and the 300 km label.
+
 ## Limits
 
 ERA5 proxy, not validated against observations; ERA5 patches in, ERA5 gust out (a live product needs GFS patches and a tracker; the earlier full-model test kept ~85% of ERA5 gain on GFS, not tested for patches). 1.5 degree grid: synoptic pattern only. 8 seasons, one more look at data used before. North-up patches (not rotated to motion). The 15 PCs are not interpreted physically.
