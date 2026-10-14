@@ -1,0 +1,8 @@
+Descriptive sensitivity (not in the verdict): cells with radiometer rain code > 1 also dropped (10.3% of cells lost, vs 0.9% for the registered scatterometer flag).
+12,310 footprints, 4,360 at >=40% coverage.
+                     test  estimate     lo95      hi95        p    n     q_BH
+               P1 rho atl  0.948540 0.940154  0.954208 0.000000 1962 0.000000
+               P1 rho pac  0.931037 0.917474  0.941010 0.000000 1488 0.000000
+         P2 AUC (>=45 kt)  0.976019 0.972220  0.979394 0.000000 3450 0.000000
+ P3 HF minus matched (kt) 10.887690 9.766840 12.274844 0.000999  314 0.001249
+P4 sensor heterogeneity F  1.675111      NaN       NaN 0.318999 4360 0.318999
