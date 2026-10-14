@@ -17,7 +17,7 @@ Three things have already gone wrong here, each caught late:
 - A README went on saying "there is no calibrated gust index" after one had been committed beside it.
 - A tracker was calibrated on the part of the archive where deepening had already finished, so it refused to follow exactly the storms the project exists to measure. A guard against one bias produced a worse one in the other direction.
 
-Each step below exists to stop one of these from happening again.
+Each step below exists to stop one of these from happening again. The full record, with what each failure was turned into, is in `failures/`; `python3 tools/failures.py tally` shows whether the project is repeating itself.
 
 ## The loop
 
@@ -25,7 +25,7 @@ Each step below exists to stop one of these from happening again.
 
 Do what `CLAUDE.md` says under "Every session, first". Then answer three questions before touching anything:
 
-- **Is someone already on this?** Look in `STATUS.md` for a thread that owns the topic. If one exists, extend that branch. If you believe a second approach is warranted, write one line in `STATUS.md` saying why it is deliberate before you start. Parallel implementations are allowed; accidental ones are the problem.
+- **Is someone already on this?** Look in `STATUS.md` for a thread that owns the topic (the `hf-scout` subagent does this inventory quickly and cheaply). If one exists, extend that branch. If you believe a second approach is warranted, write one line in `STATUS.md` saying why it is deliberate before you start. Parallel implementations are allowed; accidental ones are the problem.
 - **What does the ledger say exists and does not exist?** Believe result files and commit bodies over README prose when they disagree, and note the disagreement for step 5.
 - **Is anything you need gated?** A gate in `STATUS.md` ("not safe to compare across seasons", "flag, not a finding") binds your work too. Building on a gated result needs the gate closed first, with evidence, or the dependence stated in your output.
 
@@ -61,6 +61,8 @@ Three questions to put to every result before it goes out. Each has a failure in
 
 For any hypothesis test against a predictor, follow `hf-preregistered-test` (plan committed first, lagged indices, season-level n, FDR, power). For field composites, follow `hf-storm-composites` before pulling anything.
 
+Recomputing the numbers and judging the claims are two jobs. A verifier answers "is this number what these files produce?" The `hf-reviewer` subagent answers "does what we are about to say follow from what was found?" and runs at high effort on a stronger model, after the verifier and before anything is merged or entered in the ledger. `hf-result-closeout` has the order.
+
 Report each check as passed, failed, or not checked with the reason. "Not checked" is acceptable. Reporting an unchecked number as established is not.
 
 ### 5. Close
@@ -68,6 +70,8 @@ Report each check as passed, failed, or not checked with the reason. "Not checke
 - Update `STATUS.md` on `main` (its own small pull request when your work is on a research branch): heads, what exists, gates opened or closed, what is unfinished, what superseded what.
 - Search for sentences your change made false: `git grep -n -i -E "there is no|does not exist|not yet|still starts|no .* exists"` over READMEs and docstrings in the area you touched. Fix them in the same commit.
 - When a number replaces an earlier one, the commit body says which and why ("supersedes 16% in <hash>: the calibration sample was wrong").
+- Log every correction in `failures/` and convert it, as `CLAUDE.md` says under "Every session, last". A second failure of the same class means the workflow changes, in a pull request titled "Upgrade for review:".
+- If the job taught you a procedure that the next thread would otherwise rediscover, put it in the skill it belongs to (or a new one) in the same pull request series. Keep skills to procedure and rules; current numbers stay in the ledger.
 - A finished, verified research PR into the integration branch is merged by its own thread (Jason's standing instruction); anything into `main` beyond a `STATUS.md`-only ledger PR, and anything that deploys, stays a draft until Jason says. `hf-result-closeout` has the order of operations.
 - Forward a finished result to the Science Q&A document thread (through the coordinator).
 - Report to Jason briefly: what was produced, which checks passed and which were not run, assumptions made, and what is waiting on him.
@@ -85,6 +89,7 @@ Report each check as passed, failed, or not checked with the reason. "Not checke
 | Build and backfill (research branches) | `python3 tests/hf_lows/test_hf_lows.py` |
 | Regenerate `flat/` | `python3 tools/publish.py --no-fetch --deploy flat --flat --yes`, then do not commit `flat/.awips-publish-manifest.json` |
 | Page validity, as the downstream CI runs it | `npx html-validate@11.15.0 docs` |
+| Invariants and the failure library | `python3 tests/invariants/run.py` |
 
 - Every build stamps a new `generated` time and `build` object, so a plain diff always shows a change. To compare two builds, drop those two fields first. `tools/publish.py` prints a delta report that already does this.
 - After changing `docs/`, regenerate `flat/` in the same commit. The Pages workflow fails when they drift, because a forecaster copies `flat/` to production by hand.
