@@ -55,6 +55,7 @@
     <a class="badge badge-link" href="storm-reviews.html" title="ERA5 proxy case studies of the ten deepest lows: track, development, weather maps every 12 hours, gust swath">Storm reviews</a>
     <a class="badge badge-link" href="environment-model.html" title="ERA5 proxy model of the chance a low reaches hurricane force within 24 hours">Storm model</a>
     <a class="badge badge-link" href="bomb-environment.html" title="ERA5 proxy environment check: where a storm sits on jet-and-trough and jet-and-baroclinicity diagrams, and its 24-hour gale, storm and hurricane-force outlook">Environment check</a>
+    <a class="badge badge-link" href="what-we-learned.html" title="One-page summary for forecasters: what the research found usable, what came back empty, and why the scores stop where they do">What we learned</a>
     <span class="badge badge-warn" title="Not an official product. Derived from a hand-maintained archive.">Experimental</span>
     <span class="badge badge-env" id="envBadge" hidden></span>
     <button type="button" id="themeToggle" class="icon-btn" aria-label="Switch colour theme" title="Switch colour theme">
@@ -194,16 +195,17 @@
       <script type="text/plain" id="era5CmpLoader" src="era5-compare.js"></script>
       <button type="button" class="btn" id="fitBounds">Fit to events</button>
       <div class="atlas-tools" id="probTools" hidden>
-        <label class="check" title="Before 2004 the tables score only the catalog events and their matched null cases, for comparison within that era">
-          <input type="checkbox" id="probPre" checked> include 1979-2003 (catalog events and matched null cases only; ERA5 proxy)
-        </label>
+        <div class="filter">
+          <label for="probSeason">Season</label>
+          <select id="probSeason"></select>
+        </div>
         <div class="filter">
           <label for="probMin">Show edges at or above</label>
           <select id="probMin">
             <option value="1">All (including under 5 %)</option>
             <option value="2">5 % and above</option>
-            <option value="3" selected>20 % and above</option>
-            <option value="4">50 % and above</option>
+            <option value="3">20 % and above</option>
+            <option value="4" selected>50 % and above</option>
           </select>
         </div>
         <script type="text/plain" id="allpLoader" src="era5-allprob.js"></script>
@@ -226,6 +228,11 @@
           <option value="f64">Share of times at or above 64 kt</option>
           <option value="f717">Share of times at or above 71.7 kt</option>
         </select>
+        <label for="atlasPeriod" id="atlasPeriodLabel" hidden>Period</label>
+        <select id="atlasPeriod" hidden>
+          <option value="now">2004-05 to 2025-26, all months</option>
+          <option value="old">1979-2003, Oct to Apr (proxy, within-era)</option>
+        </select>
         <label for="atlasSrc">Source</label>
         <select id="atlasSrc">
           <option value="archive">OPC archive (2004-05 to 2025-26)</option>
@@ -235,7 +242,9 @@
       <script type="text/plain" id="atlasLoader" src="atlas.js"></script>
       <script type="text/plain" id="gustLoader" src="gust-climo.js"></script>
       <script type="text/plain" id="gustClassLoader" src="gust-classes.js"></script>
+      <script type="text/plain" id="gustClass1979Loader" src="gust-classes-1979.js"></script>
       <p class="tool-note" id="mapNote"></p>
+      <div id="probPanel" class="prob-panel" hidden></div>
       <button type="button" class="btn" id="focusBack" hidden>Back to all tracks</button>
       <a class="btn btn-link" id="focusEnv" href="bomb-environment.html" hidden>Environment check for this storm</a>
       <button type="button" class="btn" id="era5FocusClear" hidden>Clear highlighted storm</button>
@@ -1036,6 +1045,7 @@
 
 <script src="hf-lows.js"></script>
 <script src="teleconnections.js"></script>
+<script src="era5-probtable.js"></script>
 <script src="util.js"></script>
 <script src="teleconnect.js"></script>
 <script src="composite.js"></script>
