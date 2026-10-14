@@ -6,7 +6,7 @@ d = pd.read_csv(os.path.join(RES, "point_days.csv"), dtype={"cycle": str})
 cyc = sorted(d.cycle.unique()); season = {c: (int(c[:4]) if int(c[4:6]) >= 10 else int(c[:4]) - 1) for c in cyc}
 parts = []
 for tag in ("Atl", "Pac"):
-    a = pd.read_csv(f"/home/user/hf-low/data/hf_lows/HF_Data_-_{tag}.csv", dtype={"date": str})
+    a = pd.read_csv(os.path.join(HERE, "..", "..", "..", "data", "hf_lows", f"HF_Data_-_{tag}.csv"), dtype={"date": str})
     a = a[a.date.str.fullmatch(r"\d{10}", na=False)].copy(); a["t"] = pd.to_datetime(a.date, format="%Y%m%d%H", errors="coerce"); parts.append(a.dropna(subset=["t"]))
 A = pd.concat(parts); H = A[A.Category == "HF"]
 nhf = {}

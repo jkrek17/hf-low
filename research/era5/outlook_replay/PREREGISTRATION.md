@@ -31,3 +31,6 @@ No claim about warnings or sustained wind, no skill claim beyond the held-out Br
 - Replay picks: the two 'most HF called' cycles of a season must be at least 4 days apart (otherwise near-duplicates of one storm); 'none called' ranks by the number of day-2 points in the two top gust bands (72 kt and above). Both settled before the cases were looked at.
 - Pull: the first run stopped at a stale `.idx` (offsets off by a few hundred bytes); `fetch_dmax.py` now falls back to walking GRIB message lengths, as `a_fetch.py` does. No data differences.
 - Reported intervals: per-season ranges only (five seasons), as pre-registered.
+
+## Addendum 2026-10-14 (second batch, Jason chose "Better replay")
+Added a **routine sample** before looking at any of its results: every 10th 00 UTC cycle of the 1,061 (sorted order, offset 5), 106 cycles not already among the 20 picked cases (`select_sample.py`, `results/replay_sample.csv`). Nothing is chosen for interest, so coverage over this group is the fair read. Same shading, same leave-one-season-out tables (unchanged), same 324 nm coverage definition as the page. No new data pulled (saved daily-max grids reused). `build_payload.py` now writes 126 cases (1.25 MB).
