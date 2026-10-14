@@ -14,7 +14,9 @@ Wire format of window.HF_REPLAY (append-only):
   tables[season][basin+day] = {hf, st (percent OPC hurricane-force / storm-force-or-stronger agreed per band), n (point-days), c (runs with an HF event)},
     built without that season; tables_all uses all five.
   cases[] = {cycle YYYYMMDD (00 UTC), season, why ('most HF called' | 'none called' | 'random' | 'systematic', every tenth cycle), days: 4 run-length strings of band indices (digit, count and a comma) over grid order,
-    fixes: [lat, lon east, 'HF'|'S', hours after the run]}.
+    fixes: [lat, lon east, 'HF'|'S', hours after the run],
+    ov (added when data/outlook_replay/replay_overlays.json exists): 4 context overlays, forecast days 1..4 (null where a lead was missing), each
+      {lows: [[lat, lon east, hPa, coupled 0|1]], jet: [[lat, first lon east, n cells of 1.5 degrees]], trough: [[[lat, lon east], ...]]}; see tools/outlook_overlays.py}.
   coast = polygons of [lon, lat] (Natural Earth 110m via docs/data/coastlines.js), trimmed to 15N-80N.
 """
 import argparse
@@ -43,8 +45,14 @@ def main():
     ap.add_argument("--coast", default=os.path.join(ROOT, "docs", "data", "coastlines.js"))
     ap.add_argument("--template", default=os.path.join(ROOT, "tools", "outlook_replay.template.html"))
     ap.add_argument("--out", default=os.path.join(ROOT, "docs", "outlook-replay.html"))
+    ap.add_argument("--overlays", default=os.path.join(ROOT, "data", "outlook_replay", "replay_overlays.json"))
     a = ap.parse_args()
     d = json.load(open(a.payload))
+    if os.path.exists(a.overlays):
+        ov = json.load(open(a.overlays))
+        for c in d["cases"]:
+            if c["cycle"] in ov:
+                c["ov"] = ov[c["cycle"]]
     d["coast"] = coast(a.coast)
     t = open(a.template, encoding="utf-8").read()
     assert t.count(MARK) == 1
