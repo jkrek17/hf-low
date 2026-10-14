@@ -23,7 +23,7 @@ for _, r in S.iterrows():
     th = rng.uniform(0, np.pi)
     off = rng.uniform(-600, 600)
     R, Cc = E.disc_cells(r.peak_lat, r.peak_lon, 900)
-    la, lo = E.LAT[R], E.LON[Cc]
+    la, lo = E.LAT[R] - 0.125, E.LON[Cc] + 0.125     # scatterometer-grid cell centres (x.125)
     x = (lo - r.peak_lon + 180) % 360 - 180
     xk = x * 111.2 * np.cos(np.radians(r.peak_lat)); yk = (la - r.peak_lat) * 111.2
     s = xk * np.cos(th) + yk * np.sin(th) - off

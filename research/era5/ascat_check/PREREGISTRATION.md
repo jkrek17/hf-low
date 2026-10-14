@@ -115,3 +115,12 @@ Logged in order, each tagged.
    decodes it with the system libzstd; R0 on the same 300 tracks reproduces `results/r0_recovery_300.csv` exactly (max
    absolute difference 0.0 kt). Looked at before running: file counts and sizes, one day of one satellite to check the layout
    (cell count only), nothing about wind values against ERA5.
+6. **Before any outcome statistic (2026-10-14, bug fix).** The first collocation gave 0 of 12,326 footprints at >= 40 % coverage
+   (maximum 0.24). Cause: the scatterometer grid has cell centres on x.125 degrees and the ERA5 grid on x.0, and the cell
+   counting rounded half-integers to even, merging neighbouring cells, while the denominator counted ERA5 nodes.
+   `collocate.py` now counts scatterometer-grid cells on both sides (denominator: scatterometer-grid ocean cells with centres
+   within 800 km; ocean = the four surrounding ERA5 land-sea-mask nodes average < 0.5, symmetric about the half-cell offset).
+   Only coverage and cell counts had been looked at; no wind value had been compared. The synthetic test originally placed
+   its fake cells on ERA5 nodes and so could not reveal this; it now uses scatterometer-grid centres (1,637 footprints,
+   1,542 accepted, mean cover 0.62, same recovery as before). The 40 % rule is unchanged. Result: 12,327 footprints, 5,791
+   with coverage >= 40 %.
