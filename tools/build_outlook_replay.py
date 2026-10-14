@@ -13,7 +13,7 @@ Wire format of window.HF_REPLAY (append-only):
   radius_nm = shading radius per forecast day 1..4; truth_nm = radius of the OPC truth; bands_kt = the seven gust bands.
   tables[season][basin+day] = {hf, st (percent OPC hurricane-force / storm-force-or-stronger agreed per band), n (point-days), c (runs with an HF event)},
     built without that season; tables_all uses all five.
-  cases[] = {cycle YYYYMMDD (00 UTC), season, why, days: 4 run-length strings of band indices (digit, count and a comma) over grid order,
+  cases[] = {cycle YYYYMMDD (00 UTC), season, why ('most HF called' | 'none called' | 'random' | 'systematic', every tenth cycle), days: 4 run-length strings of band indices (digit, count and a comma) over grid order,
     fixes: [lat, lon east, 'HF'|'S', hours after the run]}.
   coast = polygons of [lon, lat] (Natural Earth 110m via docs/data/coastlines.js), trimmed to 15N-80N.
 """

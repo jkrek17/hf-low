@@ -56,6 +56,11 @@
   .controls > div { min-width: 0; max-width: 100%; }
   .controls label { display: block; font-size: 12px; font-weight: 650; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2); margin-bottom: 3px; }
   select { width: 100%; font: inherit; padding: 6px 8px; border: 1px solid var(--border-strong); border-radius: 6px; background: var(--surface); color: var(--ink); max-width: 100%; }
+  .stepper { display: flex; gap: 4px; align-items: stretch; }
+  .stepper button { font: inherit; padding: 4px 11px; border: 1px solid var(--border-strong); border-radius: 6px; background: var(--surface); color: var(--ink); cursor: pointer; }
+  .stepper button:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
+  .stepper select { min-width: 0; }
+  th.grp { text-align: left; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-2); background: var(--surface-2, transparent); }
   .seg { display: inline-flex; border: 1px solid var(--border-strong); border-radius: 6px; overflow: hidden; }
   .seg button { font: inherit; padding: 6px 12px; border: 0; border-right: 1px solid var(--border); background: var(--surface); color: var(--ink); cursor: pointer; }
   .seg button:last-child { border-right: 0; }
@@ -99,7 +104,7 @@
 </div>
 
 <div class="controls">
-  <div><label for="caseSel">Past GFS run (00 UTC)</label><select id="caseSel" aria-label="Past GFS run"></select></div>
+  <div><label for="caseSel">Past GFS run (00 UTC)</label><div class="stepper"><button type="button" id="prevBtn" aria-label="Previous run (earlier date)">&lsaquo;</button><select id="caseSel" aria-label="Past GFS run"></select><button type="button" id="nextBtn" aria-label="Next run (later date)">&rsaquo;</button></div></div>
   <div><label>Basin</label><div class="seg" id="basinSeg"><button type="button" data-b="atl" aria-pressed="true">Atlantic</button><button type="button" data-b="pac" aria-pressed="false">Pacific</button></div></div>
   <div><label>Forecast day</label><div class="seg" id="daySeg"></div></div>
   <div><label>OPC agreed there was a</label><div class="seg" id="tgtSeg"><button type="button" data-t="hf" aria-pressed="true">hurricane-force low</button><button type="button" data-t="st" aria-pressed="false">storm-force or stronger low</button></div></div>
@@ -120,12 +125,13 @@
 </div>
 
 <div class="answers">
-  <div class="tag">How the shading lined up with OPC across all 20 replays</div>
+  <div class="tag">How the shading lined up with OPC across the replays</div>
+  <p class="muted capline" id="allLead"></p>
   <div class="tablewrap" id="allTab"></div>
-  <p class="muted">The 20 cases were fixed before looking at the results: per season, the two runs with the most OPC hurricane-force fixes in the next 96 hours, one run where OPC called none but GFS gust was strongest, and one picked at random. Each is shaded with a table that leaves out its own season. A fix counts as covered when an ocean point shaded 15% or more (or 5% or more) lies within 324 nautical miles of it, the radius the percentages are built on. Fixes outside the map view are left out.</p>
+  <p class="muted">Two groups, both fixed before looking at the results. The 20 picked runs: per season, the two runs with the most OPC hurricane-force fixes in the next 96 hours, one run where OPC called none but GFS gust was strongest, and one picked at random. The routine sample: every tenth 00 UTC run of the five seasons, nothing chosen for interest, so it is the fairer read of how often the shading covers OPC&rsquo;s fixes. Each run is shaded with a table that leaves out its own season. A fix counts as covered when an ocean point shaded 15% or more (or 5% or more) lies within 324 nautical miles of it, the radius the percentages are built on. Fixes outside the map view are left out.</p>
 </div>
 
-<div class="limit"><p><strong>Limits.</strong> Five seasons (October&ndash;April 2021&ndash;22 to 2025&ndash;26), 00 UTC runs only, one model that changed version inside the window. Gust is sampled every 6 hours, so a short peak can be missed. Points are 1 degree apart and in the same run they are not independent: the real sample is runs and seasons, so the percentages are rates, not precise odds, and the 20 runs are a small sample (fixes within one storm are not independent). Land and coasts are not scored. Nothing beyond day 4 or outside October&ndash;April.</p>
+<div class="limit"><p><strong>Limits.</strong> Five seasons (October&ndash;April 2021&ndash;22 to 2025&ndash;26), 00 UTC runs only, one model that changed version inside the window. Gust is sampled every 6 hours, so a short peak can be missed. Points are 1 degree apart and in the same run they are not independent: the real sample is runs and seasons, so the percentages are rates, not precise odds, and fixes within one storm are not independent, and a run every 10th day still shares weather patterns with its neighbours. Land and coasts are not scored. Nothing beyond day 4 or outside October&ndash;April.</p>
 <p class="muted">Method and pre-registration: <code>research/era5/outlook_replay/</code> in the repository (counts in <code>results/point_days.csv</code>). The shading radii come from a separate position-error test on the ERA5 proxy (<code>research/era5/neighborhood_radius/</code>).</p></div>
 </main>
 <script>
@@ -155,7 +161,7 @@ window.HF_REPLAY = /*@@DATA@@*/;
   D.cases.forEach(function (c, k) {
     var g = seasons[c.season]; if (!g) { g = document.createElement('optgroup'); g.label = 'Season ' + c.season + '-' + String(c.season + 1).slice(2); seasons[c.season] = g; sel.appendChild(g); }
     var o = document.createElement('option'); o.value = k;
-    var why = c.why === 'most HF called' ? 'busy' : c.why === 'none called' ? 'GFS strong, OPC called none' : 'random pick';
+    var why = c.why === 'most HF called' ? 'busy' : c.why === 'none called' ? 'GFS strong, OPC called none' : c.why === 'random' ? 'random pick' : 'routine sample';
     o.textContent = fmtDate(c.cycle) + ' - OPC called HF ' + nHF(c) + ' times in the next 4 days (' + why + ')'; g.appendChild(o);
   });
   var dseg = document.getElementById('daySeg');
@@ -255,10 +261,9 @@ window.HF_REPLAY = /*@@DATA@@*/;
     document.getElementById('tab').innerHTML = h + '</tbody></table>';
     document.getElementById('tabTag').textContent = (st.b === 'atl' ? 'Atlantic' : 'Pacific') + ', day ' + st.d + ' table (the other four seasons)';
   }
-  function allTable() {
-    var rows = '', d, tot = { hf: [0, 0, 0, 0], a: [0, 0, 0, 0], s: [0, 0, 0, 0], m: [0, 0, 0, 0] };
-    var shaded = [0, 0, 0, 0], pts = [0, 0, 0, 0];
-    D.cases.forEach(function (c) {
+  function allRows(list) {
+    var rows = '', d, tot = { hf: [0, 0, 0, 0], a: [0, 0, 0, 0], s: [0, 0, 0, 0] }, shaded = [0, 0, 0, 0], pts = [0, 0, 0, 0];
+    list.forEach(function (c) {
       for (d = 1; d <= 4; d++) {
         var band = c.bands[d - 1];
         for (var k = 0; k < N; k++) { var tb = table(c, BASIN[k], d); pts[d - 1]++; if (tb.hf[band[k]] >= 15) shaded[d - 1]++; }
@@ -271,7 +276,14 @@ window.HF_REPLAY = /*@@DATA@@*/;
       }
     });
     for (d = 1; d <= 4; d++) { var n = tot.hf[d - 1]; rows += '<tr><td>Day ' + d + '</td><td class="num">' + n + '</td><td class="num">' + (n ? (100 * tot.a[d - 1] / n).toFixed(0) : '-') + '%</td><td class="num">' + (n ? (100 * tot.s[d - 1] / n).toFixed(0) : '-') + '%</td><td class="num">' + (100 * shaded[d - 1] / pts[d - 1]).toFixed(1) + '%</td></tr>'; }
-    document.getElementById('allTab').innerHTML = '<table><thead><tr><th>Forecast day</th><th class="num">OPC HF fixes</th><th class="num">shading 15%+ within 324 nm</th><th class="num">shading 5%+ within 324 nm</th><th class="num">ocean points shaded 15%+</th></tr></thead><tbody>' + rows + '</tbody></table>';
+    return rows;
+  }
+  function allTable() {
+    var picked = D.cases.filter(function (c) { return c.why !== 'systematic'; }), routine = D.cases.filter(function (c) { return c.why === 'systematic'; });
+    var head = '<thead><tr><th>Forecast day</th><th class="num">OPC HF fixes</th><th class="num">shading 15%+ within 324 nm</th><th class="num">shading 5%+ within 324 nm</th><th class="num">ocean points shaded 15%+</th></tr></thead>';
+    document.getElementById('allLead').textContent = 'Routine sample (' + routine.length + ' runs, every tenth), then the ' + picked.length + ' picked runs.';
+    document.getElementById('allTab').innerHTML = '<table>' + head + '<tbody><tr><th colspan="5" class="grp">Routine sample, ' + routine.length + ' runs</th></tr>' + allRows(routine) +
+      '<tr><th colspan="5" class="grp">Picked runs, ' + picked.length + ' runs (busy, quiet and random)</th></tr>' + allRows(picked) + '</tbody></table>';
   }
   function render() {
     var c = D.cases[st.ci];
@@ -296,6 +308,8 @@ window.HF_REPLAY = /*@@DATA@@*/;
   }
   cv.addEventListener('pointermove', onPtr); cv.addEventListener('pointerdown', onPtr);
   window.addEventListener('resize', function () { layout(); draw(); });
+  document.getElementById('prevBtn').addEventListener('click', function () { if (sel.selectedIndex > 0) { sel.selectedIndex--; sel.dispatchEvent(new Event('change')); } });
+  document.getElementById('nextBtn').addEventListener('click', function () { if (sel.selectedIndex < sel.options.length - 1) { sel.selectedIndex++; sel.dispatchEvent(new Event('change')); } });
   sel.value = 0; allTable();
   // open on the busiest case in its busier basin
   var best = 0; D.cases.forEach(function (c, k) { if (nHF(c) > nHF(D.cases[best])) best = k; }); sel.value = best; sel.dispatchEvent(new Event('change'));
