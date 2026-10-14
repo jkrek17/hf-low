@@ -3588,6 +3588,9 @@
     ['practiceLink', 'tableBasisLink'].forEach(function (id) {
       document.getElementById(id).addEventListener('click', gotoPractice);
     });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-goto-practice]'), function (b) {
+      b.addEventListener('click', gotoPractice);
+    });
     document.getElementById('detailClose').addEventListener('click', function () { select(null); });
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') select(null);
