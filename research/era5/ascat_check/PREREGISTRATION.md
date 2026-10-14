@@ -100,7 +100,7 @@ Logged in order, each tagged.
    daily 0.25 degree bytemaps (`data.remss.com/ascat`), one file per satellite per UTC day, each cell carrying its own
    observation time (6 min steps), so the +-1.5 h rule is applied per cell. Metop-A (2007-03 to 2021-11), Metop-B
    (2012-12 on), Metop-C (2019-07 on). Metop-A uses the `bmaps_v02.1` folder (the reprocessed `v02.1.1` folder holds no files
-   before 2016), so all three are on the same product version. Seasons 2004-05 to 2006-07 therefore have no scatterometer
+   before 2016), so all three are on the same product version. Seasons 2004-05 and 2005-06 therefore have no scatterometer (2006-07 has passes from March 2007; corrected 2026-10-14)
    pass (the registered QuikSCAT part is **not run**: it was optional, "if kept", and ASCAT-A/B/C already give three sensors
    for P4); the sample is storms from 2007-03 on, and the season bootstrap resamples the seasons that have data. Inventory
    13,059 daily files, 20.0 GB; 11,974 were opened (days with no sample fix in a window were skipped). Only cells within
@@ -124,3 +124,9 @@ Logged in order, each tagged.
    its fake cells on ERA5 nodes and so could not reveal this; it now uses scatterometer-grid centres (1,637 footprints,
    1,542 accepted, mean cover 0.62, same recovery as before). The 40 % rule is unchanged. Result: 12,327 footprints, 5,791
    with coverage >= 40 %.
+7. **Post hoc, after the claim review (2026-10-14).** (a) Decision 6 registered Atlantic fixes north of 60 N as a separate lower-confidence group; the
+   first reporting did not split them out. `post_hoc.py` now reports it (labelled post hoc, `results/post_hoc.txt`). (b) The verdict rule asks for P2
+   "in both basins"; `analyse.py` computes P2 pooled, so per-basin AUCs are reported post hoc. (c) P4 pools all passes with coverage >= 0.40
+   (5,791 passes from 4,252 storms), so a storm can contribute more than one pass; the permutation shuffles sensor labels within season, so it
+   tests a sensor difference, not an era drift. (d) The plan says a drift in P4 "would reopen Decision 1's question for 2004 on" and sets no
+   size threshold; whether the P4 result does is referred to Jason, not decided here.

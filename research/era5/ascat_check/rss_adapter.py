@@ -4,7 +4,7 @@ Each daily file (one per satellite per UTC day) holds, per ascending/descending 
 time of day (6 min steps), 10 m wind speed (0.2 m/s steps; codes > 250 are land/ice/no data), wind direction, the rain
 byte (bit 0 = scatterometer rain flag, bit 1 = radiometer rain data present, bits 2-7 = radiometer rain code) and the
 sum-of-squares residual. Format: RSS readme_ascat_v02.1.txt, ascat_bmap_support/python/ascat_daily.py.
-Satellites: Metop-A (metopa, v02.1, 2007-10 to 2021-11; the reprocessed v02.1.1 folder was empty before 2016 so v02.1 is used for all three), Metop-B (metopb, v02.1, 2012-), Metop-C (metopc, v02.1, 2019-).
+Satellites: Metop-A (metopa, v02.1, 2007-03 to 2021-11; the reprocessed v02.1.1 folder was empty before 2016 so v02.1 is used for all three), Metop-B (metopb, v02.1, 2012-), Metop-C (metopc, v02.1, 2019-).
 
 Subcommands
   inventory OUT.csv            crawl month directories for the daily file names (small)
