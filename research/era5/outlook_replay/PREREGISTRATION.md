@@ -28,4 +28,6 @@ Day 1 and 2 shading is narrow (60/120 nm) and was sized for position error only 
 No claim about warnings or sustained wind, no skill claim beyond the held-out Brier numbers, nothing for June to September, nothing beyond day 4. Days 5 to 7 on the mock are layout only.
 
 ## Deviations (post hoc)
-(none yet)
+- Replay picks: the two 'most HF called' cycles of a season must be at least 4 days apart (otherwise near-duplicates of one storm); 'none called' ranks by the number of day-2 points in the two top gust bands (72 kt and above). Both settled before the cases were looked at.
+- Pull: the first run stopped at a stale `.idx` (offsets off by a few hundred bytes); `fetch_dmax.py` now falls back to walking GRIB message lengths, as `a_fetch.py` does. No data differences.
+- Reported intervals: per-season ranges only (five seasons), as pre-registered.

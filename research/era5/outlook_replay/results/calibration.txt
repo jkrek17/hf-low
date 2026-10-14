@@ -1,0 +1,45 @@
+GFS daily-max gust band vs OPC agreed (HF = Category HF fix, storm = S or HF) within 324 nm during the forecast day; 1-degree ocean points, Oct-Apr, 5 seasons 2021-22 to 2025-26. GFS gust is a PROXY for sustained wind; OPC's call is an analyst judgement.
+
+== atl: OPC HF-agreed share (storm-agreed) by day and gust band; n point-days; cycles with an HF event; per-season range of HF share ==
+day 1: <40: 0.2% (0.3%) n=3201840 c=256 | 40-48: 1.9% (2.3%) n=478619 c=305 | 48-56: 5.2% (6.2%) n=259407 c=310 | 56-64: 13.5% (15.6%) n=110731 c=308 | 64-72: 30.8% (33.4%) n=39978 c=297 | 72-80: 48.3% (50.2%) n=10851 c=208 | >=80: 56.4% (58.4%) n=2522 c=86
+day 2: <40: 0.1% (0.1%) n=2870009 c=167 | 40-48: 0.9% (1.1%) n=597956 c=257 | 48-56: 2.9% (3.5%) n=362270 c=298 | 56-64: 8.8% (10.5%) n=175263 c=305 | 64-72: 23.1% (25.6%) n=70032 c=292 | 72-80: 44.2% (46.8%) n=22422 c=219 | >=80: 58.4% (60.3%) n=5996 c=93
+day 3: <40: 0.0% (0.0%) n=2169756 c=28 | 40-48: 0.2% (0.2%) n=782882 c=85 | 48-56: 0.7% (0.9%) n=581472 c=185 | 56-64: 3.0% (3.9%) n=339603 c=273 | 64-72: 13.2% (15.2%) n=155723 c=279 | 72-80: 30.6% (33.6%) n=54862 c=204 | >=80: 50.1% (52.4%) n=19650 c=96
+day 4: <40: 0.0% (0.0%) n=2182529 c=44 | 40-48: 0.2% (0.3%) n=784113 c=102 | 48-56: 0.9% (1.1%) n=579022 c=204 | 56-64: 3.6% (4.5%) n=337774 c=275 | 64-72: 13.1% (15.2%) n=147908 c=271 | 72-80: 29.2% (32.2%) n=53641 c=192 | >=80: 40.4% (43.5%) n=18961 c=74
+
+== pac: OPC HF-agreed share (storm-agreed) by day and gust band; n point-days; cycles with an HF event; per-season range of HF share ==
+day 1: <40: 0.2% (0.2%) n=4064350 c=235 | 40-48: 1.2% (1.7%) n=530436 c=264 | 48-56: 3.4% (4.6%) n=281248 c=268 | 56-64: 10.4% (13.0%) n=117290 c=267 | 64-72: 27.0% (30.1%) n=38504 c=252 | 72-80: 51.0% (52.4%) n=8846 c=181 | >=80: 58.8% (59.0%) n=2259 c=67
+day 2: <40: 0.1% (0.1%) n=3706773 c=157 | 40-48: 0.6% (0.9%) n=670864 c=232 | 48-56: 2.0% (2.7%) n=393503 c=257 | 56-64: 6.4% (8.5%) n=184706 c=264 | 64-72: 21.1% (24.6%) n=65426 c=246 | 72-80: 45.1% (47.3%) n=16680 c=175 | >=80: 55.4% (56.4%) n=4981 c=71
+day 3: <40: 0.0% (0.0%) n=2877300 c=25 | 40-48: 0.1% (0.2%) n=937943 c=78 | 48-56: 0.6% (0.9%) n=660362 c=171 | 56-64: 2.1% (3.3%) n=357790 c=232 | 64-72: 11.6% (14.4%) n=151557 c=246 | 72-80: 32.1% (35.1%) n=44827 c=163 | >=80: 41.5% (42.2%) n=13154 c=56
+day 4: <40: 0.0% (0.0%) n=2879744 c=54 | 40-48: 0.3% (0.3%) n=944194 c=106 | 48-56: 0.7% (1.1%) n=651730 c=179 | 56-64: 2.5% (3.6%) n=360980 c=236 | 64-72: 10.9% (13.5%) n=148337 c=233 | 72-80: 26.1% (29.1%) n=44132 c=143 | >=80: 36.8% (38.1%) n=13816 c=58
+
+== both: OPC HF-agreed share (storm-agreed) by day and gust band; n point-days; cycles with an HF event; per-season range of HF share ==
+day 1: <40: 0.2% (0.2%) n=7266190 c=491 | 40-48: 1.6% (2.0%) n=1009055 c=569 | 48-56: 4.3% (5.4%) n=540655 c=578 | 56-64: 11.9% (14.3%) n=228021 c=575 | 64-72: 29.0% (31.8%) n=78482 c=549 | 72-80: 49.5% (51.2%) n=19697 c=389 | >=80: 57.6% (58.7%) n=4781 c=153
+day 2: <40: 0.1% (0.1%) n=6576782 c=324 | 40-48: 0.7% (1.0%) n=1268820 c=489 | 48-56: 2.4% (3.1%) n=755773 c=555 | 56-64: 7.6% (9.5%) n=359969 c=569 | 64-72: 22.1% (25.1%) n=135458 c=538 | 72-80: 44.6% (47.0%) n=39102 c=394 | >=80: 57.0% (58.5%) n=10977 c=164
+day 3: <40: 0.0% (0.0%) n=5047056 c=53 | 40-48: 0.1% (0.2%) n=1720825 c=163 | 48-56: 0.6% (0.9%) n=1241834 c=356 | 56-64: 2.6% (3.6%) n=697393 c=505 | 64-72: 12.4% (14.8%) n=307280 c=525 | 72-80: 31.3% (34.3%) n=99689 c=367 | >=80: 46.7% (48.3%) n=32804 c=152
+day 4: <40: 0.0% (0.0%) n=5062273 c=98 | 40-48: 0.2% (0.3%) n=1728307 c=208 | 48-56: 0.8% (1.1%) n=1230752 c=383 | 56-64: 3.0% (4.0%) n=698754 c=511 | 64-72: 12.0% (14.4%) n=296245 c=504 | 72-80: 27.8% (30.8%) n=97773 c=335 | >=80: 38.9% (41.3%) n=32777 c=132
+
+== Leave-one-season-out Brier skill of the banded table (vs the held-out season's own base rate); range over held-out seasons ==
+hf    atl  day 1: BSS 0.140 (seasons 0.099 to 0.168; vs training base 0.103 to 0.170)
+hf    atl  day 2: BSS 0.169 (seasons 0.124 to 0.193; vs training base 0.127 to 0.195)
+hf    atl  day 3: BSS 0.190 (seasons 0.147 to 0.212; vs training base 0.151 to 0.214)
+hf    atl  day 4: BSS 0.151 (seasons 0.104 to 0.189; vs training base 0.106 to 0.191)
+hf    both day 1: BSS 0.141 (seasons 0.127 to 0.149; vs training base 0.127 to 0.149)
+hf    both day 2: BSS 0.169 (seasons 0.149 to 0.183; vs training base 0.150 to 0.183)
+hf    both day 3: BSS 0.184 (seasons 0.161 to 0.196; vs training base 0.161 to 0.196)
+hf    both day 4: BSS 0.143 (seasons 0.123 to 0.168; vs training base 0.123 to 0.169)
+hf    pac  day 1: BSS 0.138 (seasons 0.103 to 0.163; vs training base 0.103 to 0.163)
+hf    pac  day 2: BSS 0.163 (seasons 0.134 to 0.191; vs training base 0.134 to 0.191)
+hf    pac  day 3: BSS 0.171 (seasons 0.150 to 0.196; vs training base 0.150 to 0.196)
+hf    pac  day 4: BSS 0.127 (seasons 0.113 to 0.144; vs training base 0.113 to 0.144)
+storm atl  day 1: BSS 0.143 (seasons 0.093 to 0.172; vs training base 0.097 to 0.173)
+storm atl  day 2: BSS 0.172 (seasons 0.121 to 0.194; vs training base 0.125 to 0.196)
+storm atl  day 3: BSS 0.194 (seasons 0.150 to 0.216; vs training base 0.153 to 0.217)
+storm atl  day 4: BSS 0.161 (seasons 0.113 to 0.197; vs training base 0.116 to 0.199)
+storm both day 1: BSS 0.142 (seasons 0.129 to 0.151; vs training base 0.129 to 0.151)
+storm both day 2: BSS 0.170 (seasons 0.152 to 0.183; vs training base 0.153 to 0.183)
+storm both day 3: BSS 0.186 (seasons 0.163 to 0.199; vs training base 0.163 to 0.200)
+storm both day 4: BSS 0.150 (seasons 0.125 to 0.171; vs training base 0.125 to 0.171)
+storm pac  day 1: BSS 0.136 (seasons 0.103 to 0.160; vs training base 0.103 to 0.161)
+storm pac  day 2: BSS 0.160 (seasons 0.134 to 0.187; vs training base 0.134 to 0.187)
+storm pac  day 3: BSS 0.170 (seasons 0.152 to 0.197; vs training base 0.152 to 0.197)
+storm pac  day 4: BSS 0.131 (seasons 0.119 to 0.150; vs training base 0.119 to 0.150)
