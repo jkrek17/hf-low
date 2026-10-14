@@ -14,6 +14,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
+from matplotlib.colors import LinearSegmentedColormap
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -26,8 +27,8 @@ HF = 71.7
 KM_NM = 1.852
 MAP_H = old.MAP_H
 TERRAIN_M = 1000.0                              # m: terrain above this is masked on the low-level maps
-PHASES = {"fcc": ("frontal, cold core", "#2a78d6"), "fwc": ("frontal, warm core", "#e0a21b"),
-          "wsec": ("warm seclusion (symmetric, warm core)", "#d63c2a"), "scc": ("symmetric, cold core", "#7a7a76")}
+PHASES = {"fcc": ("frontal, cold core", "#3b82f6"), "fwc": ("frontal, warm core", "#f2a93b"),
+          "wsec": ("warm seclusion", "#e5502f"), "scc": ("symmetric, cold core", "#9ca3af")}
 B_EDGE = 10.0                                   # m, Hart's asymmetry threshold
 QUAD = (("front right", 1, 1), ("rear right", -1, 1), ("rear left", -1, -1), ("front left", 1, -1))
 VARS = [("jet250", "highest 250 hPa wind within 1,000 km", "kt", 0), ("div300", "300 hPa divergence within 500 km", "1e-5 /s", 1),
@@ -124,98 +125,110 @@ def orography(work):
 
 # ------------------------------------------------------------------ figures
 
-def shade_fall(axs, thr, hrs_end):
-    for a in axs:
-        a.axvspan(hrs_end - 24, hrs_end, color="#f3d9a8", alpha=0.45, lw=0, zorder=0)
+def ptitle(ax, text, sub=""):
+    ax.text(0, 1.04, text, transform=ax.transAxes, fontsize=9.5, fontweight="semibold", color=old.INK, va="bottom")
+    if sub:
+        ax.text(1, 1.04, sub, transform=ax.transAxes, fontsize=8, color=old.MUTED, va="bottom", ha="right")
 
 
 def fig_series2(fx, d24, t0, st, title, path):
     hrs = (fx.t - t0) / pd.Timedelta(hours=1)
     j = int(np.nanargmin(d24)); end = hrs[j]
-    fig, axs = plt.subplots(6, 1, figsize=(9.2, 13.2), sharex=True, gridspec_kw=dict(hspace=0.14, height_ratios=[1, 1, 1, 1, 1, 1.15]))
-    shade_fall(axs, None, end)
+    fig, axs = plt.subplots(8, 1, figsize=(9.2, 16.2), sharex=True, gridspec_kw=dict(hspace=0.62))
     for a in axs:
-        a.axvline(0, color="k", lw=0.8, ls=":"); a.grid(color="#ccc", lw=0.5)
-    axs[0].plot(hrs, fx.msl, "-o", ms=3, color="#0a3f73"); axs[0].set_ylabel("central pressure\n(hPa)"); axs[0].invert_yaxis()
-    axs[0].text(0.01, 0.06, "shaded: the 24 h of fastest fall", transform=axs[0].transAxes, fontsize=7.5, color="#8a6a1c")
+        a.axvspan(end - 24, end, color="#fbe7c2", alpha=0.6, lw=0, zorder=0)
+        a.axvline(0, color="#9ca3af", lw=0.9, ls=(0, (2, 3)), zorder=1); a.grid(axis="y", color=old.GRID, lw=0.8)
+    BLUE, ORANGE, VIOLET, TEAL, RED, BROWN = "#2563eb", "#e5502f", "#6d5bd0", "#0f9d8a", "#d1495b", "#b45309"
+    LW = dict(lw=2.2, solid_capstyle="round")
+    a = axs[0]; ptitle(a, "Central pressure (hPa)")
+    a.plot(hrs, fx.msl, color=BLUE, **LW); a.set_ylim(fx.msl.max() + 10, fx.msl.min() - 12)
+    a.fill_between(hrs, fx.msl, fx.msl.max() + 10, color=BLUE, alpha=0.08, lw=0)
+    i0 = int(fx.msl.values.argmin()); a.scatter([hrs[i0]], [fx.msl[i0]], s=46, color=BLUE, edgecolor="white", linewidth=1.5, zorder=5)
+    a.annotate(f"{fx.msl[i0]:.0f} hPa", (hrs[i0], fx.msl[i0]), xytext=(12, -16), textcoords="offset points", fontsize=9, color=BLUE, fontweight="semibold", va="center")
+    a = axs[1]; ptitle(a, "Fall over the previous 24 h (hPa)", "dashed: bomb yardstick at the storm's latitude")
     dd = -d24
-    axs[1].bar(hrs, dd, width=4.5, color=np.where(dd > 0, "#c0392b", "#8aa"))
-    axs[1].plot(hrs, 24 * np.sin(np.radians(fx.lat)) / np.sin(np.radians(60)), color="k", lw=1, ls="--", label="'bomb' yardstick at this latitude")
-    axs[1].set_ylabel("fall over previous\n24 h (hPa)"); axs[1].legend(fontsize=7.5, loc="upper left")
-    a = axs[2]; a.plot(hrs, fx.gust, "-o", ms=3, color="#b9460f"); a.axhline(HF, color="k", lw=1, ls="--")
-    a.set_ylabel("gust index (kt)\nmax within 800 km"); a.text(hrs.min(), HF + 1.2, "71.7 kt", fontsize=7.5)
-    a2 = a.twinx(); a2.bar(st.h, st.area72_nm2 / 1000, width=2.6, color="#e2b6a0", alpha=0.8, zorder=0); a2.set_ylabel("ocean area at 71.7 kt+\nwithin 600 nm (000 nm2)", color="#8a5a3c", fontsize=8)
-    a2.spines["right"].set_visible(True); a.set_zorder(a2.get_zorder() + 1); a.patch.set_visible(False)
-    a = axs[3]; a.plot(hrs, fx.jet250, "-o", ms=3, color="#5b3a8c"); a.set_ylabel("250 hPa jet\n(kt, within 1,000 km)")
-    a = axs[4]; a.plot(hrs, fx.div300, "-o", ms=3, color="#1f6fbf", label="300 hPa divergence (1e-5 /s)")
-    a.plot(hrs, fx.vadv500, "-s", ms=3, color="#c0392b", label="500 hPa vorticity advection (1e-9 /s2)"); a.axhline(0, color="k", lw=0.6)
-    a.set_ylabel("upper-level lift\nterms"); a.legend(fontsize=7.5, loc="upper left")
-    a = axs[5]; ph = fx.phase
-    a.plot(hrs, fx.B, "-o", ms=3, color="#7a3b00", label="B: thickness asymmetry (m)"); a.axhline(B_EDGE, color="#7a3b00", lw=0.8, ls="--")
-    a.set_ylabel("Hart B (m)", color="#7a3b00")
-    b = a.twinx(); b.plot(hrs, fx.VTL, "-s", ms=3, color="#1c6b5a", label="lower-level core (VTL)"); b.axhline(0, color="#1c6b5a", lw=0.8, ls="--")
-    b.set_ylabel("-VT lower (m)\n>0 warm core", color="#1c6b5a"); b.spines["right"].set_visible(True)
-    for h_, p in zip(hrs, ph):
+    a.bar(hrs, dd, width=3.6, color=np.where(dd > 0, ORANGE, "#c7ccd4"), zorder=3)
+    a.plot(hrs, 24 * np.sin(np.radians(fx.lat)) / np.sin(np.radians(60)), color=old.INK, lw=1.1, ls=(0, (4, 3)), zorder=4)
+    a = axs[2]; ptitle(a, "Gust index (kt)", "highest ERA5 gust within 800 km; dashed: 71.7 kt")
+    a.plot(hrs, fx.gust, color=ORANGE, **LW); a.axhline(HF, color=old.INK, lw=1, ls=(0, (4, 3)))
+    ig = int(np.nanargmax(fx.gust.values)); a.scatter([hrs[ig]], [fx.gust[ig]], s=40, color=ORANGE, edgecolor="white", linewidth=1.4, zorder=5)
+    a.annotate(f"{fx.gust[ig]:.0f} kt", (hrs[ig], fx.gust[ig]), xytext=(8, 4), textcoords="offset points", fontsize=9, color=ORANGE, fontweight="semibold")
+    a = axs[3]; ptitle(a, "Ocean area with 71.7 kt+ gusts (thousand nm\u00b2)", "within 600 nm of the centre, 3-hourly")
+    a.bar(st.h, st.area72_nm2 / 1000, width=2.4, color="#f08a63", zorder=3)
+    a = axs[4]; ptitle(a, "250 hPa jet (kt)", "strongest wind within 1,000 km")
+    a.plot(hrs, fx.jet250, color=VIOLET, **LW); a.fill_between(hrs, fx.jet250, fx.jet250.min() - 15, color=VIOLET, alpha=0.08, lw=0); a.set_ylim(fx.jet250.min() - 15, None)
+    a = axs[5]; ptitle(a, "Upper-level lift", "")
+    a.plot(hrs, fx.div300, color=TEAL, **LW); a.plot(hrs, fx.vadv500, color=RED, **LW); a.axhline(0, color="#9ca3af", lw=0.8)
+    a.text(1, 1.04, "500 hPa vorticity advection (1e-9 /s\u00b2)", transform=a.transAxes, color=RED, fontsize=8, va="bottom", ha="right", fontweight="semibold")
+    a.text(0.6, 1.04, "300 hPa divergence (1e-5 /s)", transform=a.transAxes, color=TEAL, fontsize=8, va="bottom", ha="right", fontweight="semibold")
+    a = axs[6]; ptitle(a, "Hart B: thickness asymmetry (m)", "dashed: 10 m; above it the low is frontal")
+    a.plot(hrs, fx.B, color=BROWN, **LW); a.axhline(B_EDGE, color=BROWN, lw=0.9, ls=(0, (4, 3)))
+    a = axs[7]; ptitle(a, "Lower-level core (m)", "above zero the core is warm; strip below: structure class")
+    a.plot(hrs, fx.VTL, color=TEAL, **LW); a.axhline(0, color=TEAL, lw=0.9, ls=(0, (4, 3)))
+    lo, hi = a.get_ylim(); a.set_ylim(lo - 0.12 * (hi - lo), hi)
+    for h_, p in zip(hrs, fx.phase):
         if isinstance(p, str):
-            a.axvspan(h_ - 3, h_ + 3, ymin=0, ymax=0.07, color=PHASES[p][1], lw=0)
+            a.axvspan(h_ - 3, h_ + 3, ymin=0, ymax=0.07, color=PHASES[p][1], lw=0, zorder=4)
     a.set_xlabel(f"hours from lowest pressure ({t0:%d %b %Y %H}Z)", labelpad=6)
-    fig.legend(handles=[Line2D([], [], color=c, lw=6, label=n) for n, c in PHASES.values()], fontsize=8, loc="lower center", ncol=2, bbox_to_anchor=(0.5, 0.065), title="structure class (strip along the bottom of the last panel)", title_fontsize=8)
-    fig.suptitle(title, fontsize=11, x=0.01, ha="left", y=0.905)
+    fig.legend(handles=[Line2D([], [], color=c, lw=7, label=n) for n, c in PHASES.values()] + [plt.Rectangle((0, 0), 1, 1, color="#fbe7c2", label="24 h of fastest fall")],
+               fontsize=8, loc="lower center", ncol=5, bbox_to_anchor=(0.5, 0.045), handlelength=1.2, columnspacing=1.2)
+    fig.suptitle(title, fontsize=12, fontweight="semibold", x=0.01, ha="left", y=0.915)
     fig.savefig(path, dpi=100, bbox_inches="tight"); plt.close(fig)
 
 
 def fig_structure(fx, t0, st, cells, title, path):
-    fig = plt.figure(figsize=(14.2, 4.9))
-    gs = fig.add_gridspec(1, 3, width_ratios=[1, 1.15, 0.85], wspace=0.3)
-    # (a) Hart phase space
+    fig = plt.figure(figsize=(14.2, 5.0))
+    gs = fig.add_gridspec(1, 3, width_ratios=[1, 1.15, 0.8], wspace=0.28)
     ax = fig.add_subplot(gs[0]); e = fx.dropna(subset=["B", "VTL"])
-    ax.axhline(B_EDGE, color="#888", lw=0.8); ax.axvline(0, color="#888", lw=0.8)
-    ax.plot(e.VTL, e.B, color="#999", lw=1, zorder=2)
+    ax.axhline(B_EDGE, color="#d6d3cb", lw=1); ax.axvline(0, color="#d6d3cb", lw=1); ax.spines["bottom"].set_visible(True)
+    ax.plot(e.VTL, e.B, color="#c4c2ba", lw=1.4, zorder=2)
     hrs = (e.t - t0) / pd.Timedelta(hours=1)
-    sc = ax.scatter(e.VTL, e.B, c=hrs, cmap="coolwarm", vmin=-60, vmax=60, s=40, edgecolor="k", linewidth=0.4, zorder=3)
-    i0 = (hrs.abs()).idxmin(); ax.scatter([e.VTL[i0]], [e.B[i0]], marker="*", s=240, color="#fff", edgecolor="k", zorder=5)
+    sc = ax.scatter(e.VTL, e.B, c=hrs, cmap="coolwarm", vmin=-60, vmax=60, s=52, edgecolor="white", linewidth=1, zorder=3)
+    i0 = (hrs.abs()).idxmin(); ax.scatter([e.VTL[i0]], [e.B[i0]], marker="*", s=300, color="#fff7d6", edgecolor=old.INK, linewidth=1.2, zorder=5)
     for k in e.index[::3]:
-        ax.annotate(e.t[k].strftime("%d/%H"), (e.VTL[k], e.B[k]), xytext=(4, 4), textcoords="offset points", fontsize=6.5)
-    xl = ax.get_xlim(); yl = ax.get_ylim()
-    ax.text(0.02, 0.97, "frontal, cold core", transform=ax.transAxes, fontsize=8, va="top", color=PHASES["fcc"][1])
-    ax.text(0.98, 0.97, "frontal, warm core", transform=ax.transAxes, fontsize=8, va="top", ha="right", color=PHASES["fwc"][1])
-    ax.text(0.98, 0.03, "warm seclusion", transform=ax.transAxes, fontsize=8, ha="right", color=PHASES["wsec"][1])
-    ax.text(0.02, 0.03, "symmetric, cold core", transform=ax.transAxes, fontsize=8, color=PHASES["scc"][1])
-    ax.set_xlabel("-VT lower (m): warm core to the right"); ax.set_ylabel("B (m): asymmetry, frontal above 10 m")
-    cb = fig.colorbar(sc, ax=ax, location="bottom", shrink=0.85, pad=0.16); cb.set_label("hours from lowest pressure")
-    ax.set_title("Where the structure went (Hart phase space)\nstar = lowest pressure", fontsize=10)
-    # (b) storm-relative gust cells
+        ax.annotate(e.t[k].strftime("%d/%H"), (e.VTL[k], e.B[k]), xytext=(5, 5), textcoords="offset points", fontsize=7, color=old.MUTED)
+    ax.text(0.02, 0.97, "frontal, cold core", transform=ax.transAxes, fontsize=8.5, va="top", color=PHASES["fcc"][1], fontweight="semibold")
+    ax.text(0.98, 0.97, "frontal, warm core", transform=ax.transAxes, fontsize=8.5, va="top", ha="right", color=PHASES["fwc"][1], fontweight="semibold")
+    ax.text(0.98, 0.03, "warm seclusion", transform=ax.transAxes, fontsize=8.5, ha="right", color=PHASES["wsec"][1], fontweight="semibold")
+    ax.text(0.02, 0.03, "symmetric, cold core", transform=ax.transAxes, fontsize=8.5, color=PHASES["scc"][1], fontweight="semibold")
+    ax.set_xlabel("lower-level core (m): warm to the right"); ax.set_ylabel("B (m): frontal above 10 m")
+    cb = fig.colorbar(sc, ax=ax, location="bottom", shrink=0.7, pad=0.16, aspect=30); cb.set_label("hours from lowest pressure (star)"); cb.outline.set_visible(False); cb.ax.tick_params(length=0)
+    ax.set_title("Where the structure went")
     ax = fig.add_subplot(gs[1]); R = 600
-    hf = cells[cells.g >= HF]; sf = cells[(cells.g >= 64) & (cells.g < HF)]
+    hf = cells[cells.g >= HF]
     for r in (200, 400, 600):
-        ax.add_patch(plt.Circle((0, 0), r, fill=False, ec="#aaa", lw=0.6, ls=":")); ax.text(0, r + 6, f"{r} nm", fontsize=6.5, color="#777", ha="center")
+        ax.add_patch(plt.Circle((0, 0), r, fill=False, ec="#d6d3cb", lw=0.8)); ax.text(r * 0.707 + 6, r * 0.707 + 6, f"{r} nm", fontsize=7, color=old.MUTED)
     bins = np.arange(-R, R + 1, 40)
     both = cells[cells.g >= 64]
     if len(both):
-        ax.hist2d(both.x, both.y, bins=bins, cmap="Oranges", cmin=1, vmin=0, vmax=max(30, np.percentile(np.histogram2d(both.x, both.y, bins=bins)[0], 99)) * 1.3)
+        ax.hist2d(both.x, both.y, bins=bins, cmap=LinearSegmentedColormap.from_list("o", ["#fff1de", "#ffc58a"]), cmin=1, vmin=0, vmax=max(30, np.percentile(np.histogram2d(both.x, both.y, bins=bins)[0], 99)) * 1.5)
     if len(hf):
-        ax.hist2d(hf.x, hf.y, bins=bins, cmap="Reds", cmin=1, vmin=-5, vmax=max(20, np.percentile(np.histogram2d(hf.x, hf.y, bins=bins)[0], 99)) * 1.1, zorder=3)
-    ax.axhline(0, color="#888", lw=0.6); ax.axvline(0, color="#888", lw=0.6)
-    ax.annotate("", xy=(R * 0.9, 0), xytext=(R * 0.55, 0), arrowprops=dict(arrowstyle="->", color="k", lw=1.6)); ax.text(R * 0.9, 12, "motion", fontsize=7.5, ha="right")
-    ax.scatter([0], [0], marker="x", color="k", s=70, zorder=6)
+        ax.hist2d(hf.x, hf.y, bins=bins, cmap=old.CM_GUST, cmin=1, vmin=-8, vmax=max(20, np.percentile(np.histogram2d(hf.x, hf.y, bins=bins)[0], 99)) * 1.1, zorder=3)
+    ax.axhline(0, color="#d6d3cb", lw=0.8, zorder=1); ax.axvline(0, color="#d6d3cb", lw=0.8, zorder=1)
+    ax.annotate("", xy=(R * 0.92, 0), xytext=(R * 0.6, 0), arrowprops=dict(arrowstyle="-|>", color=old.INK, lw=1.4), zorder=6); ax.text(R * 0.92, 14, "motion", fontsize=8, ha="right", color=old.INK)
+    ax.scatter([0], [0], marker="o", s=60, color=old.INK, zorder=6)
     ax.set_xlim(-R, R); ax.set_ylim(-R, R); ax.set_aspect(1)
-    ax.set_xlabel("nm ahead (+) or behind (-) the centre"); ax.set_ylabel("nm to the right (+) or left (-) of motion")
-    ax.set_title("Where the strong gusts were, relative to the low\n(orange: 64 kt+; red: 71.7 kt+, darker = more 3-hourly samples; ocean only)", fontsize=10)
-    # (c) sector shares and radius
+    for sp in ax.spines.values():
+        sp.set_visible(False)
+    ax.set_xlabel("nm ahead (+) or behind (-)"); ax.set_ylabel("nm right (+) or left (-) of motion")
+    ax.set_title("Where the strong gusts were (ocean, every 3 h)")
+    ax.text(0.0, -0.17, "peach: 64 kt+    red: 71.7 kt+, darker = more samples", transform=ax.transAxes, fontsize=8, color=old.MUTED)
     ax = fig.add_subplot(gs[2]); ax.axis("off")
-    ax.set_title("Share of the 71.7 kt+ ocean cells\nby quarter of the storm", fontsize=10)
+    ax.set_title("Share of 71.7 kt+ cells by quarter")
     n = len(hf); shares = []
     for name, sx, sy in QUAD:
         shares.append(((np.sign(hf.x) == sx) & (np.sign(hf.y) == sy)).mean() * 100 if n else np.nan)
+    top = max([s for s in shares if np.isfinite(s)] + [1])
     for k, ((name, sx, sy), s) in enumerate(zip(QUAD, shares)):
-        y0 = 0.80 - 0.17 * k
-        ax.text(0.0, y0 + 0.04, name, transform=ax.transAxes, fontsize=9)
-        ax.add_patch(plt.Rectangle((0.38, y0 + 0.01), 0.55 * (0 if not np.isfinite(s) else s / 100), 0.06, transform=ax.transAxes, color="#d0452f"))
-        ax.text(0.38 + 0.55 * (0 if not np.isfinite(s) else s / 100) + 0.02, y0 + 0.02, "n/a" if not np.isfinite(s) else f"{s:.0f}%", transform=ax.transAxes, fontsize=9)
+        y0 = 0.78 - 0.17 * k; w = 0 if not np.isfinite(s) else s / 100
+        ax.text(0.0, y0 + 0.075, name, transform=ax.transAxes, fontsize=9, color=old.MUTED)
+        ax.add_patch(plt.Rectangle((0.0, y0), 0.78, 0.045, transform=ax.transAxes, color="#f1efe9"))
+        ax.add_patch(plt.Rectangle((0.0, y0), 0.78 * w, 0.045, transform=ax.transAxes, color="#e5502f" if s == top else "#f0a98f"))
+        ax.text(0.82, y0 + 0.005, "n/a" if not np.isfinite(s) else f"{s:.0f}%", transform=ax.transAxes, fontsize=10, fontweight="semibold")
     if n:
         rr = np.hypot(hf.x, hf.y)
-        ax.text(0.0, 0.08, f"median distance of those cells from\nthe centre: {np.median(rr):.0f} nm (90% within {np.percentile(rr, 90):.0f} nm)\n{n:,} cell-times at 71.7 kt+", transform=ax.transAxes, fontsize=8.5, va="top")
-    fig.suptitle(title, fontsize=11, x=0.01, ha="left", y=1.02)
+        ax.text(0.0, 0.06, f"Median distance from the centre {np.median(rr):.0f} nm\n(90% within {np.percentile(rr, 90):.0f} nm)", transform=ax.transAxes, fontsize=8.5, va="top", color=old.MUTED)
+    fig.suptitle(title, fontsize=12, fontweight="semibold", x=0.01, ha="left", y=1.03)
     fig.savefig(path, dpi=100, bbox_inches="tight"); plt.close(fig)
     return shares
 
@@ -228,14 +241,14 @@ def fig_maps_low(z, polys, title, path, fx, t0, oro):
         lats, lons = old.crop_axes(la, lo, old.DLAT, old.DLON)
         high = ex.crop(oro, la, lo, old.DLAT, old.DLON)[0] > TERRAIN_M          # same cells as the stored maps
         t850 = np.where(high, np.nan, z[f"t850_{h}"]); ws = np.where(high, np.nan, z[f"ws925_{h}"])
-        cf = ax.contourf(lons, lats, t850, levels=np.arange(-30, 21, 2), cmap="RdYlBu_r", extend="both", zorder=1)
-        ax.contour(lons, lats, t850, levels=[0], colors="#444", linewidths=0.8, linestyles="--", zorder=2)
-        ax.contourf(lons, lats, high.astype(float), levels=[0.5, 1.5], colors=["#c9c8c2"], zorder=1.5)
-        ax.contour(lons, lats, z[f"msl_{h}"], levels=np.arange(900, 1060, 4), colors="k", linewidths=0.8, zorder=3)
+        cf = ax.contourf(lons, lats, t850, levels=np.arange(-30, 21, 2), cmap="coolwarm", extend="both", zorder=1)
+        ax.contour(lons, lats, t850, levels=[0], colors="#555", linewidths=0.8, linestyles="--", zorder=2)
+        ax.contourf(lons, lats, high.astype(float), levels=[0.5, 1.5], colors=["#d9d7d0"], zorder=1.5)
+        ax.contour(lons, lats, z[f"msl_{h}"], levels=np.arange(900, 1060, 4), colors=old.INK, linewidths=0.55, alpha=0.8, zorder=3)
         if np.nanmax(ws) >= 50:
-            ax.contour(lons, lats, ws, levels=[50, 64], colors=["#6a1b9a", "#6a1b9a"], linewidths=[1.2, 2.4], zorder=4)
+            ax.contour(lons, lats, ws, levels=[50, 64], colors=["#7c3aed", "#7c3aed"], linewidths=[1.2, 2.6], zorder=4)
         th = t0 + pd.Timedelta(hours=h); tracked = fx.t.iloc[0] <= th <= fx.t.iloc[-1]
-        ax.plot([lo], [la], marker="x" if tracked else "+", color="#111" if tracked else "#777", ms=9, mew=2, zorder=5)
+        ax.plot([lo], [la], marker="x" if tracked else "+", color=old.INK if tracked else "#777", ms=9, mew=2, zorder=5)
         ax.set_xlim(lons[0], lons[-1]); ax.set_ylim(lats[-1], lats[0]); ax.set_aspect(1 / np.cos(np.radians(la)))
         old.draw_coast(ax, polys, 0.7)
         ax.set_title(f"{'peak' if h == 0 else f'{h:+d} h'}: lowest {np.nanmin(z[f'msl_{h}']):.0f} hPa, 925 hPa wind up to {np.nanmax(ws):.0f} kt", fontsize=8.8)
@@ -384,7 +397,7 @@ def page(f, fx, tx, opc, meteo_, shares, style, base):
 <section><div class="tag">3. How it developed</div>
 <p>{meteo_["phase"]}</p>
 <figure class="fig"><div class="scroll"><a href="{base}-series.png"><img src="{base}-series.png" alt="Six-panel development series" loading="lazy"></a></div>
-<figcaption>From the top: central pressure; the fall over the previous 24 h against the latitude-scaled bomb yardstick; the gust index with the ocean area at 71.7 kt or more; the 250 hPa jet; the two upper-level lift terms; and Hart&rsquo;s structure parameters with the structure class along the bottom. The tan band is the 24 h of fastest fall.</figcaption></figure></section>
+<figcaption>From the top: central pressure; the fall over the previous 24 h against the latitude-scaled bomb yardstick; the gust index; the ocean area at 71.7 kt or more; the 250 hPa jet; the two upper-level lift terms; and Hart&rsquo;s two structure parameters with the structure class along the bottom. The tan band is the 24 h of fastest fall.</figcaption></figure></section>
 <section><div class="tag">4. What drove it: upper-level support</div>
 <p>{meteo_["forcing"]}</p>
 <figure class="fig"><div class="scroll"><a href="{base}-maps.png"><img src="{base}-maps.png" alt="Upper-level maps" loading="lazy"></a></div>
