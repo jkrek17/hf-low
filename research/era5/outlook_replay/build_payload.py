@@ -7,6 +7,8 @@ sys.argv = [sys.argv[0], sys.argv[1], "/home/user/hf-low/data/hf_lows", "/dev/nu
 import tabulate as T                                                       # reuses the grid, mask and max-within-radius
 HERE = os.path.dirname(os.path.abspath(__file__)); RES = os.path.join(HERE, "results"); dm = sys.argv[1]
 cases = pd.read_csv(os.path.join(RES, "replay_cases.csv"), dtype={"cycle": str})
+samp = pd.read_csv(os.path.join(RES, "replay_sample.csv"), dtype={"cycle": str})   # systematic sample, select_sample.py
+cases = pd.concat([cases, samp], ignore_index=True).sort_values("cycle", ignore_index=True)
 pdays = pd.read_csv(os.path.join(RES, "point_days.csv"), dtype={"cycle": str})
 pdays["season"] = [int(c[:4]) if int(c[4:6]) >= 10 else int(c[:4]) - 1 for c in pdays.cycle]
 ok = T.OK; bas = T.BAS
