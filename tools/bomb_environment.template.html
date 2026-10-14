@@ -69,6 +69,7 @@
   footer { border-top: 1px solid var(--border); padding-top: 14px; }
 
   .tablewrap table { min-width: 560px; }
+  caption { text-align: left; padding-bottom: 4px; }
   td.num, th.num { text-align: right; }
   .grid2 { display: grid; grid-template-columns: 1fr; gap: 12px 24px; }
   .grid2 > * { min-width: 0; }
@@ -105,7 +106,7 @@
   <a href="index.html">&larr; Back to the archive</a>
 </div></header>
 <main>
-<div class="note"><strong>ERA5 proxy, not direct observation.</strong> Everything here is built on ERA5 reanalysis and cyclone tracks found in ERA5 itself (pipeline A), seasons 2004-05 to 2025-26. The &ldquo;gale&rdquo;, &ldquo;storm&rdquo; and &ldquo;hurricane force&rdquo; classes are cut points on ERA5&rsquo;s 800 km ocean gust index (38, 54 and 71.7 kt). Only the 71.7 kt cut is tied to the archive; the other two are nominal and not calibrated on observed storms. The probabilities are leave-one-season-out model output, not observations. Research, not a forecast product.</div>
+<div class="note"><strong>ERA5 proxy, not direct observation.</strong> Everything here is built on ERA5 reanalysis and cyclone tracks found in ERA5 itself (pipeline A), seasons 2004-05 to 2025-26. The one exception is the GFS gust rule section, which scores GFS forecasts (2021-22 to 2025-26) against OPC&rsquo;s archive. The &ldquo;gale&rdquo;, &ldquo;storm&rdquo; and &ldquo;hurricane force&rdquo; classes are cut points on ERA5&rsquo;s 800 km ocean gust index (38, 54 and 71.7 kt). Only the 71.7 kt cut is tied to the archive; the other two are nominal and not calibrated on observed storms. The probabilities are leave-one-season-out model output, not observations. Research, not a forecast product.</div>
 
 <div class="answers">
   <div class="tag">In plain words</div>
@@ -114,6 +115,7 @@
     <li><strong>The four regions.</strong> Quiet, baroclinic only, forcing only and coupled. Coupled lows are 19 % of all fixes but hold <span id="coupShare"></span> of the rapid deepening: both ingredients together matter far more than either alone. The dividing lines are empirical (the upper third of each variable), not physical thresholds.</li>
     <li><strong>How to read the diagrams.</strong> Each box is a slice of all 159,430 lows in 2004-05 to 2025-26 at 00 and 12 UTC. Darker means a larger share of lows in that slice deepened rapidly over the next 24 hours (at least 1 Bergeron: 24 hPa in 24 h at 60&deg;N, the classic &ldquo;bomb&rdquo;). The storm&rsquo;s path runs through the boxes as it evolves.</li>
     <li><strong>Does it work?</strong> <span id="skillLine"></span></li>
+    <li><strong>Reading a GFS forecast gust.</strong> <a href="#gfs-rule">The GFS gust rule</a> below turns a forecast peak gust into odds that OPC calls the low hurricane force, with the 72 kt and 64 kt cut-offs side by side. No gust level is a sure thing.</li>
   </ul>
 </div>
 
@@ -175,6 +177,8 @@
   <div class="legend" id="tlLegend"></div>
   <p class="muted">Each column is the outlook made at that fix for the following 24 hours. The coloured strip under it shows which of the four regions the low was in at that fix. The line is the gust index ERA5 actually reached at that fix (kt, right scale), with dashed lines at 38, 54 and 71.7 kt. The outlook at one fix is compared with the line 12 and 24 hours later.</p>
 </section>
+
+<!--@@GFSRULE@@-->
 
 <section id="skill">
   <div class="tag">Does it work</div>

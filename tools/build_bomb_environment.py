@@ -35,6 +35,7 @@ import pandas as pd
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MARK = "/*@@DATA@@*/"
+RULE_MARK = "<!--@@GFSRULE@@-->"  # replaced by tools/gfs_gust_rule.html (made by tools/gfs_gust_rule.py)
 
 
 def main():
@@ -99,6 +100,7 @@ def main():
     blob = "window.HF_OUTLOOK=" + json.dumps(data, separators=(",", ":")) + ";"
     html = open(a.template).read()
     assert MARK in html
+    html = html.replace(RULE_MARK, open(os.path.join(ROOT, "tools", "gfs_gust_rule.html")).read().rstrip("\n"))
     open(a.out, "w").write(html.replace(MARK, blob))
     print(a.out, len(tracks), "tracks", len(D), "fixes", len(blob) // 1024, "KB data")
 
