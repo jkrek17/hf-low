@@ -20,7 +20,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 HF = 71.7
 MAP_H = (-48, -36, -24, -12, 0, 12, 24)
 DLAT, DLON = 22.0, 40.0
-plt.rcParams.update({"font.size": 9, "axes.titlesize": 10, "figure.facecolor": "white", "savefig.facecolor": "white"})
+plt.rcParams.update({"font.size": 9.5, "axes.titlesize": 10.5, "axes.titleweight": "semibold", "figure.facecolor": "white", "savefig.facecolor": "white",
+                     "axes.spines.top": False, "axes.spines.right": False, "axes.edgecolor": "#8a8984", "axes.labelcolor": "#33322f",
+                     "xtick.color": "#55544f", "ytick.color": "#55544f", "axes.grid": False, "legend.frameon": False})
 
 
 def coast():
@@ -87,11 +89,12 @@ def facts(row, fx, d24, t0, sw):
 
 
 def fig_track(fx, sw, slat, slon, polys, title, path):
-    fig, axs = plt.subplots(1, 2, figsize=(13.5, 5.6), gridspec_kw=dict(wspace=0.12))
     lon0 = fx.lonu
     x0, x1 = lon0.min() - 12, lon0.max() + 12
     y0, y1 = max(fx.lat.min() - 8, 5), min(fx.lat.max() + 8, 85)
     mid = 0.5 * (y0 + y1)
+    hgt = float(np.clip(5.2 * (y1 - y0) / ((x1 - x0) * np.cos(np.radians(mid))) + 1.5, 3.8, 6.6))   # panel height follows the map's shape
+    fig, axs = plt.subplots(1, 2, figsize=(13.5, hgt), gridspec_kw=dict(wspace=0.16))
     for ax in axs:
         ax.set_xlim(x0, x1); ax.set_ylim(y0, y1); ax.set_aspect(1 / np.cos(np.radians(mid)))
         draw_coast(ax, polys); ax.grid(color="#bbb", lw=0.4, ls=":"); ax.set_xlabel("longitude"); lonfmt(ax); ax.set_ylabel("latitude (N)")
@@ -116,9 +119,9 @@ def fig_track(fx, sw, slat, slon, polys, title, path):
     cf = ax.contourf(lonc, slat, sw, levels=lev, cmap="YlOrRd", extend="max", zorder=1)
     ax.contour(lonc, slat, sw, levels=[HF], colors="k", linewidths=1.4, zorder=2)
     ax.plot(lon0, fx.lat, color="k", lw=1, zorder=4); ax.scatter([fx.lonu[i0]], [fx.lat[i0]], marker="*", s=200, color="#fff", edgecolor="k", zorder=7)
-    cb = fig.colorbar(cf, ax=ax, shrink=0.8, pad=0.02); cb.set_label("highest ERA5 10 m gust, 48 h before to 24 h after lowest pressure (kt)")
-    ax.set_title("Gust swath: highest gust at each point (black contour = 71.7 kt)")
-    fig.suptitle(title, fontsize=11, x=0.01, ha="left", y=0.99)
+    cb = fig.colorbar(cf, ax=ax, shrink=0.8, pad=0.02); cb.set_label("highest ERA5 10 m gust (kt)")
+    ax.set_title("Gust swath, 48 h before to 24 h after lowest pressure\n(black contour = 71.7 kt)")
+    fig.suptitle(title, fontsize=12, fontweight="semibold", x=0.01, ha="left", y=1.0)
     fig.savefig(path, dpi=100, bbox_inches="tight"); plt.close(fig)
 
 
@@ -187,9 +190,12 @@ def summary(f):
     t0 = pd.Timestamp(f["t_minp"]); b, _ = label(f)
     fh = pd.Timestamp(f["first_hf"]) if f["first_hf"] else None
     s = f"ERA5 puts its lowest pressure at {f['minp']:.1f} hPa on {dt(f['t_minp'])}, near {f['lat_minp']:.1f}&deg;N {abs(f['lon_minp']):.1f}&deg;{'W' if f['lon_minp'] < 0 else 'E'}. "
-    s += f"Its fastest 24 h fall was {f['dp24_max']:.0f} hPa, ending {dt(f['t_dp24'])} at about {f['lat_dp24']:.0f}&deg;N"
-    s += (f" (the bomb threshold there is {f['bomb_thr']:.0f} hPa, so it qualifies as a bomb by that yardstick). " if f['dp24_max'] >= f['bomb_thr']
-          else f" (the bomb threshold there is {f['bomb_thr']:.0f} hPa, so it falls short of that yardstick). ")
+    if f['dp24_max'] > 0:
+        s += f"Its fastest 24 h fall was {f['dp24_max']:.0f} hPa, ending {dt(f['t_dp24'])} at about {f['lat_dp24']:.0f}&deg;N"
+        s += (f" (the bomb threshold there is {f['bomb_thr']:.0f} hPa, so it qualifies as a bomb by that yardstick). " if f['dp24_max'] >= f['bomb_thr']
+              else f" (the bomb threshold there is {f['bomb_thr']:.0f} hPa, so it falls short of that yardstick). ")
+    else:
+        s += "The tracker follows it only after most of its deepening, so no 24 h fall can be measured from the track and the bomb test cannot be applied. "
     if fh is not None:
         dur = (pd.Timestamp(f["last_hf"]) - fh) / pd.Timedelta(hours=1) + 6
         s += f"It first reached hurricane-force-equivalent gusts (index at least 71.7 kt) on {dt(f['first_hf'])} near {f['hf_lat']:.1f}&deg;N {abs(f['hf_lon']):.1f}&deg;{'W' if f['hf_lon'] < 0 else 'E'}, " \
@@ -235,55 +241,104 @@ def main(work, fixes_csv, outdir):
     write_page(rows, outdir)
 
 
+def fall(f):
+    return f"{f['dp24_max']:.0f}" if f["dp24_max"] > 0 else "n/a"
+
+
 def write_page(rows, outdir):
     with open(os.path.join(HERE, "..", "docs", "composites.html")) as f:
         c = f.read()
     style = c[c.index("<style>"):c.index("</style>") + 8]
     style = style.replace("</style>", """  .idx td.num, .idx th.num { text-align: right; }
-  .storm h3 { font-size: 18px; margin: 0 0 6px; }
-  .storm .meta { font-size: 13px; color: var(--ink-2); margin-bottom: 8px; }
-  .storm .sum { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; margin-bottom: 10px; }
+  .hero { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+  .hero .stat { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+  .hero .stat b { display: block; font-size: 24px; line-height: 1.15; font-variant-numeric: tabular-nums; }
+  .hero .stat span { font-size: 12px; color: var(--ink-2); }
+  .stack { display: flex; flex-direction: column; gap: 22px; }
+  meter.bar { appearance: none; -webkit-appearance: none; width: 64px; height: 8px; vertical-align: middle; margin-right: 6px; border: 0; border-radius: 4px; background: var(--surface-sunk); }
+  meter.bar::-webkit-meter-bar { background: var(--surface-sunk); border: 0; border-radius: 4px; height: 8px; }
+  meter.bar.atl::-webkit-meter-optimum-value, meter.bar.atl::-webkit-meter-suboptimum-value, meter.bar.atl::-webkit-meter-even-less-good-value { background: var(--atl); border-radius: 4px; }
+  meter.bar.pac::-webkit-meter-optimum-value, meter.bar.pac::-webkit-meter-suboptimum-value, meter.bar.pac::-webkit-meter-even-less-good-value { background: var(--pac); border-radius: 4px; }
+  meter.bar.atl::-moz-meter-bar { background: var(--atl); } meter.bar.pac::-moz-meter-bar { background: var(--pac); }
+  @media (max-width: 700px) { .toolbar { position: static !important; } }
+  .toolbar { position: sticky; top: 0; z-index: 5; background: var(--page); border-bottom: 1px solid var(--border); padding: 8px 0; display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; font-size: 14px; }
+  .toolbar button, .toolbar select { font: inherit; padding: 5px 12px; border: 1px solid var(--border-strong); border-radius: 999px; background: var(--surface); color: var(--ink); cursor: pointer; }
+  .toolbar button[aria-pressed="true"] { background: var(--navy); color: var(--navy-ink); border-color: var(--navy); }
+  .toolbar button:focus-visible, .toolbar select:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .storm { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; border-top: 4px solid var(--border-strong); scroll-margin-top: 56px; }
+  .storm.atl { border-top-color: var(--atl); } .storm.pac { border-top-color: var(--pac); }
+  .storm[hidden] { display: none; }
+  .storm h3 { font-size: 19px; margin: 0 0 2px; }
+  .storm .rank { display: inline-block; font-size: 12px; font-weight: 650; padding: 1px 8px; border-radius: 999px; background: var(--surface-sunk); border: 1px solid var(--border); color: var(--ink-2); margin-right: 8px; vertical-align: 2px; }
+  .storm .meta { font-size: 13px; color: var(--ink-2); margin-bottom: 10px; }
+  .tiles { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); margin: 0 0 12px; }
+  .tiles div { background: var(--surface-sunk); border-radius: 8px; padding: 8px 10px; }
+  .tiles b { display: block; font-size: 20px; line-height: 1.2; font-variant-numeric: tabular-nums; }
+  .tiles span { font-size: 12px; color: var(--ink-2); }
+  .storm .sum { border-left: 3px solid var(--accent); padding: 2px 0 2px 12px; margin-bottom: 12px; }
   .storm .sum p { margin: 0 0 6px; }
+  .storm details { border-top: 1px solid var(--border); padding: 8px 0 2px; }
+  .storm summary { cursor: pointer; font-weight: 650; padding: 4px 0; }
+  .storm .fig { margin: 8px 0 10px; }
+  .storm .fig img { border-radius: 6px; }
+  .count { color: var(--ink-2); font-size: 13px; }
 </style>""")
     esc = html.escape
+    secs = []
     tr = []
-    secs = {"atl": [], "pac": []}
-    for f in rows:
+    srt = sorted(rows, key=lambda f: (f["basin"], f["minp"]))
+    gmax = max(f["gust_idx"] for f in rows)
+    for f in srt:
         b, lab = label(f)
-        cls = "basin-atl" if f["basin"] == "atl" else "basin-pac"
+        cls = "atl" if f["basin"] == "atl" else "pac"
         pre = pd.Timestamp(f["t_minp"]).year < 2004
         anchor = f"storm-{f['track']}"
         dur = ((pd.Timestamp(f["last_hf"]) - pd.Timestamp(f["first_hf"])) / pd.Timedelta(hours=1) + 6) if f["first_hf"] else 0
-        tr.append(f'<tr><td><a href="#{anchor}"><span class="{cls}">{esc(lab)}</span></a></td><td class="num">{f["minp"]:.1f}</td>'
-                  f'<td class="num">{f["dp24_max"]:.0f}</td><td class="num">{f["gust_idx"]:.0f}</td><td class="num">{dur:.0f}</td>'
-                  f'<td>{"reanalysis only" if pre else "archive era"}</td></tr>')
-        nm = f' &mdash; the {esc(f["name"])} (name inferred from date and position)' if f["name"] else ""
+        tr.append(f'<tr><td><a href="#{anchor}"><span class="basin-{cls}">{esc(lab)}</span></a></td><td class="num">{f["minp"]:.1f}</td>'
+                  f'<td class="num">{fall(f)}</td><td class="num"><meter class="bar {cls}" min="0" max="{gmax:.0f}" value="{f["gust_idx"]:.0f}" aria-hidden="true"></meter> {f["gust_idx"]:.0f}</td>'
+                  f'<td class="num">{dur:.0f}</td><td>{"reanalysis only" if pre else "archive era"}</td></tr>')
+        nm = f' &mdash; the {esc(f["name"])} <span class="muted">(name inferred from date and position)</span>' if f["name"] else ""
         note = ""
         if pre:
             note = ('<p class="limit"><strong>Not direct observation.</strong> This storm is before the 2004&ndash;05 season. '
                     'No archive record covers it, so every number and map here is ERA5 reanalysis. '
                     + ('The gust index also runs high before 2001 (ERA5 gust drifts upward at fixed storm depth), so read its level with caution; central pressure is the better yardstick. ' if f["gust_flag"] else '')
                     + 'No trend is drawn from it.</p>')
-        sec = f"""<section id="{anchor}" class="storm">
-  <h3><span class="{cls}">{esc(lab)}</span>{nm}</h3>
+        tiles = (f'<div class="tiles"><div><b>{f["minp"]:.1f}</b><span>lowest pressure (hPa)</span></div>'
+                 f'<div><b>{fall(f)}</b><span>fastest 24 h fall (hPa)</span></div>'
+                 f'<div><b>{f["gust_idx"]:.0f}</b><span>peak gust index (kt)</span></div>'
+                 f'<div><b>{dur:.0f}</b><span>hours at HF strength</span></div></div>')
+        sec = f"""<section id="{anchor}" class="storm {cls}" data-basin="{cls}" data-minp="{f["minp"]:.1f}" data-fall="{max(f["dp24_max"], 0):.1f}" data-gust="{f["gust_idx"]:.1f}" data-year="{pd.Timestamp(f["t_minp"]).year}">
+  <h3><span class="rank">{b.replace("North ", "")} #{f["rank"]}</span><span class="basin-{cls}">{esc(lab)}</span>{nm}</h3>
   <div class="meta">Rank {f["rank"]} by lowest ERA5 central pressure in the {b}. ERA5 proxy, pipeline A track {f["track"]}.</div>
+  {tiles}
   <div class="sum"><div class="tag">In plain words</div><p>{summary(f)}</p></div>
   {note}
 <figure class="fig">
   <div class="scroll"><a href="storm-review-{f["track"]}-track.png"><img src="storm-review-{f["track"]}-track.png" alt="Track coloured by central pressure with hurricane-force fixes ringed, and a map of the highest ERA5 gust for {esc(lab)}" loading="lazy"></a></div>
   <figcaption>Where it went, and where the wind was. Left: 6-hourly pipeline A fixes coloured by central pressure; red rings mark fixes with a gust index of at least 71.7 kt. Right: the highest ERA5 10 m gust at each point from 48 h before to 24 h after the lowest pressure. It includes land and the strongest gusts around hills and coasts, so it is not the same as the ocean-only gust index.</figcaption>
 </figure>
-<figure class="fig">
-  <div class="scroll"><a href="storm-review-{f["track"]}-series.png"><img src="storm-review-{f["track"]}-series.png" alt="Time series of central pressure, 24-hour deepening and gust index for {esc(lab)}" loading="lazy"></a></div>
-  <figcaption>How it developed: central pressure, the fall over the previous 24 h against the latitude-scaled bomb threshold, and the gust index against the 71.7 kt line.</figcaption>
-</figure>
-<figure class="fig">
-  <div class="scroll"><a href="storm-review-{f["track"]}-maps.png"><img src="storm-review-{f["track"]}-maps.png" alt="Maps of sea-level pressure, 500 hPa height and 250 hPa wind speed every 12 hours around {esc(lab)}" loading="lazy"></a></div>
-  <figcaption>The weather pattern around it every 12 h, from 48 h before to 24 h after the lowest pressure: sea-level pressure (black), 500 hPa height (blue) and 250 hPa wind speed (shaded jet). Over Greenland and other high ground ERA5's sea-level pressure is extrapolated and noisy.</figcaption>
-</figure>
+<details>
+  <summary>How it developed</summary>
+  <figure class="fig">
+    <div class="scroll"><a href="storm-review-{f["track"]}-series.png"><img src="storm-review-{f["track"]}-series.png" alt="Time series of central pressure, 24-hour deepening and gust index for {esc(lab)}" loading="lazy"></a></div>
+    <figcaption>Central pressure, the fall over the previous 24 h against the latitude-scaled bomb threshold, and the gust index against the 71.7 kt line.</figcaption>
+  </figure>
+</details>
+<details>
+  <summary>Weather maps every 12 hours</summary>
+  <figure class="fig">
+    <div class="scroll"><a href="storm-review-{f["track"]}-maps.png"><img src="storm-review-{f["track"]}-maps.png" alt="Maps of sea-level pressure, 500 hPa height and 250 hPa wind speed every 12 hours around {esc(lab)}" loading="lazy"></a></div>
+    <figcaption>The pattern around it from 48 h before to 24 h after the lowest pressure: sea-level pressure (black), 500 hPa height (blue) and 250 hPa wind speed (shaded jet). Over Greenland and other high ground ERA5's sea-level pressure is extrapolated and noisy.</figcaption>
+  </figure>
+</details>
 </section>"""
-        secs[f["basin"]].append(sec)
-    npre = sum(pd.Timestamp(f["t_minp"]).year < 2004 for f in rows); npost = len(rows) - npre
+        secs.append(sec)
+    n = len(rows); na = sum(f["basin"] == "atl" for f in rows); npc = n - na
+    npre = sum(pd.Timestamp(f["t_minp"]).year < 2004 for f in rows); npost = n - npre
+    deep = min(rows, key=lambda f: f["minp"])
+    fast = max(rows, key=lambda f: f["dp24_max"])
+    nhf = sum(1 for f in rows if f["first_hf"])
     page = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -291,7 +346,7 @@ def write_page(rows, outdir):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Storm reviews - Hurricane Force Extratropical Low Archive</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<meta name="description" content="Storm reviews of the ten deepest extratropical lows in the ERA5 proxy record, five per basin: track, development, weather maps every 12 hours and gust swath.">
+<meta name="description" content="Storm reviews of the {n} deepest extratropical lows in the ERA5 proxy record, {na} Atlantic and {npc} Pacific: track, development, weather maps every 12 hours and gust swath.">
 <!-- generated by tools/build_storm_reviews.py from tools/storm_review_facts.csv: edit the script, not this file -->
 {style}
 </head>
@@ -301,28 +356,43 @@ def write_page(rows, outdir):
   <a href="index.html">&larr; Back to the archive</a>
 </div></header>
 <main>
-<div class="note"><strong>ERA5 proxy, not direct observation.</strong> Every storm here was found in ERA5 reanalysis by the project's pipeline A tracker, and every chart is drawn from ERA5 fields (0.25&deg;, 6-hourly). {npre} of the ten are before the 2004&ndash;05 season, where no archive record exists; the other {npost} are since then, and are still read here from ERA5. ERA5 smooths the very strongest winds and pressure minima, so real peaks may be stronger. These are case studies, not a trend: nothing here says whether such storms are becoming more or less common.</div>
+<div class="note"><strong>ERA5 proxy, not direct observation.</strong> Every storm here was found in ERA5 reanalysis by the project's pipeline A tracker, and every chart is drawn from ERA5 fields (0.25&deg;, 6-hourly). {npre} of the {n} are before the 2004&ndash;05 season, where no archive record exists; the other {npost} are since then, and are still read here from ERA5. ERA5 smooths the very strongest winds and pressure minima, so real peaks may be stronger. These are case studies, not a trend: nothing here says whether such storms are becoming more or less common.</div>
 
-<p class="jump"><strong>Jump to:</strong> <a href="#atl">North Atlantic</a> &middot; <a href="#pac">North Pacific</a> &middot; <a href="#how">How the storms were chosen</a></p>
+<div class="hero">
+  <div class="stat"><b>{n}</b><span>storms: {na} North Atlantic, {npc} North Pacific</span></div>
+  <div class="stat"><b>{deep["minp"]:.1f} hPa</b><span>lowest: {esc(label(deep)[1])}</span></div>
+  <div class="stat"><b>{fast["dp24_max"]:.0f} hPa</b><span>fastest 24 h fall: {esc(label(fast)[1])}</span></div>
+  <div class="stat"><b>{nhf} of {n}</b><span>reach a gust index of 71.7 kt or more</span></div>
+</div>
 
 <div class="answers">
   <div class="tag">At a glance</div>
   <div class="tablewrap"><table class="idx">
   <thead><tr><th>Storm</th><th class="num">Lowest pressure (hPa)</th><th class="num">Fastest 24 h fall (hPa)</th><th class="num">Peak gust index (kt)</th><th class="num">Hours at HF strength</th><th>Source</th></tr></thead>
   <tbody>{"".join(tr)}</tbody></table></div>
-  <p class="muted">Hours at HF strength is the number of 6-hourly fixes with a gust index of at least 71.7 kt times six, counted from the first to the last such fix. Peak gust index is the highest ERA5 gust within 800 km over the ocean, one number per fix.</p>
+  <p class="muted">Hours at HF strength is the number of 6-hourly fixes with a gust index of at least 71.7 kt times six, counted from the first to the last such fix. Peak gust index is the highest ERA5 gust within 800 km over the ocean, one number per fix. Click a storm name to jump to its review.</p>
 </div>
 
-<section id="atl"><div class="tag">North Atlantic</div><h2>The five deepest North Atlantic storms</h2></section>
-{"".join(secs["atl"])}
-<section id="pac"><div class="tag">North Pacific</div><h2>The five deepest North Pacific storms</h2></section>
-{"".join(secs["pac"])}
+<div class="toolbar" role="group" aria-label="Show storms">
+  <span>Show:</span>
+  <button type="button" data-f="all" aria-pressed="true">All {n}</button>
+  <button type="button" data-f="atl" aria-pressed="false">North Atlantic ({na})</button>
+  <button type="button" data-f="pac" aria-pressed="false">North Pacific ({npc})</button>
+  <label>Sort by <select id="sortby">
+    <option value="minp">Lowest pressure</option><option value="fall">Fastest 24 h fall</option><option value="gust">Peak gust index</option><option value="year">Newest first</option>
+  </select></label>
+  <span class="count" id="count" aria-live="polite"></span>
+</div>
+
+<div id="storms" class="stack">
+{"".join(secs)}
+</div>
 
 <section id="how">
   <div class="tag">Method</div>
   <h2>How the storms were chosen and drawn</h2>
-  <p>The ten storms are the five with the lowest ERA5 central pressure in each basin among the 1979&ndash;2025 tracks of pipeline A (the research tracker, <code>research/era5/hf_history</code>), with tropical-cyclone-flagged tracks left out. That removed two Pacific tracks (30 Oct 1989 and 3 Oct 1981) that would otherwise rank second and third. Ranking is by pressure alone, so the list is not a list of the strongest winds.</p>
-  <p>Central pressure, position and gust index come from the 6-hourly pipeline A fixes. The gust index is the highest ERA5 10 m gust over ocean within 800 km of the low. The weather maps use WeatherBench2 ERA5 at 0.25&deg;, 6-hourly (sea-level pressure, 500 hPa geopotential height, 250 hPa wind speed), re-centred on the storm at each map time. The swath uses ERA5 hourly instantaneous gusts every 3 h over the 72 h window. The 24 h fall is the change in central pressure over the previous 24 h at each 6-hourly fix; the bomb line scales 24 hPa per 24 h at 60&deg;N by sin(latitude)/sin(60&deg;).</p>
+  <p>The storms are those with the lowest ERA5 central pressure in each basin among the 1979&ndash;2025 tracks of pipeline A (the research tracker, <code>research/era5/hf_history</code>), taken in order of pressure from the lowest. Tropical-cyclone-flagged tracks are left out (three Pacific tracks, among them 30 Oct 1989 and 3 Oct 1981, which would otherwise rank second and third), and one Pacific storm from the 2024&ndash;25 season is left out because the weather-map fields used here end in January 2023. The rank shown is the rank among all tracks, so some numbers are missing. Ranking is by pressure alone, so the list is not a list of the strongest winds.</p>
+  <p>Central pressure, position and gust index come from the 6-hourly pipeline A fixes. The gust index is the highest ERA5 10 m gust over ocean within 800 km of the low. The weather maps use WeatherBench2 ERA5 at 0.25&deg;, 6-hourly (sea-level pressure, 500 hPa geopotential height, 250 hPa wind speed), re-centred on the storm at each map time. The swath uses ERA5 hourly instantaneous gusts every 3 h over the 72 h window. The 24 h fall is the change in central pressure over the previous 24 h at each 6-hourly fix; the bomb line scales 24 hPa per 24 h at 60&deg;N by sin(latitude)/sin(60&deg;). OPC warns on sustained winds; the gust index is a proxy for that, not the same thing.</p>
   <p class="limit"><strong>Read with care.</strong> ERA5 proxy throughout, never validated for storms before the archive begins. Before 2001 the gust index drifts upward at fixed storm depth, so gust numbers for the 1980s and 1990s storms are less reliable than their pressures. Not independently re-checked: how closely these ERA5 pressures match the observed minima of the named storms.</p>
 </section>
 
@@ -337,6 +407,46 @@ def write_page(rows, outdir):
       var saved = localStorage.getItem('hf-theme');
       if (saved) document.documentElement.setAttribute('data-theme', saved);
     }} catch (err) {{ /* private mode: follow the system theme */ }}
+  }})();
+  /* Basin filter and sort. Without script every review simply shows in rank order. */
+  (function () {{
+    var box = document.getElementById('storms');
+    var cards = Array.prototype.slice.call(box.querySelectorAll('.storm'));
+    var btns = document.querySelectorAll('.toolbar button');
+    var sel = document.getElementById('sortby');
+    var count = document.getElementById('count');
+    var filt = 'all';
+    function render() {{
+      var key = sel.value;
+      cards.sort(function (a, b) {{
+        var x = parseFloat(a.dataset[key]), y = parseFloat(b.dataset[key]);
+        return key === 'minp' ? x - y : y - x;
+      }});
+      var shown = 0;
+      cards.forEach(function (c) {{
+        var on = filt === 'all' || c.dataset.basin === filt;
+        c.hidden = !on; if (on) shown++;
+        box.appendChild(c);
+      }});
+      count.textContent = shown + ' shown';
+    }}
+    function openHash() {{
+      var el = location.hash && document.getElementById(location.hash.slice(1));
+      if (el && el.classList.contains('storm')) {{
+        if (el.hidden) {{ filt = 'all'; btns.forEach(function (b) {{ b.setAttribute('aria-pressed', b.dataset.f === 'all'); }}); render(); }}
+        el.scrollIntoView();
+      }}
+    }}
+    btns.forEach(function (b) {{
+      b.addEventListener('click', function () {{
+        filt = b.dataset.f;
+        btns.forEach(function (o) {{ o.setAttribute('aria-pressed', o === b ? 'true' : 'false'); }});
+        render();
+      }});
+    }});
+    sel.addEventListener('change', render);
+    window.addEventListener('hashchange', openHash);
+    render(); openHash();
   }})();
 </script>
 </body>
