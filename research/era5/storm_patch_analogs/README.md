@@ -43,8 +43,8 @@ The gain survives every check. Existing patches and the local gust cache only; n
 
 ## Limits
 
-ERA5 proxy, not validated against observations; ERA5 patches in, ERA5 gust out (a live product needs GFS patches and a tracker; the earlier full-model test kept ~85% of ERA5 gain on GFS, not tested for patches). 1.5 degree grid: synoptic pattern only. 8 seasons, one more look at data used before. North-up patches (not rotated to motion). The 15 PCs are not interpreted physically.
+ERA5 proxy, not validated against observations; ERA5 patches in, ERA5 gust out (a live product needs GFS patches and a tracker; the earlier full-model test kept ~85% of ERA5 gain on GFS). GFS patches were tested in `gfs/` (PR 206): frozen ERA5 pattern terms fed GFS f024 patches add +0.0273 RPSS over the 5 GFS seasons. 1.5 degree grid: synoptic pattern only. 8 seasons, one more look at data used before. North-up patches (not rotated to motion). The 15 PCs are not interpreted physically.
 
 ## Files
 
-`common_patch.py` geometry; `select_fixes.py`; `clim_patch.py` and `extract_patches.py` (pull); `score_patch.py` (T1, S1-S4, calibration); `extras.py` (post hoc checks, analog display, product). Results in `results/` (`skill.txt`, `extras.txt`, `tests.csv`). Patch product, not in git (65 MB): `/mnt/project-files/storm-patches/` (see its README).
+`common_patch.py` geometry; `select_fixes.py`; `clim_patch.py` and `extract_patches.py` (pull); `score_patch.py` (T1, S1-S4, calibration); `extras.py` (post hoc checks, analog display, product); `audit.py` (post hoc audit, PR 201); `gfs/` (pre-registered GFS test, PR 206: README there). Results in `results/` (`skill.txt`, `extras.txt`, `tests.csv`). Patch product, not in git (65 MB): `/mnt/project-files/storm-patches/` (see its README).
