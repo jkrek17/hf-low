@@ -1,4 +1,4 @@
-# ASCAT check of the ERA5 gust proxy (status: RUN; verification noted below)
+# ASCAT check of the ERA5 gust proxy (status: RUN and independently verified, see "Verification")
 
 Question (Jason, 2026-10-13, item 2): does pipeline A's ERA5 gust index agree with independent scatterometer winds?
 **ERA5 proxy, pipeline A** (transitioning tropical cyclones are in). Plan: `PREREGISTRATION.md`, committed first (`5440a7b`),
@@ -21,12 +21,13 @@ coverage; the analysis keeps the best-covered pass per storm: **4,252 storms** (
 | P1 rank correlation of footprint maxima, Atlantic | **0.946** [0.940, 0.952] | >= 0.6, lower >= 0.5 | < 0.001 |
 | P1 same, Pacific | **0.924** [0.913, 0.932] | same | < 0.001 |
 | P2 AUC, ERA5 footprint max separating ASCAT max >= 45 kt | **0.971** [0.967, 0.975] | >= 0.85, lower >= 0.80 | < 0.001 |
-| P3 ASCAT max, index >= 71.7 minus depth-matched lower-index storms | **+12.0 kt** [11.1, 13.1] (n 423) | > 0 and q < 0.05 | 0.0012 |
+| P3 ASCAT max, index >= 71.7 minus depth-matched lower-index storms | **+12.0 kt** [11.1, 13.1] (n 423); [10.4, 13.8] if the matching is redone inside each bootstrap draw | > 0 and q < 0.05 | 0.0012 |
 | P4 ASCAT / ERA5 ratio differs among Metop-A, B, C | F 5.33, p 0.037 | none (stability check) | 0.037 |
 
 Intervals are season-block bootstrap (resampling the 20 seasons). 5 of 5 tests pass q < 0.05 (the bootstrap p of 0.000 means
-below 1/1,000). Power: the P3 interval gives a standard error of about 0.5 kt, so the smallest difference detectable at 80 %
-power is about 1.4 kt (2.8 x SE), far below the +5 kt in the "no" rule; the "no" branch could not have been missed for lack of power.
+below 1/1,000). Power: the P3 interval gives a standard error of about 0.5 kt (0.9 kt with the matching redone in each draw), so the smallest
+difference detectable at 80 % power is about 1.4 to 2.4 kt (2.8 x SE), far below the +5 kt in the "no" rule; the "no" branch could
+not have been missed for lack of power.
 
 ## What the numbers mean in wind terms (descriptive, no verdict)
 
@@ -62,7 +63,21 @@ power is about 1.4 kt (2.8 x SE), far below the +5 kt in the "no" rule; the "no"
   mapping, not 1:1.
 - Seasons: 20 (2006-07 to 2025-26). 2004-05 to 2005-06 have no scatterometer pass here. Decision 1 holds; this check supports the
   gust index as a wind-class ordering on 2006-07 on and says nothing about pre-2001 levels.
-- Not independently recomputed until the verification section below says so.
+
+## Verification
+
+A fresh Sonnet agent with no access to this analysis recomputed from `scat_footprints.csv` (and, for the rebuild, the raw cell rows and
+the ERA5 cache): storm counts (4,252 / 2,352 / 1,900; 430 with index >= 71.7), both Spearman correlations (0.9460, 0.9236), AUC
+(0.9713), P3 (+12.003 kt, n 423), the class table (medians 31.9, 44.3, 52.9, 62.8 kt; 91 % and 84 % at 45 and 50 kt), the matched
+quantiles (43.54, 54.82, 62.20 kt) and the per-sensor ratios (0.8312, 0.8383, 0.8243, n 797 / 758 / 357): all match. Bootstrap
+intervals for both correlations and AUC match to 0.001. The **P3 interval differs**: the registered code fixes the matching once and
+resamples seasons of the matched differences ([11.1, 13.1]); the verifier redid the matching inside each draw ([10.4, 13.8]). Both
+are shown; the conclusion is the same. The agent also rebuilt 40 random footprints (10 with index >= 71.7) from the raw cells and the
+ERA5 cache: cell count, ASCAT max and ERA5 max matched in 40 of 40 (to 0.01 kt). Recomputing the stored index from the cache is
+within 1 kt in 37 of 40 (the three misses are higher in the recomputation, the neighbouring-low effect already noted in R0).
+**Not independently recomputed:** the pointwise cell-pair table (slope, bias by latitude and by distance), the rain-flag loss
+shares, the season-ratio series and slope, the within-tercile and partial correlations, the radiometer-rain sensitivity run, and the
+synthetic test. The 20-season count and the file counts come from the same scripts as the analysis.
 
 ## Files
 
