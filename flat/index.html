@@ -226,6 +226,11 @@
           <option value="f64">Share of times at or above 64 kt</option>
           <option value="f717">Share of times at or above 71.7 kt</option>
         </select>
+        <label for="atlasPeriod" id="atlasPeriodLabel" hidden>Period</label>
+        <select id="atlasPeriod" hidden>
+          <option value="now">2004-05 to 2025-26, all months</option>
+          <option value="old">1979-2003, Oct to Apr (proxy, within-era)</option>
+        </select>
         <label for="atlasSrc">Source</label>
         <select id="atlasSrc">
           <option value="archive">OPC archive (2004-05 to 2025-26)</option>
@@ -235,6 +240,7 @@
       <script type="text/plain" id="atlasLoader" src="atlas.js"></script>
       <script type="text/plain" id="gustLoader" src="gust-climo.js"></script>
       <script type="text/plain" id="gustClassLoader" src="gust-classes.js"></script>
+      <script type="text/plain" id="gustClass1979Loader" src="gust-classes-1979.js"></script>
       <p class="tool-note" id="mapNote"></p>
       <button type="button" class="btn" id="focusBack" hidden>Back to all tracks</button>
       <a class="btn btn-link" id="focusEnv" href="bomb-environment.html" hidden>Environment check for this storm</a>
