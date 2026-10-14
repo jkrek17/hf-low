@@ -1,0 +1,15 @@
+candidate storms (00/12 UTC peak, stored index > 0): from 2004-05 13851  from 2006-07 12568
+analysed storms 4252  share of 2006-07-on candidates 0.338
+index >= 71.7: analysed 0.101  candidates (2006-07 on) 0.069
+passes in P4 set (cover >= 0.40): 5791 from storms 4252
+
+Per-basin AUC (>=45 kt), season-block 95% CI:
+  atl: 0.971 [0.965, 0.976] n=2352
+  pac: 0.972 [0.966, 0.977] n=1900
+
+Atlantic Spearman rho (footprint maxima) split at 60N:
+  60N and south: 0.939 [0.929, 0.946] n=1566  index>=71.7: 182
+  north of 60N: 0.964 [0.955, 0.970] n=786  index>=71.7: 83
+
+P3 (index>=71.7 minus depth-matched), Atlantic south of 60N only (north of 60N dropped from the Atlantic):
+  12.46 kt [11.09, 13.75] n=339
