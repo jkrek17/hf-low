@@ -32,4 +32,7 @@ For each lead, the **recommended radius** is the smallest R on the grid with HF 
 No claim about skill of GFS gust, no calibration of probabilities, no truth beyond the proxy. A recommended radius says how wide to draw a footprint to absorb **position error**, not to absorb intensity error or missed storms. Real GFS shading would need to be checked separately (scored GFS gust fields beyond 96 h do not exist here).
 
 ## Deviations (post hoc)
-(none yet)
+- Intervals are 95% (not 90%) season-block bootstrap, 2,000 resamples. Decided while writing the summary script, before seeing results; stricter than planned.
+- Distances use each source cell's own latitude (exact row spacing, disk stamped per cell) instead of 5-degree bands: simpler and more exact; differs from a band approach by 1-3% of area.
+- One displacement draw per time and lead for gale and storm (two for HF), to save compute; HF is the decision class.
+- Cache data decoded with a small Node zstd + numpy bit-unshuffle reader because numcodecs/scipy are not installed and pip is unreachable.
