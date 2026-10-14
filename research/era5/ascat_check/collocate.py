@@ -1,7 +1,7 @@
 """Collocate scatterometer cells with ERA5 gust around pipeline A storm fixes.
 
 Input scatterometer cell table (any source adapter must write this): csv/csv.gz with columns
-  sensor, time (UTC, ISO), lat, lon (-180..360 ok), wind_kt, ok (1 = passes rain/ambiguity/quality flags)
+  sensor, time (UTC, ISO) or t (hours since 1900), lat, lon (-180..360 ok), wind_kt, ok (1 = passes rain/ambiguity/quality flags)
 usage: collocate.py cells.csv.gz out_prefix [--sample-rows N]
 Writes out_prefix_footprints.csv (one row per storm x sensor pass) and out_prefix_pairs.csv (matched cells)."""
 import sys, numpy as np, pandas as pd
@@ -25,8 +25,9 @@ def collocate(cells, S=None, ocean=None, idx=None, with_pairs=True):
     S["fr"] = [idx[h] for h in S.h1900]
     S = S.sort_values("fr")
     cells = cells[cells.ok == 1].copy()
-    cells["t"] = pd.to_datetime(cells.time).astype("datetime64[s]").astype("int64") / 3600.0 + \
-        E.hours1900("1970-01-01T00")           # hours since 1900
+    if "t" not in cells:                       # adapters may supply t (hours since 1900) directly: rss_adapter.load_cells does
+        cells["t"] = pd.to_datetime(cells.time).astype("datetime64[s]").astype("int64") / 3600.0 + \
+            E.hours1900("1970-01-01T00")           # hours since 1900
     cells = cells.sort_values("t")
     tt = cells.t.values
     foot, pairs = [], []

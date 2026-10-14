@@ -1,13 +1,18 @@
 """ERA5 side of the ASCAT check: cache index, sample, disc geometry, bilinear gust at points.
 ERA5 PROXY, pipeline A. Reads the shared gust cache; never pulls."""
-import glob, os, numpy as np, pandas as pd, numcodecs
+import glob, os, numpy as np, pandas as pd
+try:
+    import numcodecs
+except ImportError:                       # no PyPI in the 2026-10-14 environment: decode with blosc_nolib (system libzstd)
+    numcodecs = None
+    import blosc_nolib
 
 CACHE = os.environ.get("ERA5_GUST_CACHE", "/mnt/project-files/era5-cache")
 TRACKS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "hf_history", "results", "all_tracks.csv.gz")
 RE = 6371.0
 LAT = 90 - 0.25 * np.arange(361)          # 90N .. 0N
 LON = 0.25 * np.arange(1440)
-_blosc = numcodecs.Blosc()
+_blosc = numcodecs.Blosc() if numcodecs else None
 
 
 def cache_index():
@@ -30,7 +35,8 @@ import functools
 @functools.lru_cache(maxsize=2)
 def _file(f):
     z = np.load(f)
-    return np.frombuffer(_blosc.decode(z["data"].tobytes()), np.uint8).reshape(z["shape"])
+    raw = z["data"].tobytes()
+    return np.frombuffer(_blosc.decode(raw) if _blosc else blosc_nolib.decode(raw), np.uint8).reshape(z["shape"])
 
 
 def field(f, r):
