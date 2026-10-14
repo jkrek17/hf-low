@@ -20,9 +20,16 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 HF = 71.7
 MAP_H = (-48, -36, -24, -12, 0, 12, 24)
 DLAT, DLON = 22.0, 40.0
-plt.rcParams.update({"font.size": 9.5, "axes.titlesize": 10.5, "axes.titleweight": "semibold", "figure.facecolor": "white", "savefig.facecolor": "white",
-                     "axes.spines.top": False, "axes.spines.right": False, "axes.edgecolor": "#8a8984", "axes.labelcolor": "#33322f",
-                     "xtick.color": "#55544f", "ytick.color": "#55544f", "axes.grid": False, "legend.frameon": False})
+INK, MUTED, GRID, LAND = "#1b1f24", "#6b7280", "#eceae4", "#8b8a84"
+from matplotlib.colors import LinearSegmentedColormap
+CM_PRESS = LinearSegmentedColormap.from_list("press", ["#f6d98b", "#ee8f5a", "#c2415d", "#5b2a86", "#1d1b4b"])      # high pressure pale, low pressure deep
+CM_GUST = LinearSegmentedColormap.from_list("gust", ["#fff6e5", "#ffd9a0", "#ffa05c", "#e5502f", "#a31d4b", "#4a0e4e"])
+CM_JET = LinearSegmentedColormap.from_list("jet", ["#f3f0ff", "#c9bff5", "#8f7fe0", "#5b46c4", "#2d1f7a"])
+plt.rcParams.update({"font.family": "Inter", "font.size": 9.5, "axes.titlesize": 10.5, "axes.titleweight": "semibold", "axes.titlelocation": "left",
+                     "axes.titlecolor": INK, "figure.facecolor": "white", "savefig.facecolor": "white", "axes.facecolor": "white",
+                     "axes.spines.top": False, "axes.spines.right": False, "axes.spines.left": False, "axes.edgecolor": "#d6d3cb",
+                     "axes.labelcolor": MUTED, "axes.labelsize": 9, "xtick.color": MUTED, "ytick.color": MUTED, "xtick.major.size": 0, "ytick.major.size": 0,
+                     "axes.grid": False, "grid.color": GRID, "grid.linewidth": 0.8, "legend.frameon": False, "text.color": INK, "axes.axisbelow": True})
 
 
 def coast():
@@ -37,7 +44,7 @@ def draw_coast(ax, polys, lw=0.6):
         if np.abs(np.diff(a[:, 0])).max() > 180:
             continue                                     # skips the few polygons that straddle the antimeridian
         for sh in (-360, 0, 360):
-            ax.plot(a[:, 0] + sh, a[:, 1], color="#555", lw=lw, zorder=3)
+            ax.plot(a[:, 0] + sh, a[:, 1], color=LAND, lw=lw, zorder=3)
 
 
 def crop_axes(la, lo, dlat, dlon):
@@ -97,26 +104,26 @@ def fig_track(fx, sw, slat, slon, polys, title, path):
     fig, axs = plt.subplots(1, 2, figsize=(13.5, hgt), gridspec_kw=dict(wspace=0.16))
     for ax in axs:
         ax.set_xlim(x0, x1); ax.set_ylim(y0, y1); ax.set_aspect(1 / np.cos(np.radians(mid)))
-        draw_coast(ax, polys); ax.grid(color="#bbb", lw=0.4, ls=":"); ax.set_xlabel("longitude"); lonfmt(ax); ax.set_ylabel("latitude (N)")
+        draw_coast(ax, polys); ax.grid(color=GRID, lw=0.7); ax.set_xlabel("longitude"); lonfmt(ax); ax.set_ylabel("latitude (N)")
     ax = axs[0]
-    ax.plot(lon0, fx.lat, color="#888", lw=1, zorder=4)
-    sc = ax.scatter(lon0, fx.lat, c=fx.msl, cmap="plasma_r", s=34, vmin=910, vmax=1010, zorder=5, edgecolor="k", linewidth=0.3)
+    ax.plot(lon0, fx.lat, color="#b8b6ae", lw=1.2, zorder=4)
+    sc = ax.scatter(lon0, fx.lat, c=fx.msl, cmap=CM_PRESS, s=34, vmin=910, vmax=1010, zorder=5, edgecolor="white", linewidth=0.6)
     hf = fx[fx.gust >= HF]
-    ax.scatter(hf.lonu, hf.lat, s=130, facecolor="none", edgecolor="#d00", linewidth=1.6, zorder=6)
+    ax.scatter(hf.lonu, hf.lat, s=130, facecolor="none", edgecolor="#e5502f", linewidth=1.8, zorder=6)
     i0 = fx.msl.idxmin()
     ax.scatter([fx.lonu[i0]], [fx.lat[i0]], marker="*", s=260, color="#fff", edgecolor="k", zorder=7)
     for k, r in fx.iterrows():
         if r.t.hour == 0:
             ax.annotate(r.t.strftime("%d %b"), (r.lonu, r.lat), xytext=(4, 5), textcoords="offset points", fontsize=7, zorder=8)
     cb = fig.colorbar(sc, ax=ax, shrink=0.8, pad=0.02); cb.set_label("central pressure (hPa)")
-    ax.legend(handles=[Line2D([], [], marker="o", ls="", markerfacecolor="none", markeredgecolor="#d00", markersize=10, label="HF-strength fix (gust index ≥ 71.7 kt)"),
+    ax.legend(handles=[Line2D([], [], marker="o", ls="", markerfacecolor="none", markeredgecolor="#e5502f", markersize=10, label="HF-strength fix (gust index ≥ 71.7 kt)"),
                        Line2D([], [], marker="*", ls="", markerfacecolor="w", markeredgecolor="k", markersize=14, label="lowest pressure")],
               loc="lower left", fontsize=7.5, framealpha=0.9)
     ax.set_title("Track, coloured by central pressure (6-hourly fixes)")
     ax = axs[1]
     lonc = slon.copy()
     lev = [40, 50, 60, 64, 72, 80, 90, 100, 110]
-    cf = ax.contourf(lonc, slat, sw, levels=lev, cmap="YlOrRd", extend="max", zorder=1)
+    cf = ax.contourf(lonc, slat, sw, levels=lev, cmap=CM_GUST, extend="max", zorder=1)
     ax.contour(lonc, slat, sw, levels=[HF], colors="k", linewidths=1.4, zorder=2)
     ax.plot(lon0, fx.lat, color="k", lw=1, zorder=4); ax.scatter([fx.lonu[i0]], [fx.lat[i0]], marker="*", s=200, color="#fff", edgecolor="k", zorder=7)
     cb = fig.colorbar(cf, ax=ax, shrink=0.8, pad=0.02); cb.set_label("highest ERA5 10 m gust (kt)")
@@ -152,13 +159,13 @@ def fig_maps(z, polys, title, path, fx, t0):
         ax = axs[k]; la, lo = z[f"centre_{h}"]
         lats, lons = crop_axes(la, lo, DLAT, DLON)
         msl, z5, ws = z[f"msl_{h}"], z[f"z500_{h}"], z[f"ws250_{h}"]
-        cf = ax.contourf(lons, lats, ws, levels=np.arange(30, 91, 10), cmap="BuPu", extend="max", zorder=1)
-        cs = ax.contour(lons, lats, z5, levels=np.arange(4800, 6200, 60), colors="#1f6fbf", linewidths=0.7, zorder=2)
-        ax.contour(lons, lats, msl, levels=np.arange(900, 1060, 4), colors="k", linewidths=0.8, zorder=3)
-        ax.contour(lons, lats, msl, levels=[992], colors="k", linewidths=1.6, zorder=3)
+        cf = ax.contourf(lons, lats, ws, levels=np.arange(30, 91, 10), cmap=CM_JET, extend="max", zorder=1)
+        cs = ax.contour(lons, lats, z5, levels=np.arange(4800, 6200, 60), colors="#3b82c4", linewidths=0.9, alpha=0.85, zorder=2)
+        ax.contour(lons, lats, msl, levels=np.arange(900, 1060, 4), colors=INK, linewidths=0.55, alpha=0.8, zorder=3)
+        ax.contour(lons, lats, msl, levels=[992], colors=INK, linewidths=1.5, zorder=3)
         th = t0 + pd.Timedelta(hours=h)
         tracked = fx.t.iloc[0] <= th <= fx.t.iloc[-1]
-        ax.plot([lo], [la], marker="x" if tracked else "+", color="#d00" if tracked else "#777", ms=9, mew=2, zorder=5)
+        ax.plot([lo], [la], marker="x" if tracked else "+", color="#e5502f" if tracked else "#777", ms=9, mew=2, zorder=5)
         if not tracked:
             ax.text(0.02, 0.03, "not yet tracked: marker at the\nnearest tracked position", transform=ax.transAxes, fontsize=7, zorder=6, bbox=dict(fc="w", ec="none", alpha=0.8))
         ax.set_xlim(lons[0], lons[-1]); ax.set_ylim(lats[-1], lats[0]); ax.set_aspect(1 / np.cos(np.radians(la)))
@@ -199,7 +206,7 @@ def summary(f):
     if fh is not None:
         dur = (pd.Timestamp(f["last_hf"]) - fh) / pd.Timedelta(hours=1) + 6
         s += f"It first reached hurricane-force-equivalent gusts (index at least 71.7 kt) on {dt(f['first_hf'])} near {f['hf_lat']:.1f}&deg;N {abs(f['hf_lon']):.1f}&deg;{'W' if f['hf_lon'] < 0 else 'E'}, " \
-             f"was at that strength in {f['n_hf']} of its 6-hourly fixes (about {dur:.0f} h from first to last), and peaked at a gust index of {f['gust_idx']:.0f} kt on {dt(f['t_gust'])}. "
+             f"was at that strength in {f['n_hf']} of its 6-hourly fixes (about {dur:.0f} h, counting each 6-hourly fix as 6 h), and peaked at a gust index of {f['gust_idx']:.0f} kt on {dt(f['t_gust'])}. "
     pre_h = (t0 - pd.Timestamp(f["first_fix"])) / pd.Timedelta(hours=1)
     if pre_h < 48:
         s += f"The tracker only picks it up {pre_h:.0f} h before the lowest pressure, so its early development, and the 24 h fall above, are only partly captured. "
@@ -245,7 +252,7 @@ def fall(f):
     return f"{f['dp24_max']:.0f}" if f["dp24_max"] > 0 else "n/a"
 
 
-def write_page(rows, outdir):
+def page_style():
     with open(os.path.join(HERE, "..", "docs", "composites.html")) as f:
         c = f.read()
     style = c[c.index("<style>"):c.index("</style>") + 8]
@@ -282,7 +289,14 @@ def write_page(rows, outdir):
   .storm .fig { margin: 8px 0 10px; }
   .storm .fig img { border-radius: 6px; }
   .count { color: var(--ink-2); font-size: 13px; }
+  .blk { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; }
+  section .tag { margin-bottom: 4px; }
 </style>""")
+    return style
+
+
+def write_page(rows, outdir):
+    style = page_style()
     esc = html.escape
     secs = []
     tr = []
