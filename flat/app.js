@@ -892,7 +892,7 @@
         hit.length.toLocaleString() + ' (' + Math.round(100 * hit.length / rated.length) + '%), median lead ' + med + ' h, ' +
         early.toLocaleString() + ' with 12 h or more.') : '';
       note.textContent = rows.length.toLocaleString() + ' OPC storms match the filters (2004-05 on).';
-      basis.textContent = 'ERA5 proxy model (pipeline A tracks, model N without the gust predictor, leave-one-season-out), not an observation. A storm is matched to the pipeline A track whose peak lies within 500 km of OPC’s peak. Peak P is read at 00/12 UTC fixes only. "P stayed under 0.5" means the model never rated the storm HF-likely before OPC’s first HF fix; many are storms the proxy never took to hurricane force.';
+      basis.textContent = 'Model output on ERA5, not an observation. The model is the project’s storm model without the gust predictor, and each season was scored by a model that had not seen that season. A storm is matched to the ERA5 track (pipeline A) whose peak lies within about 270 nm of OPC’s peak. Peak P is read at the 00 and 12 UTC positions only. “P stayed under 0.5” means the model never rated the storm as likely to reach hurricane force before OPC’s first hurricane-force fix; many are storms the ERA5 record never took to hurricane force.';
     } else {
       rows = D.unl.filter(function (r) { return basinOk(r[1] === 0 ? 'atl' : 'pac'); });
       cols = [
@@ -1550,9 +1550,9 @@
   function monthHeatNote() {
     var H = monthHeatShown;
     if (!H) return state.monthHeatSrc === 'era5' ? 'Loading the ERA5 proxy storms.' : 'Heat map loading.';
-    var common = ' Smoothed with a 3.5° Gaussian; one colour scale for all twelve months, so a month that looks paler really is quieter. ';
+    var common = ' The shading is smoothed over about 3.5° of latitude and longitude; one colour scale for all twelve months, so a month that looks paler really is quieter. ';
     return (H.src === 'archive'
-      ? 'Where the track points of the archive’s hurricane-force events sit in each calendar month, all seasons (' + H.label + ') pooled: ' + H.nPts.toLocaleString() + ' six-hourly fixes, counted in the month of the fix.' + common
+      ? 'Where the track points of the archive’s hurricane-force events sit in each calendar month, all seasons (' + H.label + ') combined: ' + H.nPts.toLocaleString() + ' six-hourly fixes, counted in the month of the fix.' + common
       : 'ERA5 proxy, not direct observation. Where the track points of pipeline A’s hurricane-force-equivalent storms sit in each calendar month, ' + H.label + ': ' + H.nPts.toLocaleString() + ' six-hourly fixes.' + common +
         'The ERA5 gust index drifts before 2001-02, so compare where the track sits from month to month, not how many storms. ') +
       monthHeatPeakText().trim();
@@ -1707,8 +1707,8 @@
     var f4 = B.fix[3], f3 = B.fix[2], f5 = B.fix[4];
     box.appendChild(HF.el('p', { class: 'tool-note' }, pre
       ? 'In words: the 1979-2003 sample is every catalog event plus matched non-events, so it has far more events than the real population. It cannot give rates, only how well the bands separate the two groups: at 50 % or more nearly all the fixes are from events, below 5 % about half. The gust index drifts before 2001-02, so keep this within that era. ERA5 proxy, not observation.'
-      : 'In words: in ' + basinName + ', fixes the model put at 20 to 50 % were followed by hurricane force within 24 h ' + probPct(f3[1] / f3[0]) + ' of the time, 50 to 80 % ' + probPct(f4[1] / f4[0]) + ', and 80 % or more ' + probPct(f5[1] / f5[0]) +
-        '. Each probability was scored with its own season left out, so these are out-of-sample rates. “HF” here is the ERA5 proxy’s gust index at 71.7 kt (pipeline A), not OPC’s call. A low can have many fixes in the same band, so the lows columns are the cleaner count of storms.'));
+      : 'In plain words: in ' + basinName + ', fixes the model put at 20 to 50 % were followed by hurricane force within 24 h ' + probPct(f3[1] / f3[0]) + ' of the time, 50 to 80 % ' + probPct(f4[1] / f4[0]) + ', and 80 % or more ' + probPct(f5[1] / f5[0]) +
+        '. Each probability was scored by a model that had not seen that season, so these are honest rates. “HF” here means the ERA5 gust index reaching 71.7 kt (pipeline A), not OPC’s call. A low can have many positions in the same band, so the lows columns are the cleaner count of storms.'));
     var top = probShown.top || [];
     if (top.length) {
       var D = era5Data.allp;
@@ -1737,7 +1737,7 @@
       box.appendChild(r);
     }
     box.appendChild(HF.el('p', { class: 'legend-note' },
-      'ERA5 proxy model output (pipeline A, model N, leave-one-season-out), not an observation. Scored at 00 and 12 UTC; each edge takes the larger of its two ends. Lines under 5 % are faint on purpose.'));
+      'Model output on ERA5, not an observation. Each season was scored by a model that had not seen it. Scored at 00 and 12 UTC; each segment takes the larger of its two ends. Lines under 5 % are faint on purpose.'));
     if (state.focusStorm && focusLow()) {
       box.appendChild(HF.el('h3', {}, 'OPC analysis'));
       box.appendChild(HF.el('p', { class: 'legend-note' }, 'Dashed line: OPC fixes. Ringed dot: hurricane-force fix. Small dot: other analysed fix.'));
@@ -1760,18 +1760,18 @@
       var Gm = window.HF_GUST_CLIMO, Fn = GUST_FIELDS[state.atlas.field];
       if (Fn.cls) {
         return 'What this shows: how many hours per season the ERA5 gust reached the ' + Fn.name.toLowerCase() + ' class (' + Fn.kt + ' kt or more), ' + atlasMonthsLabel() +
-          (gustOld() ? ' (tick months in the month filter to pick some; unticked means all of October to April). 1979-80 TO 2003-04 SET: ERA5 PROXY, not direct observation, and WITHIN-ERA ONLY. ERA5 gusts drift upward before 2001, so compare where the windy places are, not how many hours; never read a difference from the 2004-05 to 2025-26 maps as a change in climate. Instantaneous 10 m gust at 00 and 12 UTC, 25 seasons, October to April only, ocean only, 1° blocks; each sample counts as 12 h. ' :
-            ' (tick months in the month filter to pick one; unticked means the whole year, June to May). ERA5 PROXY, not direct observation. Instantaneous 10 m gust sampled at 00 and 12 UTC, 2004-05 to 2025-26 (22 seasons), ocean only, 1° blocks; each sample counts as 12 h. ') +
-          'Gale ≥ 38 kt, storm ≥ 54 kt and hurricane force ≥ 71.7 kt are NOMINAL proxy classes on the gust index; the archive lists only hurricane-force storms, so gale and storm are not calibrated on observed events. ' +
+          (gustOld() ? ' (tick months in the month filter to pick some; unticked means all of October to April). 1979-80 to 2003-04 maps: ERA5 proxy, not direct observation, and only for comparing within that era. ERA5 gusts drift upward before 2001, so compare where the windy places are, not how many hours; never read a difference from the 2004-05 to 2025-26 maps as a change in climate. Instantaneous 10 m gust at 00 and 12 UTC, 25 seasons, October to April only, ocean only, 1° blocks; each sample counts as 12 h. ' :
+            ' (tick months in the month filter to pick one; unticked means the whole year, June to May). ERA5 proxy, not direct observation. Instantaneous 10 m gust sampled at 00 and 12 UTC, 2004-05 to 2025-26 (22 seasons), ocean only, 1° blocks; each sample counts as 12 h. ') +
+          'Gale ≥ 38 kt, storm ≥ 54 kt and hurricane force ≥ 71.7 kt are labels placed on the ERA5 gust index; the archive lists only hurricane-force storms, so the gale and storm classes are not calibrated against observed events. ' +
           'The older ≥ 50 and ≥ 64 kt views are October to April shares of times, not hours, and sit between these classes. ERA5 reads low in extreme storms and sampling is 12-hourly, so every value is a lower bound. ' +
           'The colour edges are for one month and scale with the number of months shown. Coastal and sea-ice cells (the Greenland coast, Chukotka) are the least reliable and there is no terrain mask. Basin filter applies; season filter does not.';
       }
-      return 'ERA5 gust climatology (' + GUST_FIELDS[state.atlas.field].title.toLowerCase() + '), ERA5 PROXY, not direct observation. Instantaneous 10 m gust sampled at 00 and 12 UTC, 1 October to 30 April, 2004-05 to 2025-26' +
+      return 'ERA5 gust climatology (' + GUST_FIELDS[state.atlas.field].title.toLowerCase() + '), ERA5 proxy, not direct observation. Instantaneous 10 m gust sampled at 00 and 12 UTC, 1 October to 30 April, 2004-05 to 2025-26' +
         (Gm ? ' (' + Gm.meta.n_times.toLocaleString() + ' times)' : '') + ', ocean only, 1° blocks. ERA5 reads low in extreme storms and the samples are 12-hourly, so every value is a lower bound on the true gust; the late-summer tropical-cyclone season is not sampled. ' +
         'Coastal and sea-ice cells (the Greenland coast, Chukotka) are the least reliable and there is no terrain mask. Blocks below the lowest class are not drawn. Basin filter applies; season and month filters do not.';
     }
     return 'The ' + A.meta.historic + ' deepest and highest-gust ERA5 proxy events before 2004-05 (15 per basin per measure, ranked within the pre-2004 sample only), drawn on their ERA5 tracks with a ring at the peak-gust position (dashed ring: tropical-cyclone linked). ' +
-      'ERA5 PROXY, NOT DIRECT OBSERVATION: nothing here is confirmed, ERA5 pressure in the 1980s rests on fewer observations, the archive is incomplete before 2004-05 so absence there is not evidence, and the gust index drifts upward before 2001. Basin filter applies.';
+      'ERA5 proxy, not direct observation: nothing here is confirmed, ERA5 pressure in the 1980s rests on fewer observations, the archive is incomplete before 2004-05 so absence there is not evidence, and the gust index drifts upward before 2001. Basin filter applies.';
   }
 
   function appendAtlasLegend(box) {
@@ -1804,8 +1804,8 @@
         box.appendChild(rr);
       });
       box.appendChild(HF.el('p', { class: 'legend-note' }, GUST_FIELDS[state.atlas.field].cls
-        ? (gustOld() ? 'ERA5 proxy, 1979-80 to 2003-04, October to April, within-era only (levels drift upward before 2001; compare patterns, not amounts). Nominal classes; a lower bound on true gusts. Instantaneous, 12-hourly.'
-          : 'ERA5 proxy, nominal classes: reads low in extreme storms; a lower bound on true gusts. Instantaneous, 12-hourly, June to May.')
+        ? (gustOld() ? 'ERA5 proxy, 1979-80 to 2003-04, October to April, within-era only (levels drift upward before 2001; compare patterns, not amounts). Classes are labels on the gust index; a lower bound on true gusts. Instantaneous, 12-hourly.'
+          : 'ERA5 proxy, classes are labels on the gust index: reads low in extreme storms; a lower bound on true gusts. Instantaneous, 12-hourly, June to May.')
         : 'ERA5 proxy: reads low in extreme storms; a lower bound on true gusts. Instantaneous, 12-hourly, October to April.'));
     } else {
       box.appendChild(HF.el('h3', {}, 'ERA5 proxy candidates, 1979-2003'));
@@ -1836,11 +1836,11 @@
       read: 'One line per event, coloured by the analyzed central pressure at each point (key at the bottom right of the map). Dashed lines are events with no analyzed centre. Click a track for its fixes.',
       data: ARCHIVE_DATA + ' Tick “ERA5 proxy tracks” to add reanalysis storms in teal underneath.',
       caution: PRACTICE_CAUTION,
-      more: ['The teal ERA5 tracks come from pipeline A, a reanalysis proxy: cyclones whose ERA5 fields look like the ones the OPC warned for as hurricane force. They are not observations. ' + PROXY_PRE + ' The null-case and all-cyclone options show proxy cyclones that stayed below the threshold.']
+      more: ['The teal ERA5 tracks come from the project’s ERA5 storm tracker (pipeline A): cyclones whose ERA5 wind fields look like the ones OPC warned on as hurricane force. They are a stand-in (a proxy), not observations. ' + PROXY_PRE + ' The null-case and all-cyclone options show proxy cyclones that stayed below the threshold.']
     },
     density: {
       view: 'Fix density: how much hurricane-force time each patch of ocean sees.',
-      read: 'Each cell is 2° of latitude by 5° of longitude, shaded by the number of hurricane-force fixes in it, on a square-root scale (pale few, dark many). It counts fixes, not storms: a slow storm leaves more fixes than a fast one.',
+      read: 'Each cell is 2° of latitude by 5° of longitude, shaded by the number of hurricane-force fixes in it (pale few, dark many; the shading is compressed so busy cells do not swamp quiet ones). It counts fixes, not storms: a slow storm leaves more fixes than a fast one.',
       data: ARCHIVE_DATA,
       caution: PRACTICE_CAUTION
     },
@@ -1860,21 +1860,21 @@
       view: 'One storm: the model’s probability along a single storm, next to what OPC analysed.',
       proxy: true,
       read: 'The coloured line is the ERA5 proxy track of this storm, each segment coloured by the model’s probability (under 5 % up to 80 % or more) of hurricane force within 24 hours. The dashed line and dots are OPC’s own analysed fixes; ringed dots are fixes OPC analysed as hurricane force. Hover the track for the probability and time. “Back to all tracks” returns to the previous map.',
-      data: 'OPC archive fixes plus the ERA5 proxy track (pipeline A) that lies within 500 km of the storm. If none does, only OPC’s fixes are drawn.',
-      caution: 'The probability is a model output on a proxy, not an observation or a forecast, and the proxy track and OPC’s fixes are matched by position and time, not identical.'
+      data: 'OPC archive fixes plus the ERA5 track (pipeline A) that lies within about 270 nm of the storm. If none does, only OPC’s fixes are drawn.',
+      caution: 'The probability is a model output built on ERA5, not an observation or a forecast, and the ERA5 track and OPC’s fixes are matched by position and time, so they are not identical.'
     },
     prob: {
       view: 'HF probability: a model’s chance that each low reaches hurricane force within 24 hours.',
       proxy: true,
       read: 'Each short edge of a track is coloured by the model’s probability (under 5 % up to 80 % or more) that the low reaches a hurricane-force-equivalent gust, 71.7 kt in ERA5, within 24 hours of the later end. Scored at 00 and 12 UTC. One season is drawn at a time, with only the edges at 50 % or more by default, so the storms the model is worried about stand out; the table above the globe says how often hurricane force actually followed each band.',
-      data: 'ERA5 proxy tracks (pipeline A) with a model fitted to them, scored out of sample season by season. 2004-2025 covers every scored low, one season at a time (or all, which is crowded). 1979-2003 is a menu choice that shows only the catalog events and their matched non-events, within that era only.',
-      caution: 'A model output on a proxy, not an observation or a forecast. Busy maps are hard to read; to compare the model storm by storm with the storms OPC actually analysed as hurricane force, use the table at the top of the ',
+      data: 'ERA5 storm tracks (pipeline A) with a model fitted to them, scored one season at a time by a model that had not seen that season. 2004-2025 covers every scored low, one season at a time (or all, which is crowded). 1979-2003 is a menu choice that shows only the catalogue events and their matched non-events, and is for comparing within that era only.',
+      caution: 'A model output built on ERA5, not an observation or a forecast. Busy maps are hard to read; to compare the model storm by storm with the storms OPC actually analysed as hurricane force, use the table at the top of the ',
       cautionLink: { go: 'events', t: 'Events tab' },
-      more: [PROXY_PRE + ' For 2004-05 to 2025-26 the probabilities are out-of-sample (each season scored without itself), so the table gives real rates against the proxy’s own label; for 1979-2003 the sample is enriched in events and the bands are shape only.']
+      more: [PROXY_PRE + ' For 2004-05 to 2025-26 each season was scored by a model that had not seen it, so the table gives honest rates against the ERA5 gust-index definition of hurricane force; for 1979-2003 the sample has many more events than the real population, so the bands show only how well the model separates events from non-events.']
     },
     'atlas-boxes': {
       view: 'Atlas, boxes: where the time at hurricane force is spent.',
-      read: 'Each 5° × 10° box shows hurricane-force centre-hours per season (6 hours per fix), on a square-root scale. Source selector: the archive, or the ERA5 proxy over the same seasons.',
+      read: 'Each 5° × 10° box shows hurricane-force centre-hours per season (6 hours per fix); the shading is compressed so busy boxes do not swamp quiet ones. Source selector: the archive, or the ERA5 proxy over the same seasons.',
       data: 'Fixed at 2004-05 to 2025-26 in both sources. Basin and month filters apply; season and other filters do not.',
       caution: 'The proxy source is reanalysis, not observation. Boxes with little time are noisy.'
     },
@@ -1907,7 +1907,7 @@
     },
     'bymonth-heat-archive': {
       view: 'By month, heat map: where hurricane-force storms sit in each month of the year.',
-      read: 'Step through January to December. The shading is where the track points of the archive’s hurricane-force events fall in that month, all seasons pooled, smoothed over about 3.5°. The colour scale is the same for every month, so a pale month really is quieter.',
+      read: 'Step through January to December. The shading is where the track points of the archive’s hurricane-force events fall in that month, all seasons combined and smoothed over about 3.5°. The colour scale is the same for every month, so a pale month really is quieter.',
       data: 'OPC archive, 2004-05 onward (the season range follows the filter above). A switch gives the ERA5 proxy for 1979-2003 instead; the two are never pooled.',
       caution: 'The shading counts six-hourly track points, not storms, and stays on events’ recorded tracks. Compare where the pattern sits from month to month more than the exact shade. The month’s densest point is named in the note above the map.',
       more: ['Heat is track points per season, so it is comparable between months but not a storm count. Recording practice changed over the period (see Method), which lengthens recorded tracks in later seasons.']
@@ -1915,7 +1915,7 @@
     'bymonth-heat-era5': {
       view: 'By month, heat map (ERA5 proxy): where reanalysis storms sat in each month, 1979-2003.',
       proxy: true,
-      read: 'Step through January to December. The shading is where the track points of the proxy hurricane-force-equivalent storms fall in that month, all seasons from 1979-80 to 2003-04 pooled, smoothed over about 3.5°. One colour scale for all months.',
+      read: 'Step through January to December. The shading is where the track points of the proxy hurricane-force-equivalent storms fall in that month, all seasons from 1979-80 to 2003-04 combined and smoothed over about 3.5°. One colour scale for all months.',
       data: 'ERA5 reanalysis, pipeline A (the same storms as the teal tracks). Separate from the archive heat map; the two are never combined.',
       caution: PROXY_PRE + ' Read the month-to-month movement of the track, not the number of storms.'
     },
@@ -2141,7 +2141,7 @@
       ends.appendChild(HF.el('span', {}, 'many'));
       box.appendChild(ends);
       box.appendChild(HF.el('p', { class: 'legend-note' },
-        'Shaded on a square-root scale; counts are strongly skewed toward the storm track.'));
+        'Shading is compressed so that the busiest areas do not hide the quieter ones; counts are strongly skewed toward the storm track.'));
       appendCurrentsLegend(box);
       return;
     }
@@ -4518,38 +4518,37 @@
       box.appendChild(tx('h3', '', term));
       box.appendChild(tx('p', '', text));
     }
+    item('In short',
+      'The question is whether storms look different (more of them, or in different places) when a climate pattern such as El Niño or the NAO is in one state. ' +
+      'Because a climate index changes slowly, there are only as many independent samples as seasons, so the tests below are built to avoid finding patterns that are really chance.');
     item('Seasons',
       'A season runs 1 June to 31 May and is labelled by its starting year. A storm on 2 January 2015 belongs to ' +
-      '2014–15. The season is also the unit that is resampled: storms in one season share a background state ' +
-      '(the jet, blocking, the ENSO phase itself), so they are not independent draws, and treating 400 storms as 400 ' +
-      'samples would make a chance pattern look decisive. Counts are converted to rates per season so a subset of ' +
+      '2014–15. Storms in one season share the same background state (the jet, blocking, the ENSO phase itself), so they are not independent. ' +
+      'The season is therefore the unit counted: treating 400 storms as 400 samples would make a chance pattern look decisive. Counts are converted to rates per season so a group of ' +
       '8 seasons and an archive of 22 can be compared at all.');
     item('Seasons left out',
-      'Seasons before ' + HF.seasonLabel(DATA.recordStart) + ' are excluded from both the subset and the baseline. ' +
+      'Seasons before ' + HF.seasonLabel(DATA.recordStart) + ' are excluded from both the group being tested and the baseline. ' +
       'Pacific entries begin in February 2002 and Atlantic entries in September 2003, so the ' + partial.length +
       ' earlier seasons hold ' + partialText + ' events against ' + lo + '–' + hi + ' in every complete one. ' +
-      'They are short-counted, not quiet, and including them manufactures signal: in testing, comparing the twelve earliest ' +
+      'They are short-counted, not quiet, and including them creates false signals: in testing, comparing the twelve earliest ' +
       'seasons with the rest flagged 11 significant cells for no climatic reason, and leaving out just the three ' +
       'short-counted seasons took that to none.');
-    item('Significance',
-      'The map is split into equal-area cells about 4 degrees of latitude across, and every cell with enough storms in the ' +
-      'archive is tested (about 150 of them). With that many tests, roughly 5% pass on pure noise, so a cell only counts ' +
-      'if it survives false discovery rate control (Benjamini–Hochberg, at twice the 5% global level as Wilks 2016 ' +
-      'recommends for spatially correlated fields). The “expected by chance” column is that 5% expectation, shown so ' +
-      'a handful of uncorrected hits is not mistaken for a finding. Colour on the map is the size of a difference and ' +
-      'dots are significance; a deep colour without dots is a big difference the test cannot tell from chance.');
+    item('How a cell is judged',
+      'The map is split into equal-area cells about 4 degrees of latitude across, and every cell with enough storms is tested (about 150 of them). ' +
+      'With that many tests, roughly 5% pass on pure noise, so a cell only counts if it survives a correction for running many tests at once ' +
+      '(false discovery rate control, Benjamini–Hochberg, at twice the 5% level as Wilks 2016 recommends for maps where neighbouring cells are related). ' +
+      'The “expected by chance” column shows that 5% so a handful of uncorrected hits is not mistaken for a finding. Colour on the map is the size of a difference and ' +
+      'dots mark significance; a deep colour without dots is a big difference that could easily be chance.');
     item('Events versus seasons',
-      'ENSO subsets are whole seasons, so the season is resampled directly. NAO, PNA, AO and MJO subsets pick storms ' +
-      'within seasons, so there is no season to resample; the test instead re-deals which storms carry the label ' +
-      'within each season, month and basin. The blocking matters: the daily indices persist for a week or two, so a ' +
-      'tercile or MJO subset is clustered in time and inherits a month and basin mix unlike the archive\u2019s (storms in ' +
+      'ENSO groups are whole seasons, so whole seasons are reshuffled to test them. NAO, PNA, AO and MJO groups pick storms ' +
+      'within seasons, so the test instead reshuffles which storms carry the label ' +
+      'within each season, month and basin. This matters: the daily indices persist for a week or two, so the group is clustered in time and has a month and basin mix unlike the archive\u2019s (storms in ' +
       'the lower NAO third, for example, are about 18% October against 9% for the archive, and the storm track sits in ' +
-      'a very different place in October than in February). Without blocking, a subset drawn disproportionately from ' +
-      'October, or from one basin, looks like an index effect when it is only a seasonal one. Blocking is the more ' +
-      'conservative choice and the result is still a floor on the real uncertainty, not the whole of it.');
-    item('Looking at many selections',
-      'False discovery rate control covers the cells of one map. It does not cover the choices made around the map: ' +
-      'ten longitudes, three states, any lag from 0 to 6 pentads, four indices. Trying several and reporting the one ' +
+      'a very different place in October than in February). Without this care, a group drawn mostly from ' +
+      'October, or from one basin, would look like an index effect when it is only a seasonal one. The result is still a lower bound on the real uncertainty, not the whole of it.');
+    item('Looking at many choices',
+      'The correction above covers the cells of one map. It does not cover the choices made around the map: ' +
+      'ten longitudes, three states, any lag from 0 to 6 pentads (5-day periods), four indices. Trying several and reporting the one ' +
       'that lights up brings the false-alarm rate back. Treat a single flagged map from a search like that as a lead ' +
       'to confirm, not a result.');
     item('Indices',
@@ -5410,17 +5409,17 @@
     var box = HF.clear(rEl('regMethodBody'));
     function item(term, text) { box.appendChild(tx('h3', '', term)); box.appendChild(tx('p', '', text)); }
     item('Two ways of asking',
-      'The composite map asks where the density of storms differs when an index is in a given state: it sorts events into thirds and ' +
-      'tests about 150 map cells. The regression asks whether the index moves the whole distribution: it keeps the index as a number and ' +
-      'asks one question of one number, such as the average latitude of a storm. They use the same events. The regression is the more ' +
-      'powerful test of the second question, because it keeps the size of the index and does not spend its power across a map, which is why ' +
+      'The composite map asks where storm density differs when an index is in a given state: it sorts events into thirds and ' +
+      'tests about 150 map cells. The regression asks whether the index shifts the storms as a whole: it keeps the index as a number and ' +
+      'asks one question about it, such as whether the average latitude of a storm changes. They use the same events. The regression is the stronger test of the second question, ' +
+      'because it uses the size of the index and does not spread its power across a map, which is why ' +
       'it can find an effect the map cannot. They do not contradict each other.');
     item('The grey band',
-      'Beside every interval is the smallest true effect this sample would detect 80% of the time at the 5% level (the MDE80, 2.8 standard errors). ' +
-      'The estimate and its interval are drawn against it. If they sit clear of the band, an effect of that size could be resolved and was. ' +
-      'If they sit inside it, the sample could not have resolved an effect that small whatever the truth is.');
+      'Beside every estimate is the smallest true effect this sample would catch 80% of the time (at the 5% level; the MDE80, 2.8 standard errors). ' +
+      'If the estimate and its range sit clear of the band, an effect of that size could be seen and was. ' +
+      'If they sit inside it, the sample could not have seen an effect that small whatever the truth is.');
     item('Below the floor is not “no effect”',
-      'An interval that includes zero is often read as “there is no effect”. For a sample this size that is the wrong reading: the interval ' +
+      'A range that includes zero is often read as “there is no effect”. For a sample this size that is the wrong reading: the range ' +
       'is wide enough to include real effects as large as the floor. This is why every interaction term is shown with its floor. On this archive ' +
       'they sit inside it, which means the archive is too short to say whether these indices interact, not that they do not.');
     item('Units and standardising',
