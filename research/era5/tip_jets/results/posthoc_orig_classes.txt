@@ -1,0 +1,32 @@
+POST HOC, all 22 seasons, episode-level; OR per SD for hurricane-force vs storm-force proxy episodes (ridge 0.5, adjusted for LOW_DEPTH except for itself)
+    family    cls     factor    n  hf     OR     lo     hi      p   mdor      q
+0    class      S  LOW_DEPTH   36   9  2.407  1.280  4.921  0.008  2.938  0.020
+1    class      S   LOW_DIST   36   9  0.426  0.174  0.971  0.045  2.938  0.084
+2    class      S       GRAD   36   9  4.920  2.496  9.266  0.000  2.938  0.000
+3    class      S         GH   36   9  1.190  0.474  2.551  0.644  2.938  0.711
+4    class      S       COLD   36   9  1.243  0.519  2.997  0.541  2.938  0.711
+5    class      E  LOW_DEPTH   73  18  2.005  1.089  4.416  0.028  2.139  0.060
+6    class      E   LOW_DIST   73  18  1.123  0.667  1.839  0.576  2.139  0.711
+7    class      E       GRAD   73  18  1.800  1.192  3.182  0.006  2.139  0.018
+8    class      E         GH   73  18  2.064  1.459  3.080  0.000  2.139  0.000
+9    class      E       COLD   73  18  0.865  0.356  1.877  0.664  2.139  0.711
+10   class      W  LOW_DEPTH   97  26  2.874  1.728  5.453  0.000  1.900  0.000
+11   class      W   LOW_DIST   97  26  0.835  0.488  1.259  0.431  1.900  0.646
+12   class      W       GRAD   97  26  3.986  2.372  8.455  0.000  1.900  0.000
+13   class      W         GH   97  26  1.834  0.956  3.380  0.059  1.900  0.098
+14   class      W       COLD   97  26  1.002  0.331  1.777  0.914  1.900  0.914
+15  pooled  S+E+W  LOW_DEPTH  206  53  2.602  1.867  3.970  0.000  1.562  0.000
+16  pooled  S+E+W   LOW_DIST  206  53  0.831  0.532  1.166  0.306  1.562  0.382
+17  pooled  S+E+W       GRAD  206  53  3.240  2.245  5.084  0.000  1.562  0.000
+18  pooled  S+E+W         GH  206  53  1.937  1.310  3.151  0.001  1.562  0.002
+19  pooled  S+E+W       COLD  206  53  0.980  0.583  1.425  0.891  1.562  0.891
+
+'other' class ( 308 episodes): bearing sector of the gust maximum from the cape and wind-from sector
+wind from   N   E   S    W
+max is                    
+N          61   0   2    0
+E           0   1   6  122
+S          49  25   6    0
+W           5   0  13   18
+
+HF share by class: {'E': 0.247, 'S': 0.25, 'W': 0.268, 'other': 0.237} ; season counts with >=1 episode per class: {'E': 20, 'S': 16, 'W': 22, 'other': 22}

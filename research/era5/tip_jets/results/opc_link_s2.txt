@@ -1,0 +1,11 @@
+OPC archive low fixes (Atlantic) within 600 nm of the gust maximum, +-12 h; 'OPC agreed' = parent low in an OPC fix, not a check of the tip jet itself
+               n  opc_hf  opc_storm_or_hf
+cls   hf_ep                              
+E     False   55    0.36             0.38
+      True    18    0.94             0.94
+S     False  109    0.24             0.25
+      True    49    0.92             0.92
+W     False   71    0.54             0.54
+      True    26    0.96             0.96
+other False  153    0.35             0.37
+      True    33    0.91             0.91

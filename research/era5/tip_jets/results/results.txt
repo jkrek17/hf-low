@@ -1,0 +1,65 @@
+ERA5 PROXY. Event times 2214 ; episodes 514 ; seasons 22
+       episodes  hf  med_gust   med_wspd  hf_share
+cls                                               
+E            73  18     66.00  42.180000     0.247
+S            36   9     65.25  41.923000     0.250
+W            97  26     66.50  42.182999     0.268
+other       308  73     65.00  42.138000     0.237
+by half (even seasons = fit):
+              n  hf
+cls   half         
+E     even   36   6
+      odd    37  12
+S     even   10   3
+      odd    26   6
+W     even   55  17
+      odd    42   9
+other even  161  36
+      odd   147  37
+
+TESTS (OR per SD of factor for HF vs storm force, adjusted for low depth except LOW_DEPTH; BH over 15 within each swap direction)
+    swap cls     factor fit_half  n_fit  hf_fit  n_test  hf_test  tested   mdor    or_fit       lo            hi  p_fit   or_test  p_test_one  q_fit  supported
+0      0   S  LOW_DEPTH     even     10       3      26        6   False  6.905     3.443    1.524  1.212155e+07  0.000     2.820       0.034  0.000      False
+1      0   S   LOW_DIST     even     10       3      26        6   False  6.905     0.159    0.000  3.891978e+05  0.481     0.311       0.061  0.656      False
+2      0   S       GRAD     even     10       3      26        6   False  6.905  3740.619  199.682  8.294771e+03  0.000     8.170       0.024  0.000      False
+3      0   S         GH     even     10       3      26        6   False  6.905     3.190    0.962  3.658412e+10  0.073     0.824       0.480  0.155      False
+4      0   S       COLD     even     10       3      26        6   False  6.905     0.786    0.000  2.095740e+04  0.813     1.494       0.779  0.885      False
+5      0   E  LOW_DEPTH     even     36       6      37       12   False  3.498     3.247    0.953  1.246344e+04  0.060     1.944       0.049  0.150      False
+6      0   E   LOW_DIST     even     36       6      37       12   False  3.498     1.344    0.426  2.499800e+01  0.557     1.159       0.204  0.696      False
+7      0   E       GRAD     even     36       6      37       12   False  3.498     1.460    0.302  3.214420e+02  0.379     2.108       0.021  0.631      False
+8      0   E         GH     even     36       6      37       12   False  3.498     3.681    1.441  5.279590e+02  0.010     2.501       0.004  0.030      False
+9      0   E       COLD     even     36       6      37       12   False  3.498     0.524    0.005  1.709000e+00  0.234     0.997       0.485  0.439      False
+10     0   W  LOW_DEPTH     even     55      17      42        9   False  2.264     3.413    1.954  1.118200e+01  0.000     2.956       0.004  0.000      False
+11     0   W   LOW_DIST     even     55      17      42        9   False  2.264     0.970    0.409  2.350000e+00  0.940     0.574       0.137  0.940      False
+12     0   W       GRAD     even     55      17      42        9   False  2.264     4.837    2.451  3.252300e+01  0.000     6.852       0.001  0.000      False
+13     0   W         GH     even     55      17      42        9   False  2.264     1.507    0.459  5.845000e+00  0.426     5.472       0.000  0.639      False
+14     0   W       COLD     even     55      17      42        9   False  2.264     0.905    0.038  2.448000e+00  0.826     1.157       0.587  0.885      False
+15     1   S  LOW_DEPTH      odd     26       6      10        3   False  3.682     2.820    0.911  1.213930e+02  0.076     3.443       0.000  0.146      False
+16     1   S   LOW_DIST      odd     26       6      10        3   False  3.682     0.311    0.000  1.745000e+00  0.122     0.159       0.231  0.203      False
+17     1   S       GRAD      odd     26       6      10        3   False  3.682     8.170    1.283  3.912409e+05  0.026  3740.619       0.000  0.078      False
+18     1   S         GH      odd     26       6      10        3   False  3.682     0.824    0.114  1.342000e+01  0.992     3.190       0.970  0.992      False
+19     1   S       COLD      odd     26       6      10        3   False  3.682     1.494    0.351  2.080067e+04  0.414     0.786       0.643  0.538      False
+20     1   E  LOW_DEPTH      odd     37      12      36        6   False  2.673     1.944    0.886  5.143000e+00  0.078     3.247       0.038  0.146      False
+21     1   E   LOW_DIST      odd     37      12      36        6   False  2.673     1.159    0.577  2.519000e+00  0.430     1.344       0.318  0.538      False
+22     1   E       GRAD      odd     37      12      36        6   False  2.673     2.108    1.015  9.942000e+00  0.048     1.460       0.200  0.120      False
+23     1   E         GH      odd     37      12      36        6   False  2.673     2.501    1.505  9.404000e+00  0.000     3.681       0.016  0.000      False
+24     1   E       COLD      odd     37      12      36        6   False  2.673     0.997    0.202  2.518000e+00  0.952     0.524       0.116  0.992      False
+25     1   W  LOW_DEPTH      odd     42       9      55       17   False  2.866     2.956    1.267  1.769900e+01  0.014     3.413       0.000  0.052      False
+26     1   W   LOW_DIST      odd     42       9      55       17   False  2.866     0.574    0.029  1.403000e+00  0.304     0.970       0.502  0.456      False
+27     1   W       GRAD      odd     42       9      55       17   False  2.866     6.852    1.704  1.173039e+05  0.004     4.837       0.000  0.020      False
+28     1   W         GH      odd     42       9      55       17   False  2.866     5.472    2.279  1.559510e+02  0.000     1.507       0.194  0.000      False
+29     1   W       COLD      odd     42       9      55       17   False  2.866     1.157    0.166  4.212000e+00  0.858     0.905       0.634  0.990      False
+
+POOLED (all 22 seasons, descriptive): class x factor median at HF vs S
+S         LOW_DEPTH  LOW_DIST  GRAD           GH  COLD
+hf_ep                                               
+False -967.950012    718.35  5.18  1003.030029  6.47
+True  -958.150024    389.96  7.21  1001.669983  7.76
+E         LOW_DEPTH  LOW_DIST  GRAD           GH  COLD
+hf_ep                                               
+False -969.950012    666.58  4.90  1012.150024  3.71
+True  -958.299988    827.98  5.99  1016.320007  3.33
+W         LOW_DEPTH  LOW_DIST  GRAD           GH  COLD
+hf_ep                                               
+False -972.369995    884.32  4.61  1017.570007  1.49
+True  -958.200012    774.68  5.95  1015.960022  1.60

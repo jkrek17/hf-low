@@ -1,0 +1,6 @@
+S S: n=109; mean-low min MSLP 984.0 hPa at (64.0N, -34.0E); composite peak wind 32 kt
+S HF: n=49; mean-low min MSLP 967.5 hPa at (63.2N, -35.5E); composite peak wind 38 kt
+E S: n=55; mean-low min MSLP 983.2 hPa at (58.0N, -36.0E); composite peak wind 36 kt
+E HF: n=18; mean-low min MSLP 972.5 hPa at (58.0N, -39.0E); composite peak wind 47 kt
+W S: n=71; mean-low min MSLP 984.6 hPa at (57.5N, -54.0E); composite peak wind 39 kt
+W HF: n=26; mean-low min MSLP 973.5 hPa at (57.5N, -55.5E); composite peak wind 48 kt
