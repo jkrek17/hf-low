@@ -58,8 +58,8 @@ Candidate factors, each standardised, computed at the peak time, none chosen aft
 2. LOW_DIST: distance from the reference low to Cape Farewell (km).
 3. GRAD: mean MSLP gradient magnitude (hPa per 100 km) over ocean within 200 km of the gust maximum.
 4. GH: mean MSLP over Greenland land points 64-78N, 55W-30W (ice-sheet high, as PR 58).
-5. COLD: SST minus 2 m temperature (K), mean over ocean in the upstream box 56-63N, 60W-46W for forward and
-   reverse alike (fixed in advance).
+5. COLD: SST minus 2 m temperature (K), mean over ocean in the upstream box 56-63N, 60W-46W for all three classes
+   alike (fixed in advance).
 
 Primary family: 5 factors x 3 classes (S, E, W) = 15 tests, univariate logistic regression of HF
 (vs S) on one factor, adjusting for LOW_DEPTH when the factor is not LOW_DEPTH. Even seasons fit, odd seasons held
