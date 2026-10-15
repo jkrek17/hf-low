@@ -31,9 +31,9 @@ PHASES = {"fcc": ("frontal, cold core", "#3b82f6"), "fwc": ("frontal, warm core"
           "wsec": ("warm seclusion", "#e5502f"), "scc": ("symmetric, cold core", "#9ca3af")}
 B_EDGE = 10.0                                   # m, Hart's asymmetry threshold
 QUAD = (("front right", 1, 1), ("rear right", -1, 1), ("rear left", -1, -1), ("front left", 1, -1))
-VARS = [("jet250", "highest 250 hPa wind within 1,000 km", "kt", 0), ("div300", "300 hPa divergence within 500 km", "1e-5 /s", 1),
-        ("vadv500", "500 hPa vorticity advection within 500 km", "1e-9 /s2", 1), ("eady", "Eady growth rate (850-500 hPa)", "/day", 2),
-        ("tcwv", "column water vapour within 500 km", "kg/m2", 0), ("sstgrad", "largest SST gradient within 500 km", "K/100 km", 1)]
+VARS = [("jet250", "strongest 250 hPa wind (the jet) within 540 nm", "kt", 0), ("div300", "upper-level divergence (300 hPa) within 270 nm", "&times;10<sup>&minus;5</sup> /s", 1),
+        ("vadv500", "vorticity advection (500 hPa) within 270 nm", "&times;10<sup>&minus;9</sup> /s&sup2;", 1), ("eady", "Eady growth rate, the support for storm growth (850&ndash;500 hPa)", "/day", 2),
+        ("tcwv", "moisture in the air column within 270 nm", "kg/m&sup2;", 0), ("sstgrad", "sharpest sea-surface temperature gradient within 270 nm", "K/100 km", 1)]
 
 
 def phase_of(B, VTL):
@@ -296,18 +296,18 @@ def meteo(f, fx, d24, st, cells, shares, opc, basin):
     if first is not None:
         s += f"At its first tracked fix ({hhmm(first.t)}, {first.lat:.1f}&deg;N) the low was <b>{PHASES[first.phase][0]}</b> (Hart B {first.B:.0f} m, lower-level core {first.VTL:+.0f} m). "
     if isinstance(pk.phase, str):
-        s += f"At its lowest pressure it was <b>{PHASES[pk.phase][0]}</b> (B {pk.B:.0f} m, {pk.VTL:+.0f} m). "
+        s += f"At its lowest pressure it was <b>{PHASES[pk.phase][0]}</b> (B {pk.B:.0f} m, lower-level core {pk.VTL:+.0f} m). "
     if ws:
         s += f"The first fix with a symmetric warm core (the warm-seclusion signature) is {hhmm(ws[0][1])}, {(ws[0][1] - t0) / pd.Timedelta(hours=1):+.0f} h from the lowest pressure. "
     else:
         s += "It never reached the symmetric warm-core signature of a warm seclusion in these 1.5&deg; diagnostics. "
     out["phase"] = s
     # forcing
-    s = (f"During its fastest 24 h fall ({dt24(win)}) the highest 250 hPa wind within 1,000 km averaged <b>{win.jet250.mean():.0f} kt</b>, "
-         f"300 hPa divergence over the centre averaged {win.div300.mean():+.1f} (units 1e-5 /s; positive = air being drawn up) and "
-         f"500 hPa vorticity advection {win.vadv500.mean():+.1f} (1e-9 /s&sup2;; positive = cyclonic spin arriving aloft). "
-         f"The 850-500 hPa Eady growth rate, a measure of baroclinic (temperature-contrast) support, averaged {win.eady.mean():.2f} per day, "
-         f"and column water vapour within 500 km averaged {win.tcwv.mean():.0f} kg/m&sup2;.")
+    s = (f"During its fastest 24 h fall ({dt24(win)}) the strongest 250 hPa wind within about 540 nm averaged <b>{win.jet250.mean():.0f} kt</b>. "
+         f"Upper-level divergence at 300 hPa over the centre averaged {win.div300.mean():+.1f} &times;10<sup>&minus;5</sup>/s (positive means air spreading out aloft, which draws air up from below), "
+         f"and 500 hPa vorticity advection {win.vadv500.mean():+.1f} &times;10<sup>&minus;9</sup>/s&sup2; (positive means cyclonic spin arriving aloft). "
+         f"The Eady growth rate (850&ndash;500 hPa), a measure of how favourable the temperature contrast and wind shear are for the storm to grow, averaged {win.eady.mean():.2f} per day, "
+         f"and the moisture in the air column within about 270 nm averaged {win.tcwv.mean():.0f} kg/m&sup2;.")
     out["forcing"] = s
     # wind
     stx = st.copy(); pkr = stx.loc[stx.area72_nm2.idxmax()] if (stx.area72_nm2 > 0).any() else None
@@ -355,7 +355,7 @@ def fnum(v, nd):
 
 
 def ordinal(p):
-    return f"above {p:.0f}% of them"
+    return f"higher than {p:.0f}% of them"
 
 
 def page(f, fx, tx, opc, meteo_, shares, style, base):
@@ -365,7 +365,7 @@ def page(f, fx, tx, opc, meteo_, shares, style, base):
     pre = pd.Timestamp(f["t_minp"]).year < 2004
     dur = ((pd.Timestamp(f["last_hf"]) - pd.Timestamp(f["first_hf"])) / pd.Timedelta(hours=1) + 6) if f["first_hf"] else 0
     nm = f' &mdash; the {esc(f["name"])} <span class="muted">(name inferred from date and position)</span>' if f["name"] else ""
-    rows = "".join(f'<tr><td>{esc(l)}</td><td class="num">{fnum(v, nd)} {esc(u)}</td><td class="num">{"n/a" if r is None else ordinal(r)}</td></tr>' for l, u, v, nd, r in meteo_["rank_rows"])
+    rows = "".join(f'<tr><td>{l}</td><td class="num">{fnum(v, nd)} {u}</td><td class="num">{"n/a" if r is None else ordinal(r)}</td></tr>' for l, u, v, nd, r in meteo_["rank_rows"])
     tiles = (f'<div class="tiles"><div><b>{f["minp"]:.1f}</b><span>lowest pressure (hPa)</span></div><div><b>{old.fall(f)}</b><span>fastest 24 h fall (hPa)</span></div>'
              f'<div><b>{f["gust_idx"]:.0f}</b><span>peak gust index (kt)</span></div><div><b>{dur:.0f}</b><span>hours at HF strength</span></div>'
              f'<div><b>{tx["area"]:,.0f}</b><span>peak ocean area at 71.7 kt+ (nm&sup2;)</span></div></div>')
@@ -388,7 +388,7 @@ def page(f, fx, tx, opc, meteo_, shares, style, base):
 <body>
 <header class="masthead"><div class="masthead-in"><h1>Storm review: {esc(lab)}</h1><a href="storm-reviews.html">&larr; All storm reviews</a></div></header>
 <main>
-<div class="note"><strong>ERA5 proxy, not direct observation.</strong> Tracks are pipeline A (found in ERA5 itself). The gust index is the highest ERA5 10 m gust over ocean within 800 km, a proxy for the sustained wind OPC warns on. Structure and forcing numbers are ERA5 at 1.5&deg; (WeatherBench2); maps and the wind field are ERA5 at 0.25&deg;. Distances are nautical miles.</div>
+<div class="note"><strong>ERA5 proxy, not direct observation.</strong> ERA5 is a weather model re-run over past years and blended with the observations available. Tracks are the project&rsquo;s pipeline A tracks, found in ERA5 itself. The gust index is the strongest ERA5 10 m gust over the ocean within 800 km (about 430 nm) of the low, a stand-in (proxy) for the sustained wind OPC warns on. Structure and upper-level numbers are ERA5 at 1.5&deg;; maps and the wind field are ERA5 at 0.25&deg;. Distances are nautical miles.</div>
 <section id="storm" class="storm {cls}">
   <h3><span class="rank">{b.replace("North ", "")} #{f["rank"]}</span><span class="basin-{cls}">{esc(lab)}</span>{nm}</h3>
   <div class="meta">Rank {f["rank"]} by lowest ERA5 central pressure in the {b}. Pipeline A track {f["track"]}.</div>
@@ -401,8 +401,9 @@ def page(f, fx, tx, opc, meteo_, shares, style, base):
 <figcaption>Left: 6-hourly fixes coloured by central pressure, red rings where the gust index reached 71.7 kt. Right: highest ERA5 10 m gust at each point from 48 h before to 24 h after the lowest pressure (land included; black contour 71.7 kt).</figcaption></figure></section>
 <section><div class="tag">3. How it developed</div>
 <p>{meteo_["phase"]}</p>
+<p class="muted">How to read the structure numbers. Hart&rsquo;s B says how lopsided the low is: above about 10 m it is frontal, near zero it is symmetric. The lower-level core number says whether the 900 to 600 hPa layer is cold (negative) or warm (positive). A frontal low with a cold core is the early stage; a warm seclusion has warm air wrapped around the centre. The classes come from a coarse 1.5&deg; grid, so treat them as a guide.</p>
 <figure class="fig"><div class="scroll"><a href="{base}-series.png"><img src="{base}-series.png" alt="Six-panel development series" loading="lazy"></a></div>
-<figcaption>From the top: central pressure; the fall over the previous 24 h against the latitude-scaled bomb yardstick; the gust index; the ocean area at 71.7 kt or more; the 250 hPa jet; the two upper-level lift terms; and Hart&rsquo;s two structure parameters with the structure class along the bottom. The tan band is the 24 h of fastest fall.</figcaption></figure></section>
+<figcaption>From the top: central pressure; the fall in pressure over the previous 24 h against the bomb yardstick (scaled by latitude); the gust index; the ocean area with gusts of 71.7 kt or more; the 250 hPa jet; the two upper-level lift terms (divergence and vorticity advection); and two structure measures (frontal against symmetric, cold core against warm core) with the structure class along the bottom. The tan band is the 24 h of fastest fall.</figcaption></figure></section>
 <section><div class="tag">4. What drove it: upper-level support</div>
 <p>{meteo_["forcing"]}</p>
 <figure class="fig"><div class="scroll"><a href="{base}-maps.png"><img src="{base}-maps.png" alt="Upper-level maps" loading="lazy"></a></div>
@@ -413,22 +414,23 @@ def page(f, fx, tx, opc, meteo_, shares, style, base):
 <section><div class="tag">6. Where the strongest wind was</div>
 <p>{meteo_["wind"]}</p>
 <figure class="fig"><div class="scroll"><a href="{base}-structure.png"><img src="{base}-structure.png" alt="Hart phase space and storm-relative wind" loading="lazy"></a></div>
-<figcaption>Left: the storm&rsquo;s path through Hart&rsquo;s cyclone phase space. Middle: ocean cells at 64 kt or more, in a frame that moves and turns with the low. Right: how the 71.7 kt+ cells split between the four quarters.</figcaption></figure></section>
-<section><div class="tag">7. How its set-up compares with other hurricane-force-strength lows</div>
-<p>Median over this storm&rsquo;s {meteo_["rank_n"]} fixes with a gust index of 71.7 kt or more, placed among all such fixes in the same basin since 2004&ndash;05 (pipeline A, ERA5 proxy; fixes from one storm are not independent, so read it as a rough rank, not a test).</p>
-<div class="tablewrap"><table class="idx"><thead><tr><th>Ingredient</th><th class="num">This storm</th><th class="num">Compared with HF-strength fixes</th></tr></thead><tbody>{rows}</tbody></table></div></section>
+<figcaption>Left: the storm&rsquo;s path through Hart&rsquo;s cyclone phase space, a diagram of how lopsided the low is against how warm its core is. Middle: ocean cells at 64 kt or more, in a frame that moves and turns with the low. Right: how the 71.7 kt+ cells split between the four quarters.</figcaption></figure></section>
+<section><div class="tag">7. Was its set-up unusual? Compared with other hurricane-force-strength lows</div>
+<p>For this storm&rsquo;s {meteo_["rank_n"]} fixes with a gust index of 71.7 kt or more, the table gives the median of each ingredient and how it ranks among all such fixes in the same basin since 2004&ndash;05 (pipeline A, ERA5 proxy). Fixes from one storm are not independent, so read the rank as a rough guide, not a test.</p>
+<div class="tablewrap"><table class="idx"><thead><tr><th>Ingredient</th><th class="num">This storm</th><th class="num">Higher than this share of HF-strength fixes</th></tr></thead><tbody>{rows}</tbody></table></div></section>
 <section>{opc_block}</section>
 <section><div class="tag">Read with care</div>
-<p class="limit">ERA5 proxy throughout; never validated for storms before the archive begins. The Hart terms use 900, 850, 700, 600, 500, 400 and 300 hPa heights on a 1.5&deg; grid, not the original 50 hPa spacing, so read the structure class as a guide, not a classification to the metre. Over Greenland and high ground ERA5&rsquo;s sea-level pressure is extrapolated, and gusts near coasts and sea ice are less reliable. The storm-relative frame uses the last direction of motion while the low is stalled. A storm is one case: nothing here is a trend or a forecast rule.</p></section>
+<p class="limit">ERA5 proxy throughout; never validated for storms before the archive begins. The structure measures (Hart&rsquo;s cyclone phase space) use seven pressure levels on a 1.5&deg; grid, coarser than the original method, so read the structure class as a guide, not an exact classification. Over Greenland and high ground ERA5&rsquo;s sea-level pressure is extrapolated, and gusts near coasts and sea ice are less reliable. The storm-relative frame uses the last direction of motion while the low is stalled. A storm is one case: nothing here is a trend or a forecast rule.</p></section>
 </main></body></html>"""
 
 
 INDEX_METHOD = """<section id="how">
-  <div class="tag">Method</div>
-  <h2>How the storms were chosen and drawn</h2>
-  <p>The storms are those with the lowest ERA5 central pressure in each basin among the 1979&ndash;2025 tracks of pipeline A (the research tracker, <code>research/era5/hf_history</code>), taken in order of pressure from the lowest. Tropical-cyclone-flagged tracks are left out (three Pacific tracks, among them 30 Oct 1989 and 3 Oct 1981, which would otherwise rank second and third), and one Pacific storm from the 2024&ndash;25 season is left out because the weather-map fields used here end in January 2023. The rank shown is the rank among all tracks, so some numbers are missing. Ranking is by pressure alone, so the list is not a list of the strongest winds.</p>
-  <p>Central pressure, position and gust index come from the 6-hourly pipeline A fixes. The gust index is the highest ERA5 10 m gust over ocean within 800 km of the low. Each review also uses WeatherBench2 ERA5 at 1.5&deg; for the 250 hPa jet, 300 hPa divergence, 500 hPa vorticity advection and Hart&rsquo;s cyclone-phase-space structure terms, and at 0.25&deg; for the maps (sea-level pressure, 500 hPa height, 250 hPa wind, 850 hPa temperature, 925 hPa wind) re-centred on the storm. The gust swath and the storm-relative wind field use ERA5 hourly instantaneous gusts every 3 h over the 72 h window. The 24 h fall is the change in central pressure over the previous 24 h at each 6-hourly fix; the bomb line scales 24 hPa per 24 h at 60&deg;N by sin(latitude)/sin(60&deg;). OPC warns on sustained winds; the gust index is a proxy for that, not the same thing. Where OPC&rsquo;s archive has the storm, its fixes are matched by time and position (within 200 nm) and shown as agreement, not verification.</p>
+  <details>
+  <summary>How the storms were chosen and drawn (method)</summary>
+  <p>The storms are the ones with the lowest ERA5 central pressure in each basin among the 1979&ndash;2025 tracks of pipeline A (the project&rsquo;s ERA5 storm tracker, <code>research/era5/hf_history</code>), taken in order of pressure from the lowest. Tropical-cyclone-flagged tracks are left out (three Pacific tracks, among them 30 Oct 1989 and 3 Oct 1981, which would otherwise rank second and third), and one Pacific storm from the 2024&ndash;25 season is left out because the weather-map fields used here end in January 2023. The rank shown is the rank among all tracks, so some numbers are missing. Ranking is by pressure alone, so the list is not a list of the strongest winds.</p>
+  <p>Central pressure, position and gust index come from the 6-hourly pipeline A fixes. The gust index is the highest ERA5 10 m gust over ocean within 800 km (about 430 nm) of the low. Each review also uses WeatherBench2 ERA5 at 1.5&deg; for the 250 hPa jet, 300 hPa divergence, 500 hPa vorticity advection and Hart&rsquo;s cyclone-phase-space structure measures (frontal against symmetric, cold core against warm core), and at 0.25&deg; for the maps (sea-level pressure, 500 hPa height, 250 hPa wind, 850 hPa temperature, 925 hPa wind) re-centred on the storm. The gust swath and the storm-relative wind field use ERA5 hourly instantaneous gusts every 3 h over the 72 h window. The 24 h fall is the change in central pressure over the previous 24 h at each 6-hourly fix; the bomb line is 24 hPa in 24 h at 60&deg;N, scaled for other latitudes by sin(latitude)/sin(60&deg;). OPC warns on sustained winds; the gust index is a proxy for that, not the same thing. Where OPC&rsquo;s archive has the storm, its fixes are matched by time and position (within 200 nm) and shown as agreement, not verification.</p>
   <p class="limit"><strong>Read with care.</strong> ERA5 proxy throughout, never validated for storms before the archive begins. Before 2001 the gust index drifts upward at fixed storm depth, so gust numbers for the 1980s and 1990s storms are less reliable than their pressures. Not independently re-checked: how closely these ERA5 pressures match the observed minima of the named storms.</p>
+  </details>
 </section>"""
 
 
@@ -463,7 +465,11 @@ def write_index(rows, outdir):
   <a href="index.html">&larr; Back to the archive</a>
 </div></header>
 <main>
-<div class="note"><strong>ERA5 proxy, not direct observation.</strong> Every storm here was found in ERA5 reanalysis by the project&rsquo;s pipeline A tracker, and every chart is drawn from ERA5 fields. {npre} of the {n} are before the 2004&ndash;05 season, where no archive record exists; the other {n - npre} are since then, and are still read here from ERA5. ERA5 smooths the very strongest winds and pressure minima, so real peaks may be stronger. These are case studies, not a trend: nothing here says whether such storms are becoming more or less common.</div>
+<div class="note"><strong>ERA5 proxy, not direct observation.</strong> ERA5 is a weather model re-run over past years and blended with the observations available. Every storm here was found in ERA5 by the project&rsquo;s pipeline A tracker, and every chart is drawn from ERA5 fields. {npre} of the {n} are before the 2004&ndash;05 season, where no archive record exists; the other {n - npre} are since then, and are still read here from ERA5. ERA5 smooths the very strongest winds and pressure minima, so real peaks may be stronger. These are case studies, not a trend: nothing here says whether such storms are becoming more or less common.</div>
+<div class="answers">
+  <div class="tag">What this page shows</div>
+  <p>The {n} deepest lows ERA5 found, {na} in the Atlantic and {npc} in the Pacific, ranked by lowest central pressure. Each has its own page that walks through how the storm developed: how fast it deepened, what the upper-level pattern looked like, where the fronts and the low-level jet were, which part of the storm had the strongest wind, and whether OPC carried it as hurricane force. Use it to compare the setup of a storm you are watching with how the strongest storms on record developed. The list is ranked by pressure, so it is not a list of the strongest winds.</p>
+</div>
 <div class="hero">
   <div class="stat"><b>{n}</b><span>storms: {na} North Atlantic, {npc} North Pacific</span></div>
   <div class="stat"><b>{deep["minp"]:.1f} hPa</b><span>lowest: {esc(old.label(deep)[1])}</span></div>
@@ -472,7 +478,7 @@ def write_index(rows, outdir):
 </div>
 <div class="answers">
   <div class="tag">Open a review</div>
-  <p class="muted">Each storm has its own page: development, upper-level support, fronts and low-level jet, where the strongest wind was, how the set-up compares, and what OPC had.</p>
+  <p class="muted">Click a storm to open its review. &ldquo;Gust index&rdquo; is the strongest ERA5 10 m gust over the ocean within about 430 nm of the low. &ldquo;Archive era&rdquo; means the storm is since the 2004&ndash;05 season, so OPC&rsquo;s archive can be compared; &ldquo;reanalysis only&rdquo; means it is earlier.</p>
   <div class="toolbar" role="group" aria-label="Show storms">
     <span>Show:</span>
     <button type="button" data-f="all" aria-pressed="true">All {n}</button>
@@ -482,7 +488,7 @@ def write_index(rows, outdir):
   <div class="tablewrap"><table class="idx">
   <thead><tr><th>Storm</th><th class="num">Lowest pressure (hPa)</th><th class="num">Fastest 24 h fall (hPa)</th><th class="num">Peak gust index (kt)</th><th class="num">Hours at HF strength</th><th>Source</th></tr></thead>
   <tbody id="rows">{"".join(tr)}</tbody></table></div>
-  <p class="muted">Hours at HF strength is the number of 6-hourly fixes with a gust index of at least 71.7 kt times six. Peak gust index is the highest ERA5 gust within 800 km over the ocean, one number per fix.</p>
+  <p class="muted">Hours at HF strength is the number of 6-hourly positions with a gust index of at least 71.7 kt, times six. Peak gust index is the highest gust-index value over the storm&rsquo;s life.</p>
 </div>
 {INDEX_METHOD}
 <footer><p class="muted">Seasons run 1 June to 31 May. Fields: WeatherBench2 ERA5 and ARCO-ERA5 (Google Cloud public data). <a href="index.html">Back to the archive</a></p></footer>
