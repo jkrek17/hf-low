@@ -334,6 +334,16 @@ ERA5 proxy; outcome G_T is a regional gust metric (ocean within 300 km of Greenl
 - The pre-registered matched check failed to match (cases 13.5 hPa deeper than controls); post hoc matching on all times gives 4.6-8.9 per SD. Station check: cases and tip cases are windier at Prins Christian Sund, but ingredient-favoured times are not; the ERA5 high effect is not independently confirmed by stations.
 - Verified by a fresh agent: counts, odds ratios, skill, risk change, pooled and all-times fits, G_T at 10 times. Station counts did not reproduce (ISD files differ); means were close. Not checked: bootstrap p/q values, composite, swap, matched, post hoc.
 
+### Greenland tip jets: three setups, storm force vs hurricane force (`research/era5/tip_jets/`, hf-low PR 243, merged into the integration branch as `8b09d04`)
+
+ERA5 proxy (shared gust cache, ocean within 216 nm of Cape Farewell; lows from the study's own MSLP minimum, neither pipeline A nor B), Nov-Mar 2004-05 to 2025-26. Plan committed first (`36bbf57`), setups changed to Jason's three before the pull (33.6 GB, 2,683 times, saved at `/mnt/project-files/tip-jets/fields_2683_times.tar`). 514 episodes, 126 reach the hurricane-force proxy (gust 71.7 kt or more), 328 fall in the three setups, 186 in none.
+- **The pre-registered half-split tests could not run** (too few hurricane-force episodes per half); every result is POST HOC, all seasons, same-time associations. The westerly class was widened after the pull (122 of its 158 episodes have the gust maximum east of the cape); the original-class results are kept beside it.
+- Hurricane-force proxy share: 31% westerly, 25% northerly, 27% easterly, 18% in none. Composite lows: about 63N 36W (westerly), 58N 39W (northerly), 57N 55W (easterly).
+- Odds per SD, hurricane force vs storm force, adjusted for low depth: deeper low 5.3 / 2.0 / 2.9 (SD 13-14 hPa); Greenland high 0.66 westerly (cause untested), 2.1 northerly, 1.8 easterly (q 0.066, cannot tell); cold air upstream 2.4 westerly (3.0 with month added; 1.2 in the original class), no detectable lean in the other two (detectable about 2).
+- OPC hurricane-force low fix within 600 nm in 92-96% of hurricane-force proxy episodes against 24-54% of storm-force ones (an OPC low, usually the parent; not a check of the jet).
+- Fresh Sonnet agent recomputed counts, classes, OPC shares, odds ratios, one correlation: matched. Not checked: intervals, q values, detectable sizes, audit, monthly counts and SDs, month-adjusted refit. The claim review corrected 11 wording and figure errors before merge; logged as `failures/2026-10-15-readme-figures-not-in-result-files.md` with an "Upgrade for review" PR (hf-low 244, draft).
+- Not done: low-level stability, upper-air composites, any confirmation (no held-out seasons remain).
+
 ### NAO share without barrier winds (`research/era5/nao_share_barrier/`, hf-low PR 63, merged into the integration branch as `e5e88cd`)
 
 Pipeline A, ERA5 proxy. Plan committed first (`d642ff7`); 20 pre-registered tests, BH over all 20 (9 pass). Atlantic, Oct-Apr 2004-05..2025-26, NAO lagged days -10..-4, PR 14's setup (reproduced exactly: 9,636 tracks, 1,003 HF, RR(share) 1.125).
