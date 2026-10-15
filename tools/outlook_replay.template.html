@@ -81,13 +81,18 @@
   .card { border: 1px solid var(--line); border-radius: 6px; padding: 10px; background: var(--bg); min-height: 8.5em; }
   .big { font-size: 26px; font-weight: 600; font-variant-numeric: tabular-nums; }
   .mono { font-family: var(--mono); font-size: 12.5px; }
+  ul.plain { margin: 0 0 8px; padding-left: 20px; max-width: 70ch; }
+  ul.plain li { margin-bottom: 5px; }
+  details.fold { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 12px; }
+  details.fold summary { cursor: pointer; font-weight: 600; }
+  details.fold h3 { font-size: 14px; margin: 14px 0 4px; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="nav"><a href="index.html">&larr; Back to the archive</a> &middot; <a href="outlook-live.html">Outlook live</a> &middot; <a href="what-we-learned.html">What we learned</a></div>
-  <h1>Outlook replay: past GFS runs, shaded by how often OPC agreed</h1>
-  <div class="mock"><strong>A replay of past forecasts, not a live forecast.</strong> Every map is a GFS run from 2021&ndash;2026 shaded with the table built from <em>the other four seasons</em>, with OPC&rsquo;s actual low fixes drawn on top. GFS gust is a model forecast and a proxy for the sustained wind OPC warns on; OPC&rsquo;s hurricane-force call is an analyst&rsquo;s judgement, sometimes made as a service to customers, so &ldquo;OPC agreed&rdquo; is not the same as &ldquo;the wind was there&rdquo;.</div>
+  <h1>Outlook replay: how past forecasts lined up with what OPC called</h1>
+  <div class="mock"><strong>A replay of past forecasts, not a live forecast.</strong> Each map is a real GFS model run from 2021&ndash;2026, shaded the same way as the <a href="outlook-live.html">live outlook</a>: blue shows how often, in past cases with a similar forecast, OPC (NOAA&rsquo;s Ocean Prediction Center) had a strong low nearby. The diamonds are where OPC&rsquo;s analysis actually put its strong lows, so you can see how well the shading matched. The shading uses data from the <em>other four</em> seasons only, never the one being shown.</div>
 
   <div class="grid">
     <div class="panel">
@@ -96,53 +101,82 @@
       </div>
       <div class="bar">
         <div class="seg" role="group" aria-label="Forecast day" id="daySeg"></div>
-        <div class="seg" role="group" aria-label="Hazard" id="tgtSeg"><button type="button" data-t="hf" aria-pressed="true">Hurricane force</button><button type="button" data-t="st" aria-pressed="false">Storm force or stronger</button></div>
+        <div class="seg" role="group" aria-label="Hazard" id="tgtSeg"><button type="button" data-t="hf" aria-pressed="true">Hurricane force (64 kt+)</button><button type="button" data-t="st" aria-pressed="false">Storm force or stronger (48 kt+)</button></div>
         <div class="seg" role="group" aria-label="Basin" id="basinSeg"><button type="button" data-b="atl" aria-pressed="true">Atlantic</button><button type="button" data-b="pac" aria-pressed="false">Pacific</button></div>
-        <label class="chk"><input type="checkbox" id="fxChk" checked> OPC low fixes (diamonds)</label>
+        <label class="chk"><input type="checkbox" id="fxChk" checked> OPC&rsquo;s low positions (diamonds)</label>
       </div>
       <div class="bar">
-        <label class="chk"><input type="checkbox" id="o_lows" checked> Lows (GFS pressure minima)</label>
-        <label class="chk"><input type="checkbox" id="o_trough" checked> 500 hPa trough axis</label>
-        <label class="chk"><input type="checkbox" id="o_jet" checked> 250 hPa jet core</label>
-        <label class="chk"><input type="checkbox" id="o_coup" checked> Coupled hatch</label>
+        <label class="chk"><input type="checkbox" id="o_lows" checked> Low-pressure centres (L)</label>
+        <label class="chk"><input type="checkbox" id="o_trough" checked> Jet-stream dip (trough)</label>
+        <label class="chk"><input type="checkbox" id="o_jet" checked> Jet-stream core</label>
+        <label class="chk"><input type="checkbox" id="o_coup" checked> Rapid-growth setup (hatched)</label>
       </div>
-      <canvas id="map" role="img" aria-label="Map of the chosen basin shaded in three categories by how often OPC agreed a low was near, with GFS lows, trough axis, jet core, coupled hatch and OPC low fixes"></canvas>
+      <canvas id="map" role="img" aria-label="Map of the chosen ocean basin for one past forecast. Blue shading shows how often OPC agreed a strong low was near. Diamonds mark where OPC actually had strong lows. Low-pressure centres, a jet-stream dip, the jet-stream core and a rapid-growth setup are marked for context."></canvas>
       <div class="legend" id="legend"></div>
       <p class="small capline" id="cap"></p>
     </div>
     <div class="col">
       <div class="panel">
-        <h2>How to read it</h2>
-        <p>Each shaded area is the chance that OPC had a hurricane-force (or storm-force) low within 324 nautical miles of a point on that forecast day, given the strongest forecast GFS gust near the point. &ldquo;Near&rdquo; is a set distance that grows with lead: 60 nautical miles on Day 1, 120 on Day 2, 270 on Days 3 and 4 (the smallest that caught at least 80% of hurricane-force gust area when the model low was out of place, ERA5 proxy, position error only). Areas are drawn from the model&rsquo;s own wind field, not from tracking a low, so a storm the tracker misses still shows.</p>
-        <p>No shading is not &ldquo;safe&rdquo;: it means GFS gust stayed in a band where OPC agreed under 10% of the time, a lower chance, not a guarantee.</p>
+        <h2>What you are looking at</h2>
+        <p><strong>Blue shading</strong> shows where, in past cases with a forecast like this one, OPC had a strong low nearby. The darker the blue, the more often that happened:</p>
+        <ul class="plain">
+          <li><strong>Light blue</strong>: about 1 to 3 times in 10.</li>
+          <li><strong>Medium blue</strong>: about 3 to 5 times in 10.</li>
+          <li><strong>Dark blue</strong>: 5 times in 10 or more.</li>
+          <li><strong>No shading</strong>: under 1 in 10. That is a lower chance, not a guarantee of calm.</li>
+        </ul>
+        <p><strong>How to use it:</strong> pick a past run with the arrows or the list, then a day (Day 1 is the first 24 hours), a basin and a strength. Hover or tap the map for the number at a spot. <strong>Diamonds</strong> are OPC&rsquo;s own strong-low positions for that day: a good map has diamonds sitting inside the blue.</p>
+        <p>&ldquo;OPC agreed&rdquo; means OPC&rsquo;s own analysis had a low of that strength within 324 nautical miles of the point on that day. Hurricane force is wind of 64 kt or more, storm force 48 to 63 kt.</p>
       </div>
       <div class="panel">
-        <h2>Lookup card (real rates)</h2>
-        <p class="small">Hover or tap the map. Shows how often OPC agreed, by the strongest GFS gust near that point, from the other four seasons.</p>
+        <h2>Lookup card: hover or tap the map</h2>
+        <p class="small">Shows how often OPC agreed in past cases with a similar forecast gust near that point, from the other four seasons.</p>
         <div class="card" id="card" aria-live="polite"></div>
         <div class="tw" id="tab"></div>
         <p class="small" id="tabNote"></p>
       </div>
       <div class="panel" id="daybox"></div>
       <div class="panel">
-        <h2>What is real, what is not</h2>
-        <p><strong>Wind measure.</strong> OPC warns on sustained wind. Our line is a GFS gust, a proxy, and OPC&rsquo;s hurricane-force call is an analyst&rsquo;s judgement, so &ldquo;OPC agreed&rdquo; is not &ldquo;the wind will be there&rdquo;.</p>
-        <p><strong>Lows, trough, jet, hatch.</strong> Context only, no probability, drawn from the same GFS run at the end of the day shown (hours 24, 48, 72, 96). Lows are GFS pressure minima of 992 hPa or lower, for display; the shading never uses them. The trough axis is a simple finder and is often the west side of a storm&rsquo;s own upper low, not a separate trough. The jet core is 250 hPa wind of 110 kt or more. The hatch (about 500 km round a low) marks a low whose surroundings have both strong 500 hPa vorticity advection and strong low-level baroclinicity: cut points are the upper thirds of ERA5 proxy fixes of 2004&ndash;2026 (pipeline A, chosen after looking), applied here to GFS, which was not tested for this display. Among all those ERA5 cyclone fixes, the next 24 h reached storm force or stronger 41% of the time with coupled surroundings against 8% with quiet ones; that is a different population and horizon from the lows drawn here, so read it as a hint, not a rate for this map. Lows over high ground (Greenland, big mountains) are left out because their sea-level pressure is not real.</p>
-        <p><strong>Not on this page.</strong> No gale shading, because there is no OPC truth for gale. Nothing past Day 4, because the rates stop at 96 h.</p>
+        <h2>Other marks on the map (context only)</h2>
+        <p>These come from the same GFS forecast, at the end of the day shown. They help you place the shading; they do not change it and have no percentages.</p>
+        <ul class="plain">
+          <li><strong>L</strong>: a low-pressure centre of 992 hPa or lower, with its pressure. Lows over high ground such as Greenland are left out, because their sea-level pressure is not real.</li>
+          <li><strong>Orange dashed line</strong>: a dip (trough) in the winds about 5.5 km up (the 500 hPa level). It is a simple finder and is often the west side of a storm&rsquo;s own upper-level low.</li>
+          <li><strong>Purple</strong>: the core of the jet stream (winds of 110 kt or more at about 10 km, the 250 hPa level).</li>
+          <li><strong>Hatched circle (about 500 km)</strong>: a low where strong upper-level lift and a strong temperature contrast are both present, a setup that has gone with rapid strengthening. A hint only; see &ldquo;How this works&rdquo;.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h2>Keep in mind</h2>
+        <ul class="plain">
+          <li>The shading uses the model&rsquo;s forecast <em>gusts</em> as a stand-in for the sustained wind OPC warns on, and OPC&rsquo;s hurricane-force call is an analyst&rsquo;s judgement, sometimes made as a service to customers. So &ldquo;OPC agreed&rdquo; does not mean the wind was that strong.</li>
+          <li>No shading does not mean safe. It means that in the past, forecasts like this were followed by an OPC low less than 1 time in 10.</li>
+          <li>The percentages come from five past seasons of one model, so read them as rough rates, not exact odds. Distances are in nautical miles.</li>
+          <li>Only forecast days 1 to 4 and only October to April. There is no gale shading, because there is no OPC record of gale-force lows to measure against.</li>
+        </ul>
       </div>
     </div>
   </div>
 
   <div class="panel">
-    <h2>How the shading lined up with OPC across the replays</h2>
+    <h2>How well the shading lined up with OPC across the replays</h2>
     <p class="small" id="allLead"></p>
     <div class="tw" id="allTab"></div>
-    <p class="small">Two groups, both fixed before looking at the results. The 20 picked runs: per season, the two runs with the most OPC hurricane-force fixes in the next 96 hours, one run where OPC called none but GFS gust was strongest, and one picked at random. The routine sample: every tenth 00 UTC run of the five seasons, nothing chosen for interest, so it is the fairer read of how often the shading covers OPC&rsquo;s fixes. Each run is shaded with a table that leaves out its own season. A fix counts as covered when an ocean point shaded 15% or more (or 5% or more) lies within 324 nautical miles of it, the radius the percentages are built on. Fixes outside the map view are left out.</p>
+    <p class="small">Reading the table: of OPC&rsquo;s hurricane-force low positions in these runs, the share that had blue shading of 15% or more (or 5% or more) within 324 nautical miles. The last column is how much of the ocean on the map was shaded at 15% or more, so you can see the shading is not just covering everything. Fixes outside the map view are left out. The groups are explained in &ldquo;How this works&rdquo; below.</p>
   </div>
 
-  <div class="panel"><h2>Limits</h2>
-    <p>Five seasons (October&ndash;April 2021&ndash;22 to 2025&ndash;26), 00 UTC runs only, one model that changed version inside the window. Gust is sampled every 6 hours, so a short peak can be missed. Points are 1 degree apart and in the same run they are not independent: the real sample is runs and seasons, so the percentages are rates, not precise odds, and fixes within one storm are not independent, and a run every 10th day still shares weather patterns with its neighbours. Land and coasts are not scored. Nothing beyond day 4 or outside October&ndash;April.</p>
-    <p class="small">Method and pre-registration: <code>research/era5/outlook_replay/</code> in the repository (counts in <code>results/point_days.csv</code>). The shading radii come from a separate position-error test on the ERA5 proxy (<code>research/era5/neighborhood_radius/</code>).</p></div>
+  <details class="fold" id="how">
+    <summary>How this works (details for the curious)</summary>
+    <h3>The shading</h3>
+    <p>For each point on a 1-degree ocean grid we take the strongest GFS forecast gust within a set distance on that forecast day (60 nautical miles on Day 1, 120 on Day 2, 270 on Days 3 and 4: the smallest distances that caught at least 80% of hurricane-force gust area when the model low was out of place, on the ERA5 reanalysis proxy, position error only). We then look up how often, in the other four seasons, OPC had a hurricane-force or storm-force low fix within 324 nautical miles of points with that gust. Those shares are the percentages. The areas are drawn from the model&rsquo;s own wind field, not from tracking a low, so a storm the tracker misses still shows.</p>
+    <h3>Which runs are shown</h3>
+    <p>Two groups, both fixed before looking at the results. The 20 picked runs: per season, the two runs with the most OPC hurricane-force fixes in the next 96 hours, one run where OPC called none but GFS gust was strongest, and one picked at random. The routine sample: every tenth 00 UTC run of the five seasons, nothing chosen for interest, so it is the fairer read of how often the shading covers OPC&rsquo;s fixes. Each run is shaded with a table that leaves out its own season. A fix counts as covered when an ocean point shaded 15% or more (or 5% or more) lies within 324 nautical miles of it, the radius the percentages are built on.</p>
+    <h3>The marks on the map</h3>
+    <p>Lows are GFS pressure minima of 992 hPa or lower; the shading never uses them. The jet core is 250 hPa wind of 110 kt or more. The hatch marks a low whose surroundings have both strong 500 hPa vorticity advection (upper-level lift) and strong low-level baroclinicity (temperature contrast): the cut points are the upper thirds of ERA5 proxy fixes of 2004&ndash;2026 (pipeline A, chosen after looking), applied here to GFS, which was not tested for this display. Among all those ERA5 cyclone fixes, the next 24 h reached storm force or stronger 41% of the time with coupled surroundings against 8% with quiet ones; that is a different population and horizon from the lows drawn here, so read it as a hint, not a rate for this map.</p>
+    <h3>Limits</h3>
+    <p>Five seasons (October&ndash;April 2021&ndash;22 to 2025&ndash;26), 00 UTC runs only, one model that changed version inside the window. Gust is sampled every 6 hours, so a short peak can be missed. Points are 1 degree apart and in the same run they are not independent: the real sample is runs and seasons, so the percentages are rates, not precise odds, and fixes within one storm are not independent, and a run every 10th day still shares weather patterns with its neighbours. Land and coasts are not scored. Nothing beyond day 4 or outside October&ndash;April. The ERA5 record is a proxy, not direct observation.</p>
+    <p class="small">Method and pre-registration: <code>research/era5/outlook_replay/</code> in the repository (counts in <code>results/point_days.csv</code>). The shading radii come from a separate position-error test on the ERA5 proxy (<code>research/era5/neighborhood_radius/</code>).</p>
+  </details>
 </div>
 <script>
 window.HF_REPLAY = /*@@DATA@@*/;
@@ -167,8 +201,8 @@ window.HF_REPLAY = /*@@DATA@@*/;
   function setPressed(seg, attr, val) { Array.prototype.forEach.call(seg.querySelectorAll('button'), function (b) { b.setAttribute('aria-pressed', String(b.dataset[attr]) === String(val)); }); }
   var legend = document.getElementById('legend');
   function paintLegend(extra) {
-    var labs = ['10\u201330%', '30\u201350%', '50% or more'];
-    legend.innerHTML = labs.map(function (t, k) { return '<span><i class="sw" data-c="' + k + '"></i>' + t + '</span>'; }).join('') + '<span>Below 10%: no shading</span>' + '<span><i class="swl"></i>500 hPa trough axis</span><span><i class="sw jet"></i>250 hPa jet core (110 kt or more)</span><span><i class="sw hatch"></i>Coupled setup (context, not a probability)</span>' + (extra || '');
+    var labs = ['10\u201330% of past cases', '30\u201350%', '50% or more'];
+    legend.innerHTML = labs.map(function (t, k) { return '<span><i class="sw" data-c="' + k + '"></i>' + t + '</span>'; }).join('') + '<span>Under 10%: no shading</span>' + '<span><i class="swl"></i>Jet-stream dip (trough)</span><span><i class="sw jet"></i>Jet-stream core (110 kt or more)</span><span><i class="sw hatch"></i>Rapid-growth setup (context only)</span>' + (extra || '');
     Array.prototype.forEach.call(legend.querySelectorAll('i[data-c]'), function (e) { e.style.background = 'var(' + COLS[+e.dataset.c] + ')'; });
   }
   var cv = document.getElementById('map'), ctx = cv.getContext('2d'), geo;
@@ -274,16 +308,16 @@ window.HF_REPLAY = /*@@DATA@@*/;
   function strongest(band) { var bk = -1, bb = -1, k; for (k = 0; k < N; k++) if (BASIN[k] === st.b && band[k] > bb) { bb = band[k]; bk = k; } return bk; }
   function pointText(k) { var lat = G.lat[k], lon = LON[k]; return Math.abs(lat).toFixed(0) + 'N ' + Math.abs(lon).toFixed(0) + (lon < 0 ? 'W' : 'E'); }
   function rowsFor(tb, band) {
-    var h = '<table><thead><tr><th>GFS gust within ' + RD[st.d - 1] + ' nm</th><th class="n">HF agreed</th><th class="n">Storm agreed</th><th class="n">Point-days</th></tr></thead><tbody>';
+    var h = '<table><thead><tr><th>Forecast gust (kt) within ' + RD[st.d - 1] + ' nautical miles</th><th class="n">OPC agreed: hurricane force</th><th class="n">OPC agreed: storm force or stronger</th><th class="n">Past cases (point-days)</th></tr></thead><tbody>';
     for (var b = 0; b < 7; b++) { var few = tb.n[b] < 100 || tb.c[b] < 5; h += '<tr' + (b === band ? ' class="cur"' : '') + '><td>' + B[b] + ' kt</td><td class="n' + (few ? ' few' : '') + '">' + (few ? 'too few' : pct(tb.hf[b]) + '%') + '</td><td class="n' + (few ? ' few' : '') + '">' + (few ? 'too few' : pct(tb.st[b]) + '%') + '</td><td class="n">' + tb.n[b].toLocaleString('en-US') + '</td></tr>'; }
     return h + '</tbody></table>';
   }
   ['lows', 'trough', 'jet', 'coup'].forEach(function (k) { document.getElementById('o_' + k).addEventListener('change', function () { OVK[k] = this.checked; draw(); }); });
   function cardHtml(k, b, tb, seasonsWords) {
     var p = tb[st.t][b], what = st.t === 'hf' ? 'hurricane-force' : 'storm-force or stronger';
-    return '<div class="small">' + (st.hover >= 0 ? 'Point ' : 'Strongest point in view · ') + pointText(k) + ' · day ' + st.d + ' · peak GFS gust within ' + RD[st.d - 1] + ' nm: ' + B[b] + ' kt</div>' +
+    return '<div class="small">' + (st.hover >= 0 ? 'Point ' : 'Strongest point in view · ') + pointText(k) + ' · day ' + st.d + ' · strongest forecast gust within ' + RD[st.d - 1] + ' nautical miles: ' + B[b] + ' kt</div>' +
       '<div class="big">' + inTen(p) + '</div>' +
-      '<div class="small">of past point-days in that gust band had OPC agree on a ' + what + ' low within ' + D.truth_nm.toFixed(0) + ' nm (' + pct(p) + '%, ' + seasonsWords + '). Frequency among similar past point-days, not a forecast for this spot.</div>';
+      '<div class="small">In past cases with a forecast gust like this, OPC had a ' + what + ' low within ' + D.truth_nm.toFixed(0) + ' nautical miles about this often (' + pct(p) + '%, ' + seasonsWords + '). That is how often it happened before, not a forecast for this spot.</div>';
   }
 
   D.cases.forEach(function (c) { c.bands = c.days.map(decode); });
@@ -331,11 +365,11 @@ window.HF_REPLAY = /*@@DATA@@*/;
     var c = cur(), tb = table(c, st.b, st.d), k = shown(), band = c.bands[st.d - 1];
     document.getElementById('card').innerHTML = cardHtml(k, band[k], tb, 'the other four seasons');
     document.getElementById('tab').innerHTML = rowsFor(tb, band[k]);
-    document.getElementById('tabNote').textContent = (st.b === 'atl' ? 'Atlantic' : 'Pacific') + ', day ' + st.d + ' (the other four seasons). Share of past point-days where OPC had a hurricane-force or storm-force low within ' + D.truth_nm.toFixed(0) + ' nm. Rows with too few cases are not given.';
+    document.getElementById('tabNote').textContent = (st.b === 'atl' ? 'Atlantic' : 'Pacific') + ', day ' + st.d + ' (the other four seasons). Share of past cases (point-days) where OPC had a hurricane-force or storm-force low within ' + D.truth_nm.toFixed(0) + ' nautical miles. Rows with too few cases are not given.';
     var fx = fixesFor(c, st.d), nb = 0, ins = 0;
     fx.forEach(function (f) { if (f[2] !== 'HF') return; var lon = lonOf(f, st.b); if (!inView(lon, f[0], st.b)) return; nb++; if (near(c, st.d, st.b, lon, f[0], 15)) ins++; });
     var v0 = 24 * (st.d - 1);
-    document.getElementById('daybox').innerHTML = '<h2>' + fmtDate(c.cycle) + ' 00 UTC run, day ' + st.d + '</h2><p>Valid ' + (v0 + 6) + ' to ' + (v0 + 24) + ' hours after the run. Shading radius ' + RD[st.d - 1] + ' nm.</p><p>OPC hurricane-force fixes this day in the ' + (st.b === 'atl' ? 'Atlantic' : 'Pacific') + ' view: <strong>' + nb + '</strong>; of these <strong>' + ins + '</strong> have shading of 15% or more within ' + D.truth_nm.toFixed(0) + ' nm.</p>';
+    document.getElementById('daybox').innerHTML = '<h2>' + fmtDate(c.cycle) + ' 00 UTC run, day ' + st.d + '</h2><p>Day ' + st.d + ' covers ' + (v0 + 6) + ' to ' + (v0 + 24) + ' hours after the run. Strongest gust is taken within ' + RD[st.d - 1] + ' nautical miles of each point.</p><p>OPC hurricane-force low positions this day in the ' + (st.b === 'atl' ? 'Atlantic' : 'Pacific') + ' view: <strong>' + nb + '</strong>; of these <strong>' + ins + '</strong> have shading of 15% or more within ' + D.truth_nm.toFixed(0) + ' nautical miles.</p>';
   }
   function allRows(list) {
     var rows = '', d, tot = { hf: [0, 0, 0, 0], a: [0, 0, 0, 0], s: [0, 0, 0, 0] }, shaded = [0, 0, 0, 0], pts = [0, 0, 0, 0];
@@ -356,15 +390,15 @@ window.HF_REPLAY = /*@@DATA@@*/;
   }
   function allTable() {
     var picked = D.cases.filter(function (c) { return c.why !== 'systematic'; }), routine = D.cases.filter(function (c) { return c.why === 'systematic'; });
-    var head = '<thead><tr><th>Forecast day</th><th class="n">OPC HF fixes</th><th class="n">shading 15%+ within 324 nm</th><th class="n">shading 5%+ within 324 nm</th><th class="n">ocean points shaded 15%+</th></tr></thead>';
+    var head = '<thead><tr><th>Forecast day</th><th class="n">OPC hurricane-force low positions</th><th class="n">With 15%+ shading within 324 nautical miles</th><th class="n">With 5%+ shading within 324 nautical miles</th><th class="n">Ocean shaded 15%+</th></tr></thead>';
     document.getElementById('allLead').textContent = 'Routine sample (' + routine.length + ' runs, every tenth), then the ' + picked.length + ' picked runs.';
     document.getElementById('allTab').innerHTML = '<table>' + head + '<tbody><tr><th colspan="5" class="grp">Routine sample, ' + routine.length + ' runs</th></tr>' + allRows(routine) +
       '<tr><th colspan="5" class="grp">Picked runs, ' + picked.length + ' runs (busy, quiet and random)</th></tr>' + allRows(picked) + '</tbody></table>';
   }
   function render() {
     var c = cur();
-    document.getElementById('cap').textContent = 'GFS run of ' + fmtDate(c.cycle) + ' 00 UTC, day ' + st.d + '. Shading: chance OPC had a ' + (st.t === 'hf' ? 'hurricane-force' : 'storm-force or stronger') + ' low within ' + D.truth_nm.toFixed(0) + ' nm, from the strongest GFS gust within ' + RD[st.d - 1] + ' nm of each point, using the table from the other four seasons. Ocean only.';
-    layout(); paintLegend('<span>&#9670; OPC hurricane-force low fix</span><span>&#9675; OPC storm-force low fix</span>'); draw(); side();
+    document.getElementById('cap').textContent = 'GFS run of ' + fmtDate(c.cycle) + ' 00 UTC, day ' + st.d + '. Shading: how often, in the other four seasons, OPC had a ' + (st.t === 'hf' ? 'hurricane-force' : 'storm-force or stronger') + ' low within ' + D.truth_nm.toFixed(0) + ' nautical miles when the forecast gust looked like this. Ocean only.';
+    layout(); paintLegend('<span>&#9670; OPC hurricane-force low position</span><span>&#9675; OPC storm-force low position</span>'); draw(); side();
   }
   sel.addEventListener('change', function () {
     st.ci = +sel.value; var c = cur(), na = 0, np = 0;
