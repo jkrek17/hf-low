@@ -7,7 +7,7 @@ gust. Counts from it: 6,654 Nov-Mar times (2004-05 to 2025-26, 00/12 UTC); box g
 
 Related work (hf-low PR 58, `research/era5/greenland_jets/`) asked a different question: which ingredients raise
 the odds of a coastal gust >= 71.7 kt anywhere within 300 km of Greenland, barrier flow included. This study
-isolates the tip jet at Cape Farewell, separates forward from reverse, and asks storm force versus hurricane
+isolates the tip jet at Cape Farewell, separates three setups, and asks storm force versus hurricane
 force among tip-jet events. Ice-sheet pressure (PR 58's one supported ingredient) is re-tested here, not assumed.
 
 ## Definitions (fixed now)
@@ -19,11 +19,14 @@ force among tip-jet events. Ice-sheet pressure (PR 58's one supported ingredient
   gust atlas; it is not calibrated on observed storm-force events. ERA5 71.7 kt corresponds to about 62 kt
   ASCAT (ascat-check), and no station near Cape Farewell has reported 64 kt: the HF class is a statement about the
   proxy only.
-- **Type**, from 10 m wind (u10, v10) averaged over the 3x3 cells around the box-gust maximum:
-  forward (westerly) tip jet = direction from 247.5 to 337.5 degrees and maximum east of 46W; reverse (easterly)
-  = from 22.5 to 157.5 degrees and maximum west of 44W (maxima between 46W and 44W are other); barrier = from 337.5 to 67.5 degrees
-  (northerly/north-easterly along the east coast) ; anything else = other. Barrier and other are described, not
-  tested.
+- **Setup class** (Jason's three common setups, 2026-10-15 04:57Z; replaces the earlier forward/reverse split, changed
+  before any pull or ingredient was seen). Bearing of the box-gust maximum from the cape, and 10 m wind direction (the
+  direction the wind blows FROM) averaged over the 3x3 cells around it:
+  **S** = south of the tip (bearing 135-225) in westerly flow (from 225-315);
+  **E** = east of the tip (bearing 45-135) in northerly flow (from 315-45);
+  **W** = west of the tip (bearing 225-315) in easterly flow (from 45-135), the setup ahead of a front.
+  Anything else is "other", described only. Class E overlaps with the barrier flow of PR 58 by construction: it is
+  reported as such, not renamed a tip jet.
 - **Episode**: event times linked when 36 h or less apart; the episode is represented by its peak-gust time and
   is HF if any of its times is HF; type from the peak time. **The unit of analysis is the episode, and the
   sample for inference is seasons (22), not episodes or times.**
@@ -42,7 +45,7 @@ composites use the events up to then and say so).
 
 ## Questions and tests
 
-**Q1, typical setup (descriptive, no test).** For forward and reverse events, HF and S separately: composite MSLP
+**Q1, typical setup (descriptive, no test).** For the three classes, HF and S separately: composite MSLP
 and 10 m wind anomaly maps; the low's median position, depth, and the box wind direction and distance of the maximum
 from the cape; month and time-of-day shares; the share of HF episodes with an OPC hurricane-force or storm low
 fix within 600 nm in the 12 h either side (OPC has low fixes only, no wind areas, so this is "OPC agreed" through the
@@ -58,11 +61,11 @@ Candidate factors, each standardised, computed at the peak time, none chosen aft
 5. COLD: SST minus 2 m temperature (K), mean over ocean in the upstream box 56-63N, 60W-46W for forward and
    reverse alike (fixed in advance).
 
-Primary family: 5 factors x 2 types (forward, reverse) = 10 tests, univariate logistic regression of HF
+Primary family: 5 factors x 3 classes (S, E, W) = 15 tests, univariate logistic regression of HF
 (vs S) on one factor, adjusting for LOW_DEPTH when the factor is not LOW_DEPTH. Even seasons fit, odd seasons held
-out, then swapped (as PR 58). 2,000 season-block bootstrap resamples. Benjamini-Hochberg over the 10. A factor is
+out, then swapped (as PR 58). 2,000 season-block bootstrap resamples. Benjamini-Hochberg over the 15. A factor is
 **supported** if q < 0.05 in the fit half and the same sign with one-sided p < 0.10 in the held-out half, in at least one
-direction of the swap; **replicated** if so in both. A type is tested only if each half holds at least 30
+direction of the swap; **replicated** if so in both. A class is tested only if each half holds at least 30
 episodes of the rarer class; otherwise it is described only, and the minimum detectable odds ratio per SD at 80%
 power is reported either way. A well-powered null is a result. Secondary (not in the family, reported as such):
 T850 minus SST (stability proxy, WeatherBench2, seasons to 2021-22), and a joint model with all five.
@@ -83,4 +86,4 @@ logged below as post hoc.
 
 ## Post hoc deviations
 
-(none yet)
+- 2026-10-15 04:57Z, before the pull: event types changed from forward/reverse to Jason's three setups S, E, W (family 10 -> 15 tests). Not post hoc in the outcome sense: no wind direction had been read.
