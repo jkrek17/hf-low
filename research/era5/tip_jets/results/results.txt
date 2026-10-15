@@ -1,3 +1,5 @@
+DO NOT QUOTE: the pre-registered tests did not meet the 30-per-half rule (tested = False everywhere); see README.
+
 ERA5 PROXY. Event times 2214 ; episodes 514 ; seasons 22
        episodes  hf  med_gust   med_wspd  hf_share
 cls                                               

@@ -155,6 +155,7 @@ for s in (0, 1):
     R.loc[m, "q_fit"] = bh(R.loc[m, "p_fit"].values)
 R["supported"] = R.tested & (R.q_fit < 0.05) & (R.p_test_one < 0.10) & ((R.or_fit > 1) == (R.or_test > 1))
 R.to_csv(os.path.join(RES, "tests.csv"), index=False)
+P("\nDO NOT QUOTE: the pre-registered tests did not meet the 30-per-half rule (tested = False everywhere); see README.")
 P("\nTESTS (OR per SD of factor for HF vs storm force, adjusted for low depth except LOW_DEPTH; BH over 15 within each swap direction)")
 P(R.round(3).to_string())
 # pooled (all seasons) description

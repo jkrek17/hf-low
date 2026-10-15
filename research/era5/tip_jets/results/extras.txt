@@ -1,0 +1,18 @@
+Episodes per month in the three setups (S widened): {1: 67, 2: 72, 3: 59, 11: 65, 12: 65} ; by class: {'E': {1: 14, 2: 14, 3: 13, 11: 18, 12: 14}, 'S': {1: 34, 2: 35, 3: 34, 11: 21, 12: 34}, 'W': {1: 19, 2: 23, 3: 12, 11: 26, 12: 17}}
+HF share by month, three setups: {1: 0.31, 2: 0.35, 3: 0.25, 11: 0.17, 12: 0.32}
+
+Within-class SD of each factor (physical units: hPa, km, hPa/100 km, hPa, K):
+S {'LOW_DEPTH': 13.7, 'LOW_DIST': 515.43, 'GRAD': 1.28, 'GH': 10.36, 'COLD': 2.89}
+E {'LOW_DEPTH': 12.73, 'LOW_DIST': 429.19, 'GRAD': 1.38, 'GH': 9.8, 'COLD': 2.27}
+W {'LOW_DEPTH': 13.33, 'LOW_DIST': 321.6, 'GRAD': 1.3, 'GH': 10.79, 'COLD': 2.25}
+
+COLD by month in S, mean K: {1: 8.7, 2: 9.3, 3: 8.7, 11: 4.0, 12: 7.0}
+
+COLD and GH ORs per SD in S with month dummies and LOW_DEPTH added (all seasons, ridge 0.5, 2,000 season-block bootstraps):
+COLD OR 2.96 [1.70, 5.74]
+GH OR 0.70 [0.45, 1.00]
+LOW_DEPTH OR 5.19 [3.75, 9.24]
+GRAD OR 7.92 [4.62, 16.98]
+
+Controls pulled: see pull_times.csv
+{'event': 2214, 'control': 469}

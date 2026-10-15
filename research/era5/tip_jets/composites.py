@@ -44,7 +44,7 @@ for j, c in enumerate(["S", "E", "W"]):
         ws = np.hypot(u, v) * KT
         txt.append(f"{c} {'HF' if hf else 'S'}: n={len(d)}; mean-low min MSLP {m.min():.1f} hPa at ({LAT[np.unravel_index(m.argmin(), m.shape)[0]]:.1f}N, "
                    f"{LON[np.unravel_index(m.argmin(), m.shape)[1]]:.1f}E); composite peak wind {ws.max():.0f} kt")
-fig.colorbar(cs, ax=ax, shrink=0.7, label="MSLP minus all-time mean (hPa); black = MSLP, arrows = 10 m wind")
+fig.colorbar(cs, ax=ax, shrink=0.7, label="MSLP minus mean of 469 comparison times that were not events (hPa); black = MSLP, arrows = 10 m wind")
 fig.suptitle("Cape Farewell box gust events, Nov-Mar 2004-05 to 2025-26 (ERA5 proxy). Star = Cape Farewell")
 fig.savefig(os.path.join(RES, "composites" + SUF + ".png"), dpi=110)
 open(os.path.join(RES, "composites" + SUF + ".txt"), "w").write("\n".join(txt))
