@@ -1,0 +1,9 @@
+ERA5 PROXY, post hoc; plan: PREREGISTRATION.md
+PRIMARY hf ~ DP + depth            DP         OR/SD  1.09  [ 0.73,  1.70]  (n_boot 2000)
+PRIMARY hf ~ DP + depth            LOW_DEPTH  OR/SD  2.16  [ 1.14,  5.72]  (n_boot 2000)
+secondary: + ice-sheet pressure    DP         OR/SD  1.38  [ 0.84,  3.11]  (n_boot 2000)
+secondary: + ice-sheet pressure    LOW_DEPTH  OR/SD  4.32  [ 2.04, 22.95]  (n_boot 2000)
+secondary: + ice-sheet pressure    GH         OR/SD  2.92  [ 1.83,  9.66]  (n_boot 2000)
+SECONDARY spearman(DP, peak box gust) = 0.16 (p 0.187, episodes not independent)
+spearman(DP, GH) = -0.18; spearman(DP, depth) = -0.02
+DP mean/SD -2.0/9.1 hPa; hf mean DP -1.8, storm-force mean DP -2.1; n 73, hf 18
