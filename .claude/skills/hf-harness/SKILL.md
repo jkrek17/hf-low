@@ -63,6 +63,8 @@ For any hypothesis test against a predictor, follow `hf-preregistered-test` (pla
 
 Recomputing the numbers and judging the claims are two jobs. A verifier answers "is this number what these files produce?" The `hf-reviewer` subagent answers "does what we are about to say follow from what was found?" and runs at high effort on a stronger model, after the verifier and before anything is merged or entered in the ledger. `hf-result-closeout` has the order.
 
+**Figures in plain-words text** (README summaries, ledger text) each come from a committed result file: write derived figures (monthly counts, one SD in physical units, shares) to `results/` with the script that makes them, and quote units from that file. A null is written "cannot tell, detectable about N", not "no effect", unless the interval excludes the size that matters. A relabelled or widened class is named as such wherever it appears, with the original-class result beside it.
+
 Report each check as passed, failed, or not checked with the reason. "Not checked" is acceptable. Reporting an unchecked number as established is not.
 
 ### 5. Close
