@@ -93,7 +93,7 @@
 <div class="wrap">
   <div class="nav"><a href="index.html">&larr; Back to the archive</a> &middot; <a href="outlook-replay.html">Outlook replay</a> &middot; <a href="what-we-learned.html">What we learned</a></div>
   <h1>Outlook (live, experimental): where very strong ocean storms may occur in the next 4 days</h1>
-  <div class="mock"><strong>Experimental. Not a warning.</strong> This page turns the latest computer-model forecasts into a map of where very strong winds over the North Atlantic and North Pacific are likely in the next four days, and shows how often forecasts like these matched what OPC (NOAA&rsquo;s Ocean Prediction Center) called in the past. For warnings use OPC&rsquo;s own products.</div>
+  <div class="mock"><strong>Experimental. Not a warning.</strong> This page turns the latest computer-model forecasts into a map of where very strong winds over the North Atlantic and North Pacific may occur in the next four days, and shows how often forecasts like these matched what OPC (NOAA&rsquo;s Ocean Prediction Center) called in the past. For warnings use OPC&rsquo;s own products.</div>
   <div class="status" id="runline" aria-live="polite">Loading the latest forecast&hellip;</div>
 
   <div class="grid">
@@ -108,7 +108,7 @@
         <label class="chk"><input type="checkbox" id="o_lows" checked> Low-pressure centres (L)</label>
         <label class="chk"><input type="checkbox" id="o_trough" checked> Jet-stream dip (trough)</label>
         <label class="chk"><input type="checkbox" id="o_jet" checked> Jet-stream core</label>
-        <label class="chk"><input type="checkbox" id="o_coup" checked> Rapid-growth setup (hatched)</label>
+        <label class="chk"><input type="checkbox" id="o_coup" checked> Strengthening setup (hatched)</label>
       </div>
       <canvas id="map" role="img" aria-label="Map of the chosen ocean basin. Blue shading shows either how often OPC agreed a strong low was near (first layer) or the forecast wind in knots (second layer). Low-pressure centres, a jet-stream dip, the jet-stream core and a rapid-growth setup are marked for context."></canvas>
       <p class="small off" id="blNote"></p>
@@ -118,7 +118,7 @@
     <div class="col">
       <div class="panel" id="readGust">
         <h2>What you are looking at</h2>
-        <p><strong>Blue shading</strong> shows where, in past cases with a forecast like this one, OPC had a strong low nearby. The darker the blue, the more often that happened:</p>
+        <p><strong>Blue shading</strong> shows where, in past cases with a forecast like this one, OPC had a strong low nearby. The stronger the blue, the more often that happened:</p>
         <ul class="plain">
           <li><strong>Light blue</strong>: about 1 to 3 times in 10.</li>
           <li><strong>Medium blue</strong>: about 3 to 5 times in 10.</li>
@@ -130,14 +130,14 @@
       </div>
       <div class="panel off" id="readBlend">
         <h2>What you are looking at</h2>
-        <p><strong>Blue shading</strong> shows the forecast wind, the average of three weather models with a small boost where they disagree:</p>
+        <p><strong>Blue shading</strong> shows the forecast wind, a weighted average of GFS, ECMWF and AIFS, with extra wind added where the ensemble runs spread out:</p>
         <ul class="plain">
           <li><strong>Light blue</strong>: wind of 34 to 47 kt (gale force).</li>
           <li><strong>Medium blue</strong>: 48 to 63 kt (storm force).</li>
           <li><strong>Dark blue</strong>: 64 kt or more (hurricane force).</li>
           <li><strong>No shading</strong>: under 34 kt.</li>
         </ul>
-        <p>This is <strong>sustained wind</strong>, the kind OPC warns on, not gusts. Hover or tap the map: the card shows the wind from each model and the chance of each wind level, worked out from about 130 runs of the models. Those chances mean &ldquo;this wind occurs&rdquo; and were checked against buoys and ships on the GFE wind page. They are not the &ldquo;OPC agreed&rdquo; rates of the first layer, and no OPC rates have been measured for this layer.</p>
+        <p>This is <strong>sustained wind</strong>, the kind OPC warns on, not gusts. Hover or tap the map: the card shows the wind from each model and the chance of each wind level, worked out from about 130 ensemble runs. Those chances mean &ldquo;this wind occurs&rdquo; and were checked against buoys and ships on the GFE wind page. They are not the &ldquo;OPC agreed&rdquo; rates of the first layer, and no OPC rates have been measured for this layer.</p>
       </div>
       <div class="panel">
         <h2 id="cardH">Lookup card: hover or tap the map</h2>
@@ -154,7 +154,7 @@
           <li><strong>L</strong>: a low-pressure centre of 992 hPa or lower, with its pressure. Lows over high ground such as Greenland are left out, because their sea-level pressure is not real.</li>
           <li><strong>Orange dashed line</strong>: a dip (trough) in the winds about 5.5 km up (the 500 hPa level). It is a simple finder and is often the west side of a storm&rsquo;s own upper-level low.</li>
           <li><strong>Purple</strong>: the core of the jet stream (winds of 110 kt or more at about 10 km, the 250 hPa level).</li>
-          <li><strong>Hatched circle (about 500 km)</strong>: a low where strong upper-level lift and a strong temperature contrast are both present, a setup that has gone with rapid strengthening. A hint only; see &ldquo;How this works&rdquo;.</li>
+          <li><strong>Hatched circle (about 500 km)</strong>: a low with strong upper-level lift (500 hPa vorticity advection) over a strong temperature contrast. In past cases lows in this setup were more likely to reach storm force within a day. A hint only, not a forecast; details in &ldquo;How this works&rdquo;.</li>
         </ul>
       </div>
       <div class="panel">
@@ -174,13 +174,13 @@
   <details class="fold" id="how">
     <summary>How this works (details for the curious)</summary>
     <h3>The first layer: how often OPC agreed</h3>
-    <p>For each point on a 1-degree ocean grid we take the strongest GFS forecast gust within a set distance on that forecast day (60 nautical miles on Day 1, 120 on Day 2, 270 on Days 3 and 4: the smallest distances that caught at least 80% of hurricane-force gust area when the model low was out of place, on the ERA5 reanalysis proxy, position error only). We then look up how often, in five past seasons (October&ndash;April 2021&ndash;22 to 2025&ndash;26) of 00 UTC GFS runs, OPC had a hurricane-force or storm-force low fix within 324 nautical miles of points with that gust. Those shares are the percentages. The areas are drawn from the model&rsquo;s own wind field, not from tracking a low, so a storm the tracker misses still shows.</p>
+    <p>For each point on a 1-degree ocean grid we take the strongest GFS forecast gust within a set distance on that forecast day (60 nautical miles on Day 1, 120 on Day 2, 270 on Days 3 and 4). These distances allow for the model putting a low in the wrong place: they are the smallest that still caught at least 80% of the hurricane-force gust area when tested against ERA5, a model-based record of past weather, not observations. We then look up how often, in five past seasons (October&ndash;April 2021&ndash;22 to 2025&ndash;26) of 00 UTC GFS runs, OPC had a hurricane-force or storm-force low fix within 324 nautical miles of points with that gust. Those shares are the percentages. The areas are drawn from the model&rsquo;s own wind field, not from tracking a low, so a storm the tracker misses still shows.</p>
     <h3>The second layer: the three-model blend</h3>
-    <p>It is the recipe behind the GFE wind page. GFS, ECMWF and AIFS 10 m sustained wind are averaged, each weighted by how many of about 80 members of the GEFS and ECMWF ensembles (many runs of a model from slightly different starting points) are close to it, and a quarter of the spread between members (0.15 on Day 1), up to 5 kt, is added, which puts back the strong winds that averaging flattens. The chances come from about 130 members (GEFS, the ECMWF ensemble and the AIFS ensemble) and were calibrated on the GFE page against buoys and ships, using hindcast cases from March 2025 to March 2026. Each day shows the higher of its two 12-hourly forecast times (+12 and +24 h for Day 1), a little more area than the single-time test the recipe was tuned on, and the highest value in each 1-degree cell. On the one run checked (14 October 00 UTC, North Atlantic, +48 h), GFS had about four times ECMWF&rsquo;s number of cells at 34 kt or more, and the blend sits between them. The blend is built from the same 00 UTC run as the first layer but is added later (the ECMWF ensemble is out about 8 hours after the run); until it is ready the layer says so.</p>
+    <p>It is the recipe behind the GFE wind page. GFS, ECMWF and AIFS 10 m sustained wind are averaged, each weighted by how many of about 80 GEFS and ECMWF ensemble runs (the same model run many times from slightly different starting points) are close to it, and a quarter of the spread between runs (0.15 on Day 1), up to 5 kt, is added; this puts back the strong winds that averaging flattens. The chances come from about 130 ensemble runs (GEFS, the ECMWF ensemble and the AIFS ensemble) and were adjusted on the GFE page to match buoys and ships over past cases from March 2025 to March 2026. Each day shows the higher of its two 12-hourly forecast times (+12 and +24 h for Day 1), a little more area than the single-time test the recipe was tuned on, and the highest value in each 1-degree cell. On the one run checked (14 October 00 UTC, North Atlantic, +48 h), GFS had about four times ECMWF&rsquo;s number of cells at 34 kt or more, and the blend sits between them. The blend is built from the same 00 UTC run as the first layer but is added later (the ECMWF ensemble is out about 8 hours after the run); until it is ready the layer says so.</p>
     <h3>The marks on the map</h3>
-    <p>Lows are GFS pressure minima of 992 hPa or lower; the shading never uses them. The jet core is 250 hPa wind of 110 kt or more. The hatch marks a low whose surroundings have both strong 500 hPa vorticity advection (upper-level lift) and strong low-level baroclinicity (temperature contrast): the cut points are the upper thirds of ERA5 proxy fixes of 2004&ndash;2026 (pipeline A, chosen after looking), applied here to GFS, which was not tested for this display. Among all those ERA5 cyclone fixes, the next 24 h reached storm force or stronger 41% of the time with coupled surroundings against 8% with quiet ones; that is a different population and horizon from the lows drawn here, so read it as a hint, not a rate for this map.</p>
+    <p>Lows are GFS pressure minima of 992 hPa or lower; the shading never uses them. The jet core is 250 hPa wind of 110 kt or more. The hatch marks a low with both strong 500 hPa vorticity advection (upper-level lift) and a strong low-level temperature contrast (baroclinic zone). &ldquo;Strong&rdquo; means in the top third of past ERA5 cyclone positions from 2004&ndash;2026, a cut-off chosen after looking at the data and not tested on GFS. Among those past ERA5 lows, the next 24 hours reached storm force or stronger 41% of the time when both were present against 8% when neither was. That is a different set of lows from the ones drawn here, so read it as a hint, not a rate for this map.</p>
     <h3>Limits</h3>
-    <p>The percentages come from five past seasons of 00 UTC runs of one model that changed version inside the window, and hold only for that sample, so read them as rates, not precise odds. Gust is sampled every 6 hours, so a short peak can be missed. Points are 1 degree apart and in the same run they are not independent: the real sample is runs and seasons. The tables here use all five seasons, so unlike the replay page they were not built without the run being shaded. The shading distances come from a position-error test on the ERA5 proxy. Land and coasts are not scored. Nothing beyond day 4, nothing from May to September, and the map is rebuilt once a day, so it can be up to a day behind the latest GFS run. The ERA5 record is a proxy, not direct observation.</p>
+    <p>The percentages come from five past seasons of 00 UTC runs of one model, and the model was upgraded during that time, so read them as rough rates, not precise odds. Gust is sampled every 6 hours, so a short peak can be missed. Neighbouring points in one run are not separate tests, so the five seasons are what limit how sure we can be. The tables here use all five seasons; the replay page leaves out the season being shown. The shading distances come from a test against ERA5 (a model-based record, not observations). Land and coasts are not scored. Nothing beyond day 4, nothing from May to September, and the map is rebuilt once a day, so it can be up to a day behind the latest GFS run.</p>
     <p class="small">How past runs lined up with OPC: <a href="outlook-replay.html">Outlook replay</a>. Code: <code>tools/outlook_live.py</code> (gust layer), <code>tools/outlook_blend_live.py</code> (blend layer) and <code>research/era5/outlook_replay/</code> in the repository.</p>
   </details>
 </div>
@@ -210,7 +210,7 @@ window.HF_LIVE_STATIC = {"grid":{"lat":[74.75,74.75,74.75,74.75,74.75,74.75,74.7
   var legend = document.getElementById('legend');
   function paintLegend(extra) {
     var labs = st.lay === 'blend' ? ['34\u201347 kt (gale)', '48\u201363 kt (storm)', '64 kt or more (hurricane force)'] : ['10\u201330% of past cases', '30\u201350%', '50% or more'];
-    legend.innerHTML = labs.map(function (t, k) { return '<span><i class="sw" data-c="' + k + '"></i>' + t + '</span>'; }).join('') + '<span>' + (st.lay === 'blend' ? 'Under 34 kt: no shading' : 'Under 10%: no shading') + '</span>' + '<span><i class="swl"></i>Jet-stream dip (trough)</span><span><i class="sw jet"></i>Jet-stream core (110 kt or more)</span><span><i class="sw hatch"></i>Rapid-growth setup (context only)</span>' + (extra || '');
+    legend.innerHTML = labs.map(function (t, k) { return '<span><i class="sw" data-c="' + k + '"></i>' + t + '</span>'; }).join('') + '<span>' + (st.lay === 'blend' ? 'Under 34 kt: no shading' : 'Under 10%: no shading') + '</span>' + '<span><i class="swl"></i>Jet-stream dip (trough)</span><span><i class="sw jet"></i>Jet-stream core (110 kt or more)</span><span><i class="sw hatch"></i>Strengthening setup (context only)</span>' + (extra || '');
     Array.prototype.forEach.call(legend.querySelectorAll('i[data-c]'), function (e) { e.style.background = 'var(' + COLS[+e.dataset.c] + ')'; });
   }
   var cv = document.getElementById('map'), ctx = cv.getContext('2d'), geo;
@@ -371,7 +371,7 @@ window.HF_LIVE_STATIC = {"grid":{"lat":[74.75,74.75,74.75,74.75,74.75,74.75,74.7
     var ll = Math.abs(lat).toFixed(1) + 'N ' + Math.abs(lon > 180 ? 360 - lon : lon).toFixed(1) + (lon > 180 || lon < 0 ? 'W' : 'E');
     var p = [d.p34[n], d.p48[n], d.p64[n]];
     card.innerHTML = '<div class="small">' + (st.bh ? 'Point ' : 'Strongest point in view · ') + ll + ' · day ' + st.d + ' · forecast wind (blend)</div><div class="big">' + (d.wind[n] / 2).toFixed(0) + ' kt</div>' +
-      '<div class="small">Chance of 34 kt or more: ' + inTen(p[0]) + ' (' + p[0] + '%). 48 kt or more: ' + inTen(p[1]) + ' (' + p[1] + '%). 64 kt or more: ' + inTen(p[2]) + ' (' + p[2] + '%). These are chances that this wind occurs, from about 130 runs of the models (as on the GFE wind page). They are not the “OPC agreed” rates of the other layer.</div>';
+      '<div class="small">Chance of 34 kt or more: ' + inTen(p[0]) + ' (' + p[0] + '%). 48 kt or more: ' + inTen(p[1]) + ' (' + p[1] + '%). 64 kt or more: ' + inTen(p[2]) + ' (' + p[2] + '%). These are chances that this wind occurs, from about 130 ensemble runs (as on the GFE wind page). They are not the “OPC agreed” rates of the other layer.</div>';
     document.getElementById('tab').innerHTML = '<table><thead><tr><th>Forecast wind at this point</th><th class="n">Sustained wind</th></tr></thead><tbody><tr><td>GFS (US model)</td><td class="n">' + (d.gfs[n] / 2).toFixed(0) + ' kt</td></tr><tr><td>ECMWF (European model)</td><td class="n">' + (d.ecmwf[n] / 2).toFixed(0) + ' kt</td></tr><tr><td>AIFS (ECMWF’s AI model)</td><td class="n">' + (d.aifs[n] / 2).toFixed(0) + ' kt</td></tr><tr class="cur"><td>Blend (what is shaded)</td><td class="n">' + (d.wind[n] / 2).toFixed(0) + ' kt</td></tr><tr><td>How much the model runs disagree (spread)</td><td class="n">' + (d.sigma[n] / 4).toFixed(1) + ' kt</td></tr></tbody></table>';
     document.getElementById('tabNote').textContent = (st.b === 'atl' ? 'Atlantic' : 'Pacific') + ', day ' + st.d + '. Each 1-degree square shows its highest value, using the higher of the two forecast times that make up the day.';
     document.getElementById('daybox').innerHTML = '<h2>' + fmtRun() + ' run, day ' + st.d + '</h2><p>Day ' + st.d + ' covers the forecast times ' + fmtValid(v0 + 12) + ' and ' + fmtValid(v0 + 24) + ' (' + (v0 + 12) + ' and ' + (v0 + 24) + ' hours after the run); each square shows the higher of the two. Sustained wind, not gust.</p>';
@@ -396,7 +396,7 @@ window.HF_LIVE_STATIC = {"grid":{"lat":[74.75,74.75,74.75,74.75,74.75,74.75,74.7
   function strongest(band) { var bk = -1, bb = -1, k; for (k = 0; k < N; k++) if (BASIN[k] === st.b && band[k] > bb) { bb = band[k]; bk = k; } return bk; }
   function pointText(k) { var lat = G.lat[k], lon = LON[k]; return Math.abs(lat).toFixed(0) + 'N ' + Math.abs(lon).toFixed(0) + (lon < 0 ? 'W' : 'E'); }
   function rowsFor(tb, band) {
-    var h = '<table><thead><tr><th>Forecast gust (kt) within ' + RD[st.d - 1] + ' nautical miles</th><th class="n">OPC agreed: hurricane force</th><th class="n">OPC agreed: storm force or stronger</th><th class="n">Past cases (point-days)</th></tr></thead><tbody>';
+    var h = '<table><thead><tr><th>Forecast gust (kt) within ' + RD[st.d - 1] + ' nautical miles</th><th class="n">OPC agreed: hurricane force</th><th class="n">OPC agreed: storm force or stronger</th><th class="n">Past cases</th></tr></thead><tbody>';
     for (var b = 0; b < 7; b++) { var few = tb.n[b] < 100 || tb.c[b] < 5; h += '<tr' + (b === band ? ' class="cur"' : '') + '><td>' + B[b] + ' kt</td><td class="n' + (few ? ' few' : '') + '">' + (few ? 'too few' : pct(tb.hf[b]) + '%') + '</td><td class="n' + (few ? ' few' : '') + '">' + (few ? 'too few' : pct(tb.st[b]) + '%') + '</td><td class="n">' + tb.n[b].toLocaleString('en-US') + '</td></tr>'; }
     return h + '</tbody></table>';
   }
@@ -418,7 +418,7 @@ window.HF_LIVE_STATIC = {"grid":{"lat":[74.75,74.75,74.75,74.75,74.75,74.75,74.7
     if (!L) { el.className = 'status warn'; el.textContent = 'No run is available yet, so there is no map. The daily job only runs October to April.'; return; }
     var age = (now.getTime() - runTime()) / 3600000;
     h = '<strong>Latest forecast: the GFS model run of ' + fmtRun() + '.</strong> Page updated ' + L.made.replace('T', ' ').replace('Z', ' UTC') + '.';
-    if (!inSeason) { warn = true; h += ' <strong>It is outside October to April, the months the percentages were measured in, so this map is old and not calibrated for now.</strong>'; }
+    if (!inSeason) { warn = true; h += ' <strong>It is outside October to April, the months the percentages were measured in, so this map is old and its percentages do not apply now.</strong>'; }
     else if (age > 36) { warn = true; h += ' <strong>This run is ' + Math.round(age) + ' hours old: the daily update may have stopped, so do not treat this map as current.</strong>'; }
     else h += ' It is ' + Math.round(age) + ' hours old.';
     el.className = warn ? 'status warn' : 'status'; el.innerHTML = h;
@@ -437,7 +437,7 @@ window.HF_LIVE_STATIC = {"grid":{"lat":[74.75,74.75,74.75,74.75,74.75,74.75,74.7
     if (!band) { card.innerHTML = '<div class="small">Day ' + st.d + ' is not available for this run.</div>'; }
     else card.innerHTML = cardHtml(k, band[k], tb, 'five past seasons');
     document.getElementById('tab').innerHTML = rowsFor(tb, band && k >= 0 ? band[k] : -1);
-    document.getElementById('tabNote').textContent = (st.b === 'atl' ? 'Atlantic' : 'Pacific') + ', day ' + st.d + ' (five past seasons). Share of past cases (point-days) where OPC had a hurricane-force or storm-force low within ' + D.truth_nm.toFixed(0) + ' nautical miles. Both strengths shown; rows with too few cases are not given.';
+    document.getElementById('tabNote').textContent = (st.b === 'atl' ? 'Atlantic' : 'Pacific') + ', day ' + st.d + ' (five past seasons). Share of past cases where OPC had a hurricane-force or storm-force low within ' + D.truth_nm.toFixed(0) + ' nautical miles. Both strengths shown; rows with too few cases are not given.';
     var el = document.getElementById('daybox'), v0 = 24 * (st.d - 1);
     el.innerHTML = L ? '<h2>' + fmtRun() + ' run, day ' + st.d + '</h2><p>Valid ' + fmtValid(v0 + 6) + ' to ' + fmtValid(v0 + 24) + ' (' + (v0 + 6) + ' to ' + (v0 + 24) + ' hours after the run). Strongest gust is taken within ' + RD[st.d - 1] + ' nautical miles of each point.</p>' : '';
   }
