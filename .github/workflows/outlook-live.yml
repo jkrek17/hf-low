@@ -6,7 +6,11 @@
 # Why the explicit dispatches: a push made with GITHUB_TOKEN does not start other workflows, so pages.yml and publish-site.yml would never see this
 # commit. workflow_dispatch is the exception GitHub allows, hence `actions: write` and the two `gh workflow run` calls.
 #
-# Safe to run twice a day: the script writes nothing when the newest complete run is already in the data file, so the second cron is a retry for a
+# Six cron slots, not two (changed 2026-10-16): GitHub starts scheduled workflows late under load, and on 2026-10-15 the 06:10 and 08:40 slots started
+# at 11:20 and 13:39 UTC (none at all by 09:16 UTC on the 16th), so the map was up to eight hours stale. More slots mean one of them is likelier to start early.
+# Extra runs are harmless: they find the run already built and exit, and the concurrency group keeps two from overlapping.
+#
+# Safe to run several times a day: the script writes nothing when the newest complete run is already in the data file, so a later cron is a retry for a
 # late GFS run. Outside October-April it does nothing (the percentages were measured in those months only). A failed pull fails the job (red run, no
 # commit); the page itself warns when its run is older than 36 hours.
 #
@@ -21,8 +25,12 @@ name: Outlook live (daily)
 
 on:
   schedule:
+    - cron: '23 5 * * *'
     - cron: '10 6 * * *'
+    - cron: '47 7 * * *'
     - cron: '40 8 * * *'
+    - cron: '53 9 * * *'
+    - cron: '37 11 * * *'
   workflow_dispatch:
     inputs:
       force:
