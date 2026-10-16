@@ -1,0 +1,12 @@
+Z3 GAP episodes: 109; gust-strong 13; wind-strong (top 13 by WMAX) 13; overlap 5
+WMAX kt: median 39.7, range 34.7-48.2; wind-strong cut (13th largest) 43.0 kt; GF median 1.493 IQR 1.445-1.522
+test      factor     outcome                   effect    est     lo    hi     p  outcome_sd     q
+   1        STAB wind_strong                OR per SD  0.821  0.408 1.706 0.564         NaN 0.564
+   2 INTERIOR_DP wind_strong                OR per SD  1.487  0.819 3.253 0.170         NaN 0.425
+   3        STAB        WMAX change in outcome per SD -0.203 -0.746 0.348 0.458       2.636 0.564
+   4 INTERIOR_DP        WMAX change in outcome per SD  0.260 -0.334 0.840 0.420       2.636 0.564
+   5        STAB          GF change in outcome per SD  0.043  0.036 0.050 0.000       0.065 0.002
+
+reference (gust-strong, same code): {'test': 'ref', 'factor': 'STAB', 'outcome': 'strong_ep', 'effect': 'OR per SD', 'est': np.float64(3.719), 'lo': np.float64(1.61), 'hi': np.float64(9.084), 'p': 0.001}
+
+PRE-REGISTERED READING: PARTLY the gust formula (test 5 interval excludes 0)

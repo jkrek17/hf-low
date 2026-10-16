@@ -1,0 +1,87 @@
+valid times per lead: {24: 2122, 48: 2122} ; seasons [np.int64(2021), np.int64(2022), np.int64(2023), np.int64(2024), np.int64(2025)]
+event base rate (all regimes) by zone and lead, %:
+zone  lead
+Z1    24      6.7
+      48      6.7
+Z2    24      6.1
+      48      6.1
+Z3    24      7.0
+      48      7.0
+
+T1 all times in regime (forecast regime; ERA5-proxy event >= 54 kt at the valid time)
+zone  lead   regime    n  events  strong  pct_event  pct_strong  season_min  season_max
+  Z1    24  BARRIER  623      64       9       10.3         1.4         7.9        14.1
+  Z1    24 OFFSHORE 1022      59       4        5.8         0.4         5.0         6.7
+  Z1    24  ONSHORE  477      19       2        4.0         0.4         3.5         4.5
+  Z1    48  BARRIER  640      62       9        9.7         1.4         7.8        12.1
+  Z1    48 OFFSHORE 1027      64       4        6.2         0.4         5.1         7.2
+  Z1    48  ONSHORE  455      16       2        3.5         0.4         2.5         4.1
+  Z2    24  BARRIER  656      78      11       11.9         1.7         8.7        16.8
+  Z2    24 OFFSHORE  805      30       1        3.7         0.1         0.7         6.3
+  Z2    24  ONSHORE  661      22       7        3.3         1.1         1.6         6.5
+  Z2    48  BARRIER  671      82      12       12.2         1.8         8.2        15.9
+  Z2    48 OFFSHORE  818      31       0        3.8         0.0         0.7         6.6
+  Z2    48  ONSHORE  633      17       7        2.7         1.1         0.8         4.2
+  Z3    24      GAP  754      67       7        8.9         0.9         4.4        12.9
+  Z3    24   INFLOW  550      33       3        6.0         0.5         2.2        12.9
+  Z3    24    OTHER  818      48       4        5.9         0.5         2.5         9.5
+  Z3    48      GAP  748      68       6        9.1         0.8         3.7        12.3
+  Z3    48   INFLOW  561      30       2        5.3         0.4         1.1        12.1
+  Z3    48    OTHER  813      50       6        6.2         0.7         3.6        10.8
+
+T1 Z1 BARRIER forecast regime, band of GFSGUST: chance (%) of an ERA5-proxy event [season-block 95%], events/times
+  24 h: bottom half: 0.0 [0.0,0.0] 0/311 | 50th-80th: 4.8 [1.1,8.9] 9/187 | 80th-95th: 31.2 [29.5,34.3] 29/93 | top 5%: 81.2 [71.8,93.5] 26/32
+  48 h: bottom half: 0.0 [0.0,0.0] 0/320 | 50th-80th: 5.2 [2.9,8.5] 10/192 | 80th-95th: 27.1 [21.8,34.0] 26/96 | top 5%: 81.2 [69.0,92.1] 26/32
+
+T1 Z1 BARRIER forecast regime, band of DEPTH: chance (%) of an ERA5-proxy event [season-block 95%], events/times
+  24 h: bottom half: 4.2 [2.8,6.5] 13/311 | 50th-80th: 13.4 [9.9,17.6] 25/187 | 80th-95th: 21.5 [16.1,26.3] 20/93 | top 5%: 18.8 [3.3,38.5] 6/32
+  48 h: bottom half: 4.4 [3.1,5.6] 14/320 | 50th-80th: 12.0 [8.8,16.0] 23/192 | 80th-95th: 17.7 [13.5,20.8] 17/96 | top 5%: 25.0 [16.7,33.3] 8/32
+
+T1 Z1 BARRIER forecast regime, band of LOW_DIST: chance (%) of an ERA5-proxy event [season-block 95%], events/times
+  24 h: bottom half: 15.4 [11.8,21.8] 48/311 | 50th-80th: 3.2 [0.5,7.0] 6/187 | 80th-95th: 8.6 [6.8,9.8] 8/93 | top 5%: 6.2 [0.0,16.0] 2/32
+  48 h: bottom half: 15.0 [11.9,20.2] 48/320 | 50th-80th: 2.6 [0.0,6.2] 5/192 | 80th-95th: 7.3 [6.1,8.7] 7/96 | top 5%: 6.2 [0.0,16.0] 2/32
+
+T1 Z1 BARRIER forecast regime, band of COASTPILE: chance (%) of an ERA5-proxy event [season-block 95%], events/times
+  24 h: bottom half: 8.7 [4.7,13.1] 27/311 | 50th-80th: 8.0 [3.5,12.3] 15/187 | 80th-95th: 11.8 [10.1,15.5] 11/93 | top 5%: 34.4 [22.0,78.6] 11/32
+  48 h: bottom half: 7.8 [4.6,11.0] 25/320 | 50th-80th: 7.8 [6.0,10.3] 15/192 | 80th-95th: 9.4 [3.6,11.7] 9/96 | top 5%: 40.6 [29.4,61.9] 13/32
+
+T1 Z2 BARRIER forecast regime, band of GFSGUST: chance (%) of an ERA5-proxy event [season-block 95%], events/times
+  24 h: bottom half: 0.0 [0.0,0.0] 0/328 | 50th-80th: 3.6 [1.0,7.7] 7/196 | 80th-95th: 38.4 [31.5,46.6] 38/99 | top 5%: 100.0 [100.0,100.0] 33/33
+  48 h: bottom half: 0.0 [0.0,0.0] 0/335 | 50th-80th: 5.0 [2.8,7.0] 10/201 | 80th-95th: 40.6 [28.6,51.5] 41/101 | top 5%: 91.2 [82.1,97.9] 31/34
+
+T1 Z2 BARRIER forecast regime, band of DEPTH: chance (%) of an ERA5-proxy event [season-block 95%], events/times
+  24 h: bottom half: 4.3 [2.8,6.3] 14/328 | 50th-80th: 13.3 [7.3,18.1] 26/196 | 80th-95th: 30.3 [21.0,38.0] 30/99 | top 5%: 24.2 [10.3,44.4] 8/33
+  48 h: bottom half: 3.9 [1.8,6.2] 13/335 | 50th-80th: 13.9 [10.0,17.9] 28/201 | 80th-95th: 30.7 [24.4,37.4] 31/101 | top 5%: 29.4 [20.0,40.7] 10/34
+
+T1 Z2 BARRIER forecast regime, band of LOW_DIST: chance (%) of an ERA5-proxy event [season-block 95%], events/times
+  24 h: bottom half: 16.2 [10.3,23.2] 53/328 | 50th-80th: 6.6 [2.3,10.2] 13/196 | 80th-95th: 10.1 [4.7,19.5] 10/99 | top 5%: 6.1 [0.0,11.1] 2/33
+  48 h: bottom half: 17.9 [13.3,23.8] 60/335 | 50th-80th: 5.0 [2.7,8.4] 10/201 | 80th-95th: 8.9 [4.3,12.5] 9/101 | top 5%: 8.8 [0.0,14.3] 3/34
+
+T1 Z2 BARRIER forecast regime, band of COASTPILE: chance (%) of an ERA5-proxy event [season-block 95%], events/times
+  24 h: bottom half: 10.7 [7.9,13.7] 35/328 | 50th-80th: 8.2 [6.7,10.4] 16/196 | 80th-95th: 15.2 [12.0,18.1] 15/99 | top 5%: 36.4 [26.5,48.4] 12/33
+  48 h: bottom half: 10.7 [9.0,12.6] 36/335 | 50th-80th: 9.5 [4.7,13.4] 19/201 | 80th-95th: 14.9 [7.4,20.0] 15/101 | top 5%: 35.3 [26.8,45.2] 12/34
+
+T1 Z3 GAP forecast regime, band of GFSGUST: chance (%) of an ERA5-proxy event [season-block 95%], events/times
+  24 h: bottom half: 0.0 [0.0,0.0] 0/377 | 50th-80th: 1.3 [0.5,2.1] 3/226 | 80th-95th: 30.1 [25.8,33.1] 34/113 | top 5%: 78.9 [74.2,91.7] 30/38
+  48 h: bottom half: 0.0 [0.0,0.0] 0/374 | 50th-80th: 2.7 [1.9,3.8] 6/224 | 80th-95th: 28.6 [21.7,33.7] 32/112 | top 5%: 78.9 [62.5,87.5] 30/38
+
+T1 Z3 GAP forecast regime, band of DEPTH: chance (%) of an ERA5-proxy event [season-block 95%], events/times
+  24 h: bottom half: 5.3 [2.7,8.2] 20/377 | 50th-80th: 10.2 [6.3,13.5] 23/226 | 80th-95th: 17.7 [11.3,25.7] 20/113 | top 5%: 10.5 [2.4,20.0] 4/38
+  48 h: bottom half: 5.1 [2.6,8.0] 19/374 | 50th-80th: 10.7 [5.5,15.5] 24/224 | 80th-95th: 15.2 [9.0,22.2] 17/112 | top 5%: 21.1 [8.3,42.4] 8/38
+
+T1 Z3 GAP forecast regime, band of LOW_DIST: chance (%) of an ERA5-proxy event [season-block 95%], events/times
+  24 h: bottom half: 15.4 [10.7,19.4] 58/377 | 50th-80th: 2.7 [1.6,3.5] 6/226 | 80th-95th: 2.7 [0.8,4.6] 3/113 | top 5%: 0.0 [0.0,0.0] 0/38
+  48 h: bottom half: 15.0 [11.3,18.0] 56/374 | 50th-80th: 4.5 [2.0,6.4] 10/224 | 80th-95th: 1.8 [0.0,4.5] 2/112 | top 5%: 0.0 [0.0,0.0] 0/38
+
+T1 Z3 GAP forecast regime, band of INTERIOR_DP: chance (%) of an ERA5-proxy event [season-block 95%], events/times
+  24 h: bottom half: 4.2 [2.1,6.4] 16/377 | 50th-80th: 5.3 [3.0,8.3] 12/226 | 80th-95th: 20.4 [10.2,23.8] 23/113 | top 5%: 42.1 [31.8,46.7] 16/38
+  48 h: bottom half: 4.5 [2.0,7.5] 17/374 | 50th-80th: 5.8 [3.7,9.3] 13/224 | 80th-95th: 21.4 [8.6,27.2] 24/112 | top 5%: 36.8 [23.8,45.8] 14/38
+
+T2 leave-one-season-out log-loss (per time), forecast regime only. diff = (gust + pressure ingredients) minus (gust alone); negative = ingredients help. BH over 6
+zone  lead  regime   n  events  ll_clim  ll_gust  ll_gust_plus    diff      lo     hi     p  auc_gust  auc_gust_plus  seasons_improved     q               verdict
+  Z1    24 BARRIER 623      64   0.3324   0.1543        0.1597  0.0054 -0.0010 0.0129 0.110    0.9557         0.9508                 1 0.220 cannot tell / no gain
+  Z1    48 BARRIER 640      62   0.3187   0.1676        0.1691  0.0015 -0.0064 0.0115 0.857    0.9377         0.9326                 2 0.857 cannot tell / no gain
+  Z2    24 BARRIER 656      78   0.3673   0.1409        0.1402 -0.0007 -0.0041 0.0037 0.726    0.9661         0.9669                 3 0.857 cannot tell / no gain
+  Z2    48 BARRIER 671      82   0.3738   0.1718        0.1725  0.0007 -0.0037 0.0051 0.760    0.9534         0.9534                 3 0.857 cannot tell / no gain
+  Z3    24     GAP 754      67   0.3042   0.1277        0.1339  0.0062 -0.0002 0.0114 0.082    0.9661         0.9624                 2 0.220 cannot tell / no gain
+  Z3    48     GAP 748      68   0.3080   0.1379        0.1493  0.0114  0.0017 0.0198 0.000    0.9603         0.9514                 0 0.003 cannot tell / no gain
