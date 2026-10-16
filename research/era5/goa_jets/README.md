@@ -57,7 +57,7 @@ no held-out seasons remain; it needs new winters.
 
 The pre-registered held-out test could not run (it needed 30 strong episodes in each half of the seasons; the biggest class has 18 and 18 against 52 and 69 in the other
 group, and the Cook Inlet class has 6 and 7). The **all-seasons estimates are the pre-registered fallback and are not held out** (`results/q2_tests.csv`, odds ratio per standard deviation, strong
-against 54 to 64 kt episodes, ridge-penalised logistic, adjusted for depth, season-block bootstrap, Benjamini-Hochberg over the 15):
+against 54 to 64 kt episodes, ridge-penalised logistic (penalty 0.5 times the sum of squared slopes added to the summed log-loss; other forms give different odds ratios), adjusted for depth, season-block bootstrap, Benjamini-Hochberg over the 15):
 
 | Factor (one SD) | North Gulf southeasterly (27 of 166 strong) | Panhandle southeasterly (36 of 157) | Cook Inlet northerly (13 of 109) |
 |---|---|---|---|
@@ -79,6 +79,11 @@ Six open-water NDBC buoys (46001, 46061, 46076, 46080, 46082, 46083; 5 m anemome
 - ERA5 gust is **8 to 17% higher** than the buoy gust (median ratio 1.08 to 1.17). When ERA5's cell shows a 54 kt gust, the buoy's median gust was **44 to 48 kt**, and 0 to 9% of those times had a buoy gust of 54 kt or more. So the 54 kt proxy class reads like a high gale on these buoys, in line with the ASCAT result (ERA5 15 to 25% above).
 - **Shelikof Strait (46077) sits in an ERA5 land cell**: ERA5 wind is 0.27 of the buoy's at 30 kt or more (median). ERA5 cannot see the strait or the inlet, so the Cook Inlet / Shelikof numbers above describe the open-ocean zone south and east of them (ocean cells only), not channel winds. Real gap winds there are underestimated by an unknown, large amount.
 - This says nothing about the cores of barrier jets within a few tens of nm of the mountains, where no buoy sits.
+
+## Checks
+
+A fresh Sonnet agent recomputed from the committed files, matching: episode counts, regime counts, all Q1 rates and band edges quoted in the tables, the three Q2 odds ratios it tried (Cook Inlet sea-air 3.7, North Gulf depth 2.1, Panhandle distance 0.60), the half counts, the buoy ratios and 46077, and three DEPTH values from the raw fields (0.00 hPa difference).
+**Not independently checked:** the bootstrap ranges and q values, the audit numbers (late-winter term, leave-one-season-out, placebo), the other twelve Q2 estimates, buoy station positions, and the ingredients other than DEPTH.
 
 ## What was not done
 
