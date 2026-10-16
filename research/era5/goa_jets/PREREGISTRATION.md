@@ -99,4 +99,8 @@ episodes will be few dozen per zone and the half-split rule is likely to fail; t
 
 ## Post hoc deviations
 
-(none yet)
+- 2026-10-16, before any result was read: `features.py` took a plain mean of SST minus 2 m temperature that came out missing (SST is missing at some coastal cells); changed to the mean of valid cells. No outcome had been read.
+- 2026-10-16 (POST HOC): the pre-registered half-split tests did not run (strong episodes per half: 11/16 North Gulf, 18/18 Panhandle, 6/7 Cook Inlet; 30 needed in the rarer group of each half). The pre-registered all-seasons fallback is reported, not held out.
+- 2026-10-16 (POST HOC): `audit.py` (late-winter term, even/odd halves, leave-one-season-out, within-season placebo) was added after the Q2 results, because the Cook Inlet sea-air temperature result was the largest and rests on 13 strong episodes.
+- 2026-10-16: GRAD (pressure gradient near the gust maximum) is pre-registered and reported but flagged as the wind itself; not a clue.
+- 2026-10-16: Q3 buoy stations: positions are from memory, not read from the NDBC station pages; Shelikof 46077 turned out to lie in an ERA5 land cell, so it is reported as a resolution finding and left out of the ratio statements.
