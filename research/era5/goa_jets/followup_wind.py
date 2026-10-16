@@ -48,7 +48,7 @@ def run(name, fac, kind, ycol):
         d = pd.concat([g[s] for s in rng.choice(ss, len(ss))])
         if kind == "logit" and d[ycol].nunique() < 2: continue
         b.append(est(d))
-    b = np.array(b); p = 2 * min((b <= 0).mean(), (b >= 0).mean())
+    b = np.array(b); p = max(2 * min((b <= 0).mean(), (b >= 0).mean()), 1 / 2000)
     if kind == "logit":
         r = dict(test=name, factor=fac, outcome=ycol, effect="OR per SD", est=np.exp(e0), lo=np.exp(np.percentile(b, 2.5)), hi=np.exp(np.percentile(b, 97.5)), p=p)
     else:

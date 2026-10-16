@@ -59,4 +59,6 @@ Alaska zones at episode times, and what a fresh RSS pull for those days would co
 
 ## Deviations
 
-(none yet)
+- 2026-10-16, fixed in the analysis script before the scoring run (POST HOC wording, found by the claim review): GFSGUST was added to the T1 band table (it is a registered predictor but T1 listed only ingredients);
+  the T2 verdict label "cannot tell / no gain" differs from the registered wording, and a significantly worse result (Cook Inlet 48 h, q 0.003) had no registered label and is reported as "worse"; T3 was not run;
+  the climatology AUC was not reported (0.5 within a regime). Lead 1: p values are floored at 1/2,000 (no bootstrap draw on the other side).
