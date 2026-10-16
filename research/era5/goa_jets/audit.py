@@ -44,9 +44,14 @@ for zn, rg in [("Z1", "BARRIER"), ("Z2", "BARRIER"), ("Z3", "GAP")]:
         sh = np.array(sh); e0 = np.log(o)
         rows.append(dict(zone=zn, regime=rg, factor=fac, n=len(d), strong=int(d.strong_ep.sum()), OR=o, OR_month_adj=om, OR_even=ev, OR_odd=od,
                          loo_min=min(loo), loo_max=max(loo), placebo_p=float((np.abs(sh) >= abs(e0)).mean())))
-A = pd.DataFrame(rows); A.to_csv(os.path.join(RES, "audit.csv"), index=False)
+A = pd.DataFrame(rows); A["placebo_hits_of_1000"] = (A.placebo_p * 1000).round().astype(int); A.to_csv(os.path.join(RES, "audit.csv"), index=False)
 P("POST HOC audit of the 15 Q2 estimates (OR per SD, strong vs 54-64 kt episodes)")
 P(A.round(2).to_string(index=False))
+lsm = np.load("/mnt/project-files/era5-cache/lsm_nh_0p25.npy")
+E["peak_land_frac"] = [lsm[int(round((90 - la) / .25)), int(round((lo % 360) / .25))] for la, lo in zip(E.glat, E.glon)]
+P("\nshare of episode peaks in an ERA5 cell with land fraction >= 0.1 (coastal mixed cell), by zone and regime")
+P(E.assign(coastal=E.peak_land_frac >= 0.1).groupby(["zone", "regime"]).coastal.mean().round(2).to_string())
+P("most common peak cell per zone:"); P(E.groupby("zone").apply(lambda g: g.groupby([g.glat, g.glon]).size().sort_values(ascending=False).head(3).to_dict()).to_string())
 c = E.groupby("zone").apply(lambda g: g.groupby(g.time.dt.month).size()).unstack(0).fillna(0).astype(int)
 P("\nepisodes per calendar month by zone"); P(c.to_string())
 open(os.path.join(RES, "audit.txt"), "w").write("\n".join(out)); print("\n".join(out))

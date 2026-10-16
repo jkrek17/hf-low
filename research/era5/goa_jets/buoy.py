@@ -2,9 +2,8 @@
 
 NDBC standard meteorological history (hourly files, UTC; wind at buoy anemometer height, about 5 m; no height adjustment), nearest
 record within 40 min of 00/12 UTC. ERA5 10 m wind from the pulled fields at the nearest cell; ERA5 gust from the shared gust cache.
-Station positions are approximate (to about 0.1 degree, from memory of the NDBC station pages; not read from the files): the 0.25 degree
-cell is not sensitive to that, but a station near a coast cell may sit in a land cell, which is reported.
-usage: buoy.py cells  (decode gust at the station cells, slow, once)  |  buoy.py run
+Station positions are those on the NDBC station pages (check_positions re-reads them); a station whose ERA5 cell is mostly land is reported with its land fraction.
+usage: buoy.py check | buoy.py cells  (decode gust at the station cells, slow, once)  |  buoy.py run
 """
 import os, sys, glob, gzip, io, urllib.request
 import numpy as np, pandas as pd
@@ -12,14 +11,27 @@ import numpy as np, pandas as pd
 HERE = os.path.dirname(os.path.abspath(__file__)); RES = os.path.join(HERE, "results")
 WORK = os.path.join(os.environ.get("ERA5_WORK", os.path.join(HERE, "work")), "goa_jets")
 CACHE = "/mnt/project-files/era5-cache"
-ST = {"46001": (56.30, -148.06), "46061": (60.24, -146.83), "46080": (57.95, -150.04), "46076": (59.50, -148.00),
-      "46082": (59.68, -143.37), "46083": (58.30, -137.99), "46077": (57.87, -156.94)}
+# Positions as published on the NDBC station pages (read 2026-10-16). check_positions() re-reads them and fails on a difference above 0.05 degree.
+# The first version of this file had 46077 at 156.94W from memory, 160 km from its true position, which put it in a land cell (failures/2026-10-16-buoy-position-from-memory.md).
+ST = {"46001": (56.296, -148.027), "46061": (60.231, -146.840), "46080": (57.910, -150.129), "46076": (59.508, -148.005),
+      "46082": (59.670, -143.353), "46083": (58.276, -138.024), "46077": (57.869, -154.211)}
 KT = 1.943844   # m/s to kt
 T0 = np.datetime64("1900-01-01T00")
 
 
 def cell(la, lo):
     return int(round((90 - la) / 0.25)), int(round((lo % 360) / 0.25))
+
+
+def check_positions():
+    import re
+    for s_, (la, lo) in ST.items():
+        h = urllib.request.urlopen(f"https://www.ndbc.noaa.gov/station_page.php?station={s_}", timeout=60).read().decode("latin-1")
+        m = re.search(r"([0-9]+\.[0-9]+) ?N ([0-9]+\.[0-9]+) ?W", h)
+        pla, plo = float(m.group(1)), -float(m.group(2))
+        assert abs(pla - la) < 0.05 and abs(plo - lo) < 0.05, (s_, (la, lo), (pla, plo))
+        lsm = np.load(os.path.join(CACHE, "lsm_nh_0p25.npy")); r, c = cell(la, lo)
+        print(s_, "NDBC", pla, plo, "ERA5 cell land fraction", round(float(lsm[r, c]), 2))
 
 
 def download():
@@ -91,7 +103,7 @@ def run():
     for s, (la, lo) in ST.items():
         b = read_buoy(s)
         r, c = cell(la, lo)
-        land_cell = bool(lsm[r, c] >= 0.5)
+        land_cell = bool(lsm[r, c] >= 0.5); land_frac = float(lsm[r, c])
         for t in pt.time:
             st = t.strftime("%Y%m%d%H"); z = np.load(os.path.join(WORK, "fields", st + ".npz"))
             rr, cc = r - ROW0, c - COL0
@@ -101,7 +113,7 @@ def run():
             if w.empty: continue
             w = w.iloc[(w.t - t).abs().argmin()]
             eg = g[(g.time == t) & (g.station == s)].era5_gust_kt
-            rows.append(dict(time=t, station=s, land_cell=land_cell, buoy_ws_kt=w.ws * KT, buoy_gust_kt=w.gs * KT, era5_wind_kt=e10,
+            rows.append(dict(time=t, station=s, land_cell=land_cell, land_frac=land_frac, buoy_ws_kt=w.ws * KT, buoy_gust_kt=w.gs * KT, era5_wind_kt=e10,
                              era5_gust_kt=float(eg.iloc[0]) if len(eg) else np.nan))
     B = pd.DataFrame(rows)
     z = ff[ff.zone.isin(["Z1", "Z2", "Z3"])][["time", "zone", "regime", "event"]] if "regime" in ff else None
@@ -131,5 +143,6 @@ def run():
 if __name__ == "__main__":
     sys.path.insert(0, HERE)
     if sys.argv[1] == "download": download()
+    elif sys.argv[1] == "check": check_positions()
     elif sys.argv[1] == "cells": cells()
     else: run()

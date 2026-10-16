@@ -161,7 +161,7 @@ for zn, rg in CLASSES:
         # DEPTH must be standardised before use as adjustment: done above
         b = boot(d, fac); e0 = est(d, fac)
         prev = d.strong_ep.mean()
-        rows.append(dict(zone=zn, regime=rg, factor=fac, n=len(d), strong=int(d.strong_ep.sum()), OR=np.exp(e0), lo=np.exp(np.percentile(b, 2.5)),
+        rows.append(dict(zone=zn, regime=rg, factor=fac, n=len(d), strong=int(d.strong_ep.sum()), sd=float(d[fac].std()), OR=np.exp(e0), lo=np.exp(np.percentile(b, 2.5)),
                          hi=np.exp(np.percentile(b, 97.5)), p=2 * min((b <= 0).mean(), (b >= 0).mean()) if len(b) else np.nan,
                          mdor=float(np.exp(2.8 / np.sqrt(len(d) * prev * (1 - prev)))) if 0 < prev < 1 else np.nan,
                          halves_ok=min(min(nstrong.values()), min(nstorm.values())) >= 30))

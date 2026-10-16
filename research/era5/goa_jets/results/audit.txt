@@ -1,20 +1,37 @@
 POST HOC audit of the 15 Q2 estimates (OR per SD, strong vs 54-64 kt episodes)
-zone  regime      factor   n  strong   OR  OR_month_adj  OR_even  OR_odd  loo_min  loo_max  placebo_p
-  Z1 BARRIER       DEPTH 166      27 2.10          2.10     1.86    2.15     1.96     2.47       0.00
-  Z1 BARRIER    LOW_DIST 166      27 0.84          0.84     0.96    0.76     0.79     0.97       0.45
-  Z1 BARRIER        GRAD 166      27 2.48          2.52     2.82    2.26     2.24     2.77       0.00
-  Z1 BARRIER   COASTPILE 166      27 1.06          1.06     1.28    0.93     0.99     1.21       0.74
-  Z1 BARRIER        STAB 166      27 1.19          1.19     1.59    1.04     1.11     1.28       0.40
-  Z2 BARRIER       DEPTH 157      36 1.53          1.50     1.89    1.19     1.42     1.70       0.03
-  Z2 BARRIER    LOW_DIST 157      36 0.60          0.61     0.67    0.58     0.50     0.66       0.01
-  Z2 BARRIER        GRAD 157      36 3.95          3.94     3.20    4.02     3.56     4.83       0.00
-  Z2 BARRIER   COASTPILE 157      36 1.38          1.40     1.35    1.37     1.31     1.48       0.08
-  Z2 BARRIER        STAB 157      36 1.26          1.26     0.95    1.47     1.16     1.33       0.26
-  Z3     GAP       DEPTH 109      13 1.35          1.49     1.13    1.57     1.25     1.43       0.21
-  Z3     GAP    LOW_DIST 109      13 0.72          0.71     1.03    0.54     0.67     0.81       0.19
-  Z3     GAP        GRAD 109      13 2.58          2.75     1.57    3.25     2.34     2.84       0.00
-  Z3     GAP INTERIOR_DP 109      13 1.16          1.15     1.34    1.05     0.96     1.36       0.61
-  Z3     GAP        STAB 109      13 3.72          3.71     6.22    2.08     3.32     6.20       0.00
+zone  regime      factor   n  strong   OR  OR_month_adj  OR_even  OR_odd  loo_min  loo_max  placebo_p  placebo_hits_of_1000
+  Z1 BARRIER       DEPTH 166      27 2.10          2.10     1.86    2.15     1.96     2.47       0.00                     2
+  Z1 BARRIER    LOW_DIST 166      27 0.84          0.84     0.96    0.76     0.79     0.97       0.45                   453
+  Z1 BARRIER        GRAD 166      27 2.48          2.52     2.82    2.26     2.24     2.77       0.00                     1
+  Z1 BARRIER   COASTPILE 166      27 1.06          1.06     1.28    0.93     0.99     1.21       0.74                   741
+  Z1 BARRIER        STAB 166      27 1.19          1.19     1.59    1.04     1.11     1.28       0.40                   400
+  Z2 BARRIER       DEPTH 157      36 1.53          1.50     1.89    1.19     1.42     1.70       0.03                    26
+  Z2 BARRIER    LOW_DIST 157      36 0.60          0.61     0.67    0.58     0.50     0.66       0.01                     7
+  Z2 BARRIER        GRAD 157      36 3.95          3.94     3.20    4.02     3.56     4.83       0.00                     0
+  Z2 BARRIER   COASTPILE 157      36 1.38          1.40     1.35    1.37     1.31     1.48       0.08                    85
+  Z2 BARRIER        STAB 157      36 1.26          1.26     0.95    1.47     1.16     1.33       0.26                   258
+  Z3     GAP       DEPTH 109      13 1.35          1.49     1.13    1.57     1.25     1.43       0.21                   207
+  Z3     GAP    LOW_DIST 109      13 0.72          0.71     1.03    0.54     0.67     0.81       0.19                   188
+  Z3     GAP        GRAD 109      13 2.58          2.75     1.57    3.25     2.34     2.84       0.00                     1
+  Z3     GAP INTERIOR_DP 109      13 1.16          1.15     1.34    1.05     0.96     1.36       0.61                   609
+  Z3     GAP        STAB 109      13 3.72          3.71     6.22    2.08     3.32     6.20       0.00                     1
+
+share of episode peaks in an ERA5 cell with land fraction >= 0.1 (coastal mixed cell), by zone and regime
+zone  regime  
+Z1    BARRIER     0.29
+      OFFSHORE    0.01
+      ONSHORE     0.42
+Z2    BARRIER     0.08
+      OFFSHORE    0.06
+      ONSHORE     0.06
+Z3    GAP         0.04
+      INFLOW      0.35
+      OTHER       0.10
+most common peak cell per zone:
+zone
+Z1    {(60.0, -143.5): 65, (60.0, -145.0): 19, (58.0...
+Z2    {(53.25, -130.5): 22, (54.0, -131.0): 18, (53....
+Z3    {(57.25, -155.5): 34, (59.25, -153.0): 23, (59...
 
 episodes per calendar month by zone
 time  zone
