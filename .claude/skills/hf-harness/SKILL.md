@@ -65,6 +65,8 @@ Recomputing the numbers and judging the claims are two jobs. A verifier answers 
 
 **Figures in plain-words text** (README summaries, ledger text) each come from a committed result file: write derived figures (monthly counts, one SD in physical units, shares) to `results/` with the script that makes them, and quote units from that file. A null is written "cannot tell, detectable about N", not "no effect", unless the interval excludes the size that matters. A relabelled or widened class is named as such wherever it appears, with the original-class result beside it.
 
+**Before the claim review, write the quoted-numbers list** (every number in headings, tables and prose, with its result file and column; include SDs, units, band edges, ranges, counts of bands or tests, and any figure borrowed from another study with its source). Anything with no row is either added to a result file or cut. Run `hf-reviewer` before the pull request is opened, not after the verifier alone. Headings that describe an association say "is more frequent when", with "same-time" where the predictor is measured at the time of the outcome; "drives", "decides", "opens the door", "matters most" need a result that supports a cause or a ranking. A placebo or shuffle result is quoted as its count ("1 of 1,000"), never as "p under 0.01" or "none". A post hoc audit is one more look at the seasons and is counted in the looks.
+
 Report each check as passed, failed, or not checked with the reason. "Not checked" is acceptable. Reporting an unchecked number as established is not.
 
 ### 5. Close
@@ -129,6 +131,7 @@ Tests: `python3 tests/fetch_hsf/test_fetch_hsf.py`, `python3 tests/hsf_parse/tes
 - It cannot be validated before the archive begins. How far back an index may be used at all is a gate in `STATUS.md`, and it has moved more than once as evidence came in. Check it before extending or quoting any pre-archive figure. Gust-based and depth-based quantities have not behaved the same way before the archive, so a result for one says nothing about the other.
 - Two pipelines exist (`research/era5/hf_history/` and the `event_fields.py` / `criterion.py` / `series.py` set). They differ in domain, gust radius, low detection, months, labels, calibration window, and what they output. Name the pipeline with every number, and do not mix their outputs.
 - Gust features are taken over ocean points only. The archive is about wind over water, and land or terrain inside the radius adds error that varies with position.
+- Any comparison at a named point (buoy, station, grid point) reads the point's position from its source in the code, asserts it matches the typed value to 0.05 degree, and prints the land fraction of the model cell before any ratio is computed. A position typed from memory is not accepted; a "the model cannot see X" finding is checked against the true position first (`research/era5/goa_jets/buoy.py check_positions` is the pattern).
 - Report skill in the terms a forecaster reads: POD, FAR, CSI, HSS, and bias, alongside AUC. Give leave-one-season-out ranges and the transfer to seasons outside the fit.
 - A sum of probabilities is not an event count. A count fitted to match the archive in the calibration window is on the archive's scale only there.
 - Transitioning tropical cyclones are a known source of false alarms. Say whether they are in or out.
