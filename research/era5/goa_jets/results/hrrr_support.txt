@@ -1,0 +1,43 @@
+ocean cells in the zone box, HRRR (3 km) vs ERA5 (0.25 degree):
+  Z1: HRRR 36282, ERA5 825, ratio 44.0
+  Z2: HRRR 29741, ERA5 618, ratio 48.1
+  Z3: HRRR 28643, ERA5 638, ratio 44.9
+
+HRRR-only events (HRRR zone gust >= 54 kt and ERA5 < 54 kt): share with the HRRR peak cell within 10 / 25 km of land
+  Z1 all flows: n 534, within 10 km 0.807, within 25 km 0.826, median 3.0 km
+  Z1 barrier/gap flow: n 185, within 10 km 0.827, within 25 km 0.865, median 3.0 km
+  Z2 all flows: n 195, within 10 km 0.328, within 25 km 0.410, median 49.3 km
+  Z2 barrier/gap flow: n 56, within 10 km 0.125, within 25 km 0.232, median 159.2 km
+  Z3 all flows: n 502, within 10 km 0.783, within 25 km 0.855, median 3.0 km
+  Z3 barrier/gap flow: n 169, within 10 km 0.822, within 25 km 0.911, median 3.0 km
+
+HRRR/ERA5 count of 64 kt times by zone and flow:
+zone   regime  hrrr_total64  era5_total64  r64
+  Z1    (all)           265            28  9.5
+  Z1  BARRIER           106            14  7.6
+  Z1 OFFSHORE            88             8 11.0
+  Z1  ONSHORE            71             6 11.8
+  Z2    (all)            81            30  2.7
+  Z2  BARRIER            39            17  2.3
+  Z2 OFFSHORE            10             3  3.3
+  Z2  ONSHORE            32            10  3.2
+  Z3    (all)           241            20 12.0
+  Z3      GAP            94             9 10.4
+  Z3   INFLOW            81             4 20.2
+  Z3    OTHER            66             7  9.4
+
+Top 5% band times per season and events (HRRR 54 kt):
+  Z1 BARRIER COASTPILE: n 50; per season (times, events): 2018: 8/3; 2019: 3/3; 2020: 11/5; 2021: 5/3; 2022: 2/2; 2023: 5/2; 2024: 13/9; 2025: 3/3
+  Z2 BARRIER COASTPILE: n 43; per season (times, events): 2018: 5/4; 2019: 5/3; 2020: 8/8; 2021: 5/4; 2022: 2/2; 2023: 7/7; 2024: 6/4; 2025: 5/5
+  Z3 GAP INTERIOR_DP: n 53; per season (times, events): 2018: 1/1; 2019: 5/4; 2020: 2/0; 2021: 15/8; 2022: 5/4; 2023: 2/0; 2024: 3/3; 2025: 20/14
+
+Buoy distance to the nearest HRRR land cell (km):
+  46001: 285.8
+  46061: 9.1
+  46080: 105.2
+  46076: 30.4
+  46082: 43.3
+  46083: 44.1
+  46077: 19.7
+
+share of the reference-low box (44-62N, 175-125W) inside the HRRR-Alaska domain: 0.668
