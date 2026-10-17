@@ -140,4 +140,13 @@ within-winter weather-regime dependence, say so and call the result an upper bou
 
 ## Deviations (post hoc)
 
-None yet. Log in order, tagged *before any outcome* or *after the primary result*.
+Logged in order. All tagged *before any outcome* (no buoy coefficient had been read; only counts and SEs).
+
+1. *Before any outcome.* Wind sample also requires `V10 >= 1 kt`. A zero-speed report in a 15-kt gradient is a
+   sensor or gap value, and the model uses log wind.
+2. *Before any outcome.* Planted-effect residuals are taken after the **full** fit (with the effect terms), not
+   after the null fit as written above. Residuals from the null fit would contain any real effect and the
+   planted effect would sit on top of it. Only SEs and detection rates were read.
+3. *Before any outcome.* Coverage seen when the dataset was built: 44,838 station-times; 25,160 pass the wind
+   filter; 587 opposed-or-following hours in Stream water at the three Stream buoys (12+ winters), so V1 clears
+   the pre-set floor of 8 winters and 150 hours.
