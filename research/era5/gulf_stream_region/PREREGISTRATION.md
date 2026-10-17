@@ -130,3 +130,5 @@ looked at):
    removal was the wrong design for the group tests. Power is re-run removing each band group's own fitted dT effect (in, out,
    mid, undef). No coefficient was read or printed; the first run's output is kept in `power-result-first-run-discarded.txt`.
 6. The ASCAT pull is slower than sized (about 3.7 min per satellite-winter); the sizes and the pull plan are unchanged.
+7. *Before any outcome.* Power simulation run at 100 outer x 200 inner (the plan said 200 x 400), for run time on 1.3M box-passes.
+8. *After the primary results.* The analysis script printed only the point range for leave-one-winter-out, so `lowo_B.py` was added to compute the registered 5-of-5 interval rule for B, and `s5_B.py` to apply the registered S5 conversion to B (the plan says S5 applies to B; the first script ran it for A1 only). Both are registered quantities, run after seeing the family results; they could not change a primary estimate.
