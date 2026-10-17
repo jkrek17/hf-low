@@ -1,0 +1,11 @@
+POST HOC sensitivity: HRRR zone-max gust restricted to ocean cells at least k km from land (barrier / gap regime from HRRR wind)
+zone  regime  min_km_from_land    n  median_ratio_to_era5  spearman  hrrr54  era5_54  both54  pct_hrrr54  pct_era5_54  pct_hrrr64  pct_era5_64
+  Z1 BARRIER                 0  989                 1.192     0.848     284      100      99      28.716       10.111      10.718        1.416
+  Z1 BARRIER                10  989                 1.105     0.931     171      100      97      17.290       10.111       3.842        1.416
+  Z1 BARRIER                25  989                 1.090     0.926     154      100      92      15.571       10.111       3.640        1.416
+  Z2 BARRIER                 0  842                 1.097     0.916     143       95      87      16.983       11.283       4.632        2.019
+  Z2 BARRIER                10  842                 1.089     0.917     139       95      87      16.508       11.283       4.513        2.019
+  Z2 BARRIER                25  842                 1.084     0.914     136       95      86      16.152       11.283       4.157        2.019
+  Z3     GAP                 0 1055                 1.144     0.929     263       97      94      24.929        9.194       8.910        0.853
+  Z3     GAP                10 1055                 1.083     0.932     193       97      90      18.294        9.194       5.024        0.853
+  Z3     GAP                25 1055                 1.040     0.927     139       97      82      13.175        9.194       3.128        0.853

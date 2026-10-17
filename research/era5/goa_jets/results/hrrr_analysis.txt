@@ -1,0 +1,82 @@
+valid times with a field: 3394 of 3396; per season: {2018: 422, 2019: 426, 2020: 424, 2021: 424, 2022: 424, 2023: 426, 2024: 424, 2025: 424}
+
+H1 HRRR vs ERA5 zone-maximum gust at the same 00/12 UTC times (regime from HRRR wind). ratio = median HRRR/ERA5; event counts for 54 and 64 kt
+zone   regime    n  spearman  median_ratio  ratio_lo  ratio_hi  hrrr_gust_median  era5_gust_median  both54  hrrr_only54  era5_only54  hrrr_total54  era5_total54  both64  hrrr_only64  era5_only64  hrrr_total64  era5_total64
+  Z1    (all) 3394     0.820         1.195     1.175     1.212            43.000              35.5     207          534           19           741           226      27          238            1           265            28
+  Z1  BARRIER  989     0.848         1.192     1.172     1.217            46.812              38.5      99          185            1           284           100      14           92            0           106            14
+  Z1 OFFSHORE 1537     0.835         1.151     1.129     1.168            40.438              34.5      70          187           14           257            84       7           81            1            88             8
+  Z1  ONSHORE  868     0.767         1.266     1.244     1.285            43.625              34.0      38          162            4           200            42       6           65            0            71             6
+  Z2    (all) 3394     0.872         1.122     1.111     1.131            39.094              34.5     181          195           24           376           205      21           60            9            81            30
+  Z2  BARRIER  842     0.916         1.097     1.087     1.108            42.016              38.5      87           56            8           143            95      14           25            3            39            17
+  Z2 OFFSHORE 1362     0.847         1.097     1.081     1.116            35.344              32.0      39           43           12            82            51       1            9            2            10             3
+  Z2  ONSHORE 1190     0.867         1.168     1.160     1.179            40.766              34.5      55           96            4           151            59       6           26            4            32            10
+  Z3    (all) 3394     0.902         1.167     1.159     1.175            42.875              36.5     217          502            5           719           222      19          222            1           241            20
+  Z3      GAP 1055     0.929         1.144     1.135     1.155            44.094              38.5      94          169            3           263            97       9           85            0            94             9
+  Z3   INFLOW  973     0.886         1.217     1.207     1.230            44.406              36.5      52          180            0           232            52       3           78            1            81             4
+  Z3    OTHER 1366     0.898         1.153     1.146     1.166            41.188              35.5      71          153            2           224            73       7           59            0            66             7
+
+H2 distance from the peak-gust cell to the nearest land (km), events in the barrier / gap regime (HRRR land mask for both)
+zone  regime                               subset   n  median_km  share_within_10  share_within_25  share_within_50
+  Z1 BARRIER HRRR events (54 kt+), HRRR peak cell 284      3.013            0.739            0.792            0.817
+  Z1 BARRIER ERA5 events (54 kt+), ERA5 peak cell 100     38.559            0.270            0.300            0.560
+  Z2 BARRIER HRRR events (54 kt+), HRRR peak cell 143    100.007            0.154            0.287            0.434
+  Z2 BARRIER ERA5 events (54 kt+), ERA5 peak cell  95     50.424            0.095            0.284            0.495
+  Z3     GAP HRRR events (54 kt+), HRRR peak cell 263      2.981            0.810            0.897            0.901
+  Z3     GAP ERA5 events (54 kt+), ERA5 peak cell  97     34.037            0.062            0.278            0.784
+buoy 46001: nearest HRRR cell 56.302N -148.034E is 0.8 km away, land=False; zone Z1
+buoy 46061: nearest HRRR cell 60.224N -146.813E is 1.7 km away, land=False; zone Z1
+buoy 46080: nearest HRRR cell 57.907N -150.139E is 0.7 km away, land=False; zone Z3
+buoy 46076: nearest HRRR cell 59.514N -147.987E is 1.2 km away, land=False; zone Z1
+buoy 46082: nearest HRRR cell 59.683N -143.338E is 1.7 km away, land=False; zone Z1
+buoy 46083: nearest HRRR cell 58.281N -138.039E is 1.0 km away, land=False; zone Z1
+buoy 46077: nearest HRRR cell 57.879N -154.226E is 1.4 km away, land=False; zone Z3
+
+H3 buoys: ratio HRRR (nearest cell) / buoy at times chosen on the buoy gust; ERA5 gust ratio on the same times; share of those times with HRRR zone gust >= 54 kt
+station             subset   n  hrrr_cell_land  cell_km  gust_ratio_med  gust_ratio_q25  gust_ratio_q75  wind_ratio_med  era5_gust_ratio_med  share_hrrr_zone_ge54
+  46001 buoy gust >= 35 kt 164           False    0.795           1.110           1.000           1.243           1.091                1.125                 0.683
+  46001 buoy gust >= 45 kt  19           False    0.795           1.115           0.986           1.252           1.074                1.104                 0.789
+  46061 buoy gust >= 35 kt 123           False    1.702           1.137           0.977           1.268           1.053                1.093                 0.837
+  46061 buoy gust >= 45 kt  24           False    1.702           1.175           1.057           1.302           1.040                1.104                 1.000
+  46076 buoy gust >= 35 kt 129           False    1.242           1.104           1.008           1.194           1.055                1.097                 0.837
+  46076 buoy gust >= 45 kt   9           False    1.242           1.105           1.055           1.233           1.062                1.095                 1.000
+  46077 buoy gust >= 35 kt 173           False    1.392           0.994           0.904           1.131           0.988                0.961                 0.607
+  46077 buoy gust >= 45 kt  15           False    1.392           1.019           0.940           1.113           1.002                0.998                 0.800
+  46080 buoy gust >= 35 kt 166           False    0.671           1.038           0.933           1.174           1.044                1.125                 0.801
+  46080 buoy gust >= 45 kt  13           False    0.671           1.079           0.939           1.168           1.073                1.114                 1.000
+  46082 buoy gust >= 35 kt 177           False    1.717           1.148           1.027           1.228           1.110                1.142                 0.746
+  46082 buoy gust >= 45 kt  28           False    1.717           1.193           1.097           1.239           1.137                1.150                 0.929
+  46083 buoy gust >= 35 kt 244           False    1.027           1.075           0.987           1.163           1.049                1.071                 0.639
+  46083 buoy gust >= 45 kt  39           False    1.027           1.118           1.070           1.172           1.088                1.089                 0.923
+
+H4 chance (%) that a 00/12 UTC time has an HRRR zone gust of 54 kt or more (64 kt in pct_hrrr64), with the ERA5 rate at the same times; exact over all times, season-block interval
+zone   regime            ingredient band    n  hrrr_events  hrrr_strong  hrrr_hf  pct_hrrr54    lo    hi  pct_hrrr64  pct_era5_54_same_times  pct_era5_64_same_times  season_min  season_max
+  Z1  BARRIER (all times in regime)  all  989          284          106       39       28.72 26.25 30.68       10.72                   10.11                    1.42       22.94       32.50
+  Z1 OFFSHORE (all times in regime)  all 1537          257           88       30       16.72 13.35 19.63        5.73                    5.47                    0.52        9.76       23.66
+  Z1  ONSHORE (all times in regime)  all  868          200           71       36       23.04 21.16 24.97        8.18                    4.84                    0.69       19.19       27.55
+  Z2  BARRIER (all times in regime)  all  842          143           39        5       16.98 14.43 20.68        4.63                   11.28                    2.02       12.40       31.25
+  Z2 OFFSHORE (all times in regime)  all 1362           82           10        3        6.02  4.40  7.81        0.73                    3.74                    0.22        2.41       10.22
+  Z2  ONSHORE (all times in regime)  all 1190          151           32        8       12.69  9.73 15.47        2.69                    4.96                    0.84        8.33       19.08
+  Z3      GAP (all times in regime)  all 1055          263           94       35       24.93 19.69 28.88        8.91                    9.19                    0.85       13.40       33.10
+  Z3   INFLOW (all times in regime)  all  973          232           81       26       23.84 19.57 27.02        8.32                    5.34                    0.41       12.24       29.20
+  Z3    OTHER (all times in regime)  all 1366          224           66       20       16.40 14.11 18.40        4.83                    5.34                    0.51       10.06       20.44
+
+H4 Z1 BARRIER by band of COASTPILE:
+       band   n  hrrr_events  pct_hrrr54   lo   hi  pct_hrrr64  pct_era5_54_same_times  season_min  season_max
+bottom half 494          140        28.3 24.8 31.0        10.9                     9.1        18.4        33.3
+  50th-80th 297           68        22.9 16.3 28.8        10.4                     7.7        11.1        37.8
+  80th-95th 148           46        31.1 25.0 36.8         8.1                    10.1        18.2        66.7
+     top 5%  50           30        60.0 47.2 77.8        18.0                    34.0        37.5       100.0
+
+H4 Z2 BARRIER by band of COASTPILE:
+       band   n  hrrr_events  pct_hrrr54   lo   hi  pct_hrrr64  pct_era5_54_same_times  season_min  season_max
+bottom half 421           19         4.5  2.6  6.5         1.4                     3.3         0.0        10.0
+  50th-80th 252           32        12.7  9.3 17.0         2.4                     7.5         4.4        26.3
+  80th-95th 126           55        43.7 36.9 49.3         9.5                    26.2        27.8        54.5
+     top 5%  43           37        86.0 73.9 96.1        34.9                    67.4        60.0       100.0
+
+H4 Z3 GAP by band of INTERIOR_DP:
+       band   n  hrrr_events  pct_hrrr54   lo   hi  pct_hrrr64  pct_era5_54_same_times  season_min  season_max
+bottom half 527          117        22.2 16.5 28.4        10.1                     7.2        12.7        37.1
+  50th-80th 317           63        19.9 13.7 25.3         4.4                     4.1         6.1        32.1
+  80th-95th 158           49        31.0 19.0 39.0        12.0                    15.2         0.0        47.4
+     top 5%  53           34        64.2 50.0 77.4        15.1                    41.5         0.0       100.0
