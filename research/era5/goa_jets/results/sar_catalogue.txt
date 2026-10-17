@@ -1,0 +1,4 @@
+episodes from 2014-10 on: 525; queries failed: 0
+Z1: episodes 181; with >=1 scene within +-6 h 36 (0.20); same UTC day 61 (0.34); strong (64 kt) episodes 28, with a scene within +-6 h 7
+Z2: episodes 172; with >=1 scene within +-6 h 34 (0.20); same UTC day 61 (0.35); strong (64 kt) episodes 26, with a scene within +-6 h 4
+Z3: episodes 172; with >=1 scene within +-6 h 41 (0.24); same UTC day 59 (0.34); strong (64 kt) episodes 19, with a scene within +-6 h 4
