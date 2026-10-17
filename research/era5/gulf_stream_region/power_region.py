@@ -5,17 +5,13 @@ import sys, numpy as np, pandas as pd
 from region_lib import *
 rng = np.random.default_rng(20261018); NO, NI = 100, 200
 A = prep_A(pd.read_csv(sys.argv[1])); B = prep_B(pd.read_csv(sys.argv[2])); L = []
-def base_and_resid(d, with_vg):
-    X, k = design(d, with_vg); X = X.astype(np.float64); y = d.y.values
-    bf = np.linalg.lstsq(X, y, rcond=None)[0]; resid = y - X @ bf
-    b0 = np.linalg.lstsq(X[:, :k], y, rcond=None)[0]; return X[:, :k] @ b0, resid
 def resample(d, W):
     pick = rng.choice(W, len(W), replace=True); idx = np.concatenate([np.nonzero(d.winter.values == w)[0] for w in pick])
     new = np.concatenate([np.full((d.winter.values == w).sum(), i) for i, w in enumerate(pick)]); s = d.iloc[idx].copy(); s["winter"] = new; return s
 def power_for(d, with_vg, targets, plant_sel, pct_):
     """targets: dict name -> (selector for fitting, selector for second group or None). Returns {name: (power, se)}."""
-    base, resid = base_and_resid(d, with_vg); W = np.unique(d.winter.values)
-    d = d.copy(); d["y"] = base + resid + np.log(1 + pct_) * ((d.dT.values >= 6) & plant_sel(d)).astype(float)
+    Xr, k0 = design_raw(d, with_vg); B0, _ = fit_boot(d, with_vg); beta = B0.fit(); W = np.unique(d.winter.values)
+    d = d.copy(); d["y"] = d.y.values - Xr[:, k0:] @ beta[k0:] + np.log(1 + pct_) * ((d.dT.values >= 6) & plant_sel(d)).astype(float)   # remove the fitted dT effect, keep residuals, add planted
     hits = {n: 0 for n in targets}; ests = {n: [] for n in targets}
     for _ in range(NO):
         s = resample(d, W)

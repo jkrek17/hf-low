@@ -27,7 +27,9 @@ def one(r):
     if a.size != 2 * 5 * 720 * 1440: raise ValueError(r.url)
     a = a.reshape(2, 5, 720, 1440)[:, :, I][:, :, :, J]
     return r.date, a[:, [0, 1, 2, 3]]          # time, wind, direction, rain
+ONLY = os.environ.get("ASCAT_SENSORS", "ABC")
 for (sen, w), g in d.groupby(["sensor", "winter"]):
+    if sen not in ONLY: continue
     fn = f"{OUT}/ascat_{sen}_{w}.npz"
     if os.path.exists(fn): continue
     t0 = time.time()

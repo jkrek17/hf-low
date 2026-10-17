@@ -121,4 +121,8 @@ looked at):
    north wall). This removes those longitudes from the band tests (A2-A5, B2-B4); A1 and B1 still use every box.
 3. Secondary S4 as written ("only winds >= 30 kt") would select on the outcome. It is run instead as the pressure-gradient
    wind `Vg >= 30 kt` (a control, not the outcome); no ASCAT-wind cut is used anywhere.
-4. The ASCAT pull is slower than sized (about 3.7 min per satellite-winter); the sizes and the pull plan are unchanged.
+4. Implementation: the 1 degree box fixed effects are absorbed by within-box demeaning (exact for the full-sample OLS fit);
+   winter resamples reuse the full-sample box means (an approximation to refitting the dummies, chosen because the table has
+   1.3 million box-passes). The planted-effect simulation removes the fitted dT-bin effect from the outcome and adds the planted
+   effect to the remaining residuals, which is the same as base fit plus residual.
+5. The ASCAT pull is slower than sized (about 3.7 min per satellite-winter); the sizes and the pull plan are unchanged.
