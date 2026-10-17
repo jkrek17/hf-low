@@ -1,0 +1,90 @@
+# Gulf Stream round 2. A sample 781652 box-passes (12 winters; round 1 had 781652), B sample 474396 (5 winters; round 1 had 474396)
+Mean conversion (neutral/actual) A, dT>=6: 1.0511; dT 0-3: 1.0196; B GFS neutral/actual dT>=6: 1.0666
+
+## Baseline A on this sample (round 1 specification: ERA5 SST and front, no controls)
+test | n | winters | estimate % | 95% interval | kt at reference wind 21.6 kt | p | q
+A1 all boxes | 781652 | 12 | +15.85 | +13.97 to +17.95 | +3.42 (+3.02 to +3.88) | 0.0002 | 0.0002
+A2 near front | 110726 | 12 | +8.15 | +6.23 to +10.17 | +1.76 (+1.34 to +2.20) | 0.0002 | 0.0002
+A3 away from front | 465442 | 12 | +19.11 | +17.31 to +21.16 | +4.13 (+3.74 to +4.57) | 0.0002 | 0.0002
+A4 near minus away |  | 12 | -9.20 | -11.47 to -7.01 | -1.99 (-2.48 to -1.51) | 0.0002 | 0.0002
+
+## Baseline B on this sample (round 1 specification: actual 10 m winds)
+test | n | winters | estimate % | 95% interval | kt at reference wind 25.0 kt | p | q
+B1 all boxes | 474396 | 5 | +2.23 | +0.90 to +3.50 | +0.56 (+0.22 to +0.87) | 0.0002 | 0.0008
+B2 near front | 63839 | 5 | +3.57 | +1.61 to +5.21 | +0.89 (+0.40 to +1.30) | 0.0010 | 0.0020
+B3 away from front | 309904 | 5 | +1.36 | +0.01 to +2.55 | +0.34 (+0.00 to +0.64) | 0.0450 | 0.0600
+B4 near minus away |  | 5 | +2.18 | -0.11 to +4.29 | +0.55 (-0.03 to +1.07) | 0.0600 | 0.0600
+
+## Family F1: like-with-like wind (COARE 3.6)
+test | n | winters | estimate % | 95% interval | kt at reference wind 25.0 kt | p | q
+B1e all boxes (like with like) | 474396 | 5 | -0.90 | -2.17 to +0.23 | -0.22 (-0.54 to +0.06) | 0.1166 | 0.1943
+B2e near front (like with like) | 63839 | 5 | +0.25 | -1.70 to +1.82 | +0.06 (-0.42 to +0.46) | 0.7437 | 0.7437
+B3e away from front (like with like) | 309904 | 5 | -1.37 | -2.75 to -0.19 | -0.34 (-0.69 to -0.05) | 0.0322 | 0.0805
+B4e near minus away (like with like) |  | 5 | +1.65 | -0.67 to +3.84 | +0.41 (-0.17 to +0.96) | 0.1696 | 0.2120
+A1a all boxes (ASCAT converted to actual 10 m wind) | 781652 | 12 | +12.24 | +10.21 to +14.41 | +3.06 (+2.55 to +3.60) | 0.0002 | 0.0010
+
+## F1 secondary: B on actual winds (ASCAT converted to actual 10 m, against GFS 10 m)
+test | n | winters | estimate % | 95% interval | kt at reference wind 25.0 kt | p | q
+Bact1 all boxes | 474396 | 5 | -0.94 | -2.23 to +0.27 | -0.24 (-0.56 to +0.07) | 0.1176 | 0.2330
+Bact2 near front | 63839 | 5 | +0.25 | -1.83 to +1.92 | +0.06 (-0.46 to +0.48) | 0.7927 | 0.7927
+Bact3 away from front | 309904 | 5 | -1.43 | -2.97 to -0.16 | -0.36 (-0.74 to -0.04) | 0.0344 | 0.1376
+Bact4 near minus away |  | 5 | +1.71 | -0.75 to +4.05 | +0.43 (-0.19 to +1.01) | 0.1748 | 0.2330
+
+## Family F2: air mass (thermal advection and curvature controls)
+test | n | winters | estimate % | 95% interval | kt at reference wind 21.6 kt | p | q
+A1c all boxes | 781652 | 12 | +10.28 | +8.55 to +12.16 | +2.22 (+1.85 to +2.63) | 0.0002 | 0.0003
+A2c near front | 110726 | 12 | +2.06 | +0.19 to +3.90 | +0.44 (+0.04 to +0.84) | 0.0292 | 0.0292
+A3c away from front | 465442 | 12 | +13.59 | +11.92 to +15.41 | +2.93 (+2.58 to +3.33) | 0.0002 | 0.0003
+A4c near minus away |  | 12 | -10.15 | -12.25 to -8.05 | -2.19 (-2.65 to -1.74) | 0.0002 | 0.0003
+A1-CAA cold advection (tadv <= -1 K/day) | 434107 | 12 | +14.56 | +12.89 to +16.31 | +3.15 (+2.78 to +3.52) | 0.0002 | 0.0003
+A1-nonCAA (tadv > -1 K/day) | 347545 | 12 | -4.35 | -6.21 to -2.26 | -0.94 (-1.34 to -0.49) | 0.0006 | 0.0007
+share of dT>=6 box-passes with cold advection (tadv <= -1): 0.886; near front 0.864; away 0.903
+
+## Family F3: satellite SST (MUR) for the front and the temperature difference
+test | n | winters | estimate % | 95% interval | kt at reference wind 21.6 kt | p | q
+A1m all boxes | 781652 | 12 | +16.03 | +14.23 to +18.05 | +3.46 (+3.07 to +3.90) | 0.0002 | 0.0002
+A2m near front | 102748 | 12 | +11.07 | +8.95 to +13.27 | +2.39 (+1.93 to +2.87) | 0.0002 | 0.0002
+A3m away from front | 503773 | 12 | +18.44 | +16.79 to +20.22 | +3.98 (+3.63 to +4.37) | 0.0002 | 0.0002
+A4m near minus away |  | 12 | -6.22 | -8.50 to -3.88 | -1.34 (-1.84 to -0.84) | 0.0002 | 0.0002
+B2m near front | 57761 | 5 | +4.01 | +2.28 to +5.32 | +0.87 (+0.49 to +1.15) | 0.0002 | 0.0002
+B4m near minus away |  | 5 | +2.87 | +0.80 to +4.86 | +0.62 (+0.17 to +1.05) | 0.0068 | 0.0068
+MUR band counts A: {'out': 503773, 'in': 102748, 'mid': 91161, 'undef': 83970}; B: {'out': 325363, 'in': 57761, 'mid': 52538, 'undef': 38734}; share of 'away' A box-passes south of MUR front: 0.982
+
+## Secondary: all three fixes together, A (MUR dT and front, controls, true 10 m wind)
+test | n | winters | estimate % | 95% interval | kt at reference wind 21.6 kt | p | q
+A1f all boxes | 781652 | 12 | +6.86 | +5.15 to +8.68 | +1.48 (+1.11 to +1.87) | 0.0002 | 0.0003
+A2f near front | 102748 | 12 | +0.74 | -1.35 to +2.80 | +0.16 (-0.29 to +0.60) | 0.5015 | 0.5015
+A3f away from front | 503773 | 12 | +9.68 | +8.11 to +11.36 | +2.09 (+1.75 to +2.45) | 0.0002 | 0.0003
+A4f near minus away |  | 12 | -8.15 | -10.46 to -5.79 | -1.76 (-2.26 to -1.25) | 0.0002 | 0.0003
+
+## Secondary: all fixes together, B (like-with-like winds, MUR front)
+test | n | winters | estimate % | 95% interval | kt at reference wind 25.0 kt | p | q
+B1f all boxes | 474396 | 5 | -0.90 | -2.17 to +0.23 | -0.22 (-0.54 to +0.06) | 0.1210 | 0.1815
+B2f near front | 57761 | 5 | +0.72 | -1.13 to +2.25 | +0.18 (-0.28 to +0.56) | 0.3664 | 0.3664
+B4f near minus away |  | 5 | +2.39 | +0.19 to +4.59 | +0.60 (+0.05 to +1.15) | 0.0334 | 0.1002
+
+current sample: 436628 box-passes, 7 winters; mean |current| 0.35 m/s, near front 0.64, away 0.27
+
+## Secondary: current sample, wind relative to the water (as ASCAT reports)
+test | n | winters | estimate % | 95% interval | kt at reference wind 21.6 kt | p | q
+Crel1 all boxes | 436628 | 7 | +15.01 | +12.75 to +17.52 | +3.24 (+2.75 to +3.78) | 0.0002 | 0.0002
+Crel2 near front | 64684 | 7 | +8.34 | +5.54 to +11.14 | +1.80 (+1.20 to +2.41) | 0.0002 | 0.0002
+Crel3 away from front | 273091 | 7 | +18.37 | +16.02 to +20.93 | +3.97 (+3.46 to +4.52) | 0.0002 | 0.0002
+Crel4 near minus away |  | 7 | -8.47 | -11.47 to -5.32 | -1.83 (-2.48 to -1.15) | 0.0002 | 0.0002
+
+## Secondary: current sample, absolute wind (relative wind plus geostrophic current)
+test | n | winters | estimate % | 95% interval | kt at reference wind 21.6 kt | p | q
+Cabs1 all boxes | 436628 | 7 | +13.92 | +11.49 to +16.67 | +3.01 (+2.48 to +3.60) | 0.0002 | 0.0002
+Cabs2 near front | 64684 | 7 | +5.83 | +2.76 to +9.10 | +1.26 (+0.60 to +1.96) | 0.0002 | 0.0002
+Cabs3 away from front | 273091 | 7 | +18.23 | +15.74 to +21.07 | +3.94 (+3.40 to +4.55) | 0.0002 | 0.0002
+Cabs4 near minus away |  | 7 | -10.49 | -13.83 to -7.01 | -2.26 (-2.99 to -1.51) | 0.0002 | 0.0002
+
+q across all 17 primary tests: 0.1321 0.7437 0.0391 0.1802 0.0003 0.0003 0.0382 0.0003 0.0003 0.0003 0.0009 0.0003 0.0003 0.0003 0.0003 0.0003 0.0096
+
+## Placebo: shuffle dT among boxes of the same winter, month and Vg tercile (A) / winter, month (B), 20 draws
+A1c: placebo mean +2.08% (range +2.00..+2.23); near-minus-away placebo mean -0.16% (range -0.46..+0.20)
+A1m: placebo mean +2.50% (range +2.40..+2.61); near-minus-away placebo mean +0.59% (range +0.13..+0.99)
+B1e: placebo mean +0.43% (range +0.24..+0.60); near-minus-away placebo mean -0.69% (range -1.37..-0.14)
+A1c: estimate +10.28%, shuffle offset +2.08%, corrected (real minus offset in log wind) +8.04%, +1.74 kt
+A1m: estimate +16.03%, shuffle offset +2.50%, corrected (real minus offset in log wind) +13.21%, +2.85 kt
+B1e: estimate -0.90%, shuffle offset +0.43%, offset under the 1-point rule, no correction

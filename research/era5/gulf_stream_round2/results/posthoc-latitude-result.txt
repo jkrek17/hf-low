@@ -1,0 +1,6 @@
+round 1 spec (ERA5 front, no controls), 29-33N: near 3381, away 207156; near -4.0%, away +14.1%, near minus away -15.89% (-19.25 to -12.29)
+round 1 spec (ERA5 front, no controls), 33-37N: near 18613, away 187643; near -1.7%, away +21.9%, near minus away -19.33% (-21.63 to -17.13)
+round 1 spec (ERA5 front, no controls), 37-41N: near 88732, away 70643; near +11.4%, away +15.6%, near minus away -3.67% (-6.09 to -1.16)
+MUR front and dT, with air-mass controls, 29-33N: near 1095, away 225925 box-passes, too few for the difference
+MUR front and dT, with air-mass controls, 33-37N: near 12784, away 205330; near -5.0%, away +15.8%, near minus away -18.00% (-20.29 to -15.91)
+MUR front and dT, with air-mass controls, 37-41N: near 88869, away 72518; near +6.3%, away +10.8%, near minus away -4.09% (-6.54 to -1.48)

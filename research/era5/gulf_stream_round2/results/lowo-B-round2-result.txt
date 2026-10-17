@@ -1,0 +1,30 @@
+B1e all boxes (like with like): interval excludes 0 (above) in 0 of 5 refits, (below) in 1
+   without winter 2021: -0.39% (-1.34 to +0.52)
+   without winter 2022: -0.89% (-2.45 to +0.40)
+   without winter 2023: -0.72% (-2.26 to +0.53)
+   without winter 2024: -1.04% (-2.43 to +0.27)
+   without winter 2025: -1.45% (-2.51 to -0.59)
+B2e near front (like with like): interval excludes 0 (above) in 1 of 5 refits, (below) in 0
+   without winter 2021: +1.17% (+0.19 to +2.19)
+   without winter 2022: +0.37% (-2.19 to +2.19)
+   without winter 2023: -0.30% (-2.29 to +1.19)
+   without winter 2024: +0.21% (-2.07 to +2.16)
+   without winter 2025: -0.14% (-2.33 to +1.66)
+B2m near front (MUR band, actual winds): interval excludes 0 (above) in 5 of 5 refits, (below) in 0
+   without winter 2021: +4.79% (+3.77 to +5.65)
+   without winter 2022: +4.10% (+1.86 to +5.62)
+   without winter 2023: +3.55% (+1.78 to +4.90)
+   without winter 2024: +4.02% (+2.12 to +5.60)
+   without winter 2025: +3.64% (+1.79 to +5.07)
+B4m near minus away (MUR band, actual winds): interval excludes 0 (above) in 4 of 5 refits, (below) in 0
+   without winter 2021: +3.08% (+1.66 to +4.63)
+   without winter 2022: +3.01% (+0.36 to +5.42)
+   without winter 2023: +2.13% (-0.08 to +4.25)
+   without winter 2024: +3.06% (+0.58 to +5.44)
+   without winter 2025: +3.17% (+1.09 to +5.00)
+B4e near minus away (like with like): interval excludes 0 (above) in 1 of 5 refits, (below) in 0
+   without winter 2021: +1.95% (+0.49 to +3.57)
+   without winter 2022: +1.87% (-1.01 to +4.66)
+   without winter 2023: +0.83% (-1.58 to +3.23)
+   without winter 2024: +1.75% (-0.98 to +4.57)
+   without winter 2025: +1.95% (-0.59 to +4.18)

@@ -1,0 +1,7 @@
+stress route sample 473864; median GFS neutral wind from stress / from 10 m wind: 0.996 (dT>=6: 1.023; 0-3: 0.984)
+B all, GFS neutral wind from stress (18-24 h mean): -6.70% (-8.41 to -5.50), -1.68 kt at 25 kt, p=0.0002
+B all, GFS neutral wind from 10 m wind (instantaneous): -0.88% (-2.16 to +0.25), -0.22 kt at 25 kt, p=0.1176
+B near front (ERA5 band), GFS neutral wind from stress (18-24 h mean): -5.08% (-7.63 to -3.07), -1.27 kt at 25 kt, p=0.0002
+B near front (ERA5 band), GFS neutral wind from 10 m wind (instantaneous): +0.29% (-1.65 to +1.85), +0.07 kt at 25 kt, p=0.7365
+B away, GFS neutral wind from stress (18-24 h mean): -7.40% (-9.57 to -5.73), -1.85 kt at 25 kt, p=0.0002
+B away, GFS neutral wind from 10 m wind (instantaneous): -1.36% (-2.80 to -0.17), -0.34 kt at 25 kt, p=0.0384
