@@ -147,6 +147,6 @@ Logged in order. All tagged *before any outcome* (no buoy coefficient had been r
 2. *Before any outcome.* Planted-effect residuals are taken after the **full** fit (with the effect terms), not
    after the null fit as written above. Residuals from the null fit would contain any real effect and the
    planted effect would sit on top of it. Only SEs and detection rates were read.
-3. *Before any outcome.* Coverage seen when the dataset was built: 44,838 station-times; 25,160 pass the wind
-   filter; 587 opposed-or-following hours in Stream water at the three Stream buoys (12+ winters), so V1 clears
+3. *Before any outcome.* Coverage seen when the dataset was built: 44,838 station-times; 25,139 pass the wind
+   filter (25,160 before the calm-report filter of item 1); 614 opposed-or-following hours in Stream water at the three Stream buoys (14 winters; the 587 first written here was a hand sum from the per-buoy counts, corrected), so V1 clears
    the pre-set floor of 8 winters and 150 hours.

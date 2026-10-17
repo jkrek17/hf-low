@@ -69,3 +69,4 @@ research/era5/threshold_axis/work/
 # research/era5/storm_patch_analogs/gfs/ keeps its GFS pull in work/ (regenerable)
 research/era5/storm_patch_analogs/gfs/work/
 research/era5/goa_jets/work/
+research/era5/gulf_stream/work/
