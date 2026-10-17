@@ -12,7 +12,7 @@ Valid time T uses the HRRR-Alaska cycle 3 h earlier (21 UTC for 00 UTC, 09 UTC f
 ## Data and size (stated before the pull)
 
 `noaa-hrrr-bdp-pds`, `hrrr.YYYYMMDD/alaska/hrrr.tCCz.wrfsfcf03.ak.grib2`, byte ranges from the `.idx`: GUST surface 0.78 MB, UGRD and VGRD 10 m 1.49 MB each, MSLMA mean sea level 0.41 MB (probed from real files on 2023-01-15):
-4.17 MB per time x 3,396 = **about 14.2 GB, under the 50 GB gate; no existing cache holds these fields.** Plus the LAND field once. Grid 1299 x 919 at 3 km (polar stereographic), cropped to the rows and columns covering 50-68N, 160-125W.
+4.17 MB per time x 3,396 = **about 14.2 GB, under the 50 GB gate; no existing cache holds these fields.** Plus the LAND field once. Grid 1299 x 919 at 3 km (polar stereographic), cropped to the rows and columns covering 48-67N, 160-128W.
 Missing files are counted; more than 2% in a season is reported. Decoder `grib2_hrrr.py` (the repository's packing 5.3 reader plus simple packing for the winds), geolocation and wind rotation `hrrr_grid.py`, checked against the file's own land mask and GFS winds.
 
 ## Definitions (same as the first study unless stated)
