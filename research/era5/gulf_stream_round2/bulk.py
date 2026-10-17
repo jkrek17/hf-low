@@ -21,3 +21,15 @@ def actual_from_neutral(un_kt, t2_k, td_k, ts_k, p_hpa, lat, jcool, nit=4):
     for _ in range(nit):
         en = neutral_from_actual(u, t2_k, td_k, ts_k, p_hpa, lat, jcool); u = un * u / en
     return u, np.nanmax(np.abs(neutral_from_actual(u, t2_k, td_k, ts_k, p_hpa, lat, jcool) - un))
+def neutral_from_stress(tau, t2_k, td_k, ts_k, p_hpa, lat, jcool, nit=5, chunk=250000):
+    """stress-equivalent neutral 10 m wind (kt) from a surface stress tau (N/m2): u* = sqrt(tau/rho); U_N = u* / sqrt(Cdn(U_N)), iterated, Cdn from COARE 3.6 at the current guess"""
+    tau = np.asarray(tau, float); t2 = np.asarray(t2_k, float) - 273.15; td = np.asarray(td_k, float) - 273.15; ts = np.asarray(ts_k, float) - 273.15
+    p = np.asarray(p_hpa, float); la = np.broadcast_to(np.asarray(lat, float), tau.shape); rho = p * 100.0 / (287.05 * (t2 + 273.15) * (1 + 0.608 * 0.622 * 6.11 * np.exp(17.625 * td / (243.04 + td)) / p))
+    us = np.sqrt(np.maximum(tau, 1e-6) / rho); u = us / 0.04; out = np.full(tau.shape, np.nan)
+    for i in range(0, len(u), chunk):
+        s = slice(i, i + chunk); uu = u[s].copy()
+        for _ in range(nit):
+            c = coare_36(uu, t=t2[s], rh=rh_from(t2[s], td[s]), zu=10, zt=2, zq=2, ts=ts[s], p=p[s], lat=la[s], jcool=jcool, rs=100, rl=310, zi=600)
+            uu = us[s] / np.sqrt(np.asarray(c.transfer_coefficients.cdn_rf, float).reshape(-1))
+        out[s] = uu
+    return out * KT

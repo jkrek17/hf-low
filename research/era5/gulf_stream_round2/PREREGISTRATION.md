@@ -60,4 +60,6 @@ Before any coefficient: the planted-effect simulation of round 1 (remove each ba
 
 1. *Before any outcome.* Power simulation done on the per-winter sufficient statistics (a winter resample is a count vector, as in the analysis bootstraps), 200 outer x 400 inner, instead of refitting resampled rows at 100 x 200. Same planted design (each band group's own fitted dT effect removed, +3% and +6% planted). Output: `power-result.txt`.
 2. *Before any outcome.* 0.1% of A rows (stable air, light wind, dT near -3) do not invert within 0.2 kt (worst 1.5 kt in a 100,000-row sample); they stay in the sample and sit in the dT < 0 bin, outside every contrast. MUR for winter 2025-26 was pulled after the first table build (the B sample covers it).
+3. *Before any outcome.* The NOAA geostrophic-current dataset has data only from February 2018, so the current secondary covers 7 winters (2018-19 to 2024-25), not 8. Noticed while building the tables.
+4. *After the primary results.* Added, all labelled: `lowo_round2.py` (the registered 5-of-5 interval rule for the B tests, also for B1e, B2e, B4e); `stress_check.py` (the GFS native-stress route, listed in the plan as a secondary; run after seeing the primary B1e); `posthoc_round2.py` (post hoc, not in the plan: near-minus-away inside 4-degree latitude bands, run because the gap persisted after every registered fix).
 
