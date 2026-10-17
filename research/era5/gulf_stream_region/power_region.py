@@ -10,8 +10,12 @@ def resample(d, W):
     new = np.concatenate([np.full((d.winter.values == w).sum(), i) for i, w in enumerate(pick)]); s = d.iloc[idx].copy(); s["winter"] = new; return s
 def power_for(d, with_vg, targets, plant_sel, pct_):
     """targets: dict name -> (selector for fitting, selector for second group or None). Returns {name: (power, se)}."""
-    Xr, k0 = design_raw(d, with_vg); B0, _ = fit_boot(d, with_vg); beta = B0.fit(); W = np.unique(d.winter.values)
-    d = d.copy(); d["y"] = d.y.values - Xr[:, k0:] @ beta[k0:] + np.log(1 + pct_) * ((d.dT.values >= 6) & plant_sel(d)).astype(float)   # remove the fitted dT effect, keep residuals, add planted
+    Xr, k0 = design_raw(d, with_vg); W = np.unique(d.winter.values); rem = np.zeros(len(d))
+    for g in ("in", "out", "mid", "undef"):                      # remove each band group's own fitted dT effect (group-specific full fit)
+        m = (d.band.values == g)
+        if m.sum() > 1000:
+            B0, _ = fit_boot(d[m], with_vg); rem[m] = Xr[m, k0:] @ B0.fit()[k0:]
+    d = d.copy(); d["y"] = d.y.values - rem + np.log(1 + pct_) * ((d.dT.values >= 6) & plant_sel(d)).astype(float)   # keep residuals, add planted
     hits = {n: 0 for n in targets}; ests = {n: [] for n in targets}
     for _ in range(NO):
         s = resample(d, W)

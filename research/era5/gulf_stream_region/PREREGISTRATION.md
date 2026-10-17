@@ -125,4 +125,8 @@ looked at):
    winter resamples reuse the full-sample box means (an approximation to refitting the dummies, chosen because the table has
    1.3 million box-passes). The planted-effect simulation removes the fitted dT-bin effect from the outcome and adds the planted
    effect to the remaining residuals, which is the same as base fit plus residual.
-5. The ASCAT pull is slower than sized (about 3.7 min per satellite-winter); the sizes and the pull plan are unchanged.
+5. The first power run removed the fitted dT effect of one pooled fit before planting; it returned zero detection for the
+   in-band test at a planted +6% (impossible if the in-band effect equalled the pooled one), so the groups differ and the pooled
+   removal was the wrong design for the group tests. Power is re-run removing each band group's own fitted dT effect (in, out,
+   mid, undef). No coefficient was read or printed; the first run's output is kept in `power-result-first-run-discarded.txt`.
+6. The ASCAT pull is slower than sized (about 3.7 min per satellite-winter); the sizes and the pull plan are unchanged.
