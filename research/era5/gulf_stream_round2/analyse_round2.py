@@ -84,6 +84,7 @@ run("Secondary: current sample, absolute wind (relative wind plus geostrophic cu
 # ---------- multiplicity across the 17
 allp = p1 + p2 + p3; P("\nq across all 17 primary tests:", " ".join(f"{x:.4f}" for x in bh(allp)))
 # ---------- placebo
+PLC = {}
 P("\n## Placebo: shuffle dT among boxes of the same winter, month and Vg tercile (A) / winter, month (B), 20 draws")
 def shuffled(d, col, wv):
     x = d.copy()
@@ -98,5 +99,8 @@ for nm, d, wv, col, extras, y, bcol, tag in [("A1c", A, True, "dT", ex, ya, "ban
         x = shuffled(d, col, wv); Bt, f, _n = fitspec(sp(x, wv, col, extras, y)); e1.append(pct(f(Bt.fit())))
         if tag != "B" or True:
             Bi, fi, _n = fitspec(sp(x[x[bcol] == "in"], wv, col, extras, y)); Bo, fo, _n = fitspec(sp(x[x[bcol] == "out"], wv, col, extras, y)); e4.append(pct(fi(Bi.fit()) - fo(Bo.fit())))
+    PLC[nm] = np.mean(e1)
     P(f"{nm}: placebo mean {np.mean(e1):+.2f}% (range {min(e1):+.2f}..{max(e1):+.2f}); near-minus-away placebo mean {np.mean(e4):+.2f}% (range {min(e4):+.2f}..{max(e4):+.2f})")
+for nm, th, ref in (("A1c", F2[0][1], REF_A), ("A1m", F3[0][1], REF_A), ("B1e", F1[0][1], REF_B)):
+    o = np.log(1 + PLC[nm] / 100); P(f"{nm}: estimate {pct(th):+.2f}%, shuffle offset {PLC[nm]:+.2f}%, {'corrected (real minus offset in log wind) ' + format(pct(th - o), '+.2f') + '%, ' + format(ref * (np.exp(th - o) - 1), '+.2f') + ' kt' if abs(PLC[nm]) > 1 else 'offset under the 1-point rule, no correction'}")
 open(f"{OUT}/round2-result.txt", "w").write("\n".join(L) + "\n")

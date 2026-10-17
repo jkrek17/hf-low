@@ -85,3 +85,6 @@ q across all 17 primary tests: 0.1321 0.7437 0.0391 0.1802 0.0003 0.0003 0.0382 
 A1c: placebo mean +2.08% (range +2.00..+2.23); near-minus-away placebo mean -0.16% (range -0.46..+0.20)
 A1m: placebo mean +2.50% (range +2.40..+2.61); near-minus-away placebo mean +0.59% (range +0.13..+0.99)
 B1e: placebo mean +0.43% (range +0.24..+0.60); near-minus-away placebo mean -0.69% (range -1.37..-0.14)
+A1c: estimate +10.28%, shuffle offset +2.08%, corrected (real minus offset in log wind) +8.04%, +1.74 kt
+A1m: estimate +16.03%, shuffle offset +2.50%, corrected (real minus offset in log wind) +13.21%, +2.85 kt
+B1e: estimate -0.90%, shuffle offset +0.43%, offset under the 1-point rule, no correction
