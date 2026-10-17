@@ -1,0 +1,4 @@
+S5 A1 all boxes after equivalent-neutral conversion: +11.28% (+9.28 to +13.36), p=0.0005; knots at 21.6 kt: +2.44
+S5 B1 all boxes after equivalent-neutral conversion: -1.88% (-3.15 to -0.76), p=0.0015; knots at 25.0 kt: -0.47
+S5 B2 in band after equivalent-neutral conversion: -0.21% (-2.19 to +1.46), p=0.8358; knots at 25.0 kt: -0.05
+S5 B3 outside band after equivalent-neutral conversion: -2.37% (-3.74 to -1.15), p=0.0005; knots at 25.0 kt: -0.59

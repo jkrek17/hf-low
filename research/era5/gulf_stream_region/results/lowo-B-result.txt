@@ -1,0 +1,18 @@
+B1 all boxes: interval excludes 0 in 5 of 5 refits
+   without winter 2021: +2.74% (+1.52 to +3.83)
+   without winter 2022: +2.28% (+0.54 to +3.70)
+   without winter 2023: +2.45% (+0.89 to +3.82)
+   without winter 2024: +2.06% (+0.69 to +3.53)
+   without winter 2025: +1.60% (+0.62 to +2.49)
+B2 in band: interval excludes 0 in 5 of 5 refits
+   without winter 2021: +4.49% (+3.21 to +5.60)
+   without winter 2022: +3.74% (+1.04 to +5.59)
+   without winter 2023: +3.14% (+1.02 to +4.95)
+   without winter 2024: +3.52% (+1.32 to +5.51)
+   without winter 2025: +3.02% (+1.00 to +4.51)
+B3 outside band: interval excludes 0 in 2 of 5 refits
+   without winter 2021: +1.87% (+0.48 to +2.89)
+   without winter 2022: +1.31% (-0.38 to +2.72)
+   without winter 2023: +1.66% (+0.09 to +2.88)
+   without winter 2024: +1.19% (-0.34 to +2.54)
+   without winter 2025: +0.71% (-0.36 to +1.79)

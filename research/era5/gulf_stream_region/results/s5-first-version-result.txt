@@ -1,0 +1,3 @@
+S5 B1 all boxes after equivalent-neutral conversion: +1.38% (+0.06 to +2.65), p=0.0445; knots at 25 kt model wind +0.34
+S5 B2 in band after equivalent-neutral conversion: +2.67% (+0.59 to +4.31), p=0.0160; knots at 25 kt model wind +0.67
+S5 B3 outside band after equivalent-neutral conversion: +0.58% (-0.81 to +1.80), p=0.4239; knots at 25 kt model wind +0.15

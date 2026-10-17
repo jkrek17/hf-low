@@ -1,0 +1,52 @@
+# Gulf Stream, region-wide: ASCAT winds against ERA5 pressure-gradient wind (A) and against GFS 24 h forecasts (B)
+A sample 781652 box-passes, 12 winters, {'B': 360342, 'A': 239910, 'C': 181400}; bands {'out': 465442, 'undef': 134838, 'in': 110726, 'mid': 70646}
+Reference ASCAT wind (0-3 C bin) at pressure-gradient wind 30 / 45 kt: 21.6 / 28.4 kt
+\n## Observed median ASCAT wind (kt) by water-minus-air temperature at pressure-gradient wind 25-35 kt, by band
+all -9..0: 19.3 (33374) | 0..3: 21.6 (90031) | 3..6: 23.6 (45233) | 6..9: 25.0 (25745) | 9..99: 25.6 (18960)
+in band -9..0: 18.9 (4703) | 0..3: 22.0 (7163) | 3..6: 22.6 (6846) | 6..9: 23.4 (6366) | 9..99: 24.0 (7352)
+outside -9..0: 19.3 (20833) | 0..3: 21.5 (59727) | 3..6: 23.8 (26527) | 6..9: 25.7 (11131) | 9..99: 26.8 (5102)
+\n## Family A: wind change when water is 6 C or more warmer than air (mean of 6-9 and >=9 bins vs 0-3 C)
+test | n box-passes | winters | estimate % | 95% interval | kt at ref wind 21.600971895125003 / 28.404427610125 kt | p | q
+A1 all boxes | 781652 | 12 | +15.85 | +13.92 to +17.93 | +3.42 (+3.01 to +3.87) / +4.50 | 0.0002 | 0.0002
+A2 in band | 110726 | 12 | +8.15 | +6.22 to +10.14 | +1.76 (+1.34 to +2.19) / +2.32 | 0.0002 | 0.0002
+A3 outside band | 465442 | 12 | +19.11 | +17.32 to +21.09 | +4.13 (+3.74 to +4.56) / +5.43 | 0.0002 | 0.0002
+A4 in band minus outside band |  | 12 | -9.20 | -11.36 to -7.00 | -1.99 (-2.45 to -1.51) / -2.61 | 0.0002 | 0.0002
+A5 in band, flow 270-360 | 43585 | 12 | +9.80 | +8.41 to +11.34 | +2.12 (+1.82 to +2.45) / +2.78 | 0.0002 | 0.0002
+\nB sample 474396 box-passes, 5 winters, bands {'out': 309904, 'in': 63839, 'undef': 58745, 'mid': 41908}
+ASCAT / GFS wind ratio in the 0-3 C bin (median): 1.036 (reference class; the ratio by class is listed below)
+\n## Observed median ASCAT/GFS ratio by model water-minus-air temperature, by band
+all -9..0: 0.966 (52467) | 0..3: 1.036 (242595) | 3..6: 1.030 (110261) | 6..9: 1.039 (49260) | 9..99: 1.047 (19813)
+in band -9..0: 0.952 (8578) | 0..3: 1.029 (16680) | 3..6: 1.036 (16992) | 6..9: 1.040 (13768) | 9..99: 1.041 (7821)
+outside -9..0: 0.973 (33963) | 0..3: 1.037 (180882) | 3..6: 1.027 (68197) | 6..9: 1.036 (21107) | 9..99: 1.050 (5755)
+\n## Family B: wind change when water is 6 C or more warmer than air (mean of 6-9 and >=9 bins vs 0-3 C)
+test | n box-passes | winters | estimate % | 95% interval | kt at ref wind 25.0 / 35.0 kt | p | q
+B1 all boxes | 474396 | 5 | +2.23 | +0.90 to +3.50 | +0.56 (+0.22 to +0.87) / +0.78 | 0.0002 | 0.0008
+B2 in band | 63839 | 5 | +3.57 | +1.61 to +5.18 | +0.89 (+0.40 to +1.30) / +1.25 | 0.0004 | 0.0008
+B3 outside band | 309904 | 5 | +1.36 | +0.01 to +2.52 | +0.34 (+0.00 to +0.63) / +0.48 | 0.0452 | 0.0603
+B4 in band minus outside band |  | 5 | +2.18 | -0.10 to +4.36 | +0.55 (-0.02 to +1.09) / +0.76 | 0.0642 | 0.0642
+\nq across all 9 tests: 0.0003 0.0003 0.0003 0.0003 0.0003 0.0003 0.0005 0.0508 0.0642
+\n## Secondary (raw p, labelled secondary)
+S2 A1 Dec-Mar only: n=466176  +14.92% (+12.80..+17.32), p=0.0007
+S3 A1 Metop-A only: n=239910  +17.39% (+15.01..+20.25), p=0.0007
+S3 A1 Metop-B only: n=360342  +15.53% (+13.60..+17.70), p=0.0007
+S3 A1 Metop-C only: n=181400  +14.31% (+12.55..+16.18), p=0.0007
+S4 A1 with pressure-gradient wind >= 30 kt: n=229325  +15.15% (+12.95..+17.26), p=0.0007
+S5 A1 after equivalent-neutral to actual 10 m wind conversion (approximate, zeta = 10.8 Rb): n=781652  +11.28% (+9.26..+13.39), p=0.0007
+S6 B-style: A1 with GFS-free design but 5 winters 2021-25 only: n=242520  +13.96% (+12.20..+15.77), p=0.0007
+B5 B2 in band, flow 270-360 by GFS direction: n=27504  +6.25% (+3.92..+8.17), p=0.0007
+\n## Leave one winter out (min..max of % effect)
+A all boxes: +15.11% .. +16.24%  (12 winters)
+A in band: +7.38% .. +8.76%  (12 winters)
+A outside band: +18.43% .. +19.46%  (12 winters)
+A in band, flow 270-360: +9.44% .. +10.16%  (12 winters)
+B all boxes: +1.61% .. +2.73%  (5 winters)
+B in band: +3.03% .. +4.47%  (5 winters)
+B outside band: +0.73% .. +1.86%  (5 winters)
+\n## Placebo: shuffle dT among boxes of the same winter, month and Vg tercile (20 draws; A) / winter, month (B)
+A1: placebo mean +2.46%  range +2.32..+2.58
+B1: placebo mean +0.47%  range +0.20..+0.70
+\n## Placebo-corrected estimates (plan: real minus shuffle offset, in log wind) and band composition
+A1 after removing the shuffle offset: +13.07%  (+2.82 kt at reference wind 21.6 kt)
+B1 shuffle offset +0.47% is under the plan's 1 point; uncorrected +2.23%, corrected would be +1.74%
+A band 'in': 110726 box-passes, 56.7% south of the front; with dT>=6: 46231, 66.0% south; east of 65W: 30.4%
+A band 'out': 465442 box-passes, 97.5% south of the front; with dT>=6: 55875, 95.4% south; east of 65W: 43.3%
