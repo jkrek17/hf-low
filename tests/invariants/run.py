@@ -181,6 +181,20 @@ def check_failure_library(files):
     return [line[6:] for line in result.stdout.splitlines() if line.startswith("FAIL  ")]
 
 
+# --- storm-force-label ------------------------------------------------------
+# failures/2026-10-16-goa-readme-causal-headings and 2026-10-17-goa-hrrr-readme-overclaims: the 54 kt proxy class was called "storm force" although
+# open-water buoys read a median 44 to 48 kt when ERA5 showed it. A README sentence that puts "storm force" with "54 kt" must also say uncalibrated / proxy / reads as.
+def check_storm_force_label(files):
+    violations = []
+    for path in files:
+        if not (path.startswith("research/") and os.path.basename(path).startswith("README") and path.endswith(".md")):
+            continue
+        for sent in re.split(r"(?<=[.!?])\s+|\n+", read(path)):
+            if re.search(r"storm[- ]force", sent, re.I) and re.search(r"\b54 kt|zone max|HRRR|ERA5", sent) and not re.search(r"uncalibrated|not calibrated|proxy|reads as|buoy", sent, re.I):
+                violations.append(path); break
+    return violations
+
+
 CHECKS = [
     ("stale-claims", check_stale_claims),
     ("seasons-complete", check_seasons_complete),
@@ -189,6 +203,7 @@ CHECKS = [
     ("proxy-label", check_proxy_label),
     ("forbidden-files", check_forbidden_files),
     ("failure-library", check_failure_library),
+    ("storm-force-label", check_storm_force_label),
 ]
 
 
