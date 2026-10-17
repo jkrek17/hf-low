@@ -110,4 +110,13 @@ winters.
 
 ## Deviations (post hoc)
 
-None yet. Log in order, tagged *before any outcome* or *after the primary result*.
+Logged in order, all *before any outcome* (only decoding checks and descriptive counts of the control fields had been
+looked at):
+
+1. ASCAT direction byte is oceanographic (direction the wind blows towards). Checked on 348 buoy matches (41013, 44014,
+   41002, 41004) in the 2013-14 winter: median direction difference 174 deg as stored, 6 deg after +180. The builder adds 180
+   degrees before the NW-flow split. (ASCAT / buoy wind ratio 1.06, correlation 0.89 on the same matches.)
+2. The Stream-band front is set undefined when the strongest gradient sits on the edge of the 32-42N search window (the
+   first descriptive look showed it pinned at 42N for every longitude east of 65W, where the window does not contain the
+   north wall). This removes those longitudes from the band tests (A2-A5, B2-B4); A1 and B1 still use every box.
+3. The ASCAT pull is slower than sized (about 3.7 min per satellite-winter); the sizes and the pull plan are unchanged.
