@@ -1,0 +1,10 @@
+station,name,n_obs,n35,hrrr_ratio,hrrr3_ratio,era5_ratio,hrrr_rho,era5_rho,hrrr_closer
+amaa2,East Amatuli,2733,416,0.993,1.022,0.962,0.417,0.382,True
+auga2,Augustine Island,2893,443,0.888,0.958,0.889,0.534,0.701,False
+cdea2,Cape Decision,2766,203,0.923,0.98,0.947,0.388,0.299,False
+cspa2,Cape Spencer,2843,364,0.749,0.797,0.852,0.401,0.416,False
+fila2,Flat Island,3092,215,0.867,0.945,1.03,0.521,0.524,False
+gixa2,Guard Island,3014,101,0.973,1.058,0.791,0.394,0.425,True
+lcna2,Lincoln Island,3007,160,0.89,0.944,0.674,0.293,0.27,True
+mdxa2,Middleton Island,455,110,0.755,0.803,0.789,0.644,0.748,False
+pila2,Pilot Rock,3091,301,0.86,0.913,0.852,0.42,0.602,True

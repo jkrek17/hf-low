@@ -1,0 +1,30 @@
+H1: station gust >= 35 kt; median model/station gust ratio and Spearman, nearest cell (registered) and 3x3 max (beside it)
+station             name  n_obs  n35  hrrr_ratio  hrrr3_ratio  era5_ratio  hrrr_rho  era5_rho  hrrr_closer
+  amaa2     East Amatuli   2733  416       0.993        1.022       0.962     0.417     0.382         True
+  auga2 Augustine Island   2893  443       0.888        0.958       0.889     0.534     0.701        False
+  cdea2    Cape Decision   2766  203       0.923        0.980       0.947     0.388     0.299        False
+  cspa2     Cape Spencer   2843  364       0.749        0.797       0.852     0.401     0.416        False
+  fila2      Flat Island   3092  215       0.867        0.945       1.030     0.521     0.524        False
+  gixa2     Guard Island   3014  101       0.973        1.058       0.791     0.394     0.425         True
+  lcna2   Lincoln Island   3007  160       0.890        0.944       0.674     0.293     0.270         True
+  mdxa2 Middleton Island    455  110       0.755        0.803       0.789     0.644     0.748        False
+  pila2       Pilot Rock   3091  301       0.860        0.913       0.852     0.420     0.602         True
+stations with >= 30 such times: 9; HRRR median ratio closer to 1 than ERA5 at 4 of them (rule: 5 or more -> 'HRRR is the better coastal reference')
+
+H2: share of times with a zone-station gust >= 45 kt, by zone class (times with at least one zone station reporting); ratio HRRR-only / neither with 8-season bootstrap interval, minimum detectable ratio, registered verdict
+zone                     cls    n  hit_per_100  ci_lo  ci_hi  mde_ratio   verdict
+  Z1               HRRR-only  494         9.10    NaN    NaN        NaN       NaN
+  Z1                    both  191        14.10    NaN    NaN        NaN       NaN
+  Z1                 neither 2390         0.90    NaN    NaN        NaN       NaN
+  Z1               ERA5-only   16        12.50    NaN    NaN        NaN       NaN
+  Z1 RATIO HRRR-only/neither  494         9.90   6.68  15.41       2.85 supported
+  Z2               HRRR-only  190        11.60    NaN    NaN        NaN       NaN
+  Z2                    both  167        27.50    NaN    NaN        NaN       NaN
+  Z2                 neither 2744         0.50    NaN    NaN        NaN       NaN
+  Z2               ERA5-only   21         4.80    NaN    NaN        NaN       NaN
+  Z2 RATIO HRRR-only/neither  190        24.44  14.53  51.65       5.50 supported
+  Z3               HRRR-only  467        21.00    NaN    NaN        NaN       NaN
+  Z3                    both  199        50.80    NaN    NaN        NaN       NaN
+  Z3                 neither 2463         1.90    NaN    NaN        NaN       NaN
+  Z3               ERA5-only    5        20.00    NaN    NaN        NaN       NaN
+  Z3 RATIO HRRR-only/neither  467        11.24   7.48  19.72       2.25 supported
