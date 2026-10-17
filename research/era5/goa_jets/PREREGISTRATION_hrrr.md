@@ -42,7 +42,8 @@ Reporting: name the pipeline and say HRRR is a model; nautical miles in text; pl
 
 ## Deviations
 
-- 2026-10-17, before the full pull: crop widened from 52N to 48N south edge so the 300-400 km coast pile-up cells are inside the stored window (no outcome read).
-- 2026-10-17, plumbing run of `hrrr_analyse.py` on the first 1,113 of 3,396 times (October 2018 and part of the season) to catch code errors; its tables were not read for results and were overwritten by the full run.
+- 2026-10-17, before the full pull (commit 9d6fddb): crop south edge widened to 48N so the 300-400 km coast pile-up cells are inside the stored window; a first start of the pull with the narrower edge was stopped and its output deleted (no outcome read).
+- 2026-10-17, plumbing run of `hrrr_analyse.py` on 1,113 times (which times was not recorded) to catch code errors; its tables were not read for results and were overwritten by the full run.
 - 2026-10-17 (POST HOC): `hrrr_sensitivity.py` restricts the HRRR zone maximum to ocean cells at least 10 km and at least 25 km from land, because H2 showed the registered zone maximum sits within 10 km of land for most HRRR events in the North Gulf and Cook Inlet. Not registered; reported as a sensitivity, one more look at the same 8 seasons.
 - 2026-10-17: 2 of 3,396 valid times have no file (2019-03-10 12 UTC and 2019-03-11 00 UTC, 404 after retries); both fall in one season (0.5% of it).
+- 2026-10-17: the bootstrap used 1,000 draws (seed 16) in `hrrr_analyse.py`, not the 2,000 registered; distances are reported in kilometres, not nautical miles; the ERA5 H2 distances were computed fresh with the same land mask rather than taken from the first study.
