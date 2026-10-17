@@ -41,7 +41,7 @@ groupsA = {"all boxes": lambda d: d.v_ascat > 0, "in band": lambda d: d.band == 
 tA, pA, qA, fA = run_family("A", A, True, vA, groupsA, "dir_ascat")
 # ---- B
 B = prep_B(B0); P(f"\\nB sample {len(B)} box-passes, {B.winter.nunique()} winters, bands {B.band.value_counts().to_dict()}")
-ratio_ref = float(np.exp(B[(B.dT >= 0) & (B.dT < 3)].y.median())); P(f"ASCAT / GFS wind ratio in the 0-3 C bin (median): {ratio_ref:.3f} (a model wind bias, same in every bin)")
+ratio_ref = float(np.exp(B[(B.dT >= 0) & (B.dT < 3)].y.median())); P(f"ASCAT / GFS wind ratio in the 0-3 C bin (median): {ratio_ref:.3f} (reference class; the ratio by class is listed below)")
 vB = [25.0, 35.0]
 P("\\n## Observed median ASCAT/GFS ratio by model water-minus-air temperature, by band")
 for gname, sel in [("all", lambda d: d.v_ascat > 0), ("in band", lambda d: d.band == "in"), ("outside", lambda d: d.band == "out")]:
@@ -57,11 +57,8 @@ def sec(label, d, with_vg, nb=3000):
 sec("S2 A1 Dec-Mar only", A[A.month.isin([12, 1, 2, 3])], True)
 for s in "ABC": sec(f"S3 A1 Metop-{s} only", A[A.sat == s], True)
 sec("S4 A1 with pressure-gradient wind >= 30 kt", A[A.vg >= 30], True)
-Ac = A.copy(); U = Ac.v_ascat / 1.944; Rb = 9.81 / Ac.t2m * (Ac.t2m - Ac.sst) * 10 / np.maximum(U, 1) ** 2
-z = np.where(Rb < 0, Rb, Rb / (1 - 5 * np.clip(Rb, None, 0.15))); x = (1 - 16 * np.clip(z, -2, 0)) ** 0.25
-psi = np.where(z < 0, 2 * np.log((1 + x) / 2) + np.log((1 + x * x) / 2) - 2 * np.arctan(x) + np.pi / 2, -5 * z)
-Ac["v_ascat"] = Ac.v_ascat * (1 - psi / 10.8); Ac["y"] = np.log(Ac.v_ascat)
-sec("S5 A1 after equivalent-neutral to actual 10 m wind conversion (approximate)", Ac, True)
+Ac = A.copy(); Ac["v_ascat"] = convert_en(Ac.v_ascat, Ac.t2m, Ac.sst); Ac["y"] = np.log(Ac.v_ascat)
+sec("S5 A1 after equivalent-neutral to actual 10 m wind conversion (approximate, zeta = 10.8 Rb)", Ac, True)
 sec("S6 B-style: A1 with GFS-free design but 5 winters 2021-25 only", A[A.winter >= 2021], True)
 sec("B5 B2 in band, flow 270-360 by GFS direction", B[(B.band == "in") & nwflow(B, "dir_gfs")], False)
 P("\\n## Leave one winter out (min..max of % effect)")
@@ -70,6 +67,7 @@ for nm, (B_, k, n, nw, d) in {**{"A " + g: fA[g] for g in groupsA}, **{"B " + g:
     for i in range(len(B_.w)):
         c = np.ones(len(B_.w)); c[i] = 0; r.append(pct(f(B_.fit(c))))
     P(f"{nm}: {min(r):+.2f}% .. {max(r):+.2f}%  ({len(B_.w)} winters)")
+PL = {}
 P("\\n## Placebo: shuffle dT among boxes of the same winter, month and Vg tercile (20 draws; A) / winter, month (B)")
 for nm, d, wv, nmz in [("A1", A, True, "vg"), ("B1", B, False, None)]:
     e = []
@@ -79,5 +77,12 @@ for nm, d, wv, nmz in [("A1", A, True, "vg"), ("B1", B, False, None)]:
         else: keys = ["winter", "month"]
         x["dT"] = x.groupby(keys).dT.transform(lambda v: rng.permutation(v.values))
         B_, k = fit_boot(x, wv); e.append(pct(contrast_high(k)(B_.fit())))
+    PL[nm] = np.mean(e)
     P(f"{nm}: placebo mean {np.mean(e):+.2f}%  range {min(e):+.2f}..{max(e):+.2f}")
+P("\\n## Placebo-corrected estimates (plan: real minus shuffle offset, in log wind) and band composition")
+o = np.log(1 + PL["A1"] / 100); th = tA[0][1]; P(f"A1 after removing the shuffle offset: {pct(th - o):+.2f}%  ({vA[0] * (np.exp(th - o) - 1):+.2f} kt at reference wind {vA[0]:.1f} kt)")
+o = np.log(1 + PL["B1"] / 100); th = tB[0][1]; P(f"B1 shuffle offset {PL['B1']:+.2f}% is under the plan's 1 point; uncorrected {pct(th):+.2f}%, corrected would be {pct(th - o):+.2f}%")
+for g in ("in", "out"):
+    s = A[A.band == g]; h = s[s.dT >= 6]
+    P(f"A band '{g}': {len(s)} box-passes, {100 * (s.lat < s.front).mean():.1f}% south of the front; with dT>=6: {len(h)}, {100 * (h.lat < h.front).mean():.1f}% south; east of 65W: {100 * (s.lon > 295).mean():.1f}%")
 open(f"{OUT}/region-result.txt", "w").write("\n".join(L) + "\n")

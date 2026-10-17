@@ -33,3 +33,11 @@ def boot_diff(B1, f1, B2, f2, nb, rng):
         out[i] = f1(B1.fit(c1)) - f2(B2.fit(c2))
     return out
 def pct(x): return 100 * (np.exp(x) - 1)
+
+def convert_en(v_kt, t2m, sst):
+    """Approximate equivalent-neutral to actual 10 m wind (kt), Businger-Dyer. Stability parameter zeta = 10.8 * bulk Richardson number, since zeta ~ Rb * ln(10 m / z0) and ln(10 / 1.5e-4) ~ 10.8 over sea. (The first version used Rb itself as zeta and understated the correction roughly tenfold; see failures/.)"""
+    U = np.asarray(v_kt, float) / 1.944
+    R = 10.8 * 9.81 / t2m * (t2m - sst) * 10 / np.maximum(U, 1) ** 2
+    z = np.where(R < 0, R, R / (1 - 5 * np.clip(R, None, 0.15))); x = (1 - 16 * np.clip(z, -2, 0)) ** 0.25
+    psi = np.where(z < 0, 2 * np.log((1 + x) / 2) + np.log((1 + x * x) / 2) - 2 * np.arctan(x) + np.pi / 2, -5 * z)
+    return np.asarray(v_kt, float) * (1 - psi / 10.8)
