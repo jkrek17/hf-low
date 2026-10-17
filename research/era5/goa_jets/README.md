@@ -103,4 +103,4 @@ A bug fix before any result was read: the sea-air temperature used a plain mean 
 
 `PREREGISTRATION.md`, `stage0_counts.py` (gust counts), `stage1_pull.py` (22.5 GB, 1,800 times), `features.py`, `analyse.py`, `audit.py`, `buoy.py`, `figures.py`. Results in `results/`:
 `q1_table.csv`, `q2_tests.csv`, `audit.csv`, `episodes.csv`, `features.csv`, `buoy_summary.csv`, `buoy_when_era5_54.csv`, `analysis.txt`, `audit.txt`. The pulled window of fields
-(44-70N, 175-125W, u10, v10, MSLP, 2 m temperature, SST at the 1,800 times) is kept at `/mnt/project-files/goa-jets/` so nothing needs pulling again.
+(44-70N, 175-125W, u10, v10, MSLP, 2 m temperature, SST at the 1,800 times) was NOT found in `/mnt/project-files/goa-jets/` on 2026-10-17 (only the result tables are there), so a new look at the fields means pulling them again.

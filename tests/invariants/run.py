@@ -181,6 +181,22 @@ def check_failure_library(files):
     return [line[6:] for line in result.stdout.splitlines() if line.startswith("FAIL  ")]
 
 
+# --- overclaim-words ---------------------------------------------------------
+# Phrases that stated a cause or "realness" no test in the Gulf of Alaska studies supported (failures 2026-10-17-goa-station-readme-overclaims); applies to research READMEs only.
+OVERCLAIM = re.compile(r"really do see|not just a (?:gust|bias)|under-?counts? (?:storm|the)", re.I)
+
+
+def check_overclaim_words(files):
+    violations = []
+    for path in files:
+        if not (path.startswith("research/") and os.path.basename(path).startswith("README") and path.endswith(".md")):
+            continue
+        for sent in re.split(r"(?<=[.!?])\s+|\n+", read(path)):
+            if OVERCLAIM.search(sent) and not re.search(r"does not show|do not show|not show|cannot|no test|not tested|whether", sent, re.I):
+                violations.append(path); break
+    return violations
+
+
 # --- storm-force-label ------------------------------------------------------
 # failures/2026-10-16-goa-readme-causal-headings and 2026-10-17-goa-hrrr-readme-overclaims: the 54 kt proxy class was called "storm force" although
 # open-water buoys read a median 44 to 48 kt when ERA5 showed it. A README sentence that puts "storm force" with "54 kt" must also say uncalibrated / proxy / reads as.
@@ -204,6 +220,7 @@ CHECKS = [
     ("forbidden-files", check_forbidden_files),
     ("failure-library", check_failure_library),
     ("storm-force-label", check_storm_force_label),
+    ("overclaim-words", check_overclaim_words),
 ]
 
 

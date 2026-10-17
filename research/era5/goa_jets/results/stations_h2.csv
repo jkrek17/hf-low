@@ -1,0 +1,16 @@
+zone,cls,n,hit_per_100,ci_lo,ci_hi,mde_ratio,verdict
+Z1,HRRR-only,494,9.1,,,,
+Z1,both,191,14.1,,,,
+Z1,neither,2390,0.9,,,,
+Z1,ERA5-only,16,12.5,,,,
+Z1,RATIO HRRR-only/neither,494,9.9,6.68,15.41,2.85,supported
+Z2,HRRR-only,190,11.6,,,,
+Z2,both,167,27.5,,,,
+Z2,neither,2744,0.5,,,,
+Z2,ERA5-only,21,4.8,,,,
+Z2,RATIO HRRR-only/neither,190,24.44,14.53,51.65,5.5,supported
+Z3,HRRR-only,467,21.0,,,,
+Z3,both,199,50.8,,,,
+Z3,neither,2463,1.9,,,,
+Z3,ERA5-only,5,20.0,,,,
+Z3,RATIO HRRR-only/neither,467,11.24,7.48,19.72,2.25,supported

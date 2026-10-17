@@ -1,0 +1,30 @@
+# Do coastal weather stations back HRRR's extra shoreline gusts? (Gulf of Alaska)
+
+HRRR values are a 3 hour MODEL forecast; ERA5 is a PROXY; the stations are observations from exposed capes and islands (anemometer heights differ and are not adjusted). "HRRR 54 kt" is the first study's 54 kt applied to HRRR's own gust, a different diagnostic: uncalibrated, not ERA5's 54 kt. Pipeline: this study's own zone maxima, neither pipeline A nor B.
+Plan: `PREREGISTRATION_stations.md` (committed `cd8bfde`; the stations were picked from counts of 35 kt station gusts, one disclosed look; deviations, including a post-run rewrite of one sentence, at its end).
+Sample: 00 and 12 UTC times from 1 October 2018 to 1 January 2026 with a station record within 30 minutes (the 2026 NDBC files were not used, so 2025-26 is October to December only): 3,140 distinct times, of 3,394 HRRR times; H2 uses 3,091 (North Gulf), 3,122 (Panhandle) and 3,134 (Cook Inlet). Middleton Island: 12 December 2024 to 1 January 2026 (455 times). Distances in nautical miles where quoted (the HRRR study quotes kilometres).
+Code `stations_pull.py`, `stations_analyse.py` (registered H1 and H2), `stations_posthoc.py` (everything marked post hoc); tables `results/stations_pairs.csv`, `stations_h1.csv`, `stations_h2.csv`, `stations_analysis.txt`, `stations_posthoc.txt`. Verification record: `VERIFICATION_stations.md`.
+
+## Short answer
+
+Registered verdict for H2: **supported** in all three zones. Registered verdict for H1: **no better than ERA5** (an even split, so read it as "cannot tell which is closer"). The stations show HRRR-only times are windier at the coast than times neither model flags; they do not show how much of HRRR's extra count is real and how much is its gust diagnostic.
+
+- **H2, are HRRR-only times windy at the coast?** Share of times with a zone-station gust of 45 kt or more, by what the two models said about the zone (times with at least one zone station reporting):
+
+| Zone (stations) | HRRR 54 kt, ERA5 not | both 54 kt | neither | HRRR-only vs neither |
+|---|---|---|---|---|
+| North Gulf (Pilot Rock, Middleton) | 9 in 100 (494 times) | 14 in 100 | 0.9 in 100 | 9.9 times [6.7, 15.4] |
+| Panhandle (Cape Decision, Lincoln, Guard) | 12 in 100 (190) | 28 in 100 | 0.5 in 100 | 24 times [15, 52] |
+| Cook Inlet (Pilot Rock, Amatuli, Flat, Augustine) | 21 in 100 (467) | 51 in 100 | 1.9 in 100 | 11 times [7.5, 20] |
+
+At about 8 to 9 in 10 of the HRRR-only times no zone station reaches 45 kt: the outcome is 45 kt at a station, not HRRR's 54 kt. The "neither" times are lower-wind times (median ERA5 zone gust 33, 32.5 and 34 kt, against 46, 48.5 and 48 kt for HRRR-only; `stations_posthoc.txt`), so this is a low bar. Intervals are 8-season block bootstraps (2,000 draws), the last season October to December only; they were not independently recomputed. Minimum detectable ratios 2.9, 5.5 and 2.3, computed as if each 12-hourly time were independent, so optimistic; in the Panhandle the counts could not separate the registered 3-times threshold. Pilot Rock sits in both the North Gulf and Cook Inlet zones, so those two are not independent confirmations; in the North Gulf it supplies nearly all the station times (Pilot Rock alone: 5.5 against 0.7 in 100, `stations_posthoc.txt`). ERA5-only times (16, 21, 5) are too few to read.
+- **Post hoc, a second (also unmatched) yardstick.** The HRRR-only rate is 0.64, 0.42 and 0.41 of the rate when both models reach 54 kt. **Post hoc, matched on ERA5:** among times with an ERA5 zone gust of 40 to 54 kt, HRRR-only times show a 45 kt station gust at 11, 11 and 22 in 100, against 4.2, 1.8 and 6.6 in 100 when HRRR is also below 54 kt (ratios 2.7, 6.1 and 3.4). So HRRR's 54 kt carries information beyond ERA5's own reading, at these stations. Neither post hoc comparison was registered; both are one more look at the same seasons.
+- **H1, the models against the stations.** On times the station gust was 35 kt or more, the median HRRR gust at the station cell was 0.75 to 0.99 of the station gust and ERA5's 0.67 to 1.03 (3x3 maximum for HRRR, 0.80 to 1.06). Selecting times on the observed gust pulls any noisy ratio below 1, so this does not show either model reads low. Choosing times on the model's own value (35 kt or more) instead gives HRRR/station 0.86 to 1.49 and ERA5/station 0.82 to 1.21 (post hoc): the truth is between the two selections, and neither model is cleanly right at the stations. Registered as 5 of 8 stations, applied as 5 of 9 (a deviation); HRRR was closer to 1 at 4 of 9, and the split turned on Augustine Island (0.888 against 0.889) and Pilot Rock (0.860 against 0.852). With no interval this is "cannot tell which is closer". ERA5's rank agreement with the stations is higher at 6 of 9 stations (Spearman 0.27 to 0.75 against 0.29 to 0.64 for HRRR). The station value is the largest report within 30 minutes of the hour, which also favours higher station values.
+
+## What it does and does not say
+
+- The stations are a handful of points. A station that sees nothing does not rule out a jet elsewhere in the zone; one that sees 45 kt does not show HRRR's peak cell was right.
+- Shoreline scope: in the North Gulf and Cook Inlet the HRRR-only peak cell sits within about 2 nautical miles of land (median 3 km, `README_hrrr.md`). In the Panhandle it is a median of about 26 nautical miles offshore (47.7 km), so the Panhandle result is not about shoreline gusts.
+- Event counts between the two models remain not directly comparable (cell counts, definitions); the stations do not settle that.
+- Cape Spencer is outside the zone boxes and used in H1 only.
+- A fresh agent recomputed every H1 and H2 point estimate and class count from the pair table and matched 5 station records to the raw NDBC files (`VERIFICATION_stations.md`). The model columns against their sources, the zone-to-station mapping, the bootstrap intervals and the minimum detectable ratios were not independently checked; the post hoc numbers in `stations_posthoc.txt` come from the script and were not independently recomputed (a reviewer's own check gave the same class medians and Panhandle distance).

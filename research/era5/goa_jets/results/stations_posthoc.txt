@@ -1,0 +1,54 @@
+station sample: pairs 23894, distinct times 3140, first 2018-10-01 00:00:00, last 2026-01-01 00:00:00
+  amaa2: 2733 pairs, 2018-10-01 to 2026-01-01
+  auga2: 2893 pairs, 2018-10-01 to 2026-01-01
+  cdea2: 2766 pairs, 2018-10-01 to 2025-12-31
+  cspa2: 2843 pairs, 2018-10-01 to 2025-12-31
+  fila2: 3092 pairs, 2018-10-01 to 2026-01-01
+  gixa2: 3014 pairs, 2018-10-19 to 2026-01-01
+  lcna2: 3007 pairs, 2018-10-01 to 2025-12-31
+  mdxa2: 455 pairs, 2024-12-12 to 2026-01-01
+  pila2: 3091 pairs, 2018-10-01 to 2026-01-01
+
+H1 beside the registered nearest-cell ratio: 3x3-max HRRR/station median (obs >= 35 kt)
+  amaa2: n 416, 3x3 1.022, nearest 0.993, ERA5 0.962
+  auga2: n 443, 3x3 0.958, nearest 0.888, ERA5 0.889
+  cdea2: n 203, 3x3 0.980, nearest 0.923, ERA5 0.947
+  cspa2: n 364, 3x3 0.797, nearest 0.749, ERA5 0.852
+  fila2: n 215, 3x3 0.945, nearest 0.867, ERA5 1.030
+  gixa2: n 101, 3x3 1.058, nearest 0.973, ERA5 0.791
+  lcna2: n 160, 3x3 0.944, nearest 0.890, ERA5 0.674
+  mdxa2: n 110, 3x3 0.803, nearest 0.755, ERA5 0.789
+  pila2: n 301, 3x3 0.913, nearest 0.860, ERA5 0.852
+
+selection check: the same ratios when the TIMES are chosen by the model's own value >= 35 kt instead of the station's (median model/station)
+  amaa2: HRRR n 527 1.21; ERA5 n 588 1.18
+  auga2: HRRR n 419 1.04; ERA5 n 377 0.95
+  cdea2: HRRR n 227 1.15; ERA5 n 260 1.15
+  cspa2: HRRR n 162 1.01; ERA5 n 256 1.01
+  fila2: HRRR n 324 1.49; ERA5 n 474 1.21
+  gixa2: HRRR n 173 1.22; ERA5 n 60 0.97
+  lcna2: HRRR n 164 1.17; ERA5 n 41 0.97
+  mdxa2: HRRR n 41 0.86; ERA5 n 51 0.82
+  pila2: HRRR n 263 1.13; ERA5 n 174 0.97
+
+H2 classes: zone gust medians (kt) and times with a reporting zone station
+ Z1: times 3091
+   HRRR-only: n 494, hit 9.1/100, median ERA5 zone gust 45.8, HRRR zone gust 59.1, HRRR peak-cell distance to land 3.0 km
+   both: n 191, hit 14.1/100, median ERA5 zone gust 58.5, HRRR zone gust 65.8, HRRR peak-cell distance to land 3.0 km
+   neither: n 2390, hit 0.9/100, median ERA5 zone gust 33.0, HRRR zone gust 39.3, HRRR peak-cell distance to land 9.0 km
+   HRRR-only rate / both rate: 0.64
+   POST HOC matched ERA5 zone gust 40-54 kt: HRRR-only n 391 hit 11.3; neither n 523 hit 4.2
+ Z2: times 3122
+   HRRR-only: n 190, hit 11.6/100, median ERA5 zone gust 48.5, HRRR zone gust 57.1, HRRR peak-cell distance to land 47.7 km
+   both: n 167, hit 27.5/100, median ERA5 zone gust 58.5, HRRR zone gust 61.8, HRRR peak-cell distance to land 66.5 km
+   neither: n 2744, hit 0.5/100, median ERA5 zone gust 32.5, HRRR zone gust 37.6, HRRR peak-cell distance to land 85.2 km
+   HRRR-only rate / both rate: 0.42
+   POST HOC matched ERA5 zone gust 40-54 kt: HRRR-only n 182 hit 11.0; neither n 655 hit 1.8
+ Z3: times 3134
+   HRRR-only: n 467, hit 21.0/100, median ERA5 zone gust 48.0, HRRR zone gust 58.9, HRRR peak-cell distance to land 3.0 km
+   both: n 199, hit 50.8/100, median ERA5 zone gust 57.0, HRRR zone gust 65.4, HRRR peak-cell distance to land 3.0 km
+   neither: n 2463, hit 1.9/100, median ERA5 zone gust 34.0, HRRR zone gust 39.8, HRRR peak-cell distance to land 9.4 km
+   HRRR-only rate / both rate: 0.41
+   POST HOC matched ERA5 zone gust 40-54 kt: HRRR-only n 438 hit 22.4; neither n 590 hit 6.6
+
+Pilot Rock alone in Z1: HRRR-only n 494 hit 5.5; neither n 2390 hit 0.7
