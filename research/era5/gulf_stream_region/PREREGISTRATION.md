@@ -119,4 +119,6 @@ looked at):
 2. The Stream-band front is set undefined when the strongest gradient sits on the edge of the 32-42N search window (the
    first descriptive look showed it pinned at 42N for every longitude east of 65W, where the window does not contain the
    north wall). This removes those longitudes from the band tests (A2-A5, B2-B4); A1 and B1 still use every box.
-3. The ASCAT pull is slower than sized (about 3.7 min per satellite-winter); the sizes and the pull plan are unchanged.
+3. Secondary S4 as written ("only winds >= 30 kt") would select on the outcome. It is run instead as the pressure-gradient
+   wind `Vg >= 30 kt` (a control, not the outcome); no ASCAT-wind cut is used anywhere.
+4. The ASCAT pull is slower than sized (about 3.7 min per satellite-winter); the sizes and the pull plan are unchanged.
