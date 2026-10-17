@@ -38,6 +38,7 @@ Commit `research/era5/<topic>/PREREGISTRATION.md` first and cite its hash in the
 - Every pre-registered test appears, with p, Benjamini-Hochberg q within its family, and q across all tests. Count tests passing FDR out of the total (0 of 55).
 - Effect sizes with intervals, per SD of the index, on the scale a forecaster reads. Beside a "yes", show the estimate adjusted for the overlapping predictor.
 - **Power and minimum detectable effect** by planted-effect simulation (`trough_bombs/power.py`, `clustering/power.py`, `hemispheric/`, `freq_split/fdr_power.py`), run before any coefficient is read. If draws ignore season clustering, call power an upper bound and show the real interval width. A null without a stated MDE is "inconclusive", not "no effect".
+- **Verdict words come from the plan.** The README's verdict column copies the plan's decision-rule words (yes, no (well-powered), can't tell) for each test, and a test that is significant in the opposite direction to the expectation is "can't tell", not "no effect". A placebo that fails voids any power or "would have seen" statement for the comparison it guards. Name the unit the bootstrap resamples, and say when groups hide a spread across stations (look at one station at a time before writing a group verdict). (Gulf Stream study, 2026-10-17: the first README draft had all three problems.)
 - Anything not in the plan is "post hoc", labelled in the table and the prose, with both versions shown. A post hoc lead is a lead, not a finding; the pre-registered verdict stands.
 
 ## 4. Before you call it done
