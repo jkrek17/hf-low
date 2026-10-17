@@ -1,0 +1,59 @@
+# Gulf Stream effects: pre-registered results (buoys + ERA5 pressure-gradient control; ERA5 is a proxy control, not an outcome)
+Wind sample 25139 station-times, 21 winters. Reference 0-3 C wind at Vg 30 / 45 kt: 20.6 / 25.3 kt.
+
+## Observed 10 m wind by water-minus-air temperature, all 7 buoys
+dT bin (C) | n | median V10 (kt) at Vg 25-35 | n | median V10 (kt) at Vg 40-50
+-9..0 | 1880 | 18.9 | 478 | 24.2
+0..3 | 2079 | 20.6 | 459 | 25.1
+3..6 | 1422 | 21.0 | 431 | 25.7
+6..9 | 1024 | 21.2 | 365 | 25.5
+9..99 | 942 | 21.0 | 403 | 25.3
+
+## Observed 10 m wind by water-minus-air temperature, Stream buoys
+dT bin (C) | n | median V10 (kt) at Vg 25-35 | n | median V10 (kt) at Vg 40-50
+-9..0 | 410 | 21.7 | 139 | 25.7
+0..3 | 904 | 20.2 | 209 | 24.2
+3..6 | 482 | 21.4 | 116 | 26.6
+6..9 | 305 | 22.3 | 96 | 26.9
+9..99 | 346 | 21.4 | 141 | 25.9
+
+## Observed 10 m wind by water-minus-air temperature, shelf buoys
+dT bin (C) | n | median V10 (kt) at Vg 25-35 | n | median V10 (kt) at Vg 40-50
+-9..0 | 1470 | 18.4 | 339 | 23.4
+0..3 | 1175 | 20.8 | 250 | 25.6
+3..6 | 940 | 21.0 | 315 | 25.5
+6..9 | 719 | 20.6 | 269 | 25.1
+9..99 | 596 | 20.6 | 262 | 24.9
+
+## Family W (5 tests): wind change for water warmer than air, at the same pressure-gradient wind
+test | estimate (% wind) | 95% interval | kt at Vg 30 | kt at Vg 45 | p | q (BH, family)
+W1 pooled, high-dT minus 0-3 C | -0.2 | -2.3 to +2.2 | -0.0 (-0.5 to +0.5) | -0.1 (-0.6 to +0.6) | 0.7923 | 0.7923
+W2 Stream buoys, same contrast | +4.7 | +1.2 to +8.7 | +1.0 (+0.2 to +1.8) | +1.2 (+0.3 to +2.2) | 0.0068 | 0.0085
+W3 shelf buoys, same contrast | -2.8 | -4.5 to -0.9 | -0.6 (-0.9 to -0.2) | -0.7 (-1.1 to -0.2) | 0.0046 | 0.0077
+W4 Stream minus shelf | +7.8 | +3.6 to +12.2 | +1.6 (+0.7 to +2.5) | +2.0 (+0.9 to +3.1) | 0.0010 | 0.0050
+W5 dT>=9 minus 6-9, pooled | -2.6 | -4.2 to -0.9 | -0.5 (-0.9 to -0.2) | -0.7 (-1.1 to -0.2) | 0.0026 | 0.0065
+
+## Model bin effects (% wind relative to 0-3 C, same Vg), pooled / Stream / shelf
+pooled <0: -7.5% (-11.1..-3.0) | 3-6: +3.6% (+1.7..+5.9) | 6-9: +1.1% (-1.2..+3.8) | >=9: -1.5% (-3.7..+0.8) | log Vg slope 0.58
+Stream <0: +4.2% (-0.5..+9.3) | 3-6: +4.1% (+1.0..+7.6) | 6-9: +6.6% (+2.6..+11.1) | >=9: +2.9% (-0.7..+6.5) | log Vg slope 0.54
+shelf <0: -11.4% (-14.3..-7.7) | 3-6: +2.8% (+0.8..+5.1) | 6-9: -1.9% (-3.6..+0.3) | >=9: -3.8% (-5.6..-1.5) | log Vg slope 0.60
+
+## Secondary (not in family; raw p, labelled secondary)
+S1a flow from 270-360 deg: n=7299  +9.3% (+5.6..+13.0), p=0.0007
+S1b other flow directions: n=17840  -12.0% (-13.8..-9.8), p=0.0007
+S2 Dec-Mar only: n=14746  +0.1% (-2.9..+3.4), p=0.9637
+S3 buoy gust instead of mean: n=25113  +7.1% (+4.5..+10.7), p=0.0007
+S4 raw (not 10 m-adjusted) wind: n=25139  -0.2% (-2.3..+2.2), p=0.7691
+
+## Waves: sample 6329 steady-wind hours (>=20 kt); opposed/following hours in Stream water at Stream buoys:
+n=614 hours, 14 winters; opposed 318, following 296
+test | estimate (ft) | 95% interval | p | q (BH, family)
+V1 opposed minus following, Stream water, Stream buoys | +0.50 | -0.82 to +1.73 | 0.7187 | 0.7187
+V2 diff-in-diff vs non-Stream water | -2.89 | -6.36 to +1.54 | 0.6979 | 0.7187
+V3 placebo, shelf buoys (41002 labels) | +2.89 | +0.40 to +6.12 | 0.0002 | 0.0006
+q across all 8 tests: 0.7923 0.0109 0.0092 0.0040 0.0069 0.7923 0.7923 0.0016
+
+## Observed wave height (ft), Stream buoys in Stream water: mean by wind bin and sector (hours)
+20-30 kt: opposed 8.3 ft (288); cross 8.9 ft (325); following 7.7 ft (248)
+30-40 kt: opposed 13.1 ft (25); cross 13.7 ft (51); following 12.6 ft (48)
+40+ kt: opposed 20.5 ft (5); cross 22.0 ft (3); following nan ft (0)

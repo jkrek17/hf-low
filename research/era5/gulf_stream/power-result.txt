@@ -1,0 +1,17 @@
+Planted-effect power (winter resampling, nested bootstrap; 200 outer x 400 inner). Unadjusted p < 0.05, correct sign.
+Residuals taken after fitting WITH the effect terms (deviation from the plan, logged before any outcome).
+W1 pooled: planted +3% wind when dT>=6 -> power 0.86  (SE of contrast 0.0116 log units)
+W1 pooled: planted +6% wind when dT>=6 -> power 1.00  (SE of contrast 0.0117 log units)
+W1 pooled: planted +10% wind when dT>=6 -> power 1.00  (SE of contrast 0.0129 log units)
+W2 Stream: planted +3% wind when dT>=6 -> power 0.32  (SE of contrast 0.0171 log units)
+W2 Stream: planted +6% wind when dT>=6 -> power 0.95  (SE of contrast 0.0173 log units)
+W2 Stream: planted +10% wind when dT>=6 -> power 1.00  (SE of contrast 0.0176 log units)
+W3 shelf: planted +3% wind when dT>=6 -> power 0.95  (SE of contrast 0.0101 log units)
+W3 shelf: planted +6% wind when dT>=6 -> power 1.00  (SE of contrast 0.0095 log units)
+W3 shelf: planted +10% wind when dT>=6 -> power 1.00  (SE of contrast 0.0094 log units)
+W4 extra Stream effect: planted +3% only at Stream stations -> power 0.39 (SE 0.0158)
+W4 extra Stream effect: planted +6% only at Stream stations -> power 0.95 (SE 0.0149)
+W4 extra Stream effect: planted +10% only at Stream stations -> power 1.00 (SE 0.0148)
+V1 planted +0.5 ft opposed in Stream water -> power 0.01 (SE 0.69 ft); V2 (diff-in-diff) -> power 0.39 (SE 2.45 ft)
+V1 planted +1.0 ft opposed in Stream water -> power 0.27 (SE 0.72 ft); V2 (diff-in-diff) -> power 0.34 (SE 2.42 ft)
+V1 planted +2.0 ft opposed in Stream water -> power 0.99 (SE 0.72 ft); V2 (diff-in-diff) -> power 0.33 (SE 2.45 ft)
