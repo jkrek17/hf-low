@@ -1,0 +1,7 @@
+basin,cls,weeks,hf_per_week,bomb_per_week,share_weeks_hf,share_weeks_bomb
+atl,low,90,1.056,1.033,0.711,0.667
+atl,typical,270,1.448,1.389,0.719,0.77
+atl,high,90,2.3,1.811,0.878,0.856
+pac,low,90,0.944,1.622,0.6,0.778
+pac,typical,270,1.211,1.667,0.67,0.841
+pac,high,90,1.756,2.144,0.833,0.967
