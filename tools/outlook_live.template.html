@@ -84,6 +84,15 @@
   .off { display: none !important; }
   ul.plain { margin: 0 0 8px; padding-left: 20px; max-width: 70ch; }
   ul.plain li { margin-bottom: 5px; }
+  #pattern .plrow { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; margin: 8px 0; }
+  #pattern .plname { width: 7em; font-weight: 600; }
+  #pattern .plbadge { display: inline-block; width: 6.5em; text-align: center; font-size: 12px; font-weight: 700; letter-spacing: .06em; padding: 2px 8px; border-radius: 4px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
+  #pattern .plbadge.high { background: var(--warn-bg); color: var(--warn-ink); border-color: var(--warn-line); }
+  #pattern .plbadge.low { background: var(--panel); color: var(--ink2); }
+  #pattern .pltxt { flex: 1 1 22em; min-width: 0; max-width: 70ch; }
+  #pattern .pltitle { font-weight: 600; margin-bottom: 2px; }
+  #pattern details { margin-top: 6px; }
+  #pattern summary { cursor: pointer; font-size: 13px; color: var(--ink2); }
   details.fold { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 12px; }
   details.fold summary { cursor: pointer; font-weight: 600; }
   details.fold h3 { font-size: 14px; margin: 14px 0 4px; }
@@ -172,6 +181,19 @@
     </div>
   </div>
 
+  <div class="panel off" id="pattern">
+    <h2>Pattern loading for the week (experimental)</h2>
+    <p class="pltitle" id="plTitle"></p>
+    <p class="small" id="plSub"></p>
+    <div id="plRows"></div>
+    <p class="small" id="plFoot"></p>
+    <details>
+      <summary>How to read this</summary>
+      <p class="small">Low, typical and high are the bottom fifth, the middle three fifths and the top fifth of 450 past weeks (15 winters, 2004-05 to 2018-19), sorted by how strongly the upper-air pattern in the 7 days before the week looks like patterns that came before many hurricane-force lows. For the past weeks the pattern is taken from GEFS forecasts, the same kind of input as today&rsquo;s.</p>
+      <p class="small">The hurricane-force lows are counted in the ERA5 record, a model-based stand-in for observed wind, not a measurement (gust of 71.7 kt or more at the low&rsquo;s peak). Weeks run October to April only. The weights behind the pattern were fitted on 11 of those 15 winters, so most of the table is not a fair test. On the last four winters only the Atlantic hurricane-force count did clearly better than a guess based on the month alone; the Pacific was within noise. Gale-force and storm-force lows are not sorted by this score. Read the numbers as rough rates.</p>
+    </details>
+  </div>
+
   <details class="fold" id="how">
     <summary>How this works (details for the curious)</summary>
     <h3>The first layer: how often OPC agreed</h3>
@@ -187,6 +209,7 @@
 </div>
 <script src="outlook-live-data.js"></script>
 <script src="outlook-live-blend.js"></script>
+<script src="pattern-loading-data.js"></script>
 <script>
 window.HF_LIVE_STATIC = /*@@DATA@@*/;
 (function () {
@@ -460,6 +483,29 @@ window.HF_LIVE_STATIC = /*@@DATA@@*/;
   document.getElementById('laySeg').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; st.lay = b.dataset.lay; st.bh = null; setPressed(this, 'lay', st.lay); render(); });
   statusLine(); render();
   loadBlend().then(function () { render(); }, function () { BL = null; render(); });
+})();
+</script>
+<script>
+// Weekly "pattern loading" note (window.HF_PATTERN, pattern-loading-data.js, written by tools/pattern_loading.py). Hidden when missing or older than 10 days.
+(function () {
+  var P = window.HF_PATTERN, el = document.getElementById('pattern');
+  if (!P || !P.basins || !P.run || !el) return;
+  var r = String(P.run), D = Date.UTC(+r.slice(0, 4), +r.slice(4, 6) - 1, +r.slice(6, 8));
+  if (Date.now() - D > 10 * 864e5) return;
+  var M = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function f(t) { var d = new Date(t); return d.getUTCDate() + ' ' + M[d.getUTCMonth()]; }
+  var S = new Date(P.week_start + 'T00:00:00Z').getTime(), E = S + 6 * 864e5;
+  document.getElementById('plTitle').textContent = 'Pattern loading, week of ' + f(S) + ' to ' + f(E);
+  document.getElementById('plSub').textContent = 'From the ' + f(D) + ' GEFS run. The week starts 8 days after the run.';
+  var names = { atl: 'N Atlantic', pac: 'N Pacific' }, lab = { low: 'LOW', typical: 'NORMAL', high: 'HIGH' }, h = '', typ = [];
+  ['atl', 'pac'].forEach(function (b) {
+    var o = P.basins[b]; if (!o) return; var t = o.ref[o.cls]; typ.push((b === 'atl' ? 'Atlantic' : 'Pacific') + ' about ' + o.ref.typical.hf_per_week.toFixed(1));
+    h += '<div class="plrow"><div class="plname">' + names[b] + '</div><span class="plbadge ' + o.cls + '">' + lab[o.cls] + '</span><div class="pltxt">Similar past weeks averaged about ' +
+      t.hf_per_week.toFixed(1) + ' hurricane-force lows. About ' + Math.round(t.share_weeks_hf * 10) + ' in 10 had at least one.</div></div>';
+  });
+  document.getElementById('plRows').innerHTML = h;
+  document.getElementById('plFoot').textContent = 'A mild heads-up for the week, not a forecast of any one storm. Use the daily map above for where and when. Typical week for comparison: ' + typ.join(', ') + '. Refreshed weekly.';
+  el.classList.remove('off');
 })();
 </script>
 </body>
