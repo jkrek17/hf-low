@@ -1,0 +1,21 @@
+   basin outcome              index  ratio  ratio_lo  ratio_hi  skill  skill_lo  skill_hi  p_perm      q
+0    atl    bomb               GEFS  1.813     1.431     2.124  0.048     0.025     0.069   0.001  0.001
+1    atl    bomb    GEFS F4 2015-18    NaN       NaN       NaN  0.014    -0.031     0.052     NaN    NaN
+2    atl    bomb             ERA5zu  1.763     1.469     2.092  0.050     0.028     0.070     NaN    NaN
+3    atl    bomb  ERA5zu F4 2015-18    NaN       NaN       NaN  0.027    -0.008     0.061     NaN    NaN
+4    atl    bomb  GEFS minus ERA5zu    NaN       NaN       NaN -0.002    -0.011     0.008     NaN    NaN
+5    atl      HF               GEFS  2.284     1.756     2.791  0.107     0.063     0.145   0.001  0.001
+6    atl      HF    GEFS F4 2015-18    NaN       NaN       NaN  0.051     0.005     0.114     NaN    NaN
+7    atl      HF             ERA5zu  2.351     1.829     3.085  0.127     0.085     0.165     NaN    NaN
+8    atl      HF  ERA5zu F4 2015-18    NaN       NaN       NaN  0.069     0.010     0.119     NaN    NaN
+9    atl      HF  GEFS minus ERA5zu    NaN       NaN       NaN -0.020    -0.032    -0.009     NaN    NaN
+10   pac    bomb               GEFS  1.351     1.130     1.599  0.025    -0.002     0.048   0.001  0.001
+11   pac    bomb    GEFS F4 2015-18    NaN       NaN       NaN  0.046    -0.002     0.114     NaN    NaN
+12   pac    bomb             ERA5zu  1.315     1.121     1.528  0.026     0.001     0.051     NaN    NaN
+13   pac    bomb  ERA5zu F4 2015-18    NaN       NaN       NaN  0.043     0.000     0.109     NaN    NaN
+14   pac    bomb  GEFS minus ERA5zu    NaN       NaN       NaN -0.002    -0.011     0.007     NaN    NaN
+15   pac      HF               GEFS  1.894     1.465     2.525  0.062     0.025     0.098   0.001  0.001
+16   pac      HF    GEFS F4 2015-18    NaN       NaN       NaN -0.012    -0.089     0.061     NaN    NaN
+17   pac      HF             ERA5zu  2.072     1.559     2.579  0.069     0.029     0.106     NaN    NaN
+18   pac      HF  ERA5zu F4 2015-18    NaN       NaN       NaN -0.001    -0.072     0.089     NaN    NaN
+19   pac      HF  GEFS minus ERA5zu    NaN       NaN       NaN -0.006    -0.018     0.007     NaN    NaN
