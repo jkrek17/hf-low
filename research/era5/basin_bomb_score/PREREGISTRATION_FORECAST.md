@@ -20,4 +20,4 @@ BH over F1 and F2 for the four basin-outcome pairs (8 tests).
 **Limits stated now:** the index weights were fitted on 2004-14 ERA5 discovery seasons, so 2004-14 skill is in-sample for the weights (as in stage B deviation 7); a GEFS control member only, not an ensemble; no GFS (2021 onward) because the frozen weights and baseline would need a separate freeze; 00 UTC init only; weekly, not daily; seasons 2019-20 onward not covered.
 
 ## Deviations (post hoc)
-(none yet)
+1. (before any association was read) BH is applied to the four F2 permutation p-values only; F1 has no p-value and is judged by its interval, as in the main bomb plan's decision rule. The "8 tests" in the Tests section is therefore 4.
