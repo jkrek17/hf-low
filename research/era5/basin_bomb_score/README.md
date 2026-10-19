@@ -22,3 +22,23 @@ Power (planted effect, before any association was read, `results/power.json`): a
 - Month and last week's count are the only controls; no position control.
 
 Files: `bomblib.py`, `power.py`, `analysis.py`, `results/tests.csv`, `results/extra.json`, `results/power.json`.
+
+## Forecast version (GEFS-fed score; Jason, 2026-10-19 "try forecast")
+**ERA5 proxy truth, pipeline A**, 15 seasons 2004-05 to 2018-19, 450 weeks per basin. Plan: `PREREGISTRATION_FORECAST.md` (`6e676f7`, one deviation logged before scoring). No new data: the index is `gfs_test/results/index_zu.csv`, the PR 41 z500 + u250 pattern computed from GEFS v12 control forecasts for days 1-7 issued on day S-8, so a week is scored 8 to 14 days before it starts. Reference: the same index computed from ERA5.
+
+### Answer in plain words
+**The score works just as well from a forecast as from reanalysis, but the size is inflated and the clean test is too small to confirm it.**
+- Top vs bottom fifth of weeks, month-adjusted, GEFS index: bombs Atlantic **1.8** [1.43, 2.12], Pacific **1.35** [1.13, 1.60]; HF lows Atlantic **2.3** [1.76, 2.79], Pacific **1.9** [1.47, 2.53].
+- Leave-one-season-out skill: bombs +4.8% [+2.5, +6.9] Atlantic and +2.5% [-0.2, +4.8] Pacific; HF lows +10.7% [6.3, 14.5] and +6.2% [2.5, 9.8]. Permutation p 0.001 for all four (BH q 0.001).
+- Forecast minus reanalysis (same weeks, same weights): bombs -0.2 points [-1.1, +0.8] Atlantic and -0.2 [-1.1, +0.7] Pacific, so nothing lost; HF lows -2.0 [-3.2, -0.9] Atlantic (lost about 1 in 6 of the skill) and -0.6 [-1.8, +0.7] Pacific.
+- Rule verdict: "works" for all four basin-outcome pairs; "loses most of it": no.
+- **Caution:** the score's weights were fitted on ERA5 HF counts in 2004-05 to 2014-15, so 11 of the 15 seasons are in-sample for the weights, which is why these numbers are larger than the ERA5 bomb result above (+2.0%, +1.1%). The four seasons the weights never saw (2015-16 to 2018-19) give, for GEFS: bombs +1.4% [-3.1, +5.2] Atlantic and +4.6% [-0.2, +11.4] Pacific; HF lows +5.1% [+0.5, +11.4] and -1.2% [-8.9, +6.1]. Four seasons is too few to say; only the Atlantic HF interval excludes zero. Same pattern with the ERA5 input, so the forecast is not the weak link.
+
+Verified by a fresh Sonnet agent from the committed files: the month-adjusted ratios, the full-sample skills and the 2015-18 skills for both indices, both outcomes and both basins all matched (the one apparent miss, Pacific bomb ERA5 ratio 1.3146 vs 1.32, was my rounding of the table's 1.315). Not independently checked: bootstrap and permutation intervals, the GEFS-minus-ERA5 differences, the BH values.
+
+### Limits
+- One GEFS control member, 00 UTC initialisation, weekly, 8 to 14 days ahead; it says nothing about which day or where. No GFS-fed version (2021 onward needs its own freeze).
+- Seasons 2019-20 onward not covered; the 2015-18 look is the only clean one and it is small.
+- Another look at the same outcomes: the bomb and HF counts for 2004-2018 were already scored with the ERA5 index (PR 275 and `pattern_quintiles`). Log: `looks/basin_bomb_score.log`.
+
+Files: `forecast.py`, `results/forecast_tests.csv`.

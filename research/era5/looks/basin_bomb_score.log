@@ -1,1 +1,2 @@
 2026-10-19 BASIN_BOMB_SCORE (hf-low): weekly bomb counts (pipeline A proxy, 24 hPa/24 h Bergeron-scaled) against the PR 41 leave-one-season-out index, 22 seasons 2004..2025 incl. held-out 2015..2025. One look at S0, no refit; S1 refit nested leave-one-season-out. Plan 699bb6a.
+2026-10-19 BASIN_BOMB_SCORE forecast: GEFS-fed z+u index (gfs_test index_zu.csv) against weekly pipeline A bomb and HF counts, 15 seasons 2004..2018 (2015-18 the only seasons the frozen weights never saw). Plan 6e676f7.
