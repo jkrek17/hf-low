@@ -1,0 +1,107 @@
+{
+ "source": "research/era5 on claude/exciting-fermat-8vcvgq; index = frozen PR 41 model P z500 and u250 PC blocks (beta[8:18], beta[18:28]) on GEFS v12 control anomalies",
+ "basins": {
+  "atl": {
+   "beta_z": [
+    -0.031452,
+    0.048205,
+    0.015852,
+    0.01971,
+    -0.026829,
+    -0.007226,
+    0.002133,
+    -0.009004,
+    0.005312,
+    -0.015971
+   ],
+   "beta_u": [
+    0.02519,
+    0.005569,
+    -0.045114,
+    0.004733,
+    0.033935,
+    0.016468,
+    -0.010841,
+    -0.013034,
+    0.013893,
+    -0.015837
+   ],
+   "low_below": -0.09704577999999997,
+   "high_from": 0.12454880000000002,
+   "table": {
+    "low": {
+     "weeks": 90.0,
+     "hf_per_week": 1.056,
+     "bomb_per_week": 1.033,
+     "share_weeks_hf": 0.711,
+     "share_weeks_bomb": 0.667
+    },
+    "typical": {
+     "weeks": 270.0,
+     "hf_per_week": 1.448,
+     "bomb_per_week": 1.389,
+     "share_weeks_hf": 0.719,
+     "share_weeks_bomb": 0.77
+    },
+    "high": {
+     "weeks": 90.0,
+     "hf_per_week": 2.3,
+     "bomb_per_week": 1.811,
+     "share_weeks_hf": 0.878,
+     "share_weeks_bomb": 0.856
+    }
+   }
+  },
+  "pac": {
+   "beta_z": [
+    -0.039412,
+    -0.03988,
+    -0.027001,
+    -0.014916,
+    0.025186,
+    0.023828,
+    0.003139,
+    -0.015986,
+    -0.026113,
+    -0.028297
+   ],
+   "beta_u": [
+    0.022959,
+    -0.005031,
+    0.041873,
+    -0.068269,
+    -0.016567,
+    -0.029073,
+    -0.002615,
+    -0.009303,
+    -0.043284,
+    0.082964
+   ],
+   "low_below": -0.13532360000000002,
+   "high_from": 0.15806560000000006,
+   "table": {
+    "low": {
+     "weeks": 90.0,
+     "hf_per_week": 0.944,
+     "bomb_per_week": 1.622,
+     "share_weeks_hf": 0.6,
+     "share_weeks_bomb": 0.778
+    },
+    "typical": {
+     "weeks": 270.0,
+     "hf_per_week": 1.211,
+     "bomb_per_week": 1.667,
+     "share_weeks_hf": 0.67,
+     "share_weeks_bomb": 0.841
+    },
+    "high": {
+     "weeks": 90.0,
+     "hf_per_week": 1.756,
+     "bomb_per_week": 2.144,
+     "share_weeks_hf": 0.833,
+     "share_weeks_bomb": 0.967
+    }
+   }
+  }
+ }
+}

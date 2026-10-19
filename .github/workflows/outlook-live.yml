@@ -19,6 +19,11 @@
 # flat/outlook-live-blend.js (about 190 KB each). It waits (exit 0) until every source has its +96 h posted, which for the ECMWF ensembles is usually after the 06:10
 # job, so the 08:40 job normally fills it. The page uses the blend only when its run equals the gust run, so cycles never mix.
 #
+# Third layer (added 2026-10-19; Jason approved the note's mockup and tapped "Add it" on the decision card for this step): tools/pattern_loading.py pulls the GEFS control
+# 500 mb height and 250 mb wind for forecast days 1-7 (about 14 byte ranges, 3 MB) once a week, on the fixed dates 23 Sep + 7 days x k, scores the hemispheric pattern and writes
+# docs/pattern-loading-data.js and flat/pattern-loading-data.js (about 1 KB): the weekly "pattern loading" note on the page. On the other days it finds the cycle done and
+# exits. The step may fail without failing the job (continue-on-error), so a GEFS problem never blocks the daily map; the page hides the note when it is over 10 days old.
+#
 # Jason approved this unattended publish on 2026-10-14 ("build it with A") and the blend layer the same day ("yes"). To pause it: disable this workflow in the Actions tab.
 
 name: Outlook live (daily)
@@ -71,19 +76,27 @@ jobs:
           FORCE: ${{ inputs.force }}
         run: |
           if [ "$FORCE" = "true" ]; then python3 tools/outlook_blend_live.py --force; else python3 tools/outlook_blend_live.py; fi
+      - name: Weekly pattern loading note (GEFS control, days 1-7)
+        continue-on-error: true
+        run: python3 tools/pattern_loading.py
       - name: Commit to main and start the publish workflows
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           git config user.name "outlook-live-bot"
           git config user.email "outlook-live-bot@users.noreply.github.com"
-          git add docs/outlook-live-data.js flat/outlook-live-data.js docs/outlook-live-blend.js flat/outlook-live-blend.js
+          git add docs/outlook-live-data.js flat/outlook-live-data.js docs/outlook-live-blend.js flat/outlook-live-blend.js docs/pattern-loading-data.js flat/pattern-loading-data.js
           if git diff --cached --quiet; then
             echo "No new run; nothing to commit."
             exit 0
           fi
           run=$(grep -o '"run":"[0-9]*"' docs/outlook-live-data.js | grep -o '[0-9]\{10\}')
-          git commit -q -m "Outlook live: GFS run ${run} UTC" -m "Written by .github/workflows/outlook-live.yml (tools/outlook_live.py, tools/outlook_blend_live.py)."
+          if git diff --cached --name-only | grep -q 'outlook-live'; then
+            subject="Outlook live: GFS run ${run} UTC"
+          else
+            subject="Outlook live: pattern loading note, GEFS run $(grep -o '"run":"[0-9]*"' docs/pattern-loading-data.js | grep -o '[0-9]\{10\}') UTC"
+          fi
+          git commit -q -m "$subject" -m "Written by .github/workflows/outlook-live.yml (tools/outlook_live.py, tools/outlook_blend_live.py, tools/pattern_loading.py)."
           for attempt in 1 2 3 4; do
             if git push -q origin HEAD:main; then pushed=1; break; fi
             echo "Push rejected (main moved); rebasing and retrying."

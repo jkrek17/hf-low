@@ -22,7 +22,7 @@ def _unpack(bits, off, widths, n_each=None):
     return out, off + int(widths.sum())
 
 
-def decode_message(b):
+def decode_message(b, grid=(1440, 721)):
     assert b[:4] == b"GRIB" and b[7] == 2
     p = 16; sec = {}
     while b[p:p + 4] != b"7777":
@@ -30,7 +30,7 @@ def decode_message(b):
     s3, s5, s7 = sec[3], sec[5], sec[7]
     assert struct.unpack(">H", s3[12:14])[0] == 0, "grid template"
     ni, nj = struct.unpack(">II", s3[30:38]); scan = s3[71]
-    assert (ni, nj) == (1440, 721) and scan == 0, (ni, nj, scan)       # +i, -j: 90N to 90S, 0E eastwards
+    assert (ni, nj) == grid and scan == 0, (ni, nj, scan)       # +i, -j: 90N to 90S, 0E eastwards
     npts = struct.unpack(">I", s5[5:9])[0]; assert struct.unpack(">H", s5[9:11])[0] == 3, "packing template"
     R = struct.unpack(">f", s5[11:15])[0]; E = _smag(s5[15:17]); D = _smag(s5[17:19]); nb = s5[19]
     assert s5[22] == 0, "missing values present"
