@@ -1,0 +1,7 @@
+basin,cls,ratio,ratio_lo,ratio_hi,ratio_month_adj,adj_lo,adj_hi,p_one_sided,q,verdict
+atl,gale,0.883,0.777,1.015,0.895,0.794,1.025,0.945,0.945,can't tell
+atl,storm,1.089,1.0,1.203,1.067,0.973,1.167,0.071,0.143,can't tell
+atl,HF,2.193,1.754,2.857,2.093,1.754,2.597,0.0,0.001,separates
+pac,gale,0.953,0.847,1.058,0.968,0.863,1.074,0.736,0.883,can't tell
+pac,storm,1.09,0.972,1.233,1.051,0.96,1.142,0.133,0.2,can't tell
+pac,HF,2.124,1.599,2.932,1.974,1.537,2.602,0.0,0.001,separates
