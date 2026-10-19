@@ -1,0 +1,12 @@
+  basin                                                 test     est      lo      hi       p       q
+0   atl                        T1 month-adj top/bottom fifth  1.5993  1.4000  1.8548  0.0005  0.0010
+1   atl  T2 skill S0 (HF-trained index) over month+prev week  0.0205  0.0029  0.0355  0.0010  0.0013
+2   atl                             T3 skill S1 (bomb-refit)  0.0264 -0.0026  0.0537     NaN     NaN
+3   atl                                       T3 S1 minus S0  0.0059 -0.0205  0.0311     NaN     NaN
+4   atl               T4 skill S0 for HF counts (same weeks)  0.1061  0.0771  0.1294     NaN     NaN
+5   pac                        T1 month-adj top/bottom fifth  1.2214  1.0874  1.3851  0.0005  0.0010
+6   pac  T2 skill S0 (HF-trained index) over month+prev week  0.0108 -0.0008  0.0227  0.0020  0.0020
+7   pac                             T3 skill S1 (bomb-refit)  0.0063 -0.0180  0.0298     NaN     NaN
+8   pac                                       T3 S1 minus S0 -0.0046 -0.0233  0.0139     NaN     NaN
+9   pac               T4 skill S0 for HF counts (same weeks)  0.0454  0.0064  0.0769     NaN     NaN
+{"atl": {"bombs_per_week_by_fifth": [1.09, 1.33, 1.43, 1.32, 1.8], "share_weeks_with_bomb": [0.69, 0.77, 0.79, 0.73, 0.86], "total_bombs": 921, "ridge_chosen": {"300.0": 22}}, "pac": {"bombs_per_week_by_fifth": [1.58, 1.58, 1.6, 1.83, 2.02], "share_weeks_with_bomb": [0.81, 0.76, 0.86, 0.89, 0.91], "total_bombs": 1136, "ridge_chosen": {"300.0": 22}}}

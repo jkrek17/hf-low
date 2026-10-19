@@ -1,0 +1,11 @@
+basin,test,est,lo,hi,p,q
+atl,T1 month-adj top/bottom fifth,1.5993,1.4,1.8548,0.0005,0.001
+atl,T2 skill S0 (HF-trained index) over month+prev week,0.0205,0.0029,0.0355,0.001,0.0013
+atl,T3 skill S1 (bomb-refit),0.0264,-0.0026,0.0537,,
+atl,T3 S1 minus S0,0.0059,-0.0205,0.0311,,
+atl,T4 skill S0 for HF counts (same weeks),0.1061,0.0771,0.1294,,
+pac,T1 month-adj top/bottom fifth,1.2214,1.0874,1.3851,0.0005,0.001
+pac,T2 skill S0 (HF-trained index) over month+prev week,0.0108,-0.0008,0.0227,0.002,0.002
+pac,T3 skill S1 (bomb-refit),0.0063,-0.018,0.0298,,
+pac,T3 S1 minus S0,-0.0046,-0.0233,0.0139,,
+pac,T4 skill S0 for HF counts (same weeks),0.0454,0.0064,0.0769,,
