@@ -44,3 +44,9 @@ Nulls are full results. No threshold, bin edge or neighbourhood radius is tuned 
 
 ## Deviations
 - 2026-10-28 (before any score): Jason chose the trimmed pull on the decision card (~61 GB): ENS and AIFS ENS comparison at leads 48 and 96 h only, GEFS unchanged at 24/48/72/96. Members: ENS 51, AIFS ENS 51, GEFS 31. Run dates, counted from 15 Oct, give 37 per winter (222 GEFS runs, 888 steps). Cell maxima are taken over ocean points only (GFS LAND flag).
+- 2026-10-28 (before any score; pulls in progress, the code was tested only on planted synthetic data, `test_stats.py`):
+  1. COARE conversion dropped. `pycoare` is not installed here and installs are denied. ASCAT's stress-equivalent wind is compared with the models' actual 10 m wind as is. PR 271 found the conversion moved GFS-vs-ASCAT by about 1 % over five winters (reported there, not rechecked here), so the effect is expected to be small, but ASCAT-side readings are still stress-equivalent. Stated with every ASCAT number.
+  2. Calibration slope is fitted over member counts k >= 1 only (damped Newton on logit of k/N clipped to [0.5/N, 1 - 0.5/N]). The "none" bin (k = 0) is reported on its own. A first synthetic test showed that including k = 0 pushed the slope of a perfectly reliable forecast to 1.5. Groups with no events or all events get half an extra case each way.
+  3. OPC storm-or-stronger set for 48 kt = S, DS, DHF, HF (DS = developing storm); HF set for 64 kt = HF only. Malformed 11-character Pacific date row dropped.
+  4. OPC neighbourhood centres: every 3rd 1 degree ocean cell (ocean = at least 8 of 16 sub-cells), radius 600 km (about 324 nm).
+  5. Rain: scatterometer rain flag dropped as in the ASCAT check; ASCAT cells need at least half of their ocean sub-cells observed in +-3 h.

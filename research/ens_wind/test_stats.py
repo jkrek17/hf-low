@@ -18,7 +18,7 @@ over = make(N, lambda f: np.clip(0.02 + 0.5 * f, 0.002, 1))   # overconfident: h
 r1 = S.summarize(*rel, N, nboot=400); r2 = S.summarize(*over, N, nboot=400)
 print("reliable slope %.2f %s p=%.3f gain %.4f" % (r1["slope"], r1["slope_ci"], r1["p_overconf"], r1["cal_gain"]))
 print("overconf slope %.2f %s p=%.3f gain %.4f %s" % (r2["slope"], r2["slope_ci"], r2["p_overconf"], r2["cal_gain"], r2["cal_gain_ci"]))
-assert r1["slope"] > 0.85 and r1["p_overconf"] > 0.05
+assert 0.85 < r1["slope"] < 1.15 and r1["p_overconf"] > 0.05
 assert r2["slope"] < 0.7 and r2["p_overconf"] < 0.05 and r2["cal_gain"] > 0 and r2["cal_gain_ci"][0] > 0
 assert S.bh([0.001, 0.2, 0.9]) == [True, False, False]
 n = np.array([5, 5, 5]); y = np.array([3, 1, 2]); assert np.all(np.diff(S.iso_fit(n, y)) >= 0)

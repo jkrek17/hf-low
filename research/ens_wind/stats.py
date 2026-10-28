@@ -51,19 +51,25 @@ def iso_fit(n, y):
 
 
 def slope(n, y, N, it=50):
-    """logistic y ~ a + b*logit(clip(k/N, 0.5/N, 1-0.5/N)) by weighted IRLS; returns (a, b) or (nan, nan)"""
+    """logistic y ~ a + b*logit(clip(k/N, 0.5/N, 1-0.5/N)) over k >= 1 by damped weighted Newton; returns (a, b) or (nan, nan)"""
     k = np.arange(N + 1); f = np.clip(k / N, 0.5 / N, 1 - 0.5 / N); x = np.log(f / (1 - f))
-    m = n > 0
-    if y.sum() == 0 or y.sum() == n.sum(): return np.nan, np.nan
-    nn = n[m].astype(float) + 1.0; yy = y[m].astype(float) + 0.5      # half an event and half a non-event per group: keeps separated groups finite
+    m = (n > 0) & (k >= 1)       # only cases where at least one member reaches it; the none bin is reported on its own
+    if y[m].sum() == 0 or y[m].sum() == n[m].sum(): return np.nan, np.nan
+    nn = n[m].astype(float); yy = y[m].astype(float)
+    sep = (yy == 0) | (yy == nn); nn = nn + sep; yy = yy + 0.5 * sep          # groups with no events or all events get half an extra case each way, so the fit stays finite
     X = np.column_stack([np.ones(m.sum()), x[m]])
-    beta = np.array([np.log(yy.sum() / (nn.sum() - yy.sum())), 0.0])
+    def dev(be):
+        e = np.clip(X @ be, -30, 30); mu = 1 / (1 + np.exp(-e))
+        return -2 * float((yy * np.log(mu + 1e-12) + (nn - yy) * np.log(1 - mu + 1e-12)).sum())
+    beta = np.array([0.0, 1.0]); d0 = dev(beta)               # start at "the fraction is the chance"; damped Newton
     for _ in range(it):
         eta = X @ beta; mu = 1 / (1 + np.exp(-np.clip(eta, -30, 30))); W = nn * mu * (1 - mu) + 1e-9
-        z = eta + (yy - nn * mu) / W
-        nb = np.linalg.solve(X.T @ (W[:, None] * X) + 1e-9 * np.eye(2), X.T @ (W * z))
-        if np.max(np.abs(nb - beta)) < 1e-8: beta = nb; break
-        beta = nb
+        g = X.T @ (yy - nn * mu); H = X.T @ (W[:, None] * X) + 1e-9 * np.eye(2)
+        step = np.linalg.solve(H, g); t = 1.0
+        while t > 1e-6 and dev(beta + t * step) > d0 + 1e-9: t /= 2
+        nb = beta + t * step
+        if np.max(np.abs(nb - beta)) < 1e-9: beta = nb; break
+        beta = nb; d0 = dev(beta)
     return float(beta[0]), float(beta[1])
 
 
