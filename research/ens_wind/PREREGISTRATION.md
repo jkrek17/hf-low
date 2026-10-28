@@ -43,4 +43,4 @@ Nulls are full results. No threshold, bin edge or neighbourhood radius is tuned 
 - Marine wind project (GFE blend) numbers (about 15 % of ASCAT 48 kt+ peaks at about 4 % false alarm; 64 kt nothing skilful) are reported there, not rechecked here.
 
 ## Deviations
-(none yet)
+- 2026-10-28 (before any score): Jason chose the trimmed pull on the decision card (~61 GB): ENS and AIFS ENS comparison at leads 48 and 96 h only, GEFS unchanged at 24/48/72/96. Members: ENS 51, AIFS ENS 51, GEFS 31. Run dates, counted from 15 Oct, give 37 per winter (222 GEFS runs, 888 steps). Cell maxima are taken over ocean points only (GFS LAND flag).
