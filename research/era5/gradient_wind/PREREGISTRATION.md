@@ -57,3 +57,6 @@ ASCAT S1: for ASCAT cells in the same region within 1.5 h of a 00/12 UTC time, t
 ## Changes after seeing results
 
 Any change is logged below as a post-hoc deviation with the date and what had been seen.
+
+- 2026-10-28, after the main tables and tests were read: P2b (core vs non-core within gradient bins, because the pooled P2 was mostly the mix of bins), P1b (bins 6-8, 8-10) and P1c (bins 2-4, 4-6, because the table showed the biggest stability differences there), and the single-bin 30-37.5N 8-10 core comparison are post hoc. The registered P2 and P1 are kept.
+- 2026-10-28: the ASCAT table also shows bins above the 45 kt ceiling, for context; the plan restricted it.

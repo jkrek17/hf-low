@@ -32,3 +32,5 @@ The size of |Va| by gradient bin, how often it is more than 5 kt, and the share 
 ## Changes after seeing results
 
 Logged below as post hoc.
+
+- 2026-10-28: the GFS wind >= 25 kt subset for I2 was added after the primary run; secondary.

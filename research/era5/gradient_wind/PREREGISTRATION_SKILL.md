@@ -36,3 +36,5 @@ Leave-one-winter-out: fit on three winters, score on the fourth, pool the four. 
 ## Changes after seeing results
 
 Logged below as post hoc, with the date.
+
+- 2026-10-28: none planned; the GFS wind >= 25 kt and >= 35 kt subsets and M1q/M2 are secondary (M1q and M2 were planned as secondary models; the subset splits were added after the primary run and are labelled secondary).
