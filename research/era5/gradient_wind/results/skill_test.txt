@@ -1,0 +1,16 @@
+box-passes 407221, winters [np.int64(2021), np.int64(2022), np.int64(2023), np.int64(2024)], days 848; GFS wind >=25 kt: 56486, >=35 kt: 6267
+T1 all                           M1  vs M0: skill +15.04% (+13.53 to +16.45) RMSE 3.10 -> 2.86 kt, n 407221, by winter 2021:+14.0%, 2022:+16.6%, 2023:+15.9%, 2024:+13.7%
+T1 all                           M1q vs M0: skill +19.92% (+18.71 to +21.08) RMSE 3.10 -> 2.77 kt, n 407221, by winter 2021:+20.4%, 2022:+21.3%, 2023:+20.6%, 2024:+17.2%
+T1 all                           M2  vs M0: skill +19.66% (+17.99 to +21.04) RMSE 3.10 -> 2.78 kt, n 407221, by winter 2021:+16.8%, 2022:+22.0%, 2023:+20.0%, 2024:+20.1%
+T1 all                           M3  vs M0: skill -99.75% (-112.89 to -89.25) RMSE 3.10 -> 4.38 kt, n 407221, by winter 2021:-108.2%, 2022:-85.2%, 2023:-94.4%, 2024:-111.6%
+T2 GFS wind >= 25 kt             M1  vs M0: skill  -2.29% (-8.32 to +2.63) RMSE 3.83 -> 3.88 kt, n 56486, by winter 2021:-12.2%, 2022:+5.6%, 2023:-0.9%, 2024:-2.0%
+T2 GFS wind >= 25 kt             M1q vs M0: skill  +5.38% (+3.26 to +7.26) RMSE 3.83 -> 3.73 kt, n 56486, by winter 2021:+2.2%, 2022:+8.2%, 2023:+6.4%, 2024:+4.6%
+T2 GFS wind >= 25 kt             M2  vs M0: skill  +6.56% (+0.06 to +11.81) RMSE 3.83 -> 3.70 kt, n 56486, by winter 2021:-6.6%, 2022:+15.5%, 2023:+5.5%, 2024:+11.6%
+T2 GFS wind >= 25 kt             M3  vs M0: skill -245.80% (-295.91 to -204.78) RMSE 3.83 -> 7.13 kt, n 56486, by winter 2021:-323.8%, 2022:-211.4%, 2023:-203.0%, 2024:-249.1%
+GFS wind >= 35 kt (secondary)    M1  vs M0: skill -21.85% (-44.11 to -5.18) RMSE 5.62 -> 6.21 kt, n 6267, by winter 2021:-57.2%, 2022:+5.3%, 2023:-21.4%, 2024:-12.8%
+GFS wind >= 35 kt (secondary)    M1q vs M0: skill  -2.53% (-8.25 to +1.81) RMSE 5.62 -> 5.69 kt, n 6267, by winter 2021:-15.0%, 2022:+2.8%, 2023:+0.4%, 2024:+2.1%
+GFS wind >= 35 kt (secondary)    M2  vs M0: skill -15.69% (-41.66 to +3.08) RMSE 5.62 -> 6.05 kt, n 6267, by winter 2021:-62.2%, 2022:+16.1%, 2023:-17.2%, 2024:+2.8%
+GFS wind >= 35 kt (secondary)    M3  vs M0: skill -328.97% (-526.82 to -193.19) RMSE 5.62 -> 11.64 kt, n 6267, by winter 2021:-596.1%, 2022:-186.7%, 2023:-225.4%, 2024:-308.9%
+BH over T1, T2: p 0.0005, 0.4180; q 0.0010, 0.4180
+Baseline M0 coefficients (fit on all four winters): [2.537 0.88 ]
+M1 coefficients (all four winters): [2.723 0.686 0.149]
