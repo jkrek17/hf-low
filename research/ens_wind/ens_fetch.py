@@ -9,7 +9,7 @@ import numpy as np, requests
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 import grib2_t53 as T53, grib2_ccsds as CC
 
-WORK = os.environ.get("ENS_WORK", "/tmp/ens_work")
+WORK = os.environ.get("ENS_WORK", os.path.join(HERE, "..", "..", "work", "ens_wind"))
 KT = 1.943844
 GFS = "https://noaa-gfs-bdp-pds.s3.amazonaws.com"
 GEFS = "https://noaa-gefs-pds.s3.amazonaws.com"

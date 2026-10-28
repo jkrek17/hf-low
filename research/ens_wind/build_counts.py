@@ -70,12 +70,13 @@ def build(model, seasons, leads, fixes):
         for ymd in F.run_dates(season):
             run = dt.datetime.strptime(ymd, "%Y%m%d")
             for lead in leads:
+                shift = dt.timedelta(days=int(os.environ.get("PLACEBO_DAYS", "0")))      # placebo: truth taken from another date; 0 in all real runs
                 p = os.path.join(F.WORK, model, "%s_%03d.npz" % (ymd, lead))
                 if not os.path.exists(p): continue
                 z = np.load(p); V = run + dt.timedelta(hours=lead)
-                tz = os.path.join(F.WORK, "ascat", V.strftime("%Y%m%d") + ".npz")
+                tz = os.path.join(F.WORK, "ascat", (V + shift).strftime("%Y%m%d") + ".npz")
                 a = np.load(tz) if os.path.exists(tz) else None
-                fx = fixes[(fixes.t >= V - dt.timedelta(hours=6)) & (fixes.t <= V + dt.timedelta(hours=6))]
+                fx = fixes[(fixes.t >= V + shift - dt.timedelta(hours=6)) & (fixes.t <= V + shift + dt.timedelta(hours=6))]
                 for basin in F.BOX:
                     m = z[basin]; N = m.shape[0]
                     # truth 1

@@ -1,0 +1,32 @@
+natl 48kt ascat 48h: runs 37, cases 53,773, events 997 | GEFS BSS +0.429 (+0.303 to +0.520); ENS BSS +0.406 (+0.310 to +0.471); AIFS ENS BSS +0.096 (+0.027 to +0.148) | ENS minus GEFS -0.024 (-0.078 to +0.045); AIFS ENS minus GEFS -0.333 (-0.401 to -0.245); AIFS ENS minus ENS -0.309 (-0.351 to -0.254)
+    GEFS rate by bin: 51154:0.2%, 1454:13.8%, 566:37.6%, 330:65.8%, 269:93.3%
+    ENS rate by bin: 50426:0.1%, 2169:9.5%, 712:45.4%, 359:85.8%, 107:97.2%
+    AIFS ENS rate by bin: 53270:1.2%, 317:65.6%, 94:86.2%, 56:94.6%, 36:100.0%
+natl 48kt ascat 96h: runs 37, cases 51,670, events 658 | GEFS BSS +0.187 (+0.088 to +0.268); ENS BSS +0.188 (+0.118 to +0.245); AIFS ENS BSS +0.023 (+0.004 to +0.040) | ENS minus GEFS +0.002 (-0.061 to +0.069); AIFS ENS minus GEFS -0.164 (-0.240 to -0.074); AIFS ENS minus ENS -0.165 (-0.212 to -0.107)
+    GEFS rate by bin: 48031:0.4%, 3001:6.7%, 445:29.0%, 175:64.0%, 18:94.4%
+    ENS rate by bin: 47053:0.2%, 4069:7.0%, 463:47.3%, 78:79.5%, 7:100.0%
+    AIFS ENS rate by bin: 51198:0.9%, 436:42.4%, 34:88.2%, 2:50.0%, 0:nan%
+natl 64kt opc 48h: runs 37, cases 11,396, events 330 | GEFS BSS +0.271 (+0.135 to +0.447); ENS BSS +0.201 (+0.093 to +0.317); AIFS ENS BSS -0.030 (-0.041 to +0.001) | ENS minus GEFS -0.070 (-0.190 to +0.020); AIFS ENS minus GEFS -0.301 (-0.468 to -0.162); AIFS ENS minus ENS -0.231 (-0.341 to -0.110)
+    GEFS rate by bin: 10856:0.7%, 298:30.5%, 112:68.8%, 52:48.1%, 78:80.8%
+    ENS rate by bin: 10595:0.6%, 540:20.4%, 168:56.0%, 69:68.1%, 24:62.5%
+    AIFS ENS rate by bin: 11396:2.9%, 0:nan%, 0:nan%, 0:nan%, 0:nan%
+natl 64kt opc 96h: runs 37, cases 11,396, events 241 | GEFS BSS +0.145 (+0.050 to +0.247); ENS BSS +0.137 (+0.050 to +0.227); AIFS ENS BSS -0.022 (-0.029 to -0.004) | ENS minus GEFS -0.008 (-0.050 to +0.028); AIFS ENS minus GEFS -0.167 (-0.266 to -0.065); AIFS ENS minus ENS -0.159 (-0.247 to -0.062)
+    GEFS rate by bin: 10797:0.8%, 465:18.1%, 95:41.1%, 39:84.6%, 0:nan%
+    ENS rate by bin: 10500:0.7%, 758:12.4%, 94:40.4%, 44:79.5%, 0:nan%
+    AIFS ENS rate by bin: 11396:2.1%, 0:nan%, 0:nan%, 0:nan%, 0:nan%
+npac 48kt ascat 48h: runs 37, cases 46,034, events 250 | GEFS BSS +0.220 (+0.106 to +0.327); ENS BSS +0.197 (+0.113 to +0.269); AIFS ENS BSS +0.031 (+0.005 to +0.059) | ENS minus GEFS -0.023 (-0.082 to +0.051); AIFS ENS minus GEFS -0.188 (-0.268 to -0.095); AIFS ENS minus ENS -0.165 (-0.215 to -0.098)
+    GEFS rate by bin: 44551:0.1%, 990:6.5%, 321:21.2%, 128:36.7%, 44:65.9%
+    ENS rate by bin: 44046:0.1%, 1616:5.8%, 319:29.5%, 50:64.0%, 3:0.0%
+    AIFS ENS rate by bin: 45872:0.4%, 150:44.7%, 12:100.0%, 0:nan%, 0:nan%
+npac 48kt ascat 96h: runs 37, cases 45,482, events 561 | GEFS BSS +0.249 (+0.143 to +0.335); ENS BSS +0.204 (+0.125 to +0.294); AIFS ENS BSS +0.030 (+0.007 to +0.060) | ENS minus GEFS -0.045 (-0.123 to +0.026); AIFS ENS minus GEFS -0.219 (-0.293 to -0.130); AIFS ENS minus ENS -0.175 (-0.270 to -0.089)
+    GEFS rate by bin: 42586:0.2%, 2125:8.0%, 605:32.2%, 149:67.8%, 17:100.0%
+    ENS rate by bin: 41954:0.1%, 3032:8.2%, 430:47.9%, 64:92.2%, 2:100.0%
+    AIFS ENS rate by bin: 44955:0.8%, 495:38.8%, 29:82.8%, 3:100.0%, 0:nan%
+npac 64kt opc 48h: runs 37, cases 14,023, events 180 | GEFS BSS +0.284 (+0.099 to +0.451); ENS BSS +0.237 (+0.109 to +0.384); AIFS ENS BSS -0.013 (-0.018 to +0.005) | ENS minus GEFS -0.047 (-0.126 to +0.066); AIFS ENS minus GEFS -0.297 (-0.462 to -0.102); AIFS ENS minus ENS -0.250 (-0.392 to -0.120)
+    GEFS rate by bin: 13716:0.4%, 141:16.3%, 120:49.2%, 33:93.9%, 13:84.6%
+    ENS rate by bin: 13265:0.3%, 590:9.3%, 117:35.9%, 30:70.0%, 21:85.7%
+    AIFS ENS rate by bin: 14023:1.3%, 0:nan%, 0:nan%, 0:nan%, 0:nan%
+npac 64kt opc 96h: runs 37, cases 14,023, events 147 | GEFS BSS +0.171 (+0.060 to +0.294); ENS BSS +0.176 (+0.081 to +0.276); AIFS ENS BSS -0.011 (-0.015 to +0.004) | ENS minus GEFS +0.005 (-0.133 to +0.117); AIFS ENS minus GEFS -0.182 (-0.301 to -0.070); AIFS ENS minus ENS -0.187 (-0.282 to -0.090)
+    GEFS rate by bin: 13615:0.3%, 315:17.5%, 63:49.2%, 30:66.7%, 0:nan%
+    ENS rate by bin: 13099:0.2%, 829:8.0%, 75:61.3%, 20:65.0%, 0:nan%
+    AIFS ENS rate by bin: 14023:1.0%, 0:nan%, 0:nan%, 0:nan%, 0:nan%

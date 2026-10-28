@@ -1,0 +1,31 @@
+GEFS (31 members): chance that the event happened, by number of members reaching the threshold.
+Isotonic fit on all six winters (2020-21 to 2025-26), 00 UTC runs every 5th day. 48 kt = ASCAT saw 48 kt or more in that 1-degree cell (ASCAT-seen only). 64 kt = OPC had a hurricane-force low within 324 nm (a neighbourhood chance, not a point chance).
+Cells with fewer than about 30 cases at a member count are interpolated; read neighbours, not single entries.
+
+Atlantic, 48 kt, members reaching it -> percent chance
+lead      1    2    3    4    6    8   10   13   16   20   25   31
+ 24 h     8   13   19   26   37   42   52   64   75   84   89   99
+ 48 h     6   13   18   22   35   44   51   62   65   82   95  100
+ 72 h     5   12   17   20   32   42   56   58   64   79   84  100
+ 96 h     5   11   15   21   30   41   47   56   68   77   77  100
+
+Pacific, 48 kt, members reaching it -> percent chance
+lead      1    2    3    4    6    8   10   13   16   20   25   31
+ 24 h     6   11   15   19   29   38   50   54   62   69   83   95
+ 48 h     4    9   15   21   29   40   46   56   63   74   89  100
+ 72 h     4    9   13   18   28   32   42   55   69   81   93  100
+ 96 h     4    7   11   17   24   31   41   52   57   80  100  100
+
+Atlantic, 64 kt, members reaching it -> percent chance
+lead      1    2    3    4    6    8   10   13   16   20   25   31
+ 24 h    14   25   25   45   50   50   57   71   71   72   79  100
+ 48 h    10   24   27   38   46   53   53   66   66   69   72   95
+ 72 h    11   26   34   38   56   56   56   56   65   79   91   91
+ 96 h     8   18   22   22   36   41   75   75   75   96   96  100
+
+Pacific, 64 kt, members reaching it -> percent chance
+lead      1    2    3    4    6    8   10   13   16   20   25   31
+ 24 h    13   17   17   48   48   68   68   68   72   78   83   90
+ 48 h    11   17   24   42   47   53   56   56   61   61   91   91
+ 72 h    10   16   22   39   53   53   67   74   94   94  100  100
+ 96 h     9   14   19   28   33   42   42   42   42   42   42  100
