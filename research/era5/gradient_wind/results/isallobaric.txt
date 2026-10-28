@@ -1,0 +1,13 @@
+I1/I3 sample: 638784 cell-times with tendency, 21 winters
+  grad 0-2: |Va| median 2.34 kt, p90 5.40, >5 kt 12.6%, along-geostrophic component median +0.64 kt (p10 -1.96, p90 +3.43), n 348287
+  grad 2-4: |Va| median 3.00 kt, p90 6.54, >5 kt 21.5%, along-geostrophic component median +1.06 kt (p10 -1.80, p90 +4.44), n 219251
+  grad 4-6: |Va| median 4.04 kt, p90 7.94, >5 kt 35.9%, along-geostrophic component median +1.68 kt (p10 -2.36, p90 +5.63), n 53718
+  grad 6-8: |Va| median 5.13 kt, p90 9.63, >5 kt 51.7%, along-geostrophic component median +2.03 kt (p10 -4.78, p90 +6.80), n 12257
+  grad 8-10: |Va| median 6.18 kt, p90 11.88, >5 kt 64.6%, along-geostrophic component median +1.30 kt (p10 -7.81, p90 +7.76), n 3205
+  grad 10-12: |Va| median 7.72 kt, p90 14.92, >5 kt 76.0%, along-geostrophic component median -1.23 kt (p10 -10.75, p90 +8.72), n 1066
+  grad 12-+: |Va| median 10.31 kt, p90 21.66, >5 kt 86.6%, along-geostrophic component median -2.87 kt (p10 -14.51, p90 +11.70), n 1000
+I1 Spearman(gust, S) minus Spearman(gust, |Vg|), grad>=4: +0.0271 (95% +0.0236 to +0.0304), n 71246, 21 winters, p 0.0000
+I3 falling (<= -1 hPa/12 h) minus rising (>= +1), median gust/G at grad 6-10: -0.038 (95% -0.050 to -0.027), 21 winters, p 0.0000; n falling 8672, rising 5335
+I2 all: adding S instead of |Vg| to GFS wind: skill +0.92% (95% +0.51 to +1.31), RMSE 2.857 -> 2.844 kt, n 405230, by winter 2021:+1.2%, 2022:+1.2%, 2023:+1.4%, 2024:-0.2%
+I2 GFS wind >= 25 kt (secondary): adding S instead of |Vg| to GFS wind: skill -0.34% (95% -1.25 to +0.65), RMSE 3.875 -> 3.881 kt, n 56373, by winter 2021:-0.5%, 2022:-0.5%, 2023:+1.8%, 2024:-2.2%
+BH over I1, I2, I3: p 0.0005, 0.0005, 0.0005; q 0.0005, 0.0005, 0.0005
