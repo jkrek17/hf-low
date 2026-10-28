@@ -42,13 +42,13 @@ Classes of sea-minus-air difference are below 0 C, 0 to below 6 C, and 6 C or mo
 | P2 non-core minus core, gust/geostrophic, gradient 6 and over | +0.107 (+0.096 to +0.120), 21 winters, q below 0.001 | direction as expected, but the pooled statistic is mostly the mix of gradient bins (core cells sit at tighter gradients, where the ratio is smaller); see P2b |
 | P3 curvature: Spearman(gust, gradient wind) minus Spearman(gust, geostrophic), core, gradient 4 and over | -0.058 (-0.078 to -0.039), 9,472 cell-times, 21 winters, q 0.0008 | **opposite sign**: the curvature-corrected wind tracks the gust less well than the plain geostrophic wind. Not a "yes" |
 
-- P3 reasons (not tested): the isobar curvature is computed from ERA5 pressure smoothed over 1 degree and its error is large where the gradient is small, and 3.9% of core cells with gradient 4 and over have no real gradient-wind root and are dropped (6.3% of non-core cells). **The curvature correction is not recommended for a forecaster rule on this evidence.**
+- P3 reasons (not tested): the isobar curvature is computed from ERA5 pressure smoothed over 1 degree and its error is large where the gradient is small, and 3.9% of core cells with gradient 4 and over have no real gradient-wind root and are dropped (6.3% of non-core cells). The verifier found 93% of the no-root cells have a negative discriminant, that is, strongly anticyclonic isobar curvature, not grid-edge failures. **The curvature correction is not recommended for a forecaster rule on this evidence.**
 - Multiplicity: the three planned tests are corrected together (Benjamini-Hochberg); the descriptive tables are not tests.
 
 ## Post hoc (added after the pooled P2 was read; labelled)
 
 - P2b: non-core minus core within gradient bins 6-8, 8-10, 10-12, 12 and over, averaged: +0.045 (+0.035 to +0.054), 21 winters. This replaces P2 as the number to quote for the core effect, and P2 is kept as registered.
-- P1b: strongly unstable minus stable averaged over bins 6-8 and 8-10: +0.022 (-0.003 to +0.044), 12 winters. P1c (bins 2-4 and 4-6, where the table shows the biggest differences): +0.245 (+0.224 to +0.266). The registered range (6-10) was chosen for the gradients where the Gulf Stream work looked; the bigger effect at weak gradients was not registered.
+- P1b: strongly unstable minus stable averaged over bins 6-8 and 8-10: about +0.01 to +0.02 depending on the minimum points per winter and bin (the verifier got +0.012 to +0.018; my first run gave +0.022), interval includes 0, 12 winters. P1c (bins 2-4 and 4-6, where the table shows the biggest differences): +0.245 (+0.224 to +0.266). The registered range (6-10) was chosen for the gradients where the Gulf Stream work looked; the bigger effect at weak gradients was not registered.
 
 ## Satellite check (secondary, ASCAT, labelled; `results/ascat_s1.txt`)
 
@@ -75,6 +75,20 @@ For a sustained-wind rule of thumb in this region: roughly two-thirds of the geo
 - Stability uses ERA5 sea-surface and 2 m air temperature from 2013-14 on only.
 - The registered gradient-wind (curvature) estimate failed its test; do not use it.
 
+## Does it add skill to the GFS forecast? (`PREREGISTRATION_SKILL.md`, `skill_test.py`, `results/skill_test.txt`)
+
+ASCAT wind against GFS 24 h 10 m wind, leave-one-winter-out, 407,221 box-passes, 4 winters (2021-22 to 2024-25), wind below about 45 kt. Adding the ERA5 gradient wind to the GFS wind cuts squared error 15.0% (13.5 to 16.5; RMSE 3.10 to 2.86 kt; all four winters). At GFS wind of 25 kt or more: -2.3% (-8.3 to +2.6), cannot tell; at 35 kt or more the straight-line add was worse (-21.9%). Unplanned lead: a curved fit at 25 kt or more, +5.4% (+3.3 to +7.3), four of four winters.
+
+**Do not read the 15% as forecast skill.** The gradient used is the ERA5 *analysis* at the valid time, which a forecaster does not have 24 h ahead, so most of the gain is the model's position and intensity error being corrected by the true pressure field. With GFS's own forecast pressure the gain should be about zero by construction (not tested; GFS pressure is not cached). The gradient helps only as an independent measurement, such as an observed surface analysis, buoy or ship pressure pair, or nowcast, set against the model wind.
+
+## Isallobaric wind (`PREREGISTRATION_ISALLOBARIC.md`, `isallobaric.py`, `results/isallobaric.txt`)
+
+The wind toward falling pressure, from the 12 h pressure tendency (24 h centred difference, 1-degree smoothing). Median size by gradient (hPa per 100 nm): 2.3 kt under 2, 3.0 at 2-4, 4.0 at 4-6, 5.1 at 6-8, 6.2 at 8-10, 7.7 at 10-12, 10.3 at 12 and over; share above 5 kt 52% at 6-8 and 87% at 12 and over. Its part along the geostrophic wind runs from about -14.5 to +11.7 kt (middle 80%) at 12 and over, so it adds to or takes from the speed.
+- I1: the corrected speed |Vg + Va| ranks gust better than |Vg|: Spearman +0.0271 (+0.0236 to +0.0304), 21 winters (meaningful size 0.01): yes.
+- I2: adding it to the GFS baseline against adding |Vg|: +0.92% (+0.51 to +1.31) squared error, below the 2% bar: no for forecast use; -0.34% (-1.25 to +0.65) at GFS wind of 25 kt or more, cannot tell. Three of four winters gain.
+- I3: at 6-10 hPa per 100 nm the gust-to-geostrophic ratio is lower where pressure falls by 1 hPa per 12 h or faster than where it rises by 1 or more: -0.038 (-0.050 to -0.027). Two-sided test, opposite to "falling pressure is windier". A possible reason, not tested: rising pressure sits behind the low in colder, unstable air.
+- Quasi-geostrophic form only (no friction or curvature). All of this is ERA5 and the 12-hourly sample.
+
 ## Checks
 
-A fresh agent recomputed the tables, bootstrap intervals, P1, P2, P2b, the spot-checked gradients (within 0.3%, a length-convention difference), the gust match (exact) and the ASCAT table from the raw files; all matched (ASCAT within a few cells). Not rechecked independently: P3, P1b, P1c, the no-real-root shares, and the 8-10 core/non-core intervals. The verifier also caught five wording errors, fixed here.
+A fresh agent recomputed the tables, bootstrap intervals, P1, P2, P2b, the spot-checked gradients (within 0.3%, a length-convention difference), the gust match (exact) and the ASCAT table from the raw files; all matched (ASCAT within a few cells). A second fresh agent rechecked the skill test, the isallobaric tests, P3 (-0.0581), the no-root shares (3.9% core, 6.3% non-core), P1c and the 8-10 core/non-core intervals: all matched, except P1b (restated above). It used the stored core flag, so core membership was not recomputed from raw pressure. The first verifier also caught five wording errors, fixed here.
