@@ -71,3 +71,6 @@ research/era5/storm_patch_analogs/gfs/work/
 research/era5/goa_jets/work/
 research/era5/gulf_stream/work/
 research/era5/gulf_stream_region/work/
+
+# Scratch for pulls and count tables (research/ens_wind)
+work/
