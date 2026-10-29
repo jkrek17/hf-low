@@ -21,7 +21,7 @@ def build(fixes, season=2025, leads=(24, 48, 72, 96)):
         for lead in leads:
             pg = os.path.join(F.WORK, "gefs", "%s_%03d.npz" % (ymd, lead)); pe = os.path.join(F.WORK, "ens", "%s_%03d.npz" % (ymd, lead))
             if not (os.path.exists(pg) and os.path.exists(pe)): continue
-            zg, ze = np.load(pg), np.load(pe); V = run + dt.timedelta(hours=lead)
+            zg, ze = np.load(pg), np.load(pe); V = run + dt.timedelta(hours=lead) + dt.timedelta(days=int(os.environ.get('PLACEBO_DAYS', '0')))   # truth date; shifted only in the placebo run
             tz = os.path.join(F.WORK, "ascat", V.strftime("%Y%m%d") + ".npz"); a = np.load(tz) if os.path.exists(tz) else None
             fx = fixes[(fixes.t >= V - dt.timedelta(hours=6)) & (fixes.t <= V + dt.timedelta(hours=6))]
             for basin in F.BOX:
