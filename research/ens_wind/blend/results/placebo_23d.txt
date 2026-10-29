@@ -1,0 +1,20 @@
+cells scored 14 of 16; skipped (fewer than 30 events): [('natl_48_ascat_48', 0), ('npac_48_ascat_48', 0)]
+PRIMARY mean BSS blend minus gefs: +0.3254 (95% +0.2372 to +17.0934)   RULE: blend beats GEFS alone
+SECONDARY mean BSS blend_half minus gefs: +0.2380 (95% +0.1744 to +11.8182)
+SECONDARY mean BSS blend_vs_recal_base minus gefs_recal: -0.0012 (95% -0.0074 to +0.0009)
+natl_48_ascat_24: cases 44,777 events 653 | BSS gefs -0.468 ens-blend -0.002 half -0.119 gefs-recal -0.002 blend-on-recal -0.002 | blend minus gefs +0.466 (+0.219 to +0.904) p=0.000 BH=True | fitted w by held-out week: median 0.0, range 0.0-0.0
+natl_48_ascat_72: cases 44,599 events 844 | BSS gefs -0.295 ens-blend -0.003 half -0.075 gefs-recal -0.007 blend-on-recal -0.007 | blend minus gefs +0.292 (+0.082 to +0.734) p=0.000 BH=True | fitted w by held-out week: median 0.0, range 0.0-0.0
+natl_48_ascat_96: cases 44,791 events 920 | BSS gefs -0.069 ens-blend -0.005 half -0.020 gefs-recal -0.003 blend-on-recal -0.004 | blend minus gefs +0.064 (+0.028 to +0.112) p=0.000 BH=True | fitted w by held-out week: median 0.0, range 0.0-0.0
+natl_64_opc_24: cases 12,036 events 227 | BSS gefs -0.424 ens-blend -0.007 half -0.127 gefs-recal -0.002 blend-on-recal -0.002 | blend minus gefs +0.416 (+0.163 to +0.915) p=0.000 BH=True | fitted w by held-out week: median 0.0, range 0.0-0.0
+natl_64_opc_48: cases 17,316 events 364 | BSS gefs -0.225 ens-blend -0.012 half -0.054 gefs-recal -0.010 blend-on-recal -0.013 | blend minus gefs +0.213 (+0.038 to +0.535) p=0.006 BH=True | fitted w by held-out week: median 0.0, range 0.0-0.1
+natl_64_opc_72: cases 12,196 events 276 | BSS gefs -0.400 ens-blend -0.008 half -0.106 gefs-recal -0.008 blend-on-recal -0.008 | blend minus gefs +0.392 (+0.132 to +0.881) p=0.000 BH=True | fitted w by held-out week: median 0.0, range 0.0-0.0
+natl_64_opc_96: cases 12,196 events 303 | BSS gefs -0.132 ens-blend -0.009 half -0.049 gefs-recal -0.008 blend-on-recal -0.011 | blend minus gefs +0.122 (+0.043 to +0.211) p=0.002 BH=True | fitted w by held-out week: median 0.0, range 0.0-0.0
+npac_48_ascat_24: cases 39,637 events 514 | BSS gefs -0.304 ens-blend -0.003 half -0.085 gefs-recal -0.001 blend-on-recal -0.001 | blend minus gefs +0.301 (+0.132 to +0.652) p=0.000 BH=True | fitted w by held-out week: median 0.0, range 0.0-0.0
+npac_48_ascat_72: cases 38,236 events 411 | BSS gefs -0.166 ens-blend -0.004 half -0.046 gefs-recal -0.004 blend-on-recal -0.004 | blend minus gefs +0.162 (+0.066 to +0.412) p=0.000 BH=True | fitted w by held-out week: median 0.0, range 0.0-0.0
+npac_48_ascat_96: cases 38,779 events 212 | BSS gefs -0.339 ens-blend -0.004 half -0.095 gefs-recal -0.003 blend-on-recal -0.003 | blend minus gefs +0.336 (+0.149 to +0.780) p=0.000 BH=True | fitted w by held-out week: median 0.0, range 0.0-0.0
+npac_64_opc_24: cases 14,467 events 93 | BSS gefs -0.414 ens-blend -0.002 half -0.105 gefs-recal -0.002 blend-on-recal -0.002 | blend minus gefs +0.412 (+0.080 to +1.767) p=0.000 BH=True | fitted w by held-out week: median 0.0, range 0.0-0.0
+npac_64_opc_48: cases 18,130 events 51 | BSS gefs -0.968 ens-blend -0.026 half -0.309 gefs-recal -0.002 blend-on-recal -0.003 | blend minus gefs +0.942 (+0.294 to +231.854) p=0.000 BH=True | fitted w by held-out week: median 0.0, range 0.0-0.0
+npac_64_opc_72: cases 14,578 events 104 | BSS gefs -0.347 ens-blend -0.011 half -0.103 gefs-recal -0.002 blend-on-recal -0.010 | blend minus gefs +0.336 (+0.053 to +1.577) p=0.000 BH=True | fitted w by held-out week: median 0.0, range 0.0-0.0
+npac_64_opc_96: cases 14,578 events 147 | BSS gefs -0.109 ens-blend -0.008 half -0.037 gefs-recal -0.004 blend-on-recal -0.005 | blend minus gefs +0.101 (+0.019 to +0.350) p=0.007 BH=True | fitted w by held-out week: median 0.0, range 0.0-0.0
+blend reliability 48 kt (held-out chance band: cases, observed): 0-5%: 249,480, 1.4%; 5-20%: 1,323, 2.3%; 20-50%: 16, 0.0%; 50%: none; 80%: none
+blend reliability 64 kt (held-out chance band: cases, observed): 0-5%: 113,251, 1.3%; 5-20%: 2,129, 4.6%; 20-50%: 117, 0.0%; 50%: none; 80%: none
